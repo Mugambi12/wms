@@ -1,0 +1,83 @@
+{% if not hide_navbar %}
+
+<header id="navbar" class="navbar navbar-expand-lg sticky-sm-top">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="navbar-brand text-light text-center d-flex align-items-center"
+            href="#"
+            >Water<span class="text-info">Management</span></a
+          >
+        </li>
+      </ul>
+      <div class="d-flex">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item me-3">
+            <a class="nav-link text-light"
+              >Hello <span class="text-info">{{ user.title() }}</span></a
+            >
+          </li>
+        </ul>
+        <div class="btn-group">
+          <img
+            src="{{ url_for('static', filename='images/user.jpg') }}"
+            alt="logo image"
+            type="button"
+            class="navbar-brand dropdown-toggle dropdown-toggle-split rounded-circle"
+            height="40px"
+            width="40px"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          />
+          <ul
+            class="dropdown-menu dropdown-menu-end border-0 shadow-sm bg-light"
+          >
+            <li>
+              <a class="dropdown-item" href="#"
+                ><ion-icon name="person" class="me-2"></ion-icon> Bill</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="#"
+                ><ion-icon name="bar-chart" class="me-2"></ion-icon> Current
+                Units</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="#"
+                ><ion-icon name="cube" class="me-2"></ion-icon> Total Units</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="#"
+                ><ion-icon name="log-out" class="me-2"></ion-icon> Logout</a
+              >
+            </li>
+            <button
+              class="btn btn-sm btn-outline-light text-light"
+              type="submit"
+            >
+              Login
+            </button>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</header>
+
+{% endif %}

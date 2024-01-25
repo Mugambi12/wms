@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <h4 class="card-title mb-4 text-center">Login</h4>
+
+          <!-- Login Form -->
+          <form>
+            <div class="mb-3">
+              <label for="mobile" class="form-label visually-hidden"
+                >Mobile Number</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">
+                  <ion-icon name="person-outline"></ion-icon>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mobile"
+                  placeholder="Mobile Number"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label visually-hidden"
+                >Password</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">
+                  <ion-icon name="key-outline"></ion-icon>
+                </span>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Password"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">
+              Login
+            </button>
+            <a
+              href="{{ url_for('admin.dashboard') }}"
+              class="btn btn-link d-block"
+              >Go to Admin Dashboard</a
+            >
+          </form>
+
+          <hr />
+
+          <!-- Additional Links -->
+          <div class="text-center">
+            <span class="mb-1">Don't have an account?</span>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-link"
+              >Register</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

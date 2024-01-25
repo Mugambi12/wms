@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Water Management System</title>
+
+    <!-- Favicon-->
+    <link
+      rel="icon"
+      type="image/jpg"
+      href="{{ url_for('static', filename='images/favicon.svg') }}"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/vendor/bootstrap.min.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- #SIDEBAR SECTION -->
+      {% include '/navigations/sidebar.html' %}
+
+      <section class="main">
+        <!-- #HEADER SECTION -->
+        {% include '/navigations/navbar.html' %}
+
+        <!-- #MAIN BODY SECTION -->
+        <main>
+          <!-- Content Block -->
+          {% block content %}{% endblock %}
+        </main>
+
+        <!-- #FOOTER SECTION -->
+        {% include '/navigations/footer.html' %}
+      </section>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <!-- Ionicons JS -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

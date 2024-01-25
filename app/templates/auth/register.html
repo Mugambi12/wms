@@ -1,0 +1,98 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card border-0 shadow">
+        <div class="card-body">
+          <h4 class="card-title mb-4 text-center">Register</h4>
+
+          <!-- Registration Form -->
+          <form>
+            <div class="mb-3">
+              <label for="mobile" class="form-label visually-hidden"
+                >Mobile Number</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">
+                  <ion-icon name="call-outline"></ion-icon>
+                </span>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="mobile"
+                  placeholder="Mobile Number"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="firstName" class="form-label visually-hidden"
+                >First Name</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">
+                  <ion-icon name="person-outline"></ion-icon>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  placeholder="First Name"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label visually-hidden"
+                >Last Name</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">
+                  <ion-icon name="person-outline"></ion-icon>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastName"
+                  placeholder="Last Name"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label visually-hidden"
+                >Password</label
+              >
+              <div class="input-group">
+                <span class="input-group-text">
+                  <ion-icon name="key-outline"></ion-icon>
+                </span>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Password"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">
+              Register
+            </button>
+
+            <hr />
+
+            <div class="text-center">
+              <span class="mb-1">Already have an account?</span>
+              <a href="{{ url_for('auth.login') }}" class="btn btn-link"
+                >Login</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

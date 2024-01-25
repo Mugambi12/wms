@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- #MAIN BODY SECTION -->
+<div class="container-fluid">
+  <h4>landing page</h4>
+
+  <a href="{{ url_for('auth.login') }}">login</a>
+  <a href="{{ url_for('auth.register') }}">register</a>
+</div>
+
+{% endblock %}

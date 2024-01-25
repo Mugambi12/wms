@@ -1,0 +1,104 @@
+{% if not hide_sidebar %}
+
+<aside id="sidebar">
+  <div class="d-flex">
+    <button class="toggle-btn" type="button">
+      <ion-icon name="apps-outline"></ion-icon>
+    </button>
+    <div class="sidebar-logo">
+      <a href="#" class="text-info">Apo<span class="text-danger">Gen</span></a>
+    </div>
+  </div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-item">
+      <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">
+        <ion-icon name="home-outline"></ion-icon>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a href="#notifications" class="sidebar-link">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span>Notification</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a
+        href="#profile"
+        class="sidebar-link collapsed has-dropdown"
+        data-bs-toggle="collapse"
+        data-bs-target="#user"
+        aria-expanded="false"
+        aria-controls="user"
+      >
+        <ion-icon name="people-outline"></ion-icon>
+        <span>Users</span>
+      </a>
+      <ul
+        id="user"
+        class="sidebar-dropdown list-unstyled collapse"
+        data-bs-parent="#sidebar"
+      >
+        <li class="sidebar-item">
+          <a href="{{ url_for('admin.user_list') }}" class="sidebar-link">
+            Users List
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="{{ url_for('admin.add_user') }}" class="sidebar-link">
+            Add New User
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="sidebar-item">
+      <a
+        href="#profile"
+        class="sidebar-link collapsed has-dropdown"
+        data-bs-toggle="collapse"
+        data-bs-target="#records"
+        aria-expanded="false"
+        aria-controls="records"
+      >
+        <ion-icon name="list-outline"></ion-icon>
+        <span>Records</span>
+      </a>
+      <ul
+        id="records"
+        class="sidebar-dropdown list-unstyled collapse"
+        data-bs-parent="#sidebar"
+      >
+        <li class="sidebar-item">
+          <a href="{{ url_for('admin.consumption') }}" class="sidebar-link">
+            Consumption
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="{{ url_for('admin.billing') }}" class="sidebar-link">
+            Billings
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="sidebar-item">
+      <a href="{{ url_for('admin.messages') }}" class="sidebar-link">
+        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+        <span>Messages</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a href="{{ url_for('admin.settings') }}" class="sidebar-link">
+        <ion-icon name="cog-outline"></ion-icon>
+        <span>Setting</span>
+      </a>
+    </li>
+  </ul>
+  <div class="sidebar-footer">
+    <a href="{{ url_for('home.home') }}" class="sidebar-link">
+      <ion-icon name="power-outline"></ion-icon>
+      <span>Logout</span>
+    </a>
+  </div>
+</aside>
+
+{% endif %}
