@@ -1,0 +1,37 @@
+<!-- app/templates/auth/register.html -->
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Register</h2>
+  <form method="POST" action="{{ url_for('auth.register') }}">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.first_name.label(class="form-label") }} {{
+      form.first_name(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.last_name.label(class="form-label") }} {{
+      form.last_name(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.mobile_number.label(class="form-label") }} {{
+      form.mobile_number(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.password.label(class="form-label") }} {{
+      form.password(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.confirm_password.label(class="form-label") }} {{
+      form.confirm_password(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+  </form>
+
+  <hr />
+
+  <div class="text-center">
+    <span class="mb-1">Already have an account?</span>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-link">Login</a>
+  </div>
+</div>
+{% endblock %}

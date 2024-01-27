@@ -1,0 +1,26 @@
+<!-- app/templates/auth/login.html -->
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Login</h2>
+  <form method="POST" action="{{ url_for('auth.login') }}">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.mobile_number.label(class="form-label") }} {{
+      form.mobile_number(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.password.label(class="form-label") }} {{
+      form.password(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+
+  <hr />
+
+  <!-- Additional Links -->
+  <div class="text-center">
+    <span class="mb-1">Don't have an account?</span>
+    <a href="{{ url_for('auth.register') }}" class="btn btn-link">Register</a>
+  </div>
+</div>
+{% endblock %}

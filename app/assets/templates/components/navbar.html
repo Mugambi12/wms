@@ -1,0 +1,161 @@
+{% if not hide_navbar %}
+
+<!-- Navbar -->
+<header id="navbar" class="navbar navbar-expand-lg sticky-sm-top">
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a
+      class="navbar-brand text-dark text-center d-flex align-items-center fw-bold"
+      href="#"
+    >
+      Aqua<span class="text-info">Flow</span>
+    </a>
+
+    <!-- Navbar Toggler -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarToggler"
+      aria-controls="navbarToggler"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <div class="d-flex align-items-center ms-auto">
+        <!-- Login Button -->
+        <ul class="navbar-nav me-3">
+          <li class="nav-item">
+            <button
+              class="nav-link btn btn-outline-info text-dark"
+              type="submit"
+            >
+              Login
+            </button>
+          </li>
+        </ul>
+
+        <!-- people Information and Dropdown -->
+        <ul class="navbar-nav me-3">
+          <li class="nav-item">
+            <a class="nav-link text-dark">
+              Hello <span class="text-info fw-bold">{{ people.title() }}</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark">
+              Bill
+              <span
+                class="fw-bold {% if bill > 0 %}text-danger{% else %}text-success{% endif %}"
+              >
+                KES {% if bill > 0 %}-{% endif %} {{ bill }}
+              </span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- people Image Dropdown -->
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn navbar-brand rounded-circle border-0"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="{{ url_for('static', filename='images/user.png') }}"
+              alt="logo image"
+              height="40px"
+              width="40px"
+            />
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow bg-info">
+            <li>
+              <a class="dropdown-item" href="{{ url_for('records.billing') }}">
+                <ion-icon name="person-outline" class="me-2"></ion-icon> Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('records.billing') }}">
+                <ion-icon name="wallet-outline" class="me-2"></ion-icon> Billing
+                Info
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('records.billing') }}">
+                <ion-icon name="stats-chart-outline" class="me-2"></ion-icon>
+                Usage Statistics
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('security.security_options') }}"
+              >
+                <ion-icon
+                  name="shield-checkmark-outline"
+                  class="me-2"
+                ></ion-icon>
+                Security Options
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                <ion-icon name="log-out-outline" class="me-2"></ion-icon> Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!--
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn navbar-brand rounded-circle border-0"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="{{ url_for('static', filename='images/people.png') }}"
+              alt="logo image"
+              height="40px"
+              width="40px"
+            />
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow bg-info">
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="person" class="me-2"></ion-icon> Bill
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="bar-chart" class="me-2"></ion-icon> Current
+                Units
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="cube" class="me-2"></ion-icon> Total Units
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="log-out" class="me-2"></ion-icon> Logout
+              </a>
+            </li>
+          </ul>
+        </div>-->
+      </div>
+    </div>
+  </div>
+</header>
+
+{% endif %}
