@@ -1,37 +1,131 @@
 <!-- app/templates/auth/register.html -->
 {% extends 'base.html' %} {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">Register</h2>
-  <form method="POST" action="{{ url_for('auth.register') }}">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">
-      {{ form.first_name.label(class="form-label") }} {{
-      form.first_name(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.last_name.label(class="form-label") }} {{
-      form.last_name(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.mobile_number.label(class="form-label") }} {{
-      form.mobile_number(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.password.label(class="form-label") }} {{
-      form.password(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.confirm_password.label(class="form-label") }} {{
-      form.confirm_password(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary">Register</button>
-  </form>
+  <div class="card mx-auto col-md-6 p-4 shadow-sm rounded-3 border-0">
+    <h2 class="mb-4 text-center">Register</h2>
+    <form method="POST" action="{{ url_for('auth.register') }}">
+      {{ form.hidden_tag() }}
 
-  <hr />
+      <!-- First Section -->
+      <div id="firstSection">
+        <div class="mb-3">
+          {{ form.first_name.label(class="form-label") }} {{
+          form.first_name(class="form-control") }}
+        </div>
 
-  <div class="text-center">
-    <span class="mb-1">Already have an account?</span>
-    <a href="{{ url_for('auth.login') }}" class="btn btn-link">Login</a>
+        <div class="mb-3">
+          {{ form.last_name.label(class="form-label") }} {{
+          form.last_name(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.mobile_number.label(class="form-label") }} {{
+          form.mobile_number(class="form-control") }}
+        </div>
+
+        <!-- Next Button -->
+        <button
+          type="button"
+          class="btn btn-primary btn-lg w-100"
+          onclick="nextSection()"
+        >
+          Next
+        </button>
+      </div>
+
+      <!-- Second Section -->
+      <div id="secondSection" style="display: none">
+        <!-- Password -->
+        <div class="mb-3">
+          {{ form.password.label(class="form-label") }}
+          <div class="input-group border rounded-3">
+            {{ form.password(class="form-control border-0", id="password") }}
+            <button
+              class="btn btn-light"
+              type="button"
+              onclick="togglePassword('password', 'password_icon')"
+              title="Toggle Password Visibility"
+            >
+              <ion-icon
+                id="password_icon"
+                name="eye"
+                class="text-primary"
+              ></ion-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-3">
+          {{ form.confirm_password.label(class="form-label") }}
+          <div class="input-group border rounded-3">
+            {{ form.confirm_password(class="form-control border-0",
+            id="confirm_password") }}
+            <button
+              class="btn btn-light"
+              type="button"
+              onclick="togglePassword('confirm_password', 'confirm_password_icon')"
+              title="Toggle Password Visibility"
+            >
+              <ion-icon
+                id="confirm_password_icon"
+                name="eye"
+                class="text-primary"
+              ></ion-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Previous and Register Buttons -->
+        <div class="d-flex justify-content-between">
+          <button
+            type="button"
+            class="btn btn-secondary btn-lg"
+            onclick="previousSection()"
+          >
+            Previous
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg">Register</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Horizontal Line -->
+    <hr class="my-4" />
+
+    <!-- Login Link -->
+    <div class="text-center">
+      <span class="mb-1">Already have an account?</span>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-link text-primary">
+        Login
+      </a>
+    </div>
   </div>
 </div>
+
+<script>
+  function nextSection() {
+    document.getElementById("firstSection").style.display = "none";
+    document.getElementById("secondSection").style.display = "block";
+  }
+
+  function previousSection() {
+    document.getElementById("firstSection").style.display = "block";
+    document.getElementById("secondSection").style.display = "none";
+  }
+
+  function togglePassword(passwordFieldId, iconId) {
+    const passwordField = document.getElementById(passwordFieldId);
+    const icon = document.getElementById(iconId);
+
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      icon.name = "eye-off";
+    } else {
+      passwordField.type = "password";
+      icon.name = "eye";
+    }
+  }
+</script>
+
 {% endblock %}

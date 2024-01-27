@@ -34,6 +34,16 @@
 
         <!-- #MAIN BODY SECTION -->
         <main>
+          <!-- Flash messages section -->
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %}
+          <ul class="flashes">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %} {% endwith %}
+
           <!-- Content Block -->
           {% block content %}{% endblock %}
         </main>
@@ -46,6 +56,9 @@
     <!-- Bootstrap Bundle with Popper -->
     <script src="{{ url_for('static', filename='js/vendor/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/autoLogout.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/flash_message_handler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/password_visibility_controller.js') }}"></script>
 
     <!-- Ionicons JS -->
     <script

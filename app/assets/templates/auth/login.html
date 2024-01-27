@@ -1,26 +1,53 @@
 <!-- app/templates/auth/login.html -->
 {% extends 'base.html' %} {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">Login</h2>
-  <form method="POST" action="{{ url_for('auth.login') }}">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">
-      {{ form.mobile_number.label(class="form-label") }} {{
-      form.mobile_number(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.password.label(class="form-label") }} {{
-      form.password(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
+  <div class="card mx-auto col-md-5 p-4 shadow-sm rounded-3 border-0">
+    <h2 class="mb-4 text-center">Login</h2>
+    <form method="POST" action="{{ url_for('auth.login') }}">
+      {{ form.hidden_tag() }}
 
-  <hr />
+      <!-- Mobile Number -->
+      <div class="mb-3">
+        {{ form.mobile_number.label(class="form-label fw-normal") }} {{
+        form.mobile_number(class="form-control") }}
+      </div>
 
-  <!-- Additional Links -->
-  <div class="text-center">
-    <span class="mb-1">Don't have an account?</span>
-    <a href="{{ url_for('auth.register') }}" class="btn btn-link">Register</a>
+      <!-- Password -->
+      <div class="mb-3">
+        {{ form.password.label(class="form-label fw-normal") }}
+        <div class="input-group border rounded-3">
+          {{ form.password(class="form-control border-0", id="current_password")
+          }}
+          <button
+            class="btn btn-light"
+            type="button"
+            onclick="togglePassword('current_password', 'current_password_icon')"
+            title="Toggle Password Visibility"
+          >
+            <ion-icon
+              id="current_password_icon"
+              name="eye"
+              class="text-primary"
+            ></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Login Button -->
+      <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
+    </form>
+
+    <!-- Horizontal Line -->
+    <hr class="my-4" />
+
+    <!-- Additional Links -->
+    <div class="text-center">
+      <span class="mb-1">Don't have an account?</span>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-link btn-sm"
+        >Register</a
+      >
+    </div>
   </div>
 </div>
+
 {% endblock %}
