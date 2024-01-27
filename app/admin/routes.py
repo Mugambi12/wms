@@ -1,45 +1,45 @@
 from flask import Blueprint, render_template
 
-admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
-@admin_bp.route('/dashboard')
+def admin_context():
+    user = 'silas'
+    bill = '2500'
+    return {'user': user, 'bill': bill}
+
+
+admin_bp = Blueprint('admin', __name__, url_prefix='/dashboard')
+
+@admin_bp.route('/overview')
 def dashboard():
-    user='silas'
     # You can add admin-specific logic and data here
-    return render_template('admin/dashboard.html', user=user, hide_footer=True)
+    return render_template('admin/dashboard.html', hide_footer=True)
 
-@admin_bp.route('/add_user')
+@admin_bp.route('users/add_user')
 def add_user():
-    user='silas'
     # You can add admin-specific logic and data here
-    return render_template('admin/add_user.html', user=user, hide_footer=True)
+    return render_template('admin/add_user.html', hide_footer=True)
 
-@admin_bp.route('/user_list')
+@admin_bp.route('users/user_list')
 def user_list():
-    user='silas'
     # You can add admin-specific logic and data here
-    return render_template('admin/user_list.html', user=user, hide_footer=True)
+    return render_template('admin/user_list.html', hide_footer=True)
 
-@admin_bp.route('/consumption')
+@admin_bp.route('records/consumption')
 def consumption():
-    user='silas'
     # You can add admin-specific logic and data here
-    return render_template('admin/consumption.html', user=user, hide_footer=True)
+    return render_template('admin/consumption.html', hide_footer=True)
 
-@admin_bp.route('/billing')
+@admin_bp.route('records/billing')
 def billing():
-    user='silas'
     # You can add admin-specific logic and data here
-    return render_template('admin/billing.html', user=user, hide_footer=True)
+    return render_template('admin/billing.html', hide_footer=True)
 
 @admin_bp.route('/messages')
 def messages():
-    user='silas'
     # You can add admin-specific logic and data here
-    return render_template('admin/messages.html', user=user, hide_footer=True)
+    return render_template('admin/messages.html', hide_footer=True)
 
 @admin_bp.route('/settings')
 def settings():
-    user='silas'
     # You can add admin-specific logic and data here
-    return render_template('admin/settings.html', user=user, hide_footer=True)
+    return render_template('admin/settings.html', hide_footer=True)

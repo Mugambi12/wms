@@ -1,6 +1,5 @@
-# Import necessary modules and classes
-
 # app/__init__.py
+
 from flask import Flask
 
 def create_app():
@@ -10,7 +9,7 @@ def create_app():
 
     # Import blueprints
     from .auth.routes import auth_bp
-    from .admin.routes import admin_bp
+    from .admin.routes import admin_bp, admin_context
     from .home.routes import home_bp
 
     # Register blueprints
@@ -18,6 +17,7 @@ def create_app():
     app.register_blueprint(admin_bp)
     app.register_blueprint(home_bp)
 
+    # Register the context processor
+    app.context_processor(admin_context)
+
     return app
-
-

@@ -1,71 +1,11 @@
 {% if not hide_navbar %}
 
-<header id="navbar" class="navbar navbar-expand-lg sticky-sm-top">
+<header class="navbar navbar-expand-lg sticky-sm-top">
   <div class="container-fluid">
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a
-            class="navbar-brand text-light text-center d-flex align-items-center"
-            href="#"
-            >Water<span class="text-info">Management</span></a
-          >
-        </li>
-      </ul>
-      <div class="d-flex">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item me-3">
-            <a class="nav-link text-light"
-              >Hello <span class="text-info">{{ user.title() }}</span></a
-            >
-          </li>
-        </ul>
-        <div class="btn-group">
-          <img
-            src="{{ url_for('static', filename='images/user.jpg') }}"
-            alt="logo image"
-            type="button"
-            class="navbar-brand dropdown-toggle dropdown-toggle-split rounded-circle"
-            height="40px"
-            width="40px"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          />
-          <ul
-            class="dropdown-menu dropdown-menu-end border-0 shadow-sm bg-light"
-          >
-            <li>
-              <a class="dropdown-item" href="#"
-                ><ion-icon name="person" class="me-2"></ion-icon> Bill</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="#"
-                ><ion-icon name="bar-chart" class="me-2"></ion-icon> Current
-                Units</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="#"
-                ><ion-icon name="cube" class="me-2"></ion-icon> Total Units</a
-              >
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" href="#"
-                ><ion-icon name="log-out" class="me-2"></ion-icon> Logout</a
-              >
-            </li>
-            <button
-              class="btn btn-sm btn-outline-light text-light"
-              type="submit"
-            >
-              Login
-            </button>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <a class="navbar-brand text-dark text-center fw-semibold" href="#">
+      <span class="text-danger">Aqua</span><span class="text-info">Flow</span>
+    </a>
+
     <button
       class="navbar-toggler"
       type="button"
@@ -77,6 +17,72 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <div class="d-flex align-items-center ms-auto">
+        <ul class="navbar-nav me-3">
+          {% if user != 'silas' %}
+          <li class="nav-item">
+            <a href="{{ url_for('home.home') }}" class="nav-link text-dark">
+              Login
+            </a>
+          </li>
+          {% endif %} {% if user == 'silas' %}
+          <li class="nav-item">
+            <a class="nav-link text-dark">
+              Hello <span class="text-primary">{{ user.title() }}</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark">
+              Bill <span class="text-warning">KES {{ bill }}</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn navbar-brand rounded-circle border-0"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="{{ url_for('static', filename='images/user.png') }}"
+              alt="logo image"
+              height="40px"
+              width="40px"
+            />
+          </button>
+          {% endif %}
+
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow bg-info">
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="person" class="me-2"></ion-icon> Bill
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="bar-chart" class="me-2"></ion-icon> Current
+                Units
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="cube" class="me-2"></ion-icon> Total Units
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <ion-icon name="log-out" class="me-2"></ion-icon> Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
