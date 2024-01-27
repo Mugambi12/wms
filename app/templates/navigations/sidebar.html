@@ -1,107 +1,138 @@
 {% if not hide_sidebar %}
 
+<!-- Sidebar -->
 <aside id="sidebar">
-  <div class="d-flex">
+  <div class="d-flex mt-2">
+    <!-- Toggle Button -->
     <button class="toggle-btn" type="button">
-      <ion-icon name="apps-outline"></ion-icon>
+      <ion-icon name="apps-outline" class="text-dark"></ion-icon>
     </button>
+
+    <!-- Sidebar Logo -->
     <div class="sidebar-logo">
       <a href="#" class="text-info">Apo<span class="text-danger">Gen</span></a>
     </div>
   </div>
+
+  <!-- Sidebar Navigation -->
   <ul class="sidebar-nav">
     <li class="sidebar-item">
-      <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">
-        <ion-icon name="home-outline"></ion-icon>
-        <span>Dashboard</span>
+      <a href="{{ url_for('dashboard.dashboard') }}" class="sidebar-link">
+        <ion-icon name="bar-chart" class="text-primary me-2"></ion-icon>
+        <span class="text-primary">Dashboard</span>
       </a>
     </li>
-    <!--
-        <li class="sidebar-item">
-        <a href="#notifications" class="sidebar-link">
-            <ion-icon name="notifications-outline"></ion-icon>
-            <span>Notification</span>
-            <span class="badge text-danger">1</span>
-        </a>
-        </li>
-    -->
+
+    <!-- peoples Dropdown -->
     <li class="sidebar-item">
       <a
-        href="#profile"
+        href="#peoples"
         class="sidebar-link collapsed has-dropdown"
         data-bs-toggle="collapse"
-        data-bs-target="#user"
+        data-bs-target="#people"
         aria-expanded="false"
-        aria-controls="user"
+        aria-controls="people"
       >
-        <ion-icon name="people-outline"></ion-icon>
-        <span>Users</span>
+        <ion-icon name="people-outline" class="text-success"></ion-icon>
+        <span>Peoples</span>
       </a>
       <ul
-        id="user"
+        id="people"
         class="sidebar-dropdown list-unstyled collapse"
         data-bs-parent="#sidebar"
       >
         <li class="sidebar-item">
-          <a href="{{ url_for('admin.user_list') }}" class="sidebar-link">
-            Users List
+          <a href="{{ url_for('dashboard.people_list') }}" class="sidebar-link">
+            Peoples List
           </a>
         </li>
         <li class="sidebar-item">
-          <a href="{{ url_for('admin.add_user') }}" class="sidebar-link">
-            Add New User
+          <a href="{{ url_for('dashboard.add_people') }}" class="sidebar-link">
+            Add New Person
           </a>
         </li>
       </ul>
     </li>
+
+    <!-- Records and Water Supply Dropdown -->
     <li class="sidebar-item">
       <a
-        href="#profile"
+        href="#records_water_supply"
         class="sidebar-link collapsed has-dropdown"
         data-bs-toggle="collapse"
-        data-bs-target="#records"
+        data-bs-target="#records_water"
         aria-expanded="false"
-        aria-controls="records"
+        aria-controls="records_water"
       >
-        <ion-icon name="list-outline"></ion-icon>
-        <span>Records</span>
+        <ion-icon name="water-outline" class="text-primary"></ion-icon>
+        <span>Water Supply</span>
       </a>
       <ul
-        id="records"
+        id="records_water"
         class="sidebar-dropdown list-unstyled collapse"
         data-bs-parent="#sidebar"
       >
         <li class="sidebar-item">
-          <a href="{{ url_for('admin.consumption') }}" class="sidebar-link">
-            Consumption
+          <a
+            href="{{ url_for('dashboard.meter_readings') }}"
+            class="sidebar-link"
+          >
+            Meter Readings
           </a>
         </li>
         <li class="sidebar-item">
-          <a href="{{ url_for('admin.billing') }}" class="sidebar-link">
-            Billings
+          <a href="{{ url_for('dashboard.billing') }}" class="sidebar-link">
+            Billing Info
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="{{ url_for('dashboard.payments') }}" class="sidebar-link">
+            Payments
           </a>
         </li>
       </ul>
     </li>
+
+    <!-- Messages -->
     <li class="sidebar-item">
-      <a href="{{ url_for('admin.messages') }}" class="sidebar-link">
-        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      <a href="{{ url_for('dashboard.messages') }}" class="sidebar-link">
+        <ion-icon
+          name="chatbubble-ellipses-outline"
+          class="text-warning"
+        ></ion-icon>
         <span>Messages</span>
       </a>
     </li>
+
+    <!-- Settings -->
     <li class="sidebar-item">
-      <a href="{{ url_for('admin.settings') }}" class="sidebar-link">
-        <ion-icon name="cog-outline"></ion-icon>
-        <span>Setting</span>
+      <a href="{{ url_for('dashboard.settings') }}" class="sidebar-link">
+        <ion-icon name="cog-outline" class="text-info"></ion-icon>
+        <span>Settings</span>
+      </a>
+    </li>
+
+    <!-- Security Options -->
+    <li class="sidebar-item">
+      <a
+        href="{{ url_for('dashboard.security_options') }}"
+        class="sidebar-link"
+      >
+        <ion-icon
+          name="shield-checkmark-outline"
+          class="text-danger"
+        ></ion-icon>
+        <span>Security Options</span>
       </a>
     </li>
   </ul>
+
+  <!-- Logout -->
   <div class="sidebar-footer">
     <a href="{{ url_for('home.home') }}" class="sidebar-link">
-      <ion-icon name="power-outline"></ion-icon>
+      <ion-icon name="power-outline" class="text-danger"></ion-icon>
       <span>Logout</span>
     </a>
   </div>
 </aside>
-
 {% endif %}
