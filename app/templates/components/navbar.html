@@ -76,27 +76,18 @@
 
           <ul class="dropdown-menu dropdown-menu-end border-0 shadow bg-info">
             <li>
-              <a
-                class="dropdown-item"
-                href="{{ url_for('dashboard.billing') }}"
-              >
+              <a class="dropdown-item" href="{{ url_for('accounts.billing') }}">
                 <ion-icon name="person-outline" class="me-2"></ion-icon> Profile
               </a>
             </li>
             <li>
-              <a
-                class="dropdown-item"
-                href="{{ url_for('dashboard.billing') }}"
-              >
+              <a class="dropdown-item" href="{{ url_for('accounts.billing') }}">
                 <ion-icon name="wallet-outline" class="me-2"></ion-icon> Billing
                 Info
               </a>
             </li>
             <li>
-              <a
-                class="dropdown-item"
-                href="{{ url_for('dashboard.billing') }}"
-              >
+              <a class="dropdown-item" href="{{ url_for('accounts.billing') }}">
                 <ion-icon name="stats-chart-outline" class="me-2"></ion-icon>
                 Usage Statistics
               </a>
@@ -104,7 +95,7 @@
             <li>
               <a
                 class="dropdown-item"
-                href="{{ url_for('dashboard.security_options') }}"
+                href="{{ url_for('accounts.security_options') }}"
               >
                 <ion-icon
                   name="shield-checkmark-outline"

@@ -17,9 +17,9 @@
   <!-- Sidebar Navigation -->
   <ul class="sidebar-nav">
     <li class="sidebar-item">
-      <a href="{{ url_for('dashboard.dashboard') }}" class="sidebar-link">
+      <a href="{{ url_for('accounts.accounts') }}" class="sidebar-link">
         <ion-icon name="bar-chart" class="text-primary me-2"></ion-icon>
-        <span class="text-primary">Dashboard</span>
+        <span class="text-primary">accounts</span>
       </a>
     </li>
 
@@ -42,12 +42,12 @@
         data-bs-parent="#sidebar"
       >
         <li class="sidebar-item">
-          <a href="{{ url_for('dashboard.people_list') }}" class="sidebar-link">
+          <a href="{{ url_for('accounts.people_list') }}" class="sidebar-link">
             Peoples List
           </a>
         </li>
         <li class="sidebar-item">
-          <a href="{{ url_for('dashboard.add_people') }}" class="sidebar-link">
+          <a href="{{ url_for('accounts.add_people') }}" class="sidebar-link">
             Add New Person
           </a>
         </li>
@@ -74,19 +74,19 @@
       >
         <li class="sidebar-item">
           <a
-            href="{{ url_for('dashboard.meter_readings') }}"
+            href="{{ url_for('accounts.meter_readings') }}"
             class="sidebar-link"
           >
             Meter Readings
           </a>
         </li>
         <li class="sidebar-item">
-          <a href="{{ url_for('dashboard.billing') }}" class="sidebar-link">
+          <a href="{{ url_for('accounts.billing') }}" class="sidebar-link">
             Billing Info
           </a>
         </li>
         <li class="sidebar-item">
-          <a href="{{ url_for('dashboard.payments') }}" class="sidebar-link">
+          <a href="{{ url_for('accounts.payments') }}" class="sidebar-link">
             Payments
           </a>
         </li>
@@ -95,7 +95,7 @@
 
     <!-- Messages -->
     <li class="sidebar-item">
-      <a href="{{ url_for('dashboard.messages') }}" class="sidebar-link">
+      <a href="{{ url_for('accounts.messages') }}" class="sidebar-link">
         <ion-icon
           name="chatbubble-ellipses-outline"
           class="text-warning"
@@ -106,7 +106,7 @@
 
     <!-- Settings -->
     <li class="sidebar-item">
-      <a href="{{ url_for('dashboard.settings') }}" class="sidebar-link">
+      <a href="{{ url_for('accounts.settings') }}" class="sidebar-link">
         <ion-icon name="cog-outline" class="text-info"></ion-icon>
         <span>Settings</span>
       </a>
@@ -114,10 +114,7 @@
 
     <!-- Security Options -->
     <li class="sidebar-item">
-      <a
-        href="{{ url_for('dashboard.security_options') }}"
-        class="sidebar-link"
-      >
+      <a href="{{ url_for('accounts.security_options') }}" class="sidebar-link">
         <ion-icon
           name="shield-checkmark-outline"
           class="text-danger"
@@ -129,7 +126,7 @@
 
   <!-- Logout -->
   <div class="sidebar-footer">
-    <a href="{{ url_for('home.home') }}" class="sidebar-link">
+    <a href="{{ url_for('landing.landing') }}" class="sidebar-link">
       <ion-icon name="power-outline" class="text-danger"></ion-icon>
       <span>Logout</span>
     </a>

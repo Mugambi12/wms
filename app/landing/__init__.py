@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-home_bp = Blueprint('home', __name__)
+landing_bp = Blueprint('landing', __name__)
 
-# You can add any necessary initialization code for the home module here
+# You can add any necessary initialization code for the landing module here
