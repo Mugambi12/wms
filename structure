@@ -2,19 +2,18 @@ project_root/
 │
 ├── app/
 │   ├── backend/
-│   │   ├── __init__.py
-│   │   │
 │   │   ├── landing/
-│   │   │   ├── __init__.py
 │   │   │   └── routes.py
 │   │   │
 │   │   ├── auth/
-│   │   │   ├── __init__.py
 │   │   │   └── routes.py
 │   │   │
 │   │   └── accounts/
-│   │       ├── __init__.py
-│   │       └── routes.py
+│   │   │   ├── __init__.py
+│   │   │   └── dashboard/
+│   │   │       └── routes.py
+│   │   │   └── people(users)/
+│   │   │       └── routes.py
 │   │
 │   ├── assets/
 │   │   ├── static/

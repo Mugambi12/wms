@@ -27,23 +27,27 @@
     <!-- Navbar Links -->
     <div class="collapse navbar-collapse" id="navbarToggler">
       <div class="d-flex align-items-center ms-auto">
+        {% if not current_user.is_authenticated %}
         <!-- Login Button -->
         <ul class="navbar-nav me-3">
           <li class="nav-item">
-            <button
-              class="nav-link btn btn-outline-info text-dark"
-              type="submit"
-            >
+            <a class="nav-link text-dark" href="#"> Home </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="{{ url_for('auth.login') }}">
               Login
-            </button>
+            </a>
           </li>
         </ul>
-
+        {% endif %} {% if current_user.is_authenticated %}
         <!-- people Information and Dropdown -->
         <ul class="navbar-nav me-3">
           <li class="nav-item">
             <a class="nav-link text-dark">
-              Hello <span class="text-info fw-bold">{{ people.title() }}</span>
+              Hello
+              <span class="text-info fw-bold"
+                >{{ current_user.first_name.title() }}</span
+              >
             </a>
           </li>
           <li class="nav-item">
@@ -51,9 +55,8 @@
               Bill
               <span
                 class="fw-bold {% if bill > 0 %}text-danger{% else %}text-success{% endif %}"
+                >KES {% if bill > 0 %}-{% endif %} {{ bill }}</span
               >
-                KES {% if bill > 0 %}-{% endif %} {{ bill }}
-              </span>
             </a>
           </li>
         </ul>
@@ -76,18 +79,27 @@
 
           <ul class="dropdown-menu dropdown-menu-end border-0 shadow bg-info">
             <li>
-              <a class="dropdown-item" href="{{ url_for('records.billing') }}">
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.records.billing') }}"
+              >
                 <ion-icon name="person-outline" class="me-2"></ion-icon> Profile
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{{ url_for('records.billing') }}">
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.records.billing') }}"
+              >
                 <ion-icon name="wallet-outline" class="me-2"></ion-icon> Billing
                 Info
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{{ url_for('records.billing') }}">
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.records.billing') }}"
+              >
                 <ion-icon name="stats-chart-outline" class="me-2"></ion-icon>
                 Usage Statistics
               </a>
@@ -95,7 +107,7 @@
             <li>
               <a
                 class="dropdown-item"
-                href="{{ url_for('security.security_options') }}"
+                href="{{ url_for('accounts.security.security_options') }}"
               >
                 <ion-icon
                   name="shield-checkmark-outline"
@@ -112,47 +124,7 @@
             </li>
           </ul>
         </div>
-
-        <!--
-        <div class="btn-group">
-          <button
-            type="button"
-            class="btn navbar-brand rounded-circle border-0"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <img
-              src="{{ url_for('static', filename='images/people.png') }}"
-              alt="logo image"
-              height="40px"
-              width="40px"
-            />
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end border-0 shadow bg-info">
-            <li>
-              <a class="dropdown-item" href="#">
-                <ion-icon name="person" class="me-2"></ion-icon> Bill
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <ion-icon name="bar-chart" class="me-2"></ion-icon> Current
-                Units
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <ion-icon name="cube" class="me-2"></ion-icon> Total Units
-              </a>
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <ion-icon name="log-out" class="me-2"></ion-icon> Logout
-              </a>
-            </li>
-          </ul>
-        </div>-->
+        {% endif %}
       </div>
     </div>
   </div>

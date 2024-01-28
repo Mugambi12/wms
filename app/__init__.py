@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from datetime import timedelta
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -12,6 +13,8 @@ def create_app():
     # Configure database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wms.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+    app.config['SESSION_COOKIE_SECURE'] = True
     app.config['SECRET_KEY'] = 'qwertyurioupiuodsfghfdjgkjhd2345678jgfnxdz'
 
     # Initialize the database with the Flask app
@@ -23,28 +26,17 @@ def create_app():
     # Import blueprints
     from .backend.landing.routes import landing_bp
     from .backend.auth.routes import auth_bp
-    from .backend.accounts.accounts_context import accounts_context
-    from .backend.accounts.messages.routes import messages_bp
-    from .backend.accounts.overview.routes import overview_bp
-    from .backend.accounts.people.routes import peoples_bp
-    from .backend.accounts.records.routes import records_bp
-    from .backend.accounts.security.routes import security_bp
-    from .backend.accounts.settings.routes import settings_bp
+    from .backend.accounts import accounts_bp
+    from .backend.accounts.accounts_context import accounts_context, inject_now
 
     # Register blueprints
     app.register_blueprint(landing_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(accounts_bp)
 
     # Register the context processor
     app.context_processor(accounts_context)
-
-    # Register account blueprints
-    app.register_blueprint(messages_bp)
-    app.register_blueprint(overview_bp)
-    app.register_blueprint(peoples_bp)
-    app.register_blueprint(records_bp)
-    app.register_blueprint(security_bp)
-    app.register_blueprint(settings_bp)
+    app.context_processor(inject_now)
 
     # Flask-Login user loader
     from .backend.models.user import User

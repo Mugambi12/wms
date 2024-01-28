@@ -46,6 +46,70 @@ body {
   background: linear-gradient(180deg, #067590, #01a0d6);
 }
 
+/* Styling for flash messages */
+.flashes {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  text-align: center;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999999;
+}
+.flashes li {
+  display: inline-block;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInUp 0.5s forwards ease-out;
+  transition: opacity 0.3s ease-in-out; /* Smooth transition effect */
+}
+.flashes .success {
+  background-color: #4caf50; /* Green */
+  color: white;
+}
+.flashes .danger {
+  background-color: #f44336; /* Red */
+  color: white;
+}
+.flashes .info {
+  background-color: #0dcaf0; /* Blue */
+  color: white;
+}
+.flashes .warning {
+  background-color: #ffc107; /* Yellow */
+  color: black;
+}
+/* Animation */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeOutDown {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Responsive styling for small screens */
+@media only screen and (max-width: 768px) {
+  .flashes {
+    width: 90%;
+    max-width: 300px;
+  }
+  .flashes li {
+    font-size: 0.9rem;
+  }
+}
+
 .wrapper {
   display: flex;
   overflow: hidden;

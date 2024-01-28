@@ -3,6 +3,9 @@
 <div class="container mt-5">
   <div class="card mx-auto col-md-5 p-4 shadow-sm rounded-3 border-0">
     <h2 class="mb-4 text-center">Login</h2>
+    <div class="text-center">
+      <a href="{{ url_for('landing.landing') }}">Home</a>
+    </div>
     <form method="POST" action="{{ url_for('auth.login') }}">
       {{ form.hidden_tag() }}
 
@@ -34,7 +37,11 @@
       </div>
 
       <!-- Login Button -->
-      <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
+      <div class="text-center mt-3">
+        <button class="btn btn-primary btn-block rounded-pill" type="submit">
+          Login
+        </button>
+      </div>
     </form>
 
     <!-- Horizontal Line -->
@@ -43,9 +50,7 @@
     <!-- Additional Links -->
     <div class="text-center">
       <span class="mb-1">Don't have an account?</span>
-      <a href="{{ url_for('auth.register') }}" class="btn btn-link btn-sm"
-        >Register</a
-      >
+      <a href="{{ url_for('auth.register') }}" class="btn btn-link">Register</a>
     </div>
   </div>
 </div>

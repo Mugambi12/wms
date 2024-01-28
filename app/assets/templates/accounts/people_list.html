@@ -1,10 +1,52 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- #MAIN BODY SECTION -->
+<!-- MAIN BODY SECTION -->
 <div class="container-fluid">
-  <h4>peoples List Page</h4>
+  <h4>People List Page</h4>
 
-  <!-- The correct URL generation for the accounts route -->
+  <!-- Download Buttons -->
+  <div class="mb-3">
+    <a href="#" class="btn btn-primary">Download as CSV</a>
+    <a href="#" class="btn btn-success">Download as Excel</a>
+    <a href="#" class="btn btn-danger">Download as PDF</a>
+  </div>
+
+  <!-- User List Table -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Mobile Number</th>
+        <th scope="col">Email</th>
+        <th scope="col">House Section</th>
+        <th scope="col">House Number</th>
+        <th scope="col">Status</th>
+        <!-- Add more columns as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for person in people_list %}
+      <tr>
+        <th scope="row">{{ person.id }}</th>
+        <td>
+          {{ person.first_name.title() ~ " " ~ person.last_name.title() }}
+        </td>
+        <td>{{ person.mobile_number }}</td>
+        <td>{{ person.email }}</td>
+        <td>{{ person.house_section }}</td>
+        <td>{{ person.house_number }}</td>
+        <td>
+          {% if person.is_active %}
+          <span class="text-success">Active</span>
+          {% else %}
+          <span class="text-danger">Inactive</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 {% endblock %}
