@@ -1,6 +1,7 @@
 # app/backend/accounts/accounts_context.py
 from flask import g
 from datetime import datetime, timedelta, timezone
+from ..models.user import User
 
 def accounts_context():
     people = 'silas'

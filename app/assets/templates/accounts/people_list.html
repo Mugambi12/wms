@@ -2,27 +2,49 @@
 
 <!-- MAIN BODY SECTION -->
 <div class="container-fluid">
-  <h4>People List Page</h4>
+  <h2 class="mb-4">People List Page</h2>
 
   <!-- Download Buttons -->
-  <div class="mb-3">
-    <a href="#" class="btn btn-primary">Download as CSV</a>
-    <a href="#" class="btn btn-success">Download as Excel</a>
-    <a href="#" class="btn btn-danger">Download as PDF</a>
+  <div class="mb-3 float-end me-3">
+    <a
+      href="{{ url_for('accounts.people.download_users', format='csv') }}"
+      class="btn btn-primary"
+      download="people_list.csv"
+    >
+      CSV <ion-icon name="download-outline"></ion-icon>
+    </a>
+    <a
+      href="{{ url_for('accounts.people.download_users', format='excel') }}"
+      class="btn btn-success"
+      download="people_list.xlsx"
+    >
+      Excel <ion-icon name="download-outline"></ion-icon>
+    </a>
+    <a
+      href="{{ url_for('accounts.people.download_users', format='pdf') }}"
+      class="btn btn-danger"
+      download="people_list.pdf"
+    >
+      PDF <ion-icon name="download-outline"></ion-icon>
+    </a>
   </div>
 
   <!-- User List Table -->
-  <table class="table table-bordered">
+  <table
+    id="people-table"
+    class="table table-bordered table-striped text-center"
+  >
     <thead>
       <tr>
         <th scope="col">ID</th>
-        <th scope="col">Name</th>
+        <th scope="col">Full Name</th>
         <th scope="col">Mobile Number</th>
         <th scope="col">Email</th>
         <th scope="col">House Section</th>
         <th scope="col">House Number</th>
         <th scope="col">Status</th>
-        <!-- Add more columns as needed -->
+        <th scope="col">Admin</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -43,10 +65,35 @@
           <span class="text-danger">Inactive</span>
           {% endif %}
         </td>
+        <td>
+          {% if person.is_admin %}
+          <span class="text-success">Admin</span>
+          {% else %}
+          <span class="text-info">Not Admin</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if current_user.is_admin or current_user.id == person.id %}
+          <a
+            href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
+          >
+            <ion-icon name="create-outline"></ion-icon>Edit
+          </a>
+          {% else %}
+          <span class="text-muted">No Edit Permission</span>
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
+
+<!-- DataTables Initialization Script -->
+<script>
+  $(document).ready(function () {
+    $("#people-table").DataTable();
+  });
+</script>
 
 {% endblock %}

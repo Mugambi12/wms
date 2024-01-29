@@ -1,5 +1,5 @@
 # app/backend/auth/routes.py
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, make_response, request
 from flask_login import login_user, login_required, logout_user, current_user
 from app.backend.models.user import User, db
 from app.backend.accounts import accounts_bp
@@ -13,14 +13,16 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(mobile_number=form.mobile_number.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user)
-            flash(f'Login successful, Welcome back {user.first_name.title()}!', 'success')
-            next_page = request.args.get('next')
-            return redirect(next_page or url_for('accounts.dashboard.dashboard'))
+            if user.is_active:
+                login_user(user)
+                flash(f'Welcome back, {user.first_name.title()}! You have successfully logged in.', 'success')
+                next_page = request.args.get('next')
+                return redirect(next_page or url_for('accounts.dashboard.dashboard'))
+            else:
+                flash('Your account is inactive. Please contact support for assistance.', 'danger')
         else:
             flash('Invalid mobile number or password. Please try again.', 'danger')
     return render_template('auth/login.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
-
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -43,5 +45,15 @@ def register():
 def logout():
     logout_user()
     flash('You have been logged out.', 'success')
-    return redirect(url_for('landing.landing'))
+
+    # Create a response object
+    response = make_response(redirect(url_for('landing.landing')))
+
+    # Set Cache-Control headers to prevent caching
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+
+    return response
+
 

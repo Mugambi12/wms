@@ -1,7 +1,9 @@
 # app/__init__.py
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_wtf.csrf import generate_csrf
 from datetime import timedelta
 
 db = SQLAlchemy()
@@ -16,6 +18,8 @@ def create_app():
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
     app.config['SESSION_COOKIE_SECURE'] = True
     app.config['SECRET_KEY'] = 'qwertyurioupiuodsfghfdjgkjhd2345678jgfnxdz'
+    uploads_folder = os.path.join(app.root_path, 'assets', 'static', 'uploads', 'profile')
+    os.makedirs(uploads_folder, exist_ok=True)
 
     # Initialize the database with the Flask app
     db.init_app(app)
@@ -44,5 +48,8 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+
+    # Generate CSRF token and make it available in the template context
+    app.jinja_env.globals['csrf_token'] = generate_csrf
 
     return app

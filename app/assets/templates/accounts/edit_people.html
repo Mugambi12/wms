@@ -1,5 +1,4 @@
-<!-- app/templates/accounts/add_people.html -->
-
+<!-- app/templates/accounts/edit_people.html -->
 {% extends "base.html" %} {% block content %}
 
 <div class="container-fluid">
@@ -30,7 +29,7 @@
         <!-- Profile Picture Form -->
         <form
           method="POST"
-          action="{{ url_for('accounts.people.add_profile_picture') }}"
+          action="{{ url_for('accounts.people.edit_profile_picture') }}"
           enctype="multipart/form-data"
         >
           <!-- CSRF Token -->
@@ -63,13 +62,13 @@
     </div>
 
     <div class="col-md-9 mt-3 px-3">
-      <div for="addUserForm" class="form-label text-center mb-4">
-        <h3 class="h4 text-dark fw-bold">add User Information</h3>
+      <div for="editUserForm" class="form-label text-center mb-4">
+        <h3 class="h4 text-dark fw-bold">Edit User Information</h3>
       </div>
 
       <form
         method="POST"
-        action="{{ url_for('accounts.people.add_user', user_id=user.id) }}"
+        action="{{ url_for('accounts.people.edit_user', user_id=user.id) }}"
       >
         <!-- CSRF Token -->
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -77,7 +76,7 @@
         <!-- Bootstrap Tabs -->
         <ul
           class="nav nav-pills justify-content-around border-0 bg-light rounded-pill mb-5"
-          id="addUserTabs"
+          id="editUserTabs"
           role="tablist"
         >
           <li class="nav-item" role="presentation">
@@ -124,7 +123,7 @@
         </ul>
 
         <!-- Tab Content -->
-        <div class="tab-content" id="addUserTabsContent">
+        <div class="tab-content" id="editUserTabsContent">
           <!-- Basic Info Section -->
           <div
             class="tab-pane fade show active"
@@ -228,39 +227,62 @@
           >
             <div class="col-md-9 mx-auto">
               <h3>Password Section</h3>
+
               <!-- Current Password -->
-              <div class="mb-3">
-                <label for="currentPassword" class="form-label"
-                  >Current Password</label
+              <div class="mb-3 input-group border rounded-3">
+                {{ form.current_password.label(class="visually-hidden") }} {{
+                form.current_password(class="form-control border-0",
+                id="currentPassword", placeholder="Current Password") }}
+                <button
+                  class="btn btn-light"
+                  type="button"
+                  onclick="togglePassword('currentPassword', 'currentPasswordIcon')"
+                  title="Toggle Password Visibility"
                 >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="currentPassword"
-                  name="current_password"
-                />
+                  <ion-icon
+                    id="currentPasswordIcon"
+                    name="eye"
+                    class="text-primary"
+                  ></ion-icon>
+                </button>
               </div>
+
               <!-- New Password -->
-              <div class="mb-3">
-                <label for="newPassword" class="form-label">New Password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="newPassword"
-                  name="new_password"
-                />
-              </div>
-              <!-- Confirm New Password -->
-              <div class="mb-3">
-                <label for="confirmNewPassword" class="form-label"
-                  >Confirm New Password</label
+              <div class="mb-3 input-group border rounded-3">
+                {{ form.new_password.label(class="visually-hidden") }} {{
+                form.new_password(class="form-control border-0",
+                id="newPassword", placeholder="New Password") }}
+                <button
+                  class="btn btn-light"
+                  type="button"
+                  onclick="togglePassword('newPassword', 'newPasswordIcon')"
+                  title="Toggle Password Visibility"
                 >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="confirmNewPassword"
-                  name="confirm_new_password"
-                />
+                  <ion-icon
+                    id="newPasswordIcon"
+                    name="eye"
+                    class="text-primary"
+                  ></ion-icon>
+                </button>
+              </div>
+
+              <!-- Confirm New Password -->
+              <div class="mb-3 input-group border rounded-3">
+                {{ form.confirm_new_password.label(class="visually-hidden") }}
+                {{ form.confirm_new_password(class="form-control border-0",
+                id="confirmNewPassword", placeholder="Confirm New Password") }}
+                <button
+                  class="btn btn-light"
+                  type="button"
+                  onclick="togglePassword('confirmNewPassword', 'confirmNewPasswordIcon')"
+                  title="Toggle Password Visibility"
+                >
+                  <ion-icon
+                    id="confirmNewPasswordIcon"
+                    name="eye"
+                    class="text-primary"
+                  ></ion-icon>
+                </button>
               </div>
             </div>
           </div>

@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     house_number = db.Column(db.String(20))
     profile_image = db.Column(db.String(255))
     is_active = db.Column(db.Boolean, default=True)
+    is_admin = db.Column(db.Boolean, default=False)
 
     def __init__(self, mobile_number, password, first_name=None, last_name=None,
                  email=None, house_section=None, house_number=None, profile_image=None):
