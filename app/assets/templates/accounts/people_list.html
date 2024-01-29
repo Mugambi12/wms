@@ -2,34 +2,39 @@
 
 <!-- MAIN BODY SECTION -->
 <div class="container-fluid">
-  <h2 class="mb-4">People List Page</h2>
+  <div class="text-center mt-3">
+    <h2 class="mb-2 fw-bold text-primary">People List</h2>
+    <p class="mb-4 text-muted fst-italic">
+      Explore the list of people and download in various formats:
+    </p>
+  </div>
 
   <!-- Download Buttons -->
   <div class="mb-3 float-end me-3">
     <a
       href="{{ url_for('accounts.people.download_users', format='csv') }}"
-      class="btn btn-primary"
+      class="btn btn-sm me-2 btn-primary"
       download="people_list.csv"
     >
       CSV <ion-icon name="download-outline"></ion-icon>
     </a>
     <a
       href="{{ url_for('accounts.people.download_users', format='excel') }}"
-      class="btn btn-success"
+      class="btn btn-sm me-2 btn-success"
       download="people_list.xlsx"
     >
       Excel <ion-icon name="download-outline"></ion-icon>
     </a>
     <a
       href="{{ url_for('accounts.people.download_users', format='pdf') }}"
-      class="btn btn-danger"
+      class="btn btn-sm me-2 btn-danger"
       download="people_list.pdf"
     >
       PDF <ion-icon name="download-outline"></ion-icon>
     </a>
   </div>
 
-  <!-- User List Table -->
+  <!-- People List Table -->
   <table
     id="people-table"
     class="table table-bordered table-striped text-center"
@@ -43,7 +48,7 @@
         <th scope="col">House Section</th>
         <th scope="col">House Number</th>
         <th scope="col">Status</th>
-        <th scope="col">Admin</th>
+        <th scope="col">Account</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
@@ -69,7 +74,7 @@
           {% if person.is_admin %}
           <span class="text-success">Admin</span>
           {% else %}
-          <span class="text-info">Not Admin</span>
+          <span class="text-info">Regular</span>
           {% endif %}
         </td>
         <td>
