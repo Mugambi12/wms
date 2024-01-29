@@ -21,18 +21,6 @@ class AddUserForm(FlaskForm):
         if User.query.filter_by(mobile_number=field.data).first():
             raise ValidationError('Mobile number is already registered.')
 
-#class AddUserForm(FlaskForm):
-#    mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(min=10, max=15)])
-#    first_name = StringField('First Name', validators=[DataRequired(), Length(max=50)])
-#    last_name = StringField('Last Name', validators=[DataRequired(), Length(max=50)])
-#    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=100)])
-#    house_section = StringField('House Section', validators=[DataRequired(), Length(max=20)])
-#    house_number = StringField('House Number', validators=[DataRequired(), Length(max=10)])
-#    is_active = BooleanField('Active')
-#    is_admin = BooleanField('Admin')
-#
-#    submit = SubmitField('Add User')
-
 class EditUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[Optional()])
     last_name = StringField('Last Name', validators=[Optional()])

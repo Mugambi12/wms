@@ -3,8 +3,9 @@
 
 <div class="container-fluid">
   <div class="row">
+    <!-- Profile Picture -->
     <div class="col-md-3 mt-5 px-3">
-      <div class="text-center mt-5">
+      <div class="text-center mt-5 position-relative">
         <h4 class="mb-4">Profile Picture</h4>
 
         <!-- Display User Profile Image -->
@@ -19,6 +20,7 @@
 
         <!-- Profile Picture Form -->
         <form
+          class="mb-5"
           method="POST"
           action="{{ url_for('accounts.people.edit_profile_picture') }}"
           enctype="multipart/form-data"
@@ -49,9 +51,74 @@
             Upload Picture
           </button>
         </form>
+
+        <!-- Delete User Button -->
+        <ul class="nav nav-pills justify-content-center border-0">
+          <li class="nav-item">
+            <button
+              class="nav-link rounded-pill text-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteUserModal"
+            >
+              <ion-icon name="trash-outline"></ion-icon>
+              Delete User
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
 
+    <!-- Delete User Modal -->
+    <div
+      class="modal fade"
+      id="deleteUserModal"
+      tabindex="-1"
+      aria-labelledby="deleteUserModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteUserModalLabel">
+              Confirm Deletion
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Delete the account for
+            <strong
+              >{{ user.first_name.title() }} {{ user.last_name.title()
+              }}</strong
+            >? This can't be undone.
+          </div>
+
+          <div class="modal-footer justify-content-between">
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <form
+              method="post"
+              action="{{ url_for('accounts.people.delete_user', user_id=user.id) }}"
+            >
+              <button type="submit" class="btn btn-sm btn-danger">
+                Confirm Deletion
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit User Information -->
     <div class="col-md-9 mt-3 px-3">
       <div for="editUserForm" class="form-label text-center mb-4">
         <h3 class="h4 text-dark fw-bold">Edit User Information</h3>

@@ -107,6 +107,20 @@ def edit_profile_picture():
 
     return render_template('accounts/edit_people.html', form=form)
 
+@people_bp.route('/delete_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+
+    if user == current_user:
+        flash('You cannot delete your own account.', 'danger')
+        return redirect(url_for('accounts.people.people_list'))
+
+    db.session.delete(user)
+    db.session.commit()
+    flash(f'Successfully deleted the user {user.first_name.title()}.', 'success')
+    return redirect(url_for('accounts.people.people_list'))
+
 
 # Download Logic Manager
 @people_bp.route('/download_users', methods=['GET'])
