@@ -5,10 +5,10 @@ from wtforms.validators import DataRequired
 
 class UnitPriceForm(FlaskForm):
     unit_price = FloatField('Unit Price', validators=[DataRequired()])
-    submit = SubmitField()
+    submit = SubmitField('Submit')
 
 class AddHouseSectionForm(FlaskForm):
-    house_sections = StringField('New House Section', validators=[DataRequired()])
+    house_sections = StringField('New House Section')
     submit = SubmitField()
 
 class EditHouseSectionForm(FlaskForm):

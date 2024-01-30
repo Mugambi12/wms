@@ -77,10 +77,11 @@ class Payment(db.Model):
 
 class Settings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    unit_price = db.Column(db.Float, nullable=False)
-    house_sections = db.Column(db.String(255), nullable=False)
+    unit_price = db.Column(db.Float)
+    house_sections = db.Column(db.String(255))
 
-    def __init__(self, unit_price, house_sections):
+    def __init__(self, unit_price=None, house_sections=None):
         self.unit_price = unit_price
         self.house_sections = house_sections
+
 
