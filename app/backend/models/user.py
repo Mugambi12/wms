@@ -16,8 +16,9 @@ class User(db.Model, UserMixin):
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
 
-    # Establishing a one-to-many relationship with records
-    records = db.relationship('Record', backref='user', lazy=True)
+    # Establishing a one-to-many relationship with meter readings and payments
+    meter_readings = db.relationship('MeterReading', backref='user', lazy=True)
+    payments = db.relationship('Payment', backref='user', lazy=True)
 
     def __init__(self, mobile_number, password, first_name=None, last_name=None,
                  email=None, house_section=None, house_number=None, profile_image=None):
@@ -33,15 +34,53 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class Record(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    meter_reading = db.Column(db.Float)
-    billing_info = db.Column(db.String(255))
-    payment_info = db.Column(db.String(255))
 
-    def __init__(self, meter_reading, billing_info, payment_info, user_id):
+class MeterReading(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    house_section = db.Column(db.String(50))
+    house_number = db.Column(db.String(20))
+    reading_value = db.Column(db.Float)
+    reading_date = db.Column(db.Date)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, reading_value, reading_date, house_section, house_number, user_id):
+        self.house_section = house_section
+        self.house_number = house_number
+        self.reading_value = reading_value
+        self.reading_date = reading_date
         self.user_id = user_id
-        self.meter_reading = meter_reading
-        self.billing_info = billing_info
-        self.payment_info = payment_info
+
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Float, nullable=False)
+    payment_date = db.Column(db.Date, nullable=False)
+    payment_method = db.Column(db.String(50))
+    reference_number = db.Column(db.String(50))
+    status = db.Column(db.String(20))  # e.g., "Pending", "Processed"
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, amount, payment_date, user_id, payment_method=None, reference_number=None, status="Pending"):
+        self.amount = amount
+        self.payment_date = payment_date
+        self.user_id = user_id
+        self.payment_method = payment_method
+        self.reference_number = reference_number
+        self.status = status
+
+    def mark_as_processed(self):
+        self.status = "Processed"
+
+    def __repr__(self):
+        return f"<Payment {self.id}: {self.amount} {self.payment_date}>"
+
+
+class Settings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    unit_price = db.Column(db.Float, nullable=False)
+    house_sections = db.Column(db.String(255), nullable=False)
+
+    def __init__(self, unit_price, house_sections):
+        self.unit_price = unit_price
+        self.house_sections = house_sections
+

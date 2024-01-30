@@ -1,10 +1,26 @@
-{% extends "base.html" %} {% block content %}
+<!-- app/templates/accounts/meter_readings.html -->
+{% extends 'base.html' %} {% block content %}
+<h2>Add Meter Reading</h2>
+<form method="post" action="{{ url_for('accounts.records.meter_readings') }}">
+  <!-- CSRF Token -->
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-<!-- #MAIN BODY SECTION -->
-<div class="container-fluid">
-  <h4>Meter Readings Page</h4>
+  <label for="reading_value">Reading Value:</label>
+  <input type="number" step="any" name="reading_value" required />
+  <br />
 
-  <!-- The correct URL generation for the accounts route -->
-</div>
+  <label for="reading_date">Reading Date:</label>
+  <input type="date" name="reading_date" required />
+  <br />
 
+  <label for="house_section">House Section:</label>
+  <input type="text" name="house_section" required />
+  <br />
+
+  <label for="house_number">House Number:</label>
+  <input type="text" name="house_number" required />
+  <br />
+
+  <button type="submit">Submit</button>
+</form>
 {% endblock %}

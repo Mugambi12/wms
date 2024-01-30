@@ -1,10 +1,88 @@
-{% extends "base.html" %} {% block content %}
+{% extends 'base.html' %} {% block content %}
 
-<!-- #MAIN BODY SECTION -->
+<!-- Settings Section -->
 <div class="container-fluid">
-  <h4>Settings Page</h4>
+  <div class="text-center mt-3">
+    <h2 class="mb-2 fw-bold text-primary">System Settings</h2>
+    <p class="mb-4 text-muted fst-italic">
+      Discover and connect with our vibrant community.
+    </p>
+  </div>
 
-  <!-- The correct URL generation for the accounts route -->
+  <!-- Unit Price Form -->
+  <form method="post" action="{{ url_for('accounts.settings.settings') }}">
+    <!-- CSRF Token -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <label for="unit_price">Unit Price:</label>
+    {{ unit_price_form.unit_price(class="form-control") }}
+    <br />
+
+    <button
+      type="submit"
+      name="unit_price_submit"
+      class="btn btn-primary rounded-pill"
+    >
+      Submit
+    </button>
+  </form>
+
+  <!-- Add House Section Form -->
+  <form method="post" action="{{ url_for('accounts.settings.settings') }}">
+    <!-- CSRF Token -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <label for="house_sections">New House Section:</label>
+    {{ add_section_form.house_sections(class="form-control") }}
+    <br />
+
+    <button
+      type="submit"
+      name="add_section_submit"
+      class="btn btn-success rounded-pill"
+    >
+      Add Section
+    </button>
+  </form>
+
+  <!-- Edit House Section Form -->
+  <form method="post" action="{{ url_for('accounts.settings.settings') }}">
+    <!-- CSRF Token -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <label for="house_sections">Select House Section:</label>
+    {{ edit_section_form.house_sections(class="form-control") }}
+
+    <label for="new_house_section">New House Section Name:</label>
+    {{ edit_section_form.new_house_section(class="form-control") }}
+    <br />
+
+    <button
+      type="submit"
+      name="edit_section_submit"
+      class="btn btn-primary rounded-pill"
+    >
+      Save Changes
+    </button>
+  </form>
+
+  <!-- Delete House Section Form -->
+  <form method="post" action="{{ url_for('accounts.settings.settings') }}">
+    <!-- CSRF Token -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <label for="house_sections">Select House Section to Delete:</label>
+    {{ delete_section_form.house_sections(class="form-control") }}
+    <br />
+
+    <button
+      type="submit"
+      name="delete_section_submit"
+      class="btn btn-danger rounded-pill"
+    >
+      Delete Section
+    </button>
+  </form>
 </div>
 
 {% endblock %}
