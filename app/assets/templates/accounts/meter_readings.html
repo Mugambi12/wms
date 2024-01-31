@@ -1,26 +1,103 @@
 <!-- app/templates/accounts/meter_readings.html -->
 {% extends 'base.html' %} {% block content %}
-<h2>Add Meter Reading</h2>
-<form method="post" action="{{ url_for('accounts.records.meter_readings') }}">
-  <!-- CSRF Token -->
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-  <label for="reading_value">Reading Value:</label>
-  <input type="number" step="any" name="reading_value" required />
-  <br />
+<div class="container-fluid">
+  <!-- Improved Add Meter Reading Form -->
+  <div class="mb-5">
+    <h2>Add Meter Reading</h2>
+    <form
+      method="post"
+      action="{{ url_for('accounts.records.meter_readings') }}"
+      class="needs-validation"
+      novalidate
+    >
+      <!-- CSRF Token -->
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-  <label for="reading_date">Reading Date:</label>
-  <input type="date" name="reading_date" required />
-  <br />
+      <div class="row">
+        <!-- House Section -->
+        <div class="col-md-6 mb-2">
+          <label for="house_section" class="form-label">House Section:</label>
+          <select
+            class="form-select"
+            name="house_section"
+            id="house_section"
+            required
+          >
+            <option value="" selected disabled>Select House Section</option>
+            {% for section in house_sections %}
+            <option value="{{ section[0] }}">{{ section[0] }}</option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">Please select a house section.</div>
+        </div>
 
-  <label for="house_section">House Section:</label>
-  <input type="text" name="house_section" required />
-  <br />
+        <!-- House Number -->
+        <div class="col-md-6 mb-2">
+          {{ form.house_number.label(class="form-label") }} {{
+          form.house_number(class="form-control", id="house_number",
+          required="required") }}
+          <div class="invalid-feedback">Please provide a house number.</div>
+        </div>
 
-  <label for="house_number">House Number:</label>
-  <input type="text" name="house_number" required />
-  <br />
+        <!-- Reading Date -->
+        <div class="col-md-6 mb-2">
+          {{ form.reading_date.label(class="form-label") }} {{
+          form.reading_date(class="form-control", required="required") }}
+          <div class="invalid-feedback">Please select a reading date.</div>
+        </div>
 
-  <button type="submit">Submit</button>
-</form>
+        <!-- Reading Value -->
+        <div class="col-md-6 mb-2">
+          {{ form.reading_value.label(class="form-label") }} {{
+          form.reading_value(class="form-control", required="required") }}
+          <div class="invalid-feedback">
+            Please provide a valid reading value.
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <!-- Improved Meter Readings Table -->
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">Meter Readings</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped data-table text-center">
+            <thead class="table-primary">
+              <tr>
+                <th scope="col">Reading Date</th>
+                <th scope="col">House Section</th>
+                <th scope="col">House Number</th>
+                <th scope="col">Reading Value</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for reading in meter_readings %}
+              <tr>
+                <td>{{ reading.reading_date }}</td>
+                <td>{{ reading.house_section }}</td>
+                <td>{{ reading.house_number }}</td>
+                <td>{{ reading.reading_value }}</td>
+                <td>
+                  <a href="#">
+                    <ion-icon name="create-outline"></ion-icon>Edit
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
