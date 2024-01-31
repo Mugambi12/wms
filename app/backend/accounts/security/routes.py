@@ -14,3 +14,4 @@ def security_options():
     else:
         # If the user is not authenticated, redirect to the login page
         return redirect(url_for('auth.login'))
+

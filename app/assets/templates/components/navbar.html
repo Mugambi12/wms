@@ -81,7 +81,7 @@
             <li>
               <a
                 class="dropdown-item"
-                href="{{ url_for('accounts.records.billing') }}"
+                href="{{ url_for('accounts.people.edit_user', user_id=current_user.id) }}"
               >
                 <ion-icon name="person-outline" class="me-2"></ion-icon> Profile
               </a>
@@ -118,7 +118,11 @@
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
-              <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+              <a
+                class="dropdown-item"
+                onclick="localStorage.clear();"
+                href="{{ url_for('auth.logout') }}"
+              >
                 <ion-icon name="log-out-outline" class="me-2"></ion-icon> Logout
               </a>
             </li>

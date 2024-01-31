@@ -26,16 +26,18 @@ def people_list():
     else:
         return redirect(url_for('auth.login'))
 
+
 @people_bp.route('/add_people', methods=['GET', 'POST'])
 @login_required
 def add_people():
     form = AddUserForm()
 
-    # Assuming you have a current_user variable available
-    user = current_user  # or however you get the current user in your application
+    # Populate house sections choices
+    form.populate_house_sections()
+
+    user = current_user
 
     if request.method == 'POST' and form.validate():
-        # Create a new user
         new_user = User(
             mobile_number=form.mobile_number.data,
             first_name=form.first_name.data,
@@ -46,7 +48,6 @@ def add_people():
             password=form.password.data
         )
 
-        # Commit the new user to the database
         db.session.add(new_user)
         db.session.commit()
 
@@ -55,6 +56,30 @@ def add_people():
 
     return render_template('accounts/add_people.html', form=form, user=user, hide_footer=True)
 
+# app/backend/accounts/people/routes.py
+
+@people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    form = EditUserForm(request.form, obj=user)
+
+    # Populate house sections choices
+    form.populate_house_sections()
+
+    if request.method == 'POST' and form.validate():
+        if form.new_password.data:  # Check if new password is provided
+            if not validate_new_password(form.new_password.data):
+                flash('New password must be at least 6 characters long.', 'danger')
+                return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
+
+        if change_password(user, form):
+            form.populate_obj(user)
+            db.session.commit()
+            flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
+            return redirect(url_for('accounts.people.people_list'))
+
+    return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
 
 # Edit User Informations
 def change_password(user, form):
@@ -63,24 +88,14 @@ def change_password(user, form):
             flash('Current password is incorrect.', 'danger')
             return False
 
-        user.password_hash = generate_password_hash(form.new_password.data)
+        if form.new_password.data:
+            user.password_hash = generate_password_hash(form.new_password.data)
 
     return True
 
-@people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
-@login_required
-def edit_user(user_id):
-    user = User.query.get_or_404(user_id)
-    form = EditUserForm(request.form, obj=user)
+def validate_new_password(password):
+    return len(password) >= 6
 
-    if request.method == 'POST' and form.validate():
-        if change_password(user, form):
-            form.populate_obj(user)
-            db.session.commit()
-            flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
-            return redirect(url_for('accounts.people.people_list'))
-
-    return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
 
 @people_bp.route('/edit_profile_picture', methods=['GET', 'POST'])
 @login_required

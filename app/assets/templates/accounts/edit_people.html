@@ -53,6 +53,7 @@
         </form>
 
         <!-- Delete User Button -->
+        {% if current_user.is_admin %}
         <ul class="nav nav-pills justify-content-center border-0">
           <li class="nav-item">
             <button
@@ -65,6 +66,7 @@
             </button>
           </li>
         </ul>
+        {% endif %}
       </div>
     </div>
 
@@ -184,7 +186,7 @@
         <div class="tab-content" id="editUserTabsContent">
           <!-- Basic Info Section -->
           <div
-            class="tab-pane fade show active"
+            class="px-3 tab-pane fade show active"
             id="basicInfo"
             role="tabpanel"
             aria-labelledby="basicInfo-tab"
@@ -194,83 +196,40 @@
               <div class="col-md-6">
                 <!-- Mobile Number -->
                 <div class="mb-3">
-                  <label for="mobileNumber" class="form-label"
-                    >Mobile Number</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="mobileNumber"
-                    name="mobile_number"
-                    value="{{ user.mobile_number }}"
-                    required
-                  />
+                  {{ form.mobile_number.label(class="form-label") }} {{
+                  form.mobile_number(class="form-control", required=true) }}
                 </div>
 
                 <!-- First Name -->
                 <div class="mb-3">
-                  <label for="firstName" class="form-label">First Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="firstName"
-                    name="first_name"
-                    value="{{ user.first_name }}"
-                  />
+                  {{ form.first_name.label(class="form-label") }} {{
+                  form.first_name(class="form-control") }}
                 </div>
 
                 <!-- Last Name -->
                 <div class="mb-3">
-                  <label for="lastName" class="form-label">Last Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="lastName"
-                    name="last_name"
-                    value="{{ user.last_name }}"
-                  />
+                  {{ form.last_name.label(class="form-label") }} {{
+                  form.last_name(class="form-control") }}
                 </div>
               </div>
 
               <div class="col-md-6">
                 <!-- Email -->
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    name="email"
-                    value="{{ user.email }}"
-                  />
+                  {{ form.email.label(class="form-label") }} {{
+                  form.email(class="form-control") }}
                 </div>
 
                 <!-- House Section -->
                 <div class="mb-3">
-                  <label for="houseSection" class="form-label"
-                    >House Section</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="houseSection"
-                    name="house_section"
-                    value="{{ user.house_section }}"
-                  />
+                  {{ form.house_section.label(class="form-label") }} {{
+                  form.house_section(class="form-control") }}
                 </div>
 
                 <!-- House Number -->
                 <div class="mb-3">
-                  <label for="houseNumber" class="form-label"
-                    >House Number</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="houseNumber"
-                    name="house_number"
-                    value="{{ user.house_number }}"
-                  />
+                  {{ form.house_number.label(class="form-label") }} {{
+                  form.house_number(class="form-control") }}
                 </div>
               </div>
             </div>
@@ -287,60 +246,70 @@
               <h3>Password Section</h3>
 
               <!-- Current Password -->
-              <div class="mb-3 input-group border rounded-3">
-                {{ form.current_password.label(class="visually-hidden") }} {{
-                form.current_password(class="form-control border-0",
-                id="currentPassword", placeholder="Current Password") }}
-                <button
-                  class="btn btn-light"
-                  type="button"
-                  onclick="togglePassword('currentPassword', 'currentPasswordIcon')"
-                  title="Toggle Password Visibility"
-                >
-                  <ion-icon
-                    id="currentPasswordIcon"
-                    name="eye"
-                    class="text-primary"
-                  ></ion-icon>
-                </button>
+              <div class="mb-3">
+                {{ form.current_password.label(class="form-label
+                visually-hidden") }}
+                <div class="input-group border rounded-3">
+                  {{ form.current_password(class="form-control border-0",
+                  id="currentPassword", placeholder="Current Password") }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('currentPassword', 'currentPasswordIcon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="currentPasswordIcon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
               </div>
 
               <!-- New Password -->
-              <div class="mb-3 input-group border rounded-3">
-                {{ form.new_password.label(class="visually-hidden") }} {{
-                form.new_password(class="form-control border-0",
-                id="newPassword", placeholder="New Password") }}
-                <button
-                  class="btn btn-light"
-                  type="button"
-                  onclick="togglePassword('newPassword', 'newPasswordIcon')"
-                  title="Toggle Password Visibility"
-                >
-                  <ion-icon
-                    id="newPasswordIcon"
-                    name="eye"
-                    class="text-primary"
-                  ></ion-icon>
-                </button>
+              <div class="mb-3">
+                {{ form.new_password.label(class="form-label visually-hidden")
+                }}
+                <div class="input-group border rounded-3">
+                  {{ form.new_password(class="form-control border-0",
+                  id="newPassword", placeholder="New Password") }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('newPassword', 'newPasswordIcon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="newPasswordIcon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
               </div>
 
               <!-- Confirm New Password -->
-              <div class="mb-3 input-group border rounded-3">
-                {{ form.confirm_new_password.label(class="visually-hidden") }}
-                {{ form.confirm_new_password(class="form-control border-0",
-                id="confirmNewPassword", placeholder="Confirm New Password") }}
-                <button
-                  class="btn btn-light"
-                  type="button"
-                  onclick="togglePassword('confirmNewPassword', 'confirmNewPasswordIcon')"
-                  title="Toggle Password Visibility"
-                >
-                  <ion-icon
-                    id="confirmNewPasswordIcon"
-                    name="eye"
-                    class="text-primary"
-                  ></ion-icon>
-                </button>
+              <div class="mb-3">
+                {{ form.confirm_new_password.label(class="form-label
+                visually-hidden") }}
+                <div class="input-group border rounded-3">
+                  {{ form.confirm_new_password(class="form-control border-0",
+                  id="confirmNewPassword", placeholder="Confirm New Password")
+                  }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('confirmNewPassword', 'confirmNewPasswordIcon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="confirmNewPasswordIcon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
