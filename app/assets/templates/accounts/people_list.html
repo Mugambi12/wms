@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- MAIN BODY SECTION -->
 <div class="container-fluid">
   <div class="text-center mt-3">
     <h2 class="mb-2 fw-bold text-primary">People List</h2>
@@ -10,88 +9,103 @@
   </div>
 
   <!-- Download Buttons -->
-  <div class="mb-3 float-end me-3">
-    <a
-      href="{{ url_for('accounts.people.download_users', format='csv') }}"
-      class="btn btn-sm me-2 btn-primary"
-      download="people_list.csv"
-    >
-      CSV <ion-icon name="download-outline"></ion-icon>
-    </a>
-    <a
-      href="{{ url_for('accounts.people.download_users', format='excel') }}"
-      class="btn btn-sm me-2 btn-success"
-      download="people_list.xlsx"
-    >
-      Excel <ion-icon name="download-outline"></ion-icon>
-    </a>
-    <a
-      href="{{ url_for('accounts.people.download_users', format='pdf') }}"
-      class="btn btn-sm me-2 btn-danger"
-      download="people_list.pdf"
-    >
-      PDF <ion-icon name="download-outline"></ion-icon>
-    </a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="mb-3 float-end me-3">
+        <a
+          href="{{ url_for('accounts.people.download_users', format='csv') }}"
+          class="btn btn-sm me-2 btn-primary"
+          download="people_list.csv"
+        >
+          CSV <ion-icon name="download-outline"></ion-icon>
+        </a>
+        <a
+          href="{{ url_for('accounts.people.download_users', format='excel') }}"
+          class="btn btn-sm me-2 btn-success"
+          download="people_list.xlsx"
+        >
+          Excel <ion-icon name="download-outline"></ion-icon>
+        </a>
+        <a
+          href="{{ url_for('accounts.people.download_users', format='pdf') }}"
+          class="btn btn-sm me-2 btn-danger"
+          download="people_list.pdf"
+        >
+          PDF <ion-icon name="download-outline"></ion-icon>
+        </a>
+      </div>
+    </div>
   </div>
 
   <!-- People List Table -->
-  <table
-    id="people-table"
-    class="table table-bordered table-striped text-center"
-  >
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Full Name</th>
-        <th scope="col">Mobile Number</th>
-        <th scope="col">Email</th>
-        <th scope="col">House Section</th>
-        <th scope="col">House Number</th>
-        <th scope="col">Status</th>
-        <th scope="col">Account</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for person in people_list %}
-      <tr>
-        <th scope="row">{{ person.id }}</th>
-        <td>
-          {{ person.first_name.title() ~ " " ~ person.last_name.title() }}
-        </td>
-        <td>{{ person.mobile_number }}</td>
-        <td>{{ person.email }}</td>
-        <td>{{ person.house_section }}</td>
-        <td>{{ person.house_number }}</td>
-        <td>
-          {% if person.is_active %}
-          <span class="text-success">Active</span>
-          {% else %}
-          <span class="text-danger">Inactive</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if person.is_admin %}
-          <span class="text-success">Admin</span>
-          {% else %}
-          <span class="text-info">Regular</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if current_user.is_admin or current_user.id == person.id %}
-          <a
-            href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">Data Tables of People List</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table
+            id="example"
+            class="table table-striped data-table text-center"
+            style="width: 100%"
           >
-            <ion-icon name="create-outline"></ion-icon>Edit
-          </a>
-          {% else %}
-          <span class="text-muted">No Edit Permission</span>
-          {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+            <thead class="table-primary">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Mobile Number</th>
+                <th scope="col">Email</th>
+                <th scope="col">House Section</th>
+                <th scope="col">House Number</th>
+                <th scope="col">Status</th>
+                <th scope="col">Account</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for person in people_list %}
+              <tr>
+                <th scope="row">{{ person.id }}</th>
+                <td>
+                  {{ person.first_name.title() ~ " " ~ person.last_name.title()
+                  }}
+                </td>
+                <td>{{ person.mobile_number }}</td>
+                <td>{{ person.email }}</td>
+                <td>{{ person.house_section }}</td>
+                <td>{{ person.house_number }}</td>
+                <td>
+                  {% if person.is_active %}
+                  <span class="text-success">Active</span>
+                  {% else %}
+                  <span class="text-danger">Inactive</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if person.is_admin %}
+                  <span class="text-success">Admin</span>
+                  {% else %}
+                  <span class="text-info">Regular</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if current_user.is_admin or current_user.id == person.id %}
+                  <a
+                    href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
+                  >
+                    <ion-icon name="create-outline"></ion-icon>Edit
+                  </a>
+                  {% else %}
+                  <span class="text-muted">No Edit Permission</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- DataTables Initialization Script -->
