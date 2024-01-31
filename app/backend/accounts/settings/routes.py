@@ -18,9 +18,13 @@ def update_unit_price(system_settings, new_unit_price):
 
         system_settings.unit_price = new_unit_price
         db.session.commit()
-        flash(f'Unit Price updated to {new_unit_price} successfully!', 'success')
+        flash(f'Unit Price updated to "{new_unit_price.title()}" successfully!', 'success')
 
-    return redirect(url_for('accounts.settings.settings'))
+    else:
+        new_settings = Settings(unit_price=new_unit_price)
+        db.session.add(new_settings)
+        db.session.commit()
+        flash(f'Unit Price added as "{new_unit_price.title()}" successfully!', 'success')
 
 def add_house_section(system_settings, house_section):
     if system_settings:
@@ -76,6 +80,7 @@ def settings():
     if request.method == 'POST':
         if 'unit_price_submit' in request.form:
             update_unit_price(system_settings, new_unit_price)
+            return redirect(url_for('accounts.settings.settings'))
 
         elif 'add_section_submit' in request.form and add_section_form.validate_on_submit():
             return add_house_section(system_settings, add_section_form.house_sections.data)
