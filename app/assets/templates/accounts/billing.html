@@ -2,9 +2,99 @@
 
 <!-- #MAIN BODY SECTION -->
 <div class="container-fluid">
-  <h4>Billings Page</h4>
+  <div class="text-center mt-3">
+    <h2 class="mb-2 fw-bold text-primary">Manage Invoices</h2>
+    <p class="mb-4 text-muted fst-italic">
+      Effortlessly send and track invoices to users
+    </p>
+  </div>
 
-  <!-- The correct URL generation for the accounts route -->
+  <!-- Download Buttons -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="mb-3 float-end me-3">
+        <a
+          href="#"
+          class="btn btn-sm me-2 btn-primary"
+          download="people_list.csv"
+        >
+          CSV <ion-icon name="download-outline"></ion-icon>
+        </a>
+        <a
+          href="#"
+          class="btn btn-sm me-2 btn-success"
+          download="people_list.xlsx"
+        >
+          Excel <ion-icon name="download-outline"></ion-icon>
+        </a>
+        <a
+          href="#"
+          class="btn btn-sm me-2 btn-danger"
+          download="people_list.pdf"
+        >
+          PDF <ion-icon name="download-outline"></ion-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice Details Table -->
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">Invoice Details Data Tables</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table
+            id="example"
+            class="table table-striped data-table text-center"
+            style="width: 100%"
+          >
+            <thead class="table-primary">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Date</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Section</th>
+                <th scope="col">House</th>
+                <th scope="col">Status</th>
+                <th scope="col">Prev. Reading</th>
+                <th scope="col">Curr. Reading</th>
+                <th scope="col">Consumed</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Total</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if billing_data %} {% for entry in billing_data %}
+              <tr>
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.timestamp.strftime('%d-%m-%Y') }}</td>
+                <td>{{ entry.user.first_name }} {{ entry.user.last_name }}</td>
+                <td>{{ entry.house_section }}</td>
+                <td>{{ entry.house_number }}</td>
+                <td>{{ "Active" if entry.user.is_active else "Inactive" }}</td>
+                <td>{{ entry.prev_reading }}</td>
+                <td>{{ entry.curr_reading }}</td>
+                <td>{{ entry.consumed }}</td>
+                <td>{{ entry.unit_price }}</td>
+                <td>{{ entry.total }}</td>
+                <td>
+                  <a class="me-2" href="#"> Edit </a>
+                  <a href="#"> Invoice </a>
+                </td>
+              </tr>
+              {% endfor %} {% else %}
+              <tr>
+                <td colspan="12">No billing data available</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

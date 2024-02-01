@@ -1,0 +1,126 @@
+{% extends "base.html" %} {% block content %}
+
+<head>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/invoice.css') }}"
+  />
+</head>
+
+<div class="invoice-wrapper" id="print-area">
+  <div class="invoice">
+    <div class="invoice-container">
+      <div class="invoice-head">
+        <div class="invoice-head-top">
+          <div class="invoice-head-top-left text-start">
+            <h3 class="text-dark">Aqua<span class="text-info">Flow</span></h3>
+          </div>
+          <div class="invoice-head-top-right text-end">
+            <h3>Invoice</h3>
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="invoice-head-middle">
+          <div class="invoice-head-middle-left text-start">
+            <p><span class="text-bold">Date</span>: 31/01/2024</p>
+          </div>
+          <div class="invoice-head-middle-right text-end">
+            <p><span class="text-bold">Invoice No:</span>16789</p>
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="invoice-head-bottom">
+          <div class="invoice-head-bottom-left">
+            <ul>
+              <li class="text-bold">Invoiced To:</li>
+              <li>John Doe</li>
+              <li>Phase 1</li>
+              <li>House No. 1</li>
+              <li>+(254) 720155155</li>
+            </ul>
+          </div>
+          <div class="invoice-head-bottom-right">
+            <ul class="text-end">
+              <li class="text-bold">Pay To:</li>
+              <li>AquaFlow Inc.</li>
+              <li>M-Pesa/Bank Name</li>
+              <li>Pay Bill No,</li>
+              <li>Account Number</li>
+              <li>Mobile No.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-view">
+        <div class="invoice-body">
+          <table>
+            <thead>
+              <tr>
+                <td class="text-bold">Service</td>
+                <td class="text-bold">Description</td>
+                <td class="text-bold">Rate</td>
+                <td class="text-bold">QTY</td>
+                <td class="text-bold">Amount</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Water Usage</td>
+                <td>Monthly water consumption</td>
+                <td>KES 250</td>
+                <td>15 units</td>
+                <td class="text-end">KES 3750</td>
+              </tr>
+              <tr>
+                <td>Service Fee</td>
+                <td>Maintenance & service charge</td>
+                <td>KES 1000</td>
+                <td>1</td>
+                <td class="text-end">KES 1000</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="invoice-body-bottom">
+            <div class="invoice-body-info-item border-bottom">
+              <div class="info-item-td text-end text-bold">Sub Total:</div>
+              <div class="info-item-td text-end">KES 4750</div>
+            </div>
+            <div class="invoice-body-info-item border-bottom">
+              <div class="info-item-td text-end text-bold">VAT (5%):</div>
+              <div class="info-item-td text-end">KES 238</div>
+            </div>
+            <div class="invoice-body-info-item">
+              <div class="info-item-td text-end text-bold">Total:</div>
+              <div class="info-item-td text-end">KES 4988</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice-foot text-center">
+        <p class="text-bold">
+          NOTE: This is a computer-generated receipt and does not require a
+          physical signature.
+        </p>
+
+        <div class="invoice-btns mt-3">
+          <button type="button" class="invoice-btn" onclick="printInvoice()">
+            <ion-icon name="print-outline"></ion-icon> Print
+          </button>
+          <script>
+            function printInvoice() {
+              window.print();
+            }
+          </script>
+
+          <button type="button" class="invoice-btn ms-2">
+            <ion-icon name="cloud-download-outline"></ion-icon> Download
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

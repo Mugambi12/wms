@@ -30,56 +30,61 @@ def people_list():
 @people_bp.route('/add_people', methods=['GET', 'POST'])
 @login_required
 def add_people():
-    form = AddUserForm()
+    if current_user.is_authenticated:
+        form = AddUserForm()
 
-    # Populate house sections choices
-    form.populate_house_sections()
+        # Populate house sections choices
+        form.populate_house_sections()
 
-    user = current_user
+        user = current_user
 
-    if request.method == 'POST' and form.validate():
-        new_user = User(
-            mobile_number=form.mobile_number.data,
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-            email=form.email.data,
-            house_section=form.house_section.data,
-            house_number=form.house_number.data,
-            password=form.password.data
-        )
+        if request.method == 'POST' and form.validate():
+            new_user = User(
+                mobile_number=form.mobile_number.data,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                email=form.email.data,
+                house_section=form.house_section.data,
+                house_number=form.house_number.data,
+                password=form.password.data
+            )
 
-        db.session.add(new_user)
-        db.session.commit()
+            db.session.add(new_user)
+            db.session.commit()
 
-        flash('User added successfully.', 'success')
-        return redirect(url_for('accounts.people.people_list'))
+            flash('User added successfully.', 'success')
+            return redirect(url_for('accounts.people.people_list'))
 
-    return render_template('accounts/add_people.html', form=form, user=user, hide_footer=True)
+        return render_template('accounts/add_people.html', form=form, user=user, hide_footer=True)
+    else:
+        return redirect(url_for('auth.login'))
 
-# app/backend/accounts/people/routes.py
 
 @people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def edit_user(user_id):
-    user = User.query.get_or_404(user_id)
-    form = EditUserForm(request.form, obj=user)
+    if current_user.is_authenticated:
+        user = User.query.get_or_404(user_id)
+        form = EditUserForm(request.form, obj=user)
 
-    # Populate house sections choices
-    form.populate_house_sections()
+        # Populate house sections choices
+        form.populate_house_sections()
 
-    if request.method == 'POST' and form.validate():
-        if form.new_password.data:  # Check if new password is provided
-            if not validate_new_password(form.new_password.data):
-                flash('New password must be at least 6 characters long.', 'danger')
-                return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
+        if request.method == 'POST' and form.validate():
+            if form.new_password.data:
+                if not validate_new_password(form.new_password.data):
+                    flash('New password must be at least 6 characters long.', 'danger')
+                    return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
 
-        if change_password(user, form):
-            form.populate_obj(user)
-            db.session.commit()
-            flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
-            return redirect(url_for('accounts.people.people_list'))
+            if change_password(user, form):
+                form.populate_obj(user)
+                db.session.commit()
+                flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
+                return redirect(url_for('accounts.people.people_list'))
 
-    return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
+        return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
+    else:
+        return redirect(url_for('auth.login'))
 
 # Edit User Informations
 def change_password(user, form):
@@ -100,41 +105,47 @@ def validate_new_password(password):
 @people_bp.route('/edit_profile_picture', methods=['GET', 'POST'])
 @login_required
 def edit_profile_picture():
-    form = EditProfilePictureForm()
+    if current_user.is_authenticated:
+        form = EditProfilePictureForm()
 
-    if request.method == 'POST' and form.validate():
-        if form.profile_image.data:
-            profile_picture = form.profile_image.data
+        if request.method == 'POST' and form.validate():
+            if form.profile_image.data:
+                profile_picture = form.profile_image.data
 
-            filename = secure_filename(f"{current_user.mobile_number}.png")
+                filename = secure_filename(f"{current_user.mobile_number}.png")
 
-            uploads_folder = os.path.join(current_app.root_path, 'assets', 'static', 'uploads', 'profile')
-            save_path = os.path.join(uploads_folder, filename)
+                uploads_folder = os.path.join(current_app.root_path, 'assets', 'static', 'uploads', 'profile')
+                save_path = os.path.join(uploads_folder, filename)
 
-            try:
-                profile_picture.save(save_path)
-                current_user.profile_image = url_for('static', filename=f'uploads/profile/{filename}')
-                db.session.commit()
-                flash('Profile picture updated successfully.', 'success')
-                return redirect(url_for('accounts.people.people_list'))
-            except Exception as e:
-                flash(f'Error updating profile picture: {str(e)}', 'danger')
+                try:
+                    profile_picture.save(save_path)
+                    current_user.profile_image = url_for('static', filename=f'uploads/profile/{filename}')
+                    db.session.commit()
+                    flash('Profile picture updated successfully.', 'success')
+                    return redirect(url_for('accounts.people.people_list'))
+                except Exception as e:
+                    flash(f'Error updating profile picture: {str(e)}', 'danger')
 
-    return render_template('accounts/edit_people.html', form=form)
+        return render_template('accounts/edit_people.html', form=form)
+    else:
+        return redirect(url_for('auth.login'))
 
 @people_bp.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
 def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
+    if current_user.is_authenticated:
+        user = User.query.get_or_404(user_id)
 
-    if user == current_user:
-        flash('You cannot delete your own account.', 'danger')
+        if user == current_user:
+            flash('You cannot delete your own account.', 'danger')
+            return redirect(url_for('accounts.people.people_list'))
+
+        db.session.delete(user)
+        db.session.commit()
+        flash(f'Successfully deleted the user {user.first_name.title()}.', 'success')
         return redirect(url_for('accounts.people.people_list'))
-
-    db.session.delete(user)
-    db.session.commit()
-    flash(f'Successfully deleted the user {user.first_name.title()}.', 'success')
-    return redirect(url_for('accounts.people.people_list'))
+    else:
+        return redirect(url_for('auth.login'))
 
 
 # Download Logic Manager
@@ -205,35 +216,52 @@ def generate_excel():
 
 def generate_pdf(people_list):
     html_template = """
-    <html>
-        <head>
-            <title>People List</title>
-        </head>
-        <body>
-            <h1>People List</h1>
-            <table border="1">
-                <tr>
-                    <th>ID</th>
-                    <th>Full Name</th>
-                    <th>Mobile Number</th>
-                    <th>Email</th>
-                    <th>House Section</th>
-                    <th>House Number</th>
-                    <th>Status</th>
-                </tr>
-                {% for person in people_list %}
-                <tr>
-                    <td>{{ person.id }}</td>
-                    <td>{{ person.first_name }} {{ person.last_name }}</td>
-                    <td>{{ person.mobile_number }}</td>
-                    <td>{{ person.email }}</td>
-                    <td>{{ person.house_section }}</td>
-                    <td>{{ person.house_number }}</td>
-                    <td>{{ 'Active' if person.is_active else 'Inactive' }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </body>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>People List</title>
+        <!-- Bootstrap CSS -->
+        <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        />
+    </head>
+
+    <body class="container mt-5">
+        <h1 class="text-center mb-4">People List</h1>
+
+        <table class="table table-bordered">
+        <thead class="table-primary">
+            <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Mobile Number</th>
+            <th>Email</th>
+            <th>House Section</th>
+            <th>House Number</th>
+            <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in people_list %}
+            <tr>
+            <td>{{ person.id }}</td>
+            <td>{{ person.first_name }} {{ person.last_name }}</td>
+            <td>{{ person.mobile_number }}</td>
+            <td>{{ person.email }}</td>
+            <td>{{ person.house_section }}</td>
+            <td>{{ person.house_number }}</td>
+            <td>{{ 'Active' if person.is_active else 'Inactive' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+        <!-- Bootstrap JS and Popper.js -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
     </html>
     """
 

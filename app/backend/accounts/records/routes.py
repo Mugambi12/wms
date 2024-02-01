@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from app import db
 from .forms import AddMeterReadingForm, EditMeterReadingForm
-from ...models.user import MeterReading, User
+from ...models.user import MeterReading, User, Settings
 
 records_bp = Blueprint('records', __name__, url_prefix='/records')
 
@@ -48,10 +48,6 @@ def meter_readings():
 #        flash('Please check your input values. The form is not valid.', 'warning')
 
     return render_template('accounts/meter_readings.html', form=form, house_sections=house_sections, meter_readings=meter_readings, hide_footer=True)
-
-
-
-
 
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
@@ -103,13 +99,56 @@ def delete_meter_reading(meter_reading_id):
 
 
 
+
+# Update your route to use the modified function
 @records_bp.route('/billing')
 @login_required
 def billing():
+    if current_user.is_authenticated:
+        # Fetch billing data for the currently logged-in user
+        billing_data = get_billing_data_for_user(current_user.id)
+        return render_template('accounts/billing.html', hide_footer=True, billing_data=billing_data)
+    else:
+        return redirect(url_for('auth.login'))
+
+# Assuming you have a method to fetch billing details for the user
+def get_billing_data_for_user(user_id):
+    try:
+        billing_data = db.session.query(
+            MeterReading.id,
+            MeterReading.timestamp,
+            User.first_name,
+            User.last_name,
+            MeterReading.house_section,
+            MeterReading.house_number,
+            User.is_active,
+            MeterReading.reading_value.label('prev_reading'),
+            MeterReading.reading_value.label('curr_reading'),
+            (MeterReading.reading_value - MeterReading.reading_value).label('consumed'),
+            Settings.unit_price.label('unit_price'),
+            (Settings.unit_price * (MeterReading.reading_value - MeterReading.reading_value)).label('total')
+        ).join(User).join(Settings).filter(User.id == user_id).all()
+
+        return billing_data or []  # Return an empty list if billing_data is None
+
+    except Exception as e:
+        # Handle exceptions based on your application's needs
+        print(f"Error fetching billing data: {str(e)}")
+        return []
+
+
+
+
+
+
+
+@records_bp.route('/invoice')
+@login_required
+def invoice():
     # Check if the user is still authenticated
     if current_user.is_authenticated:
         # You can add records-specific logic and data here
-        return render_template('accounts/billing.html', hide_footer=True)
+        return render_template('accounts/invoice.html', hide_sidebar=True, hide_navbar=True, hide_footer=True)
     else:
         # If the user is not authenticated, redirect to the login page
         return redirect(url_for('auth.login'))
