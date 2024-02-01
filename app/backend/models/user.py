@@ -2,6 +2,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from flask_login import UserMixin
+from datetime import datetime, timedelta, timezone
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,17 +38,17 @@ class User(db.Model, UserMixin):
 
 class MeterReading(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc) + timedelta(hours=3), nullable=False)
     house_section = db.Column(db.String(50))
     house_number = db.Column(db.String(20))
     reading_value = db.Column(db.Float)
-    reading_date = db.Column(db.Date)
+    reading_status = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __init__(self, reading_value, reading_date, house_section, house_number, user_id):
+    def __init__(self, reading_value, house_section, house_number, user_id):
         self.house_section = house_section
         self.house_number = house_number
         self.reading_value = reading_value
-        self.reading_date = reading_date
         self.user_id = user_id
 
 

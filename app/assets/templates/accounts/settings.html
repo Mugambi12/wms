@@ -7,8 +7,8 @@
   <div class="row">
     <!-- Unit Price Form -->
     <div class="col-md-4 mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body p-3">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
           <h5 class="card-title mb-3">Unit Price</h5>
           <form
             method="post"
@@ -23,11 +23,11 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="text-center mt-3">
+            <div class="text-center mt-4">
               <button
                 type="submit"
                 name="unit_price_submit"
-                class="btn btn-sm btn-primary rounded-pill"
+                class="btn btn-primary rounded-pill"
               >
                 Update
               </button>
@@ -39,8 +39,8 @@
 
     <!-- Add House Section Form -->
     <div class="col-md-4 mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body p-3">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
           <h5 class="card-title mb-3">Add House Section</h5>
           <form
             method="post"
@@ -57,11 +57,11 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="text-center mt-3">
+            <div class="text-center mt-4">
               <button
                 type="submit"
                 name="add_section_submit"
-                class="btn btn-sm btn-success rounded-pill"
+                class="btn btn-success rounded-pill"
               >
                 Add Section
               </button>
@@ -71,44 +71,10 @@
       </div>
     </div>
 
-    <!-- Delete House Section Form -->
-    <div class="col-md-4 mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body p-3">
-          <h5 class="card-title mb-3">Delete House Section</h5>
-          <form
-            method="post"
-            action="{{ url_for('accounts.settings.settings') }}"
-          >
-            <!-- CSRF Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
-            <div class="mb-3">
-              <label for="house_sections" class="form-label"
-                >Select House Section to Delete:</label
-              >
-              {{ delete_section_form.house_sections(class="form-control") }}
-            </div>
-
-            <!-- Submit Button -->
-            <div class="text-center mt-3">
-              <button
-                type="submit"
-                name="delete_section_submit"
-                class="btn btn-sm btn-danger rounded-pill"
-              >
-                Delete Section
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
     <!-- Edit House Section Form -->
     <div class="col-md-4 mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body p-3">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
           <h5 class="card-title mb-3">Edit House Section</h5>
           <form
             method="post"
@@ -132,13 +98,47 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="text-center mt-3">
+            <div class="text-center mt-4">
               <button
                 type="submit"
                 name="edit_section_submit"
-                class="btn btn-sm btn-primary rounded-pill"
+                class="btn btn-primary rounded-pill"
               >
                 Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete House Section Form -->
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
+          <h5 class="card-title mb-3">Delete House Section</h5>
+          <form
+            method="post"
+            action="{{ url_for('accounts.settings.settings') }}"
+          >
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="mb-3">
+              <label for="house_sections" class="form-label"
+                >Select House Section to Delete:</label
+              >
+              {{ delete_section_form.house_sections(class="form-control") }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+              <button
+                type="submit"
+                name="delete_section_submit"
+                class="btn btn-danger rounded-pill"
+              >
+                Delete Section
               </button>
             </div>
           </form>

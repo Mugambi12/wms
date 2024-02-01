@@ -11,20 +11,29 @@ def get_system_settings():
     return Settings.query.first()
 
 def update_unit_price(system_settings, new_unit_price):
-    if system_settings:
-        if system_settings.unit_price is not None:
-            system_settings.unit_price = None
+    try:
+        # Try to convert new_unit_price to float
+        new_unit_price = float(new_unit_price)
+
+        if system_settings:
+            if system_settings.unit_price is not None:
+                system_settings.unit_price = None
+                db.session.commit()
+
+            system_settings.unit_price = new_unit_price
             db.session.commit()
+            flash(f'Unit Price updated to "{new_unit_price}" successfully!', 'success')
 
-        system_settings.unit_price = new_unit_price
-        db.session.commit()
-        flash(f'Unit Price updated to "{new_unit_price.title()}" successfully!', 'success')
+        else:
+            new_settings = Settings(unit_price=new_unit_price)
+            db.session.add(new_settings)
+            db.session.commit()
+            flash(f'Unit Price added as "{new_unit_price}" successfully!', 'success')
 
-    else:
-        new_settings = Settings(unit_price=new_unit_price)
-        db.session.add(new_settings)
-        db.session.commit()
-        flash(f'Unit Price added as "{new_unit_price.title()}" successfully!', 'success')
+    except ValueError:
+        # Handle the case where new_unit_price cannot be converted to float
+        flash('Invalid input for Unit Price. Please enter a valid number.', 'danger')
+
 
 def add_house_section(system_settings, house_section):
     if system_settings:
