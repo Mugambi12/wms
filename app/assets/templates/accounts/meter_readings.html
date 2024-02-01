@@ -1,116 +1,165 @@
 <!-- app/templates/accounts/meter_readings.html -->
 {% extends 'base.html' %} {% block content %}
 
-<div class="container-fluid">
-  <!-- Improved Add Meter Reading Form -->
-  <div class="card mt-3">
-    <div class="card-header">Add Meter Reading</div>
-    <div class="card-body">
-      <form
-        method="post"
-        action="{{ url_for('accounts.records.meter_readings') }}"
-        class="needs-validation"
-        novalidate
+<div class="container-fluid mt-3">
+  <ul
+    class="nav nav-pills justify-content-around border-0"
+    id="meterTabs"
+    role="tablist"
+  >
+    <li class="nav-item" role="presentation">
+      <a
+        class="nav-link active"
+        id="meterReadings-tab"
+        data-bs-toggle="tab"
+        href="#meterReadings"
+        role="tab"
+        aria-controls="meterReadings"
+        aria-selected="false"
+        >Meter Readings</a
       >
-        <!-- CSRF Token -->
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    </li>
+    <li class="nav-item" role="presentation">
+      <a
+        class="nav-link"
+        id="addMeterReading-tab"
+        data-bs-toggle="tab"
+        href="#addMeterReading"
+        role="tab"
+        aria-controls="addMeterReading"
+        aria-selected="true"
+        >Add Meter Reading</a
+      >
+    </li>
+  </ul>
 
-        <div class="row">
-          <!-- House Section -->
-          <div class="col-md-6 mb-3">
-            <label for="house_section" class="form-label">House Section:</label>
-            <select
-              class="form-select"
-              name="house_section"
-              id="house_section"
-              required
-            >
-              <option value="" selected disabled>Select House Section</option>
-              {% for section in house_sections %}
-              <option value="{{ section[0] }}">{{ section[0] }}</option>
-              {% endfor %}
-            </select>
-            <div class="invalid-feedback">Please select a house section.</div>
-          </div>
-
-          <!-- House Number -->
-          <div class="col-md-6 mb-3">
-            {{ form.house_number.label(class="form-label") }} {{
-            form.house_number(class="form-control", id="house_number",
-            required="required") }}
-            <div class="invalid-feedback">Please provide a house number.</div>
-          </div>
-
-          <!-- Reading Value -->
-          <div class="col-md-6 mb-3">
-            {{ form.reading_value.label(class="form-label") }} {{
-            form.reading_value(class="form-control", required="required") }}
-            <div class="invalid-feedback">
-              Please provide a valid reading value.
+  <div class="tab-content" id="meterTabsContent">
+    <!-- Meter Readings Table Tab -->
+    <div
+      class="tab-pane fade show active"
+      id="meterReadings"
+      role="tabpanel"
+      aria-labelledby="meterReadings-tab"
+    >
+      <!-- Improved Meter Readings Table -->
+      <div class="col-md-12">
+        <div class="card mt-5">
+          <div class="card-header">Meter Readings</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-striped data-table text-center">
+                <thead class="table-primary">
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Reading Date</th>
+                    <th scope="col">Reading Time</th>
+                    <th scope="col">House Section</th>
+                    <th scope="col">House Number</th>
+                    <th scope="col">Reading Value</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for reading in meter_readings | reverse %}
+                  <tr>
+                    <td>{{ reading.id }}</td>
+                    <td>
+                      {{ reading.user.first_name.title() }} {{
+                      reading.user.last_name.title() }}
+                    </td>
+                    <td>{{ reading.timestamp.strftime('%d-%m-%Y') }}</td>
+                    <td>{{ reading.timestamp.strftime('%H:%M:%S') }}</td>
+                    <td>{{ reading.house_section.title() }}</td>
+                    <td>{{ reading.house_number }}</td>
+                    <td>{{ reading.reading_value }}</td>
+                    <td
+                      class="fst-italic {% if reading.reading_status %}text-success{% else %}tetx-sucendary{% endif %}"
+                    >
+                      {{ 'Cleared' if reading.reading_status else 'Pending' }}
+                    </td>
+                    <td>
+                      <a
+                        href="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
+                      >
+                        <ion-icon name="create-outline"></ion-icon>Edit
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-
-        <!-- Submit Button -->
-        <div class="text-center mt-3">
-          <button type="submit" class="btn btn-primary rounded-pill">
-            Submit
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
 
-  <!-- Improved Meter Readings Table -->
-  <div class="col-md-12">
-    <div class="card mt-5">
-      <div class="card-header">Meter Readings</div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-striped data-table text-center">
-            <thead class="table-primary">
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">User</th>
-                <th scope="col">Reading Date</th>
-                <th scope="col">Reading Time</th>
-                <th scope="col">House Section</th>
-                <th scope="col">House Number</th>
-                <th scope="col">Reading Value</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for reading in meter_readings | reverse %}
-              <tr>
-                <td>{{ reading.id }}</td>
-                <td>
-                  {{ reading.user.first_name.title() }} {{
-                  reading.user.last_name.title() }}
-                </td>
-                <td>{{ reading.timestamp.strftime('%d-%m-%Y') }}</td>
-                <td>{{ reading.timestamp.strftime('%H:%M:%S') }}</td>
-                <td>{{ reading.house_section.title() }}</td>
-                <td>{{ reading.house_number }}</td>
-                <td>{{ reading.reading_value }}</td>
-                <td
-                  class="fst-italic {% if reading.reading_status %}text-success{% else %}tetx-sucendary{% endif %}"
-                >
-                  {{ 'Cleared' if reading.reading_status else 'Pending' }}
-                </td>
-                <td>
-                  <a
-                    href="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
-                  >
-                    <ion-icon name="create-outline"></ion-icon>Edit
-                  </a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+    <!-- Add Meter Reading Form Tab -->
+    <div
+      class="tab-pane fade"
+      id="addMeterReading"
+      role="tabpanel"
+      aria-labelledby="addMeterReading-tab"
+    >
+      <!-- Improved Add Meter Reading Form -->
+      <div class="container mt-3">
+        <h5 class="mb-4">Add Meter Reading</h5>
+        <form
+          method="post"
+          action="{{ url_for('accounts.records.meter_readings') }}"
+          class="needs-validation"
+          novalidate
+        >
+          <!-- CSRF Token -->
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+          <div class="row mb-3">
+            <!-- House Section -->
+            <div class="col-md-6 mb-3">
+              <label for="house_section" class="form-label"
+                >House Section:</label
+              >
+              <select
+                class="form-select"
+                name="house_section"
+                id="house_section"
+                required
+              >
+                <option value="" selected disabled>Select House Section</option>
+                {% for section in house_sections %}
+                <option value="{{ section[0] }}">{{ section[0] }}</option>
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">Please select a house section.</div>
+            </div>
+
+            <!-- House Number -->
+            <div class="col-md-6 mb-3">
+              {{ form.house_number.label(class="form-label") }} {{
+              form.house_number(class="form-control", id="house_number",
+              required="required") }}
+              <div class="invalid-feedback">Please provide a house number.</div>
+            </div>
+
+            <!-- Reading Value -->
+            <div class="col-md-6 mb-3">
+              {{ form.reading_value.label(class="form-label") }} {{
+              form.reading_value(class="form-control", required="required") }}
+              <div class="invalid-feedback">
+                Please provide a valid reading value.
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary rounded-pill">
+              Submit
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

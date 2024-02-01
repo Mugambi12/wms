@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% block content %}
+
 <div class="container-fluid">
   <div class="text-center mt-3">
     <h2 class="mb-2 fw-bold text-primary">Edit Meter Reading</h2>
@@ -15,14 +16,20 @@
 
     <div class="col-md-6 mb-3">
       {{ form.house_section.label(class="form-label") }} {{
-      form.house_section(class="form-control", required="required") }}
-      <div class="invalid-feedback">Please enter a valid house section.</div>
+      form.house_section(class="form-control", required="required",
+      disabled="disabled") }}
+      <div class="invalid-feedback d-none">
+        Please enter a valid house section.
+      </div>
     </div>
 
     <div class="col-md-6 mb-3">
       {{ form.house_number.label(class="form-label") }} {{
-      form.house_number(class="form-control", required="required") }}
-      <div class="invalid-feedback">Please enter a valid house number.</div>
+      form.house_number(class="form-control", required="required",
+      disabled="disabled") }}
+      <div class="invalid-feedback d-none">
+        Please enter a valid house number.
+      </div>
     </div>
 
     <div class="col-md-6 mb-3">
@@ -108,4 +115,5 @@
     </form>
   </div>
 </div>
+
 {% endblock %}

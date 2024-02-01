@@ -14,7 +14,7 @@ def meter_readings():
 
     house_sections = db.session.query(User.house_section).distinct().all()
 
-    meter_readings = MeterReading.query.filter_by(user_id=current_user.id).order_by(MeterReading.timestamp.desc()).all()
+    meter_readings = MeterReading.query.filter_by(user_id=current_user.id).all()
 
     if form.validate_on_submit():
         reading_value = form.reading_value.data
@@ -29,28 +29,28 @@ def meter_readings():
             flash('The combination of house section and house number does not match.', 'danger')
         else:
             try:
-                last_meter_reading = meter_readings[0] if meter_readings else None
+                new_meter_reading = MeterReading(
+                    reading_value=reading_value,
+                    house_section=house_section,
+                    house_number=house_number,
+                    user_id=current_user.id
+                )
+                db.session.add(new_meter_reading)
+                db.session.commit()
 
-                if last_meter_reading and reading_value < last_meter_reading.reading_value:
-                    flash('The new meter reading cannot be less than the previous reading.', 'danger')
-                else:
-                    new_meter_reading = MeterReading(
-                        reading_value=reading_value,
-                        house_section=house_section,
-                        house_number=house_number,
-                        user_id=current_user.id
-                    )
-                    db.session.add(new_meter_reading)
-                    db.session.commit()
+                flash('Meter reading added successfully!', 'success')
 
-                    flash('Meter reading added successfully!', 'success')
-
-                    return redirect(url_for('accounts.records.meter_readings'))
+                return redirect(url_for('accounts.records.meter_readings'))
 
             except Exception as e:
-                flash(f'Error adding meter reading: {str(e)}', 'error')
+                flash(f'Error adding meter reading: {str(e)}', 'danger')
+#    else:
+#        flash('Please check your input values. The form is not valid.', 'warning')
 
     return render_template('accounts/meter_readings.html', form=form, house_sections=house_sections, meter_readings=meter_readings, hide_footer=True)
+
+
+
 
 
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
@@ -75,7 +75,7 @@ def edit_meter_reading(meter_reading_id):
             return redirect(url_for('accounts.records.meter_readings'))
 
         except Exception as e:
-            flash(f'Error updating meter reading: {str(e)}', 'error')
+            flash(f'Error updating meter reading: {str(e)}', 'danger')
 
     return render_template('accounts/edit_records.html', form=form, meter_reading=meter_reading, hide_footer=True)
 
@@ -96,7 +96,7 @@ def delete_meter_reading(meter_reading_id):
         flash('Meter reading deleted successfully!', 'success')
 
     except Exception as e:
-        flash(f'Error deleting meter reading: {str(e)}', 'error')
+        flash(f'Error deleting meter reading: {str(e)}', 'danger')
 
     return redirect(url_for('accounts.records.meter_readings'))
 
