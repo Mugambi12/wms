@@ -1,11 +1,14 @@
 {% if not hide_navbar %}
 
 <!-- Navbar -->
-<header id="navbar" class="navbar navbar-expand-lg sticky-sm-top">
+<header
+  id="navbar"
+  class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-dark{% endif %}"
+>
   <div class="container-fluid">
     <!-- Brand -->
     <a
-      class="navbar-brand text-dark text-center d-flex align-items-center fw-bold"
+      class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
       href="#"
     >
       Aqua<span class="text-info">Flow</span>
@@ -21,7 +24,9 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <span
+        class="navbar-toggler-icon {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+      ></span>
     </button>
 
     <!-- Navbar Links -->
@@ -30,10 +35,39 @@
         {% if not current_user.is_authenticated %}
         <!-- Login Button -->
         <ul class="navbar-nav me-3">
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="#"> Home </a>
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#home"
+            >
+              Home
+            </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#about"
+            >
+              About Us
+            </a>
+          </li>
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#services"
+            >
+              Services
+            </a>
+          </li>
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#contact"
+            >
+              Contant
+            </a>
+          </li>
+          <li class="nav-item ms-5">
             <a class="nav-link text-primary" href="{{ url_for('auth.login') }}">
               Login
             </a>

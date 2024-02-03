@@ -1,5 +1,71 @@
 {% if not hide_footer %}
 
-<footer><p>silas mugambi</p></footer>
+<footer class="bg-dark text-light mt-3 py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h3 class="mb-4">Contact Information</h3>
+        <p><i class="bi bi-geo-alt-fill"></i> Nairobi, Kenya</p>
+        <p><i class="bi bi-envelope-fill"></i> silas@example.com</p>
+        <p><i class="bi bi-phone-fill"></i> +254 123 456 789</p>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4 text-center">
+        <h3 class="mb-4">Quick Links</h3>
+        <ul class="list-unstyled">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="social-media text-center">
+          <h3 class="mb-4 mt-3">Follow Us</h3>
+          <p>Stay connected on social media:</p>
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#" class="social-icon">
+                <ion-icon name="logo-facebook" class="text-primary"></ion-icon>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" class="social-icon">
+                <ion-icon name="logo-whatsapp" class="text-success"></ion-icon>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" class="social-icon">
+                <ion-icon name="logo-twitter" class="text-primary"></ion-icon>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" class="social-icon">
+                <ion-icon name="logo-linkedin" class="text-info"></ion-icon>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" class="social-icon">
+                <ion-icon name="logo-instagram" class="text-danger"></ion-icon>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <p>
+      &copy;
+      <script>
+        document.write(new Date().getFullYear());
+      </script>
+      <a href="mailto:mungiria8@gmail.com">Silas Mugambi.</a>. All Rights
+      Reserved
+    </p>
+  </div>
+</footer>
 
 {% endif %}

@@ -1,11 +1,153 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- #MAIN BODY SECTION -->
-<div class="container-fluid">
-  <h4>landing page</h4>
+<!-- #HOME SECTION -->
+<section
+  id="home"
+  class="container-fluid text-center py-5"
+  style="
+    height: 95vh;
+    background-image: url('https://e0.pxfuel.com/wallpapers/796/609/desktop-wallpaper-wastewater-based-epidemiology-surveillance-service%EF%BD%9Cinnovation%EF%BD%9Cshionogi-co-ltd-water-treatment-plant.jpg');
+    background-size: cover;
+    background-position: center;
+  "
+>
+  <div class="row align-items-center">
+    <div class="text-center">
+      <h1 class="display-4 text-primary mb-4">
+        Welcome to AquaFlow Water Services
+      </h1>
+      <p class="lead">
+        Providing reliable and sustainable water solutions for a healthier
+        community.
+      </p>
+      <a href="#services" class="btn btn-primary btn-lg"
+        >Explore Our Services</a
+      >
+    </div>
+  </div>
+</section>
 
-  <a href="{{ url_for('auth.login') }}">login</a>
-  <a href="{{ url_for('auth.register') }}">register</a>
+<div class="container mt-5">
+  <!-- #ABOUT SECTION -->
+  <section id="about" class="container-fluid py-5">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <div class="text-center p-5">
+          <h2 class="display-6 mb-4 text-primary">About AquaFlow</h2>
+          <p class="lead">
+            AquaFlow is dedicated to delivering clean and accessible water to
+            every household. Learn more about our mission, values, and
+            commitment to sustainability.
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div
+          class="about-image"
+          style="
+            background-image: url('https://www.shutterstock.com/image-photo/collecting-natural-spring-water-5-260nw-1010387206.jpg');
+            background-size: cover;
+            background-position: center;
+          "
+        ></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- #SERVICES SECTION -->
+  <section id="services" class="container-fluid py-5 bg-light">
+    <div class="container">
+      <h2 class="display-6 text-center mb-5 text-primary">Our Services</h2>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card border-0 shadow mb-4 bg-danger">
+            <div class="card-body text-center">
+              <h5 class="card-title">Water Supply</h5>
+              <p class="card-text">
+                Reliable and continuous water supply to meet your daily personal
+                and household needs.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card border-0 shadow mb-4 bg-warning">
+            <div class="card-body text-center">
+              <h5 class="card-title">Water Quality Testing</h5>
+              <p class="card-text">
+                Ensuring the purity and safety of the water we provide through
+                regular testing.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card border-0 shadow mb-4 bg-info">
+            <div class="card-body text-center">
+              <h5 class="card-title">Community Outreach</h5>
+              <p class="card-text">
+                Engaging with the community to promote water conservation and
+                education.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- #CONTACT SECTION -->
+  <section id="contact" class="container-fluid py-5 bg-light">
+    <div class="container">
+      <h2 class="display-4 text-center mb-5">Get in Touch</h2>
+      <div class="row">
+        <div class="col-lg-7">
+          <form>
+            <div class="mb-3">
+              <label for="name" class="form-label">Your Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Write your full name"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Write your email address"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Your Message</label>
+              <textarea
+                class="form-control"
+                id="message"
+                rows="4"
+                placeholder="Write your message here"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+        <div class="col-lg-5 mt-4 mt-lg-0">
+          <div class="contact-details">
+            <p class="lead">Visit us at:</p>
+            <address>
+              AquaFlow Water Services<br />
+              123 Water Street<br />
+              Cityville, Country
+            </address>
+            <p>Contact: +(123) 456-7890</p>
+            <p>Email: info@aquaflow.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 {% endblock %}
