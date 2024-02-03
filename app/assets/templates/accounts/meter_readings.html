@@ -8,7 +8,7 @@
       <a
         class="nav-link"
         data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
+        data-bs-target="#addMeterReadingModal"
         >Add Meter Reading</a
       >
     </li>
@@ -47,12 +47,12 @@
               <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ reading.id }}</td>
-                <td>
-                  {{ reading.user.first_name.title() }} {{
-                  reading.user.last_name.title() }}
-                </td>
+                <td>{{ reading.user_id }}</td>
                 <td>{{ reading.timestamp.strftime('%d-%m-%Y') }}</td>
-                <td>{{ reading.timestamp.strftime('%H:%M:%S') }}</td>
+                <td>
+                  {{ reading.timestamp.strftime('%H:%M:%S') if reading.timestamp
+                  else '' }}
+                </td>
                 <td>{{ reading.house_section.title() }}</td>
                 <td>{{ reading.house_number }}</td>
                 <td>{{ reading.reading_value }}</td>
@@ -62,40 +62,8 @@
                   {{ 'Cleared' if reading.reading_status else 'Pending' }}
                 </td>
                 <td>
-                  <!-- Edit Meter Reading Button -->
-                  <a
-                    href=""
-                    class="me-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editConfirmationModal"
-                    {%
-                    if
-                    reading.id
-                    %}
-                    data-reading-id="{{ reading.id }}"
-                    {%
-                    endif
-                    %}
-                  >
-                    Edit
-                  </a>
-
-                  <!-- Delete Meter Reading Button -->
-                  <a
-                    href=""
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteConfirmationModal"
-                    {%
-                    if
-                    reading.id
-                    %}
-                    data-reading-id="{{ reading.id }}"
-                    {%
-                    endif
-                    %}
-                  >
-                    Delete
-                  </a>
+                  <a href="">edit</a>
+                  <a href="">delete</a>
                 </td>
               </tr>
               {% endfor %}
@@ -109,17 +77,17 @@
   <!-- Add Reading Modal -->
   <div
     class="modal fade"
-    id="staticBackdrop"
+    id="addMeterReadingModal"
     data-bs-backdrop="static"
     data-bs-keyboard="false"
     tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
+    aria-labelledby="addMeterReadingModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">
+          <h5 class="modal-title" id="addMeterReadingModalLabel">
             Add Meter Reading
           </h5>
           <button
@@ -187,6 +155,7 @@
               </div>
             </div>
           </div>
+
           <div class="modal-footer justify-content-between">
             <button
               type="button"
@@ -196,7 +165,11 @@
               Close
             </button>
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary rounded-pill">
+            <button
+              name="add"
+              type="submit"
+              class="btn btn-primary rounded-pill"
+            >
               Submit
             </button>
           </div>
@@ -204,6 +177,39 @@
       </div>
     </div>
   </div>
+
+  {% for reading in meter_readings | reverse %}
+  <ul class="d-flex">
+    <td>{{ reading.id }}</td>
+    <td>{{ reading.house_section }}</td>
+    <td>{{ reading.house_number }}</td>
+    <td>
+      <!-- Edit Meter Reading Button -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#editConfirmationModal"
+        data-reading-id="{{ reading.id }}"
+      >
+        Edit
+      </button>
+    </td>
+
+    <td>
+      <!-- Delete Meter Reading Button -->
+      <button
+        type="button"
+        class="btn btn-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteConfirmationModal"
+        data-reading-id="{{ reading.id }}"
+      >
+        Delete
+      </button>
+    </td>
+  </ul>
+  {% endfor %}
 
   <!-- Edit Meter Reading Modal -->
   <div
@@ -218,7 +224,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">
+          <h5 class="modal-title" id="editConfirmationModalLabel">
             Edit Meter Reading
           </h5>
           <button
@@ -230,7 +236,7 @@
         </div>
         <!-- Edit Meter Reading Form -->
         <form
-          method="POST"
+          method="post"
           action="{{ url_for('accounts.records.meter_readings') }}"
           class="row justify-content-center mt-4"
         >
@@ -239,11 +245,18 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <!-- Form Type -->
             <input type="hidden" name="form_type" value="edit" />
+            <!-- Meter Reading ID -->
+            <input
+              type="hidden"
+              name="meter_reading_id"
+              id="editReadingId"
+              value=""
+            />
 
             <div class="col-md-6 mb-3">
               {{ edit_form.house_section.label(class="form-label") }} {{
-              edit_form.house_section(class="form-control", required="required",
-              disabled="disabled") }}
+              edit_form.house_section(class="form-control", required="required")
+              }}
               <div class="invalid-feedback d-none">
                 Please enter a valid house section.
               </div>
@@ -251,8 +264,8 @@
 
             <div class="col-md-6 mb-3">
               {{ edit_form.house_number.label(class="form-label") }} {{
-              edit_form.house_number(class="form-control", required="required",
-              disabled="disabled") }}
+              edit_form.house_number(class="form-control", required="required")
+              }}
               <div class="invalid-feedback d-none">
                 Please enter a valid house number.
               </div>
@@ -287,6 +300,7 @@
           <!-- Submit Button -->
           <div class="modal-footer">
             <button
+              name="edit"
               type="submit"
               class="btn btn-primary btn-block rounded-pill"
             >
@@ -309,7 +323,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Confirm Deletion</h5>
+          <h5 class="modal-title" id="deleteConfirmationModalLabel">
+            Confirm Deletion
+          </h5>
           <button
             type="button"
             class="btn-close"
