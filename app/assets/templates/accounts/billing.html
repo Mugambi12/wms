@@ -56,12 +56,12 @@
                 <th scope="col">Customer</th>
                 <th scope="col">Section</th>
                 <th scope="col">House</th>
-                <th scope="col">Status</th>
                 <th scope="col">Prev. Reading</th>
                 <th scope="col">Curr. Reading</th>
                 <th scope="col">Consumed</th>
                 <th scope="col">Unit Price</th>
-                <th scope="col">Total</th>
+                <th scope="col">Sub Total</th>
+                <th scope="col">Status</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -70,15 +70,15 @@
               <tr>
                 <td>{{ entry.id }}</td>
                 <td>{{ entry.timestamp.strftime('%d-%m-%Y') }}</td>
-                <td>{{ entry.user.first_name }} {{ entry.user.last_name }}</td>
+                <td>{{ entry.first_name }} {{ entry.last_name }}</td>
                 <td>{{ entry.house_section }}</td>
                 <td>{{ entry.house_number }}</td>
-                <td>{{ "Active" if entry.user.is_active else "Inactive" }}</td>
                 <td>{{ entry.prev_reading }}</td>
                 <td>{{ entry.curr_reading }}</td>
                 <td>{{ entry.consumed }}</td>
                 <td>{{ entry.unit_price }}</td>
-                <td>{{ entry.total }}</td>
+                <td>{{ entry.total_price }}</td>
+                <td>{{ "Pending" if entry.is_active else "Cleared" }}</td>
                 <td>
                   <a class="me-2" href="#"> Edit </a>
                   <a href="#"> Invoice </a>

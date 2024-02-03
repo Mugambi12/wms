@@ -11,82 +11,89 @@ records_bp = Blueprint('records', __name__, url_prefix='/records')
 @login_required
 def meter_readings():
     form = AddMeterReadingForm()
+    edit_form = AddMeterReadingForm()
+    if request.method == 'POST':
+        # Handle form submissions for adding, editing, and deleting
+        form_type = request.form.get('form_type')
 
-    house_sections = db.session.query(User.house_section).distinct().all()
+        if form_type == 'add':
+            return handle_add_meter_reading()
 
+        elif form_type == 'edit':
+            return handle_edit_meter_reading()
+
+        elif form_type == 'delete':
+            return handle_delete_meter_reading()
+
+    # Fetch data needed for rendering the main page
+    house_sections = db.session.query(User.house_section.distinct()).all()
     meter_readings = MeterReading.query.filter_by(user_id=current_user.id).all()
 
-    if form.validate_on_submit():
-        reading_value = form.reading_value.data
-        house_section = form.house_section.data
-        house_number = form.house_number.data
+    return render_template('accounts/meter_readings.html', form=form, edit_form=edit_form, house_sections=house_sections, meter_readings=meter_readings, hide_footer=True)
 
-        if not User.query.filter_by(house_section=house_section).first():
-            flash('The selected house section is not registered.', 'danger')
-        elif not User.query.filter_by(house_number=house_number).first():
-            flash('The entered house number is not registered.', 'danger')
-        elif not User.query.filter_by(house_section=house_section, house_number=house_number).first():
-            flash('The combination of house section and house number does not match.', 'danger')
+
+def handle_add_meter_reading():
+    try:
+        form = AddMeterReadingForm(request.form)
+        if form.validate_on_submit():
+            # Create a new MeterReading instance
+            new_reading = MeterReading(
+                house_section=form.house_section.data,
+                house_number=form.house_number.data,
+                reading_value=form.reading_value.data,
+                user_id=current_user.id
+            )
+
+            # Add and commit the new meter reading to the database
+            db.session.add(new_reading)
+            db.session.commit()
+
+            flash('Meter reading added successfully!', 'success')
         else:
-            try:
-                new_meter_reading = MeterReading(
-                    reading_value=reading_value,
-                    house_section=house_section,
-                    house_number=house_number,
-                    user_id=current_user.id
-                )
-                db.session.add(new_meter_reading)
-                db.session.commit()
+            flash('Invalid form submission for adding meter reading.', 'danger')
 
-                flash('Meter reading added successfully!', 'success')
+    except Exception as e:
+        flash(f'Error adding meter reading: {str(e)}', 'danger')
 
-                return redirect(url_for('accounts.records.meter_readings'))
+    return redirect(url_for('accounts.records.meter_readings'))
 
-            except Exception as e:
-                flash(f'Error adding meter reading: {str(e)}', 'danger')
-#    else:
-#        flash('Please check your input values. The form is not valid.', 'warning')
 
-    return render_template('accounts/meter_readings.html', form=form, house_sections=house_sections, meter_readings=meter_readings, hide_footer=True)
+def handle_edit_meter_reading():
+    try:
+        form = EditMeterReadingForm(request.form)
+        if form.validate_on_submit():
+            # Retrieve the meter reading to be edited
+            meter_reading_id = request.form.get('meter_reading_id')
+            edited_reading = MeterReading.query.get_or_404(meter_reading_id)
 
-@records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
-@login_required
-def edit_meter_reading(meter_reading_id):
-    meter_reading = MeterReading.query.get_or_404(meter_reading_id)
-
-    if meter_reading.user_id != current_user.id:
-        flash('You do not have permission to edit this meter reading.', 'danger')
-        return redirect(url_for('accounts.records.meter_readings'))
-
-    form = EditMeterReadingForm(obj=meter_reading)
-
-    if form.validate_on_submit():
-        try:
             # Update the meter reading attributes
-            form.populate_obj(meter_reading)
+            edited_reading.house_section = form.house_section.data
+            edited_reading.house_number = form.house_number.data
+            edited_reading.reading_value = form.reading_value.data
+            edited_reading.timestamp = form.timestamp.data
+            edited_reading.reading_status = form.reading_status.data
+
+            # Commit the changes to the database
             db.session.commit()
 
             flash('Meter reading updated successfully!', 'success')
+        else:
+            flash('Invalid form submission for editing meter reading.', 'danger')
 
-            return redirect(url_for('accounts.records.meter_readings'))
+    except Exception as e:
+        flash(f'Error updating meter reading: {str(e)}', 'danger')
 
-        except Exception as e:
-            flash(f'Error updating meter reading: {str(e)}', 'danger')
-
-    return render_template('accounts/edit_records.html', form=form, meter_reading=meter_reading, hide_footer=True)
+    return redirect(url_for('accounts.records.meter_readings'))
 
 
-@records_bp.route('/delete_meter_reading/<int:meter_reading_id>', methods=['POST'])
-@login_required
-def delete_meter_reading(meter_reading_id):
-    meter_reading = MeterReading.query.get_or_404(meter_reading_id)
-
-    if meter_reading.user_id != current_user.id:
-        flash('You do not have permission to delete this meter reading.', 'danger')
-        return redirect(url_for('accounts.records.meter_readings'))
-
+def handle_delete_meter_reading():
     try:
-        db.session.delete(meter_reading)
+        # Retrieve the meter reading to be deleted
+        meter_reading_id = request.form.get('meter_reading_id')
+        deleted_reading = MeterReading.query.get_or_404(meter_reading_id)
+
+        # Delete the meter reading from the database
+        db.session.delete(deleted_reading)
         db.session.commit()
 
         flash('Meter reading deleted successfully!', 'success')
@@ -100,42 +107,44 @@ def delete_meter_reading(meter_reading_id):
 
 
 
-# Update your route to use the modified function
+
+
+
+
+
+
+
+
+
+
 @records_bp.route('/billing')
 @login_required
 def billing():
     if current_user.is_authenticated:
-        # Fetch billing data for the currently logged-in user
-        billing_data = get_billing_data_for_user(current_user.id)
+        billing_data = (
+            db.session.query(
+                MeterReading.id,
+                MeterReading.timestamp,
+                User.first_name,
+                User.last_name,
+                MeterReading.house_section,
+                MeterReading.house_number,
+                User.is_active,
+                MeterReading.reading_value.label('prev_reading'),
+                MeterReading.reading_value.label('curr_reading'),
+                MeterReading.consumed,
+                MeterReading.unit_price,
+                MeterReading.total_price
+            )
+            .join(User)
+            .filter(User.id == current_user.id)
+            .order_by(MeterReading.timestamp.desc())
+            .all()
+        )
+
         return render_template('accounts/billing.html', hide_footer=True, billing_data=billing_data)
     else:
         return redirect(url_for('auth.login'))
-
-# Assuming you have a method to fetch billing details for the user
-def get_billing_data_for_user(user_id):
-    try:
-        billing_data = db.session.query(
-            MeterReading.id,
-            MeterReading.timestamp,
-            User.first_name,
-            User.last_name,
-            MeterReading.house_section,
-            MeterReading.house_number,
-            User.is_active,
-            MeterReading.reading_value.label('prev_reading'),
-            MeterReading.reading_value.label('curr_reading'),
-            (MeterReading.reading_value - MeterReading.reading_value).label('consumed'),
-            Settings.unit_price.label('unit_price'),
-            (Settings.unit_price * (MeterReading.reading_value - MeterReading.reading_value)).label('total')
-        ).join(User).join(Settings).filter(User.id == user_id).all()
-
-        return billing_data or []  # Return an empty list if billing_data is None
-
-    except Exception as e:
-        # Handle exceptions based on your application's needs
-        print(f"Error fetching billing data: {str(e)}")
-        return []
-
 
 
 

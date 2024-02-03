@@ -44,12 +44,18 @@ class MeterReading(db.Model):
     reading_value = db.Column(db.Float)
     reading_status = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    consumed = db.Column(db.Float)
+    unit_price = db.Column(db.Float)
+    total_price = db.Column(db.Float)
 
-    def __init__(self, reading_value, house_section, house_number, user_id):
+    def __init__(self, reading_value, house_section, house_number, user_id, unit_price, consumed, total_price):
         self.house_section = house_section
         self.house_number = house_number
         self.reading_value = reading_value
         self.user_id = user_id
+        self.consumed = consumed
+        self.unit_price = unit_price
+        self.total_price = total_price
 
 
 class Payment(db.Model):
