@@ -91,28 +91,42 @@ def handle_add_meter_reading(form):
     else:
         return {'success': False, 'message': 'Invalid form submission for adding meter reading.'}
 
+
+
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
-def edit_meter_reading(form, meter_reading_id):
-    try:
-        edited_reading = MeterReading.query.get_or_404(meter_reading_id)
+def edit_meter_reading(meter_reading_id):
+    # Fetch the existing meter reading from the database
+    edited_reading = MeterReading.query.get_or_404(meter_reading_id)
 
-        edited_reading.house_section = form.house_section.data
-        edited_reading.house_number = form.house_number.data
-        edited_reading.reading_value = form.reading_value.data
-        edited_reading.timestamp = form.timestamp.data
-        edited_reading.consumed = form.consumed.data
-        edited_reading.unit_price = form.unit_price.data
-        edited_reading.total_price = form.total_price.data
-        edited_reading.reading_status = form.reading_status.data
+    # Create an instance of the EditMeterReadingForm and set default values
+    edit_meter_reading_form = EditMeterReadingForm(obj=edited_reading)
 
-        db.session.commit()
+    if request.method == 'POST':
+        try:
+            # Update the form with the submitted data
+            if edit_meter_reading_form.validate_on_submit():
+                edited_reading.house_section = edit_meter_reading_form.house_section.data
+                edited_reading.house_number = edit_meter_reading_form.house_number.data
+                edited_reading.reading_value = edit_meter_reading_form.reading_value.data
+                edited_reading.timestamp = edit_meter_reading_form.timestamp.data
+                edited_reading.consumed = edit_meter_reading_form.consumed.data
+                edited_reading.unit_price = edit_meter_reading_form.unit_price.data
+                edited_reading.total_price = edit_meter_reading_form.total_price.data
+                edited_reading.reading_status = edit_meter_reading_form.reading_status.data
 
-        return {'success': True, 'message': 'Meter reading updated successfully!'}
+                db.session.commit()
 
-    except Exception as e:
-        return {'success': False, 'message': f'Error updating meter reading: {str(e)}'}
+                flash('Meter reading updated successfully!', 'success')
+                return redirect(url_for('accounts.records.meter_readings'))
 
+            else:
+                flash('Invalid form submission for editing meter reading.', 'danger')
+
+        except Exception as e:
+            flash(f'Error updating meter reading: {str(e)}', 'danger')
+
+    return render_template('accounts/edit_meter_reading.html', form=edit_meter_reading_form, meter_reading=edited_reading)
 
 
 
