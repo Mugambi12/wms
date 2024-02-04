@@ -24,24 +24,8 @@ def meter_readings():
             else:
                 flash(result['message'], 'danger')
 
-        elif form_type == 'edit':
-            result = handle_edit_meter_reading(edit_meter_reading_form)
-
-            if result['success']:
-                flash(result['message'], 'success')
-            else:
-                flash(result['message'], 'danger')
-
-        elif form_type == 'delete':
-            result = handle_delete_meter_reading()
-
-            if result['success']:
-                flash(result['message'], 'success')
-            else:
-                flash(result['message'], 'danger')
-
     house_sections = db.session.query(User.house_section.distinct()).all()
-    meter_readings = MeterReading.query.filter_by(user_id=current_user.id).all()
+    meter_readings = MeterReading.query.all()
 
     return render_template('accounts/meter_readings.html', house_sections=house_sections, meter_readings=meter_readings, hide_footer=True, form=add_meter_reading_form, edit_form=edit_meter_reading_form)
 
@@ -91,9 +75,6 @@ def handle_add_meter_reading(form):
     else:
         return {'success': False, 'message': 'Invalid form submission for adding meter reading.'}
 
-
-
-
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
 def edit_meter_reading(meter_reading_id):
@@ -136,10 +117,7 @@ def edit_meter_reading(meter_reading_id):
         except Exception as e:
             flash(f'Error updating meter reading: {str(e)}', 'danger')
 
-    return render_template('accounts/meter_readings.html', form=edit_meter_reading_form, meter_reading=edited_reading)
-
-
-
+    return render_template('accounts/error.html', form=edit_meter_reading_form, meter_reading=edited_reading)
 
 @records_bp.route('/delete_meter_reading/<int:meter_reading_id>', methods=['POST'])
 @login_required
@@ -163,41 +141,6 @@ def delete_meter_reading(meter_reading_id):
 
 
 
-
-
-
-
-
-def handle_edit_meter_reading(form):
-    try:
-        meter_reading_id = request.form.get('meter_reading_id')
-        edited_reading = MeterReading.query.get_or_404(meter_reading_id)
-
-        edited_reading.house_section = form.house_section.data
-        edited_reading.house_number = form.house_number.data
-        edited_reading.reading_value = form.reading_value.data
-        edited_reading.timestamp = form.timestamp.data
-        edited_reading.reading_status = form.reading_status.data
-
-        db.session.commit()
-
-        return {'success': True, 'message': 'Meter reading updated successfully!'}
-
-    except Exception as e:
-        return {'success': False, 'message': f'Error updating meter reading: {str(e)}'}
-
-def handle_delete_meter_reading():
-    try:
-        meter_reading_id = request.form.get('meter_reading_id')
-        deleted_reading = MeterReading.query.get_or_404(meter_reading_id)
-
-        db.session.delete(deleted_reading)
-        db.session.commit()
-
-        return {'success': True, 'message': 'Meter reading deleted successfully!'}
-
-    except Exception as e:
-        return {'success': False, 'message': f'Error deleting meter reading: {str(e)}'}
 
 
 

@@ -14,6 +14,110 @@
     </li>
   </ul>
 
+  <!-- Add Reading Modal -->
+  <div
+    class="modal fade"
+    id="addMeterReadingModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="addMeterReadingModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addMeterReadingModalLabel">
+            Add Meter Reading
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <!-- Add Meter Reading Form -->
+        <form
+          method="post"
+          action="{{ url_for('accounts.records.meter_readings') }}"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="modal-body">
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <!-- Form Type -->
+            <input type="hidden" name="form_type" value="add" />
+
+            <div class="row mb-3">
+              <!-- House Section -->
+              <div class="mb-3">
+                {{ form.house_section.label(class="form-label") }}
+                <select
+                  class="form-select"
+                  name="house_section"
+                  id="house_section"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Select House Section
+                  </option>
+                  {% for section in house_sections %}
+                  <option value="{{ section[0] }}">{{ section[0] }}</option>
+                  {% endfor %}
+                </select>
+                <div class="form-text">
+                  Choose the house section from the list.
+                </div>
+                <div class="invalid-feedback">
+                  Please select a house section.
+                </div>
+              </div>
+
+              <!-- House Number -->
+              <div class="mb-3">
+                {{ form.house_number.label(class="form-label") }} {{
+                form.house_number(class="form-control", id="house_number",
+                required="required") }}
+                <div class="invalid-feedback">
+                  Please provide a house number.
+                </div>
+              </div>
+
+              <!-- Reading Value -->
+              <div class="mb-3">
+                {{ form.reading_value.label(class="form-label") }} {{
+                form.reading_value(class="form-control", required="required") }}
+                <div class="invalid-feedback">
+                  Please provide a valid reading value.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer justify-content-between">
+            <button
+              type="button"
+              class="btn btn-secondary rounded-pill"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <!-- Submit Button -->
+            <button
+              name="add"
+              type="submit"
+              class="btn btn-primary rounded-pill"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="text-center">
     <h2 class="fw-bold text-success">Smart Water Monitoring</h2>
     <p class="mt-2 fst-italic">
@@ -296,110 +400,6 @@
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add Reading Modal -->
-  <div
-    class="modal fade"
-    id="addMeterReadingModal"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="addMeterReadingModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addMeterReadingModalLabel">
-            Add Meter Reading
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <!-- Add Meter Reading Form -->
-        <form
-          method="post"
-          action="{{ url_for('accounts.records.meter_readings') }}"
-          class="needs-validation"
-          novalidate
-        >
-          <div class="modal-body">
-            <!-- CSRF Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <!-- Form Type -->
-            <input type="hidden" name="form_type" value="add" />
-
-            <div class="row mb-3">
-              <!-- House Section -->
-              <div class="mb-3">
-                {{ form.house_section.label(class="form-label") }}
-                <select
-                  class="form-select"
-                  name="house_section"
-                  id="house_section"
-                  required
-                >
-                  <option value="" selected disabled>
-                    Select House Section
-                  </option>
-                  {% for section in house_sections %}
-                  <option value="{{ section[0] }}">{{ section[0] }}</option>
-                  {% endfor %}
-                </select>
-                <div class="form-text">
-                  Choose the house section from the list.
-                </div>
-                <div class="invalid-feedback">
-                  Please select a house section.
-                </div>
-              </div>
-
-              <!-- House Number -->
-              <div class="mb-3">
-                {{ form.house_number.label(class="form-label") }} {{
-                form.house_number(class="form-control", id="house_number",
-                required="required") }}
-                <div class="invalid-feedback">
-                  Please provide a house number.
-                </div>
-              </div>
-
-              <!-- Reading Value -->
-              <div class="mb-3">
-                {{ form.reading_value.label(class="form-label") }} {{
-                form.reading_value(class="form-control", required="required") }}
-                <div class="invalid-feedback">
-                  Please provide a valid reading value.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-footer justify-content-between">
-            <button
-              type="button"
-              class="btn btn-secondary rounded-pill"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <!-- Submit Button -->
-            <button
-              name="add"
-              type="submit"
-              class="btn btn-primary rounded-pill"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   </div>
