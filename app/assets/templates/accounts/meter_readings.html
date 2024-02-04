@@ -38,6 +38,7 @@
                 <th scope="col">House Section</th>
                 <th scope="col">House Number</th>
                 <th scope="col">Reading Value</th>
+                <th scope="col">Consumption</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
               </tr>
@@ -56,32 +57,71 @@
                 <td>{{ reading.house_section.title() }}</td>
                 <td>{{ reading.house_number }}</td>
                 <td>{{ reading.reading_value }}</td>
+                <td>{{ reading.consumed }}</td>
                 <td
                   class="fst-italic {% if reading.reading_status %}text-success{% else %}text-secondary{% endif %}"
                 >
                   {{ 'Cleared' if reading.reading_status else 'Pending' }}
                 </td>
                 <td>
-                  <!-- Edit Meter Reading Button -->
                   <a
                     href="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
-                    class="btn btn-primary"
+                    class="me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#editConfirmationModal{{ reading.id }}"
                   >
-                    Edit
+                    <ion-icon
+                      name="create-outline"
+                      class="text-primary"
+                    ></ion-icon>
                   </a>
-                </td>
-                <td>
-                  <!-- Delete Meter Reading Button -->
                   <a
                     href="#deleteConfirmationModal_{{ reading.id }}"
-                    class="btn btn-danger"
+                    class=""
                     data-bs-toggle="modal"
                     data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
                   >
-                    Delete
+                    <ion-icon
+                      name="trash-outline"
+                      class="text-danger"
+                    ></ion-icon>
                   </a>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-secondary btn-sm dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      AB
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <!-- Edit Meter Reading Button -->
+                        <a
+                          href="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
+                          class="dropdown-item text-primary"
+                          data-bs-toggle="modal"
+                          data-bs-target="#editConfirmationModal{{ reading.id }}"
+                        >
+                          Edit
+                        </a>
+                      </li>
+                      <li>
+                        <!-- Delete Meter Reading Button -->
+                        <a
+                          href="#deleteConfirmationModal_{{ reading.id }}"
+                          class="dropdown-item text-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
+                        >
+                          Delete
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
 
@@ -134,7 +174,7 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.house_section.label(class="form-label")
                             }} {{ edit_form.house_section(class="form-control",
-                            required="required") }}
+                            required="required", value=reading.house_section) }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house section.
                             </div>
@@ -143,7 +183,7 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.house_number.label(class="form-label")
                             }} {{ edit_form.house_number(class="form-control",
-                            required="required") }}
+                            required="required", value=reading.house_number) }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house number.
                             </div>
@@ -152,7 +192,7 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.reading_value.label(class="form-label")
                             }} {{ edit_form.reading_value(class="form-control",
-                            required="required") }}
+                            required="required", value=reading.reading_value) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -161,7 +201,7 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.consumed.label(class="form-label") }}
                             {{ edit_form.consumed(class="form-control",
-                            required="required") }}
+                            required="required", value=reading.consumed) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -170,7 +210,7 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.unit_price.label(class="form-label") }}
                             {{ edit_form.unit_price(class="form-control",
-                            required="required") }}
+                            required="required", value=reading.unit_price) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -179,7 +219,7 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.total_price.label(class="form-label")
                             }} {{ edit_form.total_price(class="form-control",
-                            required="required") }}
+                            required="required", value=reading.total_price) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -188,7 +228,7 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.timestamp.label(class="form-label") }}
                             {{ edit_form.timestamp(class="form-control",
-                            required="required") }}
+                            required="required", value=reading.timestamp) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading date.
                             </div>
@@ -198,8 +238,8 @@
                             {{
                             edit_form.reading_status.label(class="form-label")
                             }} {{
-                            edit_form.reading_status(class="form-check-input")
-                            }}
+                            edit_form.reading_status(class="form-check-input",
+                            checked=reading.reading_status) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading status.
                             </div>
