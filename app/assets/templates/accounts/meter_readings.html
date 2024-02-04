@@ -64,32 +64,30 @@
                   {{ 'Cleared' if reading.reading_status else 'Pending' }}
                 </td>
                 <td>
-                  <ul class="d-flex">
-                    <!-- Edit Meter Reading Button -->
-                    <li
-                      action="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
-                      class="me-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#editConfirmationModal{{ reading.id }}"
-                    >
-                      <ion-icon
-                        name="create-outline"
-                        class="text-primary"
-                      ></ion-icon>
-                    </li>
-                    <!-- Delete Meter Reading Button -->
-                    <li
-                      action="#deleteConfirmationModal_{{ reading.id }}"
-                      class=""
-                      data-bs-toggle="modal"
-                      data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
-                    >
-                      <ion-icon
-                        name="trash-outline"
-                        class="text-danger"
-                      ></ion-icon>
-                    </li>
-                  </ul>
+                  <!-- Edit Meter Reading Button -->
+                  <a
+                    action="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
+                    class="me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editConfirmationModal{{ reading.id }}"
+                  >
+                    <ion-icon
+                      name="create-outline"
+                      class="text-primary"
+                    ></ion-icon>
+                  </a>
+                  <!-- Delete Meter Reading Button -->
+                  <a
+                    action="#deleteConfirmationModal_{{ reading.id }}"
+                    class=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
+                  >
+                    <ion-icon
+                      name="trash-outline"
+                      class="text-danger"
+                    ></ion-icon>
+                  </a>
                 </td>
               </tr>
 
