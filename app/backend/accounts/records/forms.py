@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import FloatField, StringField, DateField, BooleanField, SubmitField, DateTimeField
+from wtforms import FloatField, StringField, BooleanField, SubmitField, DateField, DateTimeField, DateTimeLocalField
 from wtforms.validators import DataRequired
 
 class AddMeterReadingForm(FlaskForm):
@@ -18,6 +18,6 @@ class EditMeterReadingForm(FlaskForm):
     consumed = FloatField('Consumed Units', validators=[DataRequired()])
     unit_price = FloatField('Unit Price', validators=[DataRequired()])
     total_price = FloatField('Total Price', validators=[DataRequired()])
-    timestamp = DateField('Reading Date', validators=[DataRequired()])
+    timestamp = DateTimeField('Reading Date', validators=[DataRequired()])
     reading_status = BooleanField('Reading Status')
     submit = SubmitField('Update')

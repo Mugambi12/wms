@@ -114,19 +114,8 @@ def edit_meter_reading(meter_reading_id):
 
     if request.method == 'POST':
         try:
-            # Validate the form
+            # Update the form with the submitted data
             if edit_meter_reading_form.validate_on_submit():
-                # Ensure the house section and house number match an existing user
-                user = User.query.filter_by(
-                    house_section=edit_meter_reading_form.house_section.data,
-                    house_number=edit_meter_reading_form.house_number.data
-                ).first()
-
-                if not user:
-                    flash('Invalid house section or house number.', 'danger')
-                    return render_template('accounts/meter_readings.html', form=edit_meter_reading_form, meter_reading=edited_reading)
-
-                # Update the meter reading with the submitted data
                 edited_reading.house_section = edit_meter_reading_form.house_section.data
                 edited_reading.house_number = edit_meter_reading_form.house_number.data
                 edited_reading.reading_value = edit_meter_reading_form.reading_value.data
@@ -148,7 +137,6 @@ def edit_meter_reading(meter_reading_id):
             flash(f'Error updating meter reading: {str(e)}', 'danger')
 
     return render_template('accounts/meter_readings.html', form=edit_meter_reading_form, meter_reading=edited_reading)
-
 
 
 

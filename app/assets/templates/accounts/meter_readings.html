@@ -64,64 +64,32 @@
                   {{ 'Cleared' if reading.reading_status else 'Pending' }}
                 </td>
                 <td>
-                  <a
-                    href="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
-                    class="me-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editConfirmationModal{{ reading.id }}"
-                  >
-                    <ion-icon
-                      name="create-outline"
-                      class="text-primary"
-                    ></ion-icon>
-                  </a>
-                  <a
-                    href="#deleteConfirmationModal_{{ reading.id }}"
-                    class=""
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
-                  >
-                    <ion-icon
-                      name="trash-outline"
-                      class="text-danger"
-                    ></ion-icon>
-                  </a>
-                </td>
-                <td>
-                  <div class="btn-group">
-                    <button
-                      class="btn btn-secondary btn-sm dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
+                  <ul class="d-flex">
+                    <!-- Edit Meter Reading Button -->
+                    <li
+                      action="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
+                      class="me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editConfirmationModal{{ reading.id }}"
                     >
-                      AB
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <!-- Edit Meter Reading Button -->
-                        <a
-                          href="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
-                          class="dropdown-item text-primary"
-                          data-bs-toggle="modal"
-                          data-bs-target="#editConfirmationModal{{ reading.id }}"
-                        >
-                          Edit
-                        </a>
-                      </li>
-                      <li>
-                        <!-- Delete Meter Reading Button -->
-                        <a
-                          href="#deleteConfirmationModal_{{ reading.id }}"
-                          class="dropdown-item text-danger"
-                          data-bs-toggle="modal"
-                          data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
-                        >
-                          Delete
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                      <ion-icon
+                        name="create-outline"
+                        class="text-primary"
+                      ></ion-icon>
+                    </li>
+                    <!-- Delete Meter Reading Button -->
+                    <li
+                      action="#deleteConfirmationModal_{{ reading.id }}"
+                      class=""
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
+                    >
+                      <ion-icon
+                        name="trash-outline"
+                        class="text-danger"
+                      ></ion-icon>
+                    </li>
+                  </ul>
                 </td>
               </tr>
 
@@ -174,7 +142,8 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.house_section.label(class="form-label")
                             }} {{ edit_form.house_section(class="form-control",
-                            required="required", value=reading.house_section) }}
+                            required="required", value=reading.house_section,
+                            disabled="disabled") }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house section.
                             </div>
@@ -183,7 +152,8 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.house_number.label(class="form-label")
                             }} {{ edit_form.house_number(class="form-control",
-                            required="required", value=reading.house_number) }}
+                            required="required", value=reading.house_number,
+                            disabled="disabled") }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house number.
                             </div>

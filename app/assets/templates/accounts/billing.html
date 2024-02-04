@@ -80,8 +80,8 @@
                 <td>{{ entry.total_price }}</td>
                 <td>{{ "Pending" if entry.is_active else "Cleared" }}</td>
                 <td>
-                  <a class="me-2" href="#"> Edit </a>
-                  <a href="#"> Invoice </a>
+                  <a class="me-2" href="#"> Invoice </a>
+                  <a class="text-success" href="#"> Send </a>
                 </td>
               </tr>
               {% endfor %} {% else %}
