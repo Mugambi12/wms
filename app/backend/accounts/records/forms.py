@@ -19,4 +19,3 @@ class EditMeterReadingForm(FlaskForm):
     timestamp = DateField('Reading Date', validators=[DataRequired()])
     reading_status = BooleanField('Reading Status')
     submit = SubmitField('Update')
-

@@ -58,6 +58,17 @@ class MeterReading(db.Model):
         self.total_price = total_price
 
 
+class Settings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    unit_price = db.Column(db.Float)
+    house_sections = db.Column(db.String(255))
+
+    def __init__(self, unit_price=None, house_sections=None):
+        self.unit_price = unit_price
+        self.house_sections = house_sections
+
+
+
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, nullable=False)
@@ -80,15 +91,3 @@ class Payment(db.Model):
 
     def __repr__(self):
         return f"<Payment {self.id}: {self.amount} {self.payment_date}>"
-
-
-class Settings(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    unit_price = db.Column(db.Float)
-    house_sections = db.Column(db.String(255))
-
-    def __init__(self, unit_price=None, house_sections=None):
-        self.unit_price = unit_price
-        self.house_sections = house_sections
-
-

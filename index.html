@@ -178,3 +178,68 @@
 </div>
 
 {% endblock %}
+
+<td>
+  <!-- Delete Meter Reading Button -->
+  <a
+    href="{{ url_for('accounts.records..delete_meter_reading', meter_reading_id=reading.id) }}"
+    class="btn btn-danger"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteConfirmationModal"
+  >
+    Delete
+  </a>
+</td>
+
+<!-- Delete Meter Reading Confirmation Modal -->
+<div
+  class="modal fade"
+  id="deleteConfirmationModal"
+  tabindex="-1"
+  aria-labelledby="deleteConfirmationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmationModalLabel">
+          Confirm Deletion
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <!-- Delete Meter Reading Form -->
+      <form
+        method="post"
+        action="{{ url_for('accounts.records.delete_meter_reading') }}"
+      >
+        <div class="modal-body">
+          <!-- CSRF Token -->
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <!-- Form Type
+                        <input type="hidden" name="form_type" value="delete" /> -->
+
+          <p>
+            Delete meter reading for
+            <b>House {{ reading.house_number }}</b> in
+            <b>{{ reading.house_section.title() }}</b>. Confirm? 🚨
+          </p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button name="" type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
