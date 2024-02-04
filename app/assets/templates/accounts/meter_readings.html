@@ -67,7 +67,7 @@
                     href="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
                     class="btn btn-primary"
                     data-bs-toggle="modal"
-                    data-bs-target="#editConfirmationModal{{ loop.index }}"
+                    data-bs-target="#editConfirmationModal{{ reading.id }}"
                   >
                     Edit
                   </a>
@@ -88,14 +88,16 @@
               <!-- Edit Meter Reading Modal -->
               <div
                 class="modal fade"
-                id="editConfirmationModal{{ loop.index }}"
+                id="editConfirmationModal{{ reading.id }}"
                 data-bs-backdrop="static"
                 data-bs-keyboard="false"
                 tabindex="-1"
-                aria-labelledby="editConfirmationModalLabel{{ loop.index }}"
+                aria-labelledby="editConfirmationModalLabel{{ reading.id }}"
                 aria-hidden="true"
               >
-                <div class="modal-dialog modal-lg">
+                <div
+                  class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+                >
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="editConfirmationModalLabel">
@@ -259,20 +261,23 @@
                         <p>
                           Delete meter reading for
                           <b>House {{ reading.house_number }}</b> in
-                          <b>{{ reading.house_section.title() }}</b>. Confirm?
-                          🚨
+                          <b>{{ reading.house_section.title() }}</b>? 🚨
                         </p>
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button
                           type="button"
-                          class="btn btn-secondary"
+                          class="btn btn-secondary rounded-pill"
                           data-bs-dismiss="modal"
                         >
                           Cancel
                         </button>
-                        <button name="" type="submit" class="btn btn-danger">
-                          Delete
+                        <button
+                          name=""
+                          type="submit"
+                          class="btn btn-danger rounded-pill"
+                        >
+                          Confirm
                         </button>
                       </div>
                     </form>

@@ -93,14 +93,24 @@ def handle_add_meter_reading(form):
 
 
 
+
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
 def edit_meter_reading(meter_reading_id):
     # Fetch the existing meter reading from the database
     edited_reading = MeterReading.query.get_or_404(meter_reading_id)
 
-    # Create an instance of the EditMeterReadingForm and set default values
-    edit_meter_reading_form = EditMeterReadingForm(obj=edited_reading)
+    # Create an instance of the EditMeterReadingForm and pass existing reading data
+    edit_meter_reading_form = EditMeterReadingForm(
+        house_section=edited_reading.house_section,
+        house_number=edited_reading.house_number,
+        reading_value=edited_reading.reading_value,
+        consumed=edited_reading.consumed,
+        unit_price=edited_reading.unit_price,
+        total_price=edited_reading.total_price,
+        timestamp=edited_reading.timestamp,
+        reading_status=edited_reading.reading_status
+    )
 
     if request.method == 'POST':
         try:
@@ -127,6 +137,7 @@ def edit_meter_reading(meter_reading_id):
             flash(f'Error updating meter reading: {str(e)}', 'danger')
 
     return render_template('accounts/edit_meter_reading.html', form=edit_meter_reading_form, meter_reading=edited_reading)
+
 
 
 

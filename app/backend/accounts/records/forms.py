@@ -9,6 +9,8 @@ class AddMeterReadingForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+
+# Update the EditMeterReadingForm to handle default values
 class EditMeterReadingForm(FlaskForm):
     house_section = StringField('House Section', validators=[DataRequired()])
     house_number = StringField('House Number', validators=[DataRequired()])
