@@ -135,8 +135,7 @@
             <thead class="table-primary">
               <tr>
                 <th scope="col">NO.</th>
-                <th scope="col">ID</th>
-                <th scope="col">User</th>
+                <th scope="col">Customer Name</th>
                 <th scope="col">Reading Date</th>
                 <th scope="col">Reading Time</th>
                 <th scope="col">House Section</th>
@@ -148,11 +147,11 @@
               </tr>
             </thead>
             <tbody>
-              {% for reading in meter_readings | reverse %}
+              {% if meter_readings %} {% for reading in meter_readings | reverse
+              %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ reading.id }}</td>
-                <td>{{ reading.user_id }}</td>
+                <td>{{ reading.customer_name }}</td>
                 <td>{{ reading.timestamp.strftime('%d-%m-%Y') }}</td>
                 <td>
                   {{ reading.timestamp.strftime('%H:%M:%S') if reading.timestamp
@@ -396,7 +395,11 @@
                   </div>
                 </div>
               </div>
-              {% endfor %}
+              {% endfor %}{% else %}
+              <tr>
+                <td colspan="12">No billing data available</td>
+              </tr>
+              {% endif %}
             </tbody>
           </table>
         </div>

@@ -51,11 +51,12 @@
           >
             <thead class="table-primary">
               <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Date</th>
-                <th scope="col">Customer</th>
-                <th scope="col">Section</th>
-                <th scope="col">House</th>
+                <th scope="col">No.</th>
+                <th scope="col">Invoice No.</th>
+                <th scope="col">Reading Date</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">House Section</th>
+                <th scope="col">House Number</th>
                 <th scope="col">Prev. Reading</th>
                 <th scope="col">Curr. Reading</th>
                 <th scope="col">Consumed</th>
@@ -66,19 +67,25 @@
               </tr>
             </thead>
             <tbody>
-              {% if billing_data %} {% for entry in billing_data %}
+              {% if billing_data %} {% for entry in billing_data |
+              sort(attribute='id', reverse=true) %}
               <tr>
+                <td>{{ loop.index }}</td>
                 <td>{{ entry.id }}</td>
-                <td>{{ entry.timestamp.strftime('%d-%m-%Y') }}</td>
-                <td>{{ entry.first_name }} {{ entry.last_name }}</td>
-                <td>{{ entry.house_section }}</td>
+                <td>{{ entry.timestamp.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+                <td>{{ entry.customer_name.title() }}</td>
+                <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
                 <td>{{ entry.prev_reading }}</td>
                 <td>{{ entry.curr_reading }}</td>
                 <td>{{ entry.consumed }}</td>
                 <td>{{ entry.unit_price }}</td>
                 <td>{{ entry.total_price }}</td>
-                <td>{{ "Pending" if entry.is_active else "Cleared" }}</td>
+                <td
+                  class="fst-italic {% if entry.is_active %}text-secondary{% else %}text-success{% endif %}"
+                >
+                  {{ "Pending" if entry.is_active else "Cleared" }}
+                </td>
                 <td>
                   <a class="me-2" href="#"> Invoice </a>
                   <a class="text-success" href="#"> Send </a>
