@@ -40,19 +40,14 @@
 
   <!-- Invoice Details Table -->
   <div class="col-md-12">
-    <div class="card">
+    <div class="card mt-3 mb-3">
       <div class="card-header">Invoice Details Data Tables</div>
       <div class="card-body">
         <div class="table-responsive">
-          <table
-            id="example"
-            class="table table-striped data-table text-center"
-            style="width: 100%"
-          >
-            <thead class="table-primary">
+          <table class="table table-striped data-table" style="width: 100%">
+            <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Invoice No.</th>
                 <th scope="col">Reading Date</th>
                 <th scope="col">Customer Name</th>
                 <th scope="col">House Section</th>
@@ -71,8 +66,7 @@
               sort(attribute='id', reverse=true) %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ entry.id }}</td>
-                <td>{{ entry.timestamp.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+                <td>{{ entry.timestamp.strftime('%d/%m/%Y %H:%M') }}</td>
                 <td>{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
@@ -86,7 +80,7 @@
                 >
                   {{ "Pending" if entry.is_active else "Cleared" }}
                 </td>
-                <td>
+                <td class="d-flex">
                   <a class="me-2" href="#"> Invoice </a>
                   <a class="text-success" href="#"> Send </a>
                 </td>

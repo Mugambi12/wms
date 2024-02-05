@@ -1,7 +1,7 @@
 <!-- app/templates/accounts/meter_readings.html -->
 {% extends 'base.html' %} {% block content %}
 
-<div class="container-fluid mt-3">
+<section class="container-fluid mt-3">
   <!-- Button trigger add reading modal -->
   <ul class="nav nav-pills justify-content-end border-0">
     <li type="button" class="nav-item">
@@ -127,12 +127,12 @@
 
   <!-- Improved Meter Readings Table -->
   <div class="col-md-12">
-    <div class="card mt-3">
+    <div class="card mt-3 mb-3">
       <div class="card-header">Meter Readings</div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-striped data-table text-center">
-            <thead class="table-primary">
+          <table class="table table-striped data-table" style="width: 100%">
+            <thead>
               <tr>
                 <th scope="col">NO.</th>
                 <th scope="col">Customer Name</th>
@@ -299,7 +299,8 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.timestamp.label(class="form-label") }}
                             {{ edit_form.timestamp(class="form-control",
-                            required="required", value=reading.timestamp) }}
+                            required="required",
+                            value=reading.timestamp.strftime('%d-%m-%Y')) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading date.
                             </div>
@@ -406,6 +407,6 @@
       </div>
     </div>
   </div>
-</div>
+</section>
 
 {% endblock %}

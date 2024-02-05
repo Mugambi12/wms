@@ -1,3 +1,9 @@
+$(document).ready(function () {
+  $(".data-table").each(function (_, table) {
+    $(table).DataTable();
+  });
+});
+
 // const hamBurger = document.querySelector(".toggle-btn");
 //
 // hamBurger.addEventListener("click", function () {

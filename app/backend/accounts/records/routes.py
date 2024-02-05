@@ -28,14 +28,13 @@ def meter_readings():
     house_sections = db.session.query(User.house_section.distinct()).all()
     meter_readings = get_meter_readings(current_user)
 
-    return render_template('accounts/meter_readings.html', house_sections=house_sections, meter_readings=meter_readings, hide_footer=True, form=add_meter_reading_form, edit_form=edit_meter_reading_form)
+    return render_template('accounts/meter_readings.html', house_sections=house_sections, meter_readings=meter_readings, form=add_meter_reading_form, edit_form=edit_meter_reading_form, hide_footer=True)
 
 
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
 def edit_meter_reading(meter_reading_id):
     if current_user.is_authenticated:
-        # Fetch the existing meter reading from the database
         edited_reading = MeterReading.query.get_or_404(meter_reading_id)
 
         result = edit_meter_reading_logic(edited_reading)
@@ -45,7 +44,7 @@ def edit_meter_reading(meter_reading_id):
             return redirect(url_for('accounts.records.meter_readings'))
         else:
             flash(result['message'], 'danger')
-            return render_template('accounts/error.html', form=result['form'], meter_reading=edited_reading)
+            return render_template('accounts/meter_readings.html', form=result['form'], meter_reading=edited_reading, hide_footer=True)
     else:
         return redirect(url_for('auth.login'))
 
