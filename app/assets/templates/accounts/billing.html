@@ -57,6 +57,8 @@
                 <th scope="col">Consumed</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Sub Total</th>
+                <th scope="col">Service Fee</th>
+                <th scope="col">Total</th>
                 <th scope="col">Status</th>
                 <th scope="col">Actions</th>
               </tr>
@@ -69,24 +71,30 @@
                 <td>{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
-                <td>{{ entry.prev_reading }}</td>
+                <td>
+                  {{ "%0.0f"|format(entry.prev_reading) if entry.prev_reading is
+                  not none else "None" }}
+                </td>
                 <td>{{ "%0.0f"|format(entry.curr_reading) }}</td>
+
                 <td>{{ "%0.0f"|format(entry.consumed) }}</td>
                 <td>{{ "%0.0f"|format(entry.unit_price) }}</td>
+                <td>{{ "%0.0f"|format(entry.sub_total_price) }}</td>
+                <td>{{ "%0.0f"|format(entry.service_fee) }}</td>
                 <td>{{ "%0.0f"|format(entry.total_price) }}</td>
                 <td
-                  class="fst-italic {% if entry.is_active %}text-secondary{% else %}text-success{% endif %}"
+                  class="fst-italic {% if entry.reading_status %}text-success{% else %}text-secondary{% endif %}"
                 >
-                  {{ "Pending" if entry.is_active else "Cleared" }}
+                  {{ "Cleared" if entry.reading_status else "Pending" }}
                 </td>
                 <td class="text-center">
-                  <a class="me-2" href="#">
-                    <ion-icon name="receipt-outline"></ion-icon>
-                  </a>
                   <a
-                    class="text-success"
+                    class="me-2"
                     href="{{ url_for('accounts.records.invoice') }}"
                   >
+                    <ion-icon name="receipt-outline"></ion-icon>
+                  </a>
+                  <a class="text-success" href="#">
                     <ion-icon name="paper-plane-outline"></ion-icon>
                   </a>
                 </td>

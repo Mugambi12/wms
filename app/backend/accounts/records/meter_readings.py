@@ -1,53 +1,61 @@
 # app/backend/accounts/records/service.py
 from flask import request, flash
+from sqlalchemy.exc import SQLAlchemyError
 from app import db
 from ...models.user import MeterReading, User, Settings
 from .forms import EditMeterReadingForm
 
 def handle_add_meter_reading(form, current_user):
-    house_section = form.house_section.data
-    house_number = form.house_number.data
-    reading_value = form.reading_value.data
+    try:
+        house_section = form.house_section.data
+        house_number = form.house_number.data
+        reading_value = form.reading_value.data
 
-    user = User.query.filter_by(house_section=house_section, house_number=house_number).first()
+        user = User.query.filter_by(house_section=house_section, house_number=house_number).first()
 
-    if not user:
-        return {'success': False, 'message': 'Invalid house section or house number.'}
-    else:
-        try:
-            latest_reading = MeterReading.query.filter_by(
-                house_section=house_section, house_number=house_number
-            ).order_by(MeterReading.reading_value.desc()).first()
+        if not user:
+            return {'success': False, 'message': 'Invalid house section or house number.'}
 
-            old_prev_reading = 0 if latest_reading is None else latest_reading.reading_value
-            consumed = reading_value - old_prev_reading
+        latest_reading = MeterReading.query.filter_by(
+            house_section=house_section, house_number=house_number
+        ).order_by(MeterReading.reading_value.desc()).first()
 
-            unit_price_row = db.session.query(Settings.unit_price).first()
-            unit_price = 0 if not unit_price_row else unit_price_row[0]
-            total_price = consumed * unit_price
+        old_prev_reading = 0 if latest_reading is None else latest_reading.reading_value
+        consumed = reading_value - old_prev_reading
 
-            # Get the customer name from the User model
-            customer = User.query.filter_by(house_section=house_section, house_number=house_number).first()
-            customer_name = f"{customer.first_name} {customer.last_name}" if customer else None
+        unit_price = db.session.query(Settings.unit_price).scalar() or 0
+        service_fee = db.session.query(Settings.service_fee).scalar() or 0
 
-            new_meter_reading = MeterReading(
-                reading_value=reading_value,
-                house_section=house_section,
-                house_number=house_number,
-                user_id=current_user.id,
-                customer_name=customer_name,
-                consumed=consumed,
-                unit_price=unit_price,
-                total_price=total_price
-            )
+        sub_total_price = consumed * unit_price
+        total_price = sub_total_price + service_fee
 
-            db.session.add(new_meter_reading)
-            db.session.commit()
+        customer = f"{user.first_name} {user.last_name}" if user else None
 
-            return {'success': True, 'message': 'Meter reading added successfully!'}
+        new_meter_reading = MeterReading(
+            reading_value=reading_value,
+            house_section=house_section,
+            house_number=house_number,
+            user_id=current_user.id,
+            customer_name=customer,
+            consumed=consumed,
+            unit_price=unit_price,
+            service_fee=service_fee,
+            sub_total_price=sub_total_price,
+            total_price=total_price
+        )
 
-        except Exception as e:
-            return {'success': False, 'message': f'Error adding meter reading: {str(e)}'}
+        db.session.add(new_meter_reading)
+        db.session.commit()
+
+        return {'success': True, 'message': 'Meter reading added successfully!'}
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return {'success': False, 'message': f'Database error: {str(e)}'}
+    except ValueError as e:
+        return {'success': False, 'message': f'Invalid input: {str(e)}'}
+    except Exception as e:
+        return {'success': False, 'message': f'Error: {str(e)}'}
 
 def get_meter_readings(current_user):
     return MeterReading.query.filter_by(user_id=current_user.id).all()

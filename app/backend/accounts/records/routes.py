@@ -94,6 +94,7 @@ def billing():
                 MeterReading.house_section,
                 MeterReading.house_number,
                 User.is_active,
+                MeterReading.reading_status,
                 MeterReading.customer_name,
                 func.lag(MeterReading.reading_value)
                 .over(partition_by=(MeterReading.house_section, MeterReading.house_number), order_by=MeterReading.timestamp)
@@ -101,6 +102,8 @@ def billing():
                 MeterReading.reading_value.label('curr_reading'),
                 MeterReading.consumed,
                 MeterReading.unit_price,
+                MeterReading.sub_total_price,
+                MeterReading.service_fee,
                 MeterReading.total_price
             )
             .join(User)

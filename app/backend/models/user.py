@@ -45,11 +45,13 @@ class MeterReading(db.Model):
     reading_value = db.Column(db.Float)
     consumed = db.Column(db.Float)
     unit_price = db.Column(db.Float)
+    service_fee = db.Column(db.Float)
+    sub_total_price = db.Column(db.Float)
     total_price = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc) + timedelta(hours=3), nullable=False)
     reading_status = db.Column(db.Boolean, default=False)
 
-    def __init__(self, reading_value, house_section, house_number, user_id, unit_price, customer_name, consumed, total_price):
+    def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_price, total_price):
         self.house_section = house_section
         self.house_number = house_number
         self.reading_value = reading_value
@@ -57,6 +59,8 @@ class MeterReading(db.Model):
         self.customer_name = customer_name
         self.consumed = consumed
         self.unit_price = unit_price
+        self.service_fee = service_fee
+        self.sub_total_price = sub_total_price
         self.total_price = total_price
 
 
@@ -66,8 +70,9 @@ class Settings(db.Model):
     service_fee = db.Column(db.Float)
     house_sections = db.Column(db.String(255))
 
-    def __init__(self, unit_price=None, house_sections=None):
+    def __init__(self, unit_price=None, service_fee=None, house_sections=None):
         self.unit_price = unit_price
+        self.service_fee = service_fee
         self.house_sections = house_sections
 
 
