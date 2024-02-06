@@ -9,55 +9,92 @@ from werkzeug.utils import secure_filename
 from openpyxl import Workbook
 from xhtml2pdf import pisa
 from app import db
-from ...models.user import User
-from .forms import EditUserForm, EditProfilePictureForm, AddUserForm
+from ...models.user import User, Settings
+from .forms import AddUserForm, EditUserForm, EditProfilePictureForm
 
 
 people_bp = Blueprint('people', __name__, url_prefix='/people')
 
 
-@people_bp.route('/people_list')
+@people_bp.route('/people_list', methods=['GET', 'POST'])
 @login_required
 def people_list():
     if current_user.is_authenticated:
         people_list = User.query.all()
+        add_form = AddUserForm()
 
-        return render_template('accounts/people_list.html', hide_footer=True, people_list=people_list)
+        # Retrieve house sections and populate the choices
+        house_sections = []
+        settings = Settings.query.first()
+        if settings:
+            house_sections = [(section, section) for section in settings.house_sections.split(',')]
+
+        return render_template('accounts/people_list.html', people_list=people_list, house_sections=house_sections, form=add_form, hide_footer=True)
     else:
         return redirect(url_for('auth.login'))
 
 
-@people_bp.route('/add_people', methods=['GET', 'POST'])
+@people_bp.route('/add_user', methods=['GET', 'POST'])
 @login_required
-def add_people():
+def add_user():
     if current_user.is_authenticated:
-        form = AddUserForm()
+        add_form = AddUserForm()
 
-        # Populate house sections choices
-        form.populate_house_sections()
+        if request.method == 'POST':
+            form_type = request.form.get('form_type')
 
-        user = current_user
+            if form_type == 'add':
+                result = handle_add_new_users(add_form, current_user)
 
-        if request.method == 'POST' and form.validate():
-            new_user = User(
-                mobile_number=form.mobile_number.data,
-                first_name=form.first_name.data,
-                last_name=form.last_name.data,
-                email=form.email.data,
-                house_section=form.house_section.data,
-                house_number=form.house_number.data,
-                password=form.password.data
-            )
-
-            db.session.add(new_user)
-            db.session.commit()
-
-            flash('User added successfully.', 'success')
-            return redirect(url_for('accounts.people.people_list'))
-
-        return render_template('accounts/add_people.html', form=form, user=user, hide_footer=True)
+                if result['success']:
+                    flash(result['message'], 'success')
+                else:
+                    flash(result['message'], 'danger')
+        return redirect(url_for('accounts.people.people_list', people_list=people_list, form=add_form, hide_footer=True))
     else:
         return redirect(url_for('auth.login'))
+
+
+def handle_add_new_users(form):
+    mobile_number = form.mobile_number.data
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+    email = form.email.data
+    house_section = form.house_section.data
+    house_number = form.house_number.data
+    password = form.password.data
+
+    try:
+        # Check if the mobile number is already registered
+        existing_user = User.query.filter_by(mobile_number=mobile_number).first()
+        if existing_user:
+            return {'success': False, 'message': 'Failed to add user. Mobile number is already registered.'}
+
+        # Check if the household is already registered
+        existing_household = User.query.filter_by(house_section=house_section, house_number=house_number).first()
+        if existing_household:
+            return {'success': False, 'message': 'Failed to add user. Household is already registered.'}
+
+        # Create a new user object
+        new_user = User(
+            mobile_number=mobile_number,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            house_section=house_section,
+            house_number=house_number,
+            password=password
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return {'success': True, 'message': f'{first_name.title()} has been successfully added as a user.'}
+
+    except Exception as e:
+        return {'success': False, 'message': f'Failed to add user. An error occurred: {str(e)}'}
+
+
 
 
 @people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])

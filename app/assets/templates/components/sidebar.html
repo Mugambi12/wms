@@ -16,6 +16,7 @@
 
   <!-- Sidebar Navigation -->
   <ul class="sidebar-nav">
+    <!-- Dashboard -->
     <li class="sidebar-item">
       <a
         href="{{ url_for('accounts.dashboard.dashboard') }}"
@@ -26,41 +27,15 @@
       </a>
     </li>
 
-    <!-- people Dropdown -->
+    <!-- People Dropdown -->
     <li class="sidebar-item">
       <a
-        href="#people"
-        class="sidebar-link collapsed has-dropdown"
-        data-bs-toggle="collapse"
-        data-bs-target="#people"
-        aria-expanded="false"
-        aria-controls="people"
+        href="{{ url_for('accounts.people.people_list') }}"
+        class="sidebar-link"
       >
         <ion-icon name="people-outline" class="text-success"></ion-icon>
-        <span>People</span>
+        <span>People List</span>
       </a>
-      <ul
-        id="people"
-        class="sidebar-dropdown list-unstyled collapse"
-        data-bs-parent="#sidebar"
-      >
-        <li class="sidebar-item">
-          <a
-            href="{{ url_for('accounts.people.people_list') }}"
-            class="sidebar-link"
-          >
-            People List
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a
-            href="{{ url_for('accounts.people.add_people') }}"
-            class="sidebar-link"
-          >
-            Add New Person
-          </a>
-        </li>
-      </ul>
     </li>
 
     <!-- Records and Water Supply Dropdown -->

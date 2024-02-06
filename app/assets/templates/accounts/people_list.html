@@ -1,37 +1,200 @@
 {% extends "base.html" %} {% block content %}
 
-<div class="container-fluid">
-  <div class="text-center mt-3">
-    <h2 class="mb-2 fw-bold text-primary">People List</h2>
-    <p class="mb-4 text-muted fst-italic">
-      Explore the list of people and download in various formats:
+<section class="container-fluid">
+  <!-- Button trigger New Person modal -->
+  <ul class="nav nav-pills justify-content-end border-0">
+    <li type="button" class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="modal"
+        data-bs-target="#addNewPersonModal"
+        >Add New Person</a
+      >
+    </li>
+  </ul>
+
+  <!-- Add New Person Modal -->
+  <div
+    class="modal fade"
+    id="addNewPersonModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="addNewPersonModalLabel"
+    aria-hidden="true"
+  >
+    <div
+      class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addNewPersonModalLabel">
+            Add New Person
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <!-- Add New Person Form -->
+        <form
+          method="POST"
+          action="{{ url_for('accounts.people.add_user') }}"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="modal-body">
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <!-- Form Type -->
+            <input type="hidden" name="form_type" value="add" />
+
+            <div class="row">
+              <!-- First Name -->
+              <div class="col-md-6 mb-3">
+                {{ form.first_name.label(class="form-label") }} {{
+                form.first_name(class="form-control") }}
+              </div>
+
+              <!-- Last Name -->
+              <div class="col-md-6 mb-3">
+                {{ form.last_name.label(class="form-label") }} {{
+                form.last_name(class="form-control") }}
+              </div>
+
+              <!-- Mobile Number -->
+              <div class="col-md-6 mb-3">
+                {{ form.mobile_number.label(class="form-label") }} {{
+                form.mobile_number(class="form-control") }}
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6 mb-3">
+                {{ form.email.label(class="form-label") }} {{
+                form.email(class="form-control") }}
+              </div>
+
+              <!-- House Section -->
+              <div class="col-md-6 mb-3">
+                {{ form.house_section.label(class="form-label") }}
+                <select
+                  class="form-select"
+                  name="house_section"
+                  id="house_section"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Select House Section
+                  </option>
+                  {% for section in house_sections %}
+                  <option value="{{ section[0] }}">{{ section[0] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <!-- House Number -->
+              <div class="col-md-6 mb-3">
+                {{ form.house_number.label(class="form-label") }} {{
+                form.house_number(class="form-control") }}
+              </div>
+
+              <!-- Password -->
+              <div class="col-md-6 mb-3">
+                {{ form.password.label(class="form-label") }}
+                <div class="input-group border rounded-3">
+                  {{ form.password(class="form-control border-0",
+                  id="reg_password") }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('reg_password', 'password_icon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="password_icon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="col-md-6 mb-3">
+                {{ form.confirm_password.label(class="form-label") }}
+                <div class="input-group border rounded-3">
+                  {{ form.confirm_password(class="form-control border-0",
+                  id="confirm_password") }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('confirm_password', 'confirm_password_icon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="confirm_password_icon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Button -->
+          <div class="modal-footer justify-content-between">
+            <button
+              type="button"
+              class="btn btn-secondary rounded-pill"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary rounded-pill">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Title Details -->
+  <div class="text-center">
+    <h2 class="fw-bold text-success">People at a Glance</h2>
+    <p class="mt-2 fst-italic">
+      Discover our people directory and download in various formats.
     </p>
   </div>
 
   <!-- Download Buttons -->
   <div class="row">
     <div class="col-md-12">
-      <div class="mb-3 float-end me-3">
+      <div class="float-start ms-3">
         <a
           href="{{ url_for('accounts.people.download_users', format='csv') }}"
           class="btn btn-sm me-2 btn-primary"
           download="people_list.csv"
         >
-          CSV <ion-icon name="download-outline"></ion-icon>
+          <ion-icon name="download-outline"></ion-icon> CSV
         </a>
         <a
           href="{{ url_for('accounts.people.download_users', format='excel') }}"
           class="btn btn-sm me-2 btn-success"
           download="people_list.xlsx"
         >
-          Excel <ion-icon name="download-outline"></ion-icon>
+          <ion-icon name="download-outline"></ion-icon> Excel
         </a>
         <a
           href="{{ url_for('accounts.people.download_users', format='pdf') }}"
           class="btn btn-sm me-2 btn-danger"
           download="people_list.pdf"
         >
-          PDF <ion-icon name="download-outline"></ion-icon>
+          <ion-icon name="download-outline"></ion-icon> PDF
         </a>
       </div>
     </div>
@@ -102,6 +265,6 @@
       </div>
     </div>
   </div>
-</div>
+</section>
 
 {% endblock %}
