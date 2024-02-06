@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from app import db
 from .forms import AddMeterReadingForm, EditMeterReadingForm
 from ...models.user import MeterReading, User, Settings
-from .records import handle_add_meter_reading, get_meter_readings, edit_meter_reading_logic, delete_meter_reading_logic
+from .meter_readings import handle_add_meter_reading, get_meter_readings, edit_meter_reading_logic, delete_meter_reading_logic
 
 records_bp = Blueprint('records', __name__, url_prefix='/records')
 

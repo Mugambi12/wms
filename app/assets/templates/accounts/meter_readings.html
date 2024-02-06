@@ -167,7 +167,7 @@
                 >
                   {{ 'Cleared' if reading.reading_status else 'Pending' }}
                 </td>
-                <td>
+                <td class="text-center">
                   <!-- Edit Meter Reading Button -->
                   <a
                     action="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"

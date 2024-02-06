@@ -2,10 +2,11 @@
 
 <!-- #MAIN BODY SECTION -->
 <div class="container-fluid">
-  <div class="text-center mt-3">
-    <h2 class="mb-2 fw-bold text-primary">Manage Invoices</h2>
-    <p class="mb-4 text-muted fst-italic">
-      Effortlessly send and track invoices to users
+  <!-- Page Title Details -->
+  <div class="text-center">
+    <h2 class="fw-bold text-success">Invoice Management</h2>
+    <p class="mt-2 fst-italic">
+      Streamline invoicing processes and effortlessly track payments.
     </p>
   </div>
 
@@ -40,7 +41,7 @@
 
   <!-- Invoice Details Table -->
   <div class="col-md-12">
-    <div class="card mt-3 mb-3">
+    <div class="card mb-3">
       <div class="card-header">Invoice Details Data Tables</div>
       <div class="card-body">
         <div class="table-responsive">
@@ -48,7 +49,6 @@
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Reading Date</th>
                 <th scope="col">Customer Name</th>
                 <th scope="col">House Section</th>
                 <th scope="col">House Number</th>
@@ -66,23 +66,26 @@
               sort(attribute='id', reverse=true) %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ entry.timestamp.strftime('%d/%m/%Y %H:%M') }}</td>
                 <td>{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
                 <td>{{ entry.prev_reading }}</td>
-                <td>{{ entry.curr_reading }}</td>
-                <td>{{ entry.consumed }}</td>
-                <td>{{ entry.unit_price }}</td>
-                <td>{{ entry.total_price }}</td>
+                <td>{{ "%0.0f"|format(entry.curr_reading) }}</td>
+                <td>{{ "%0.0f"|format(entry.consumed) }}</td>
+                <td>{{ "%0.0f"|format(entry.unit_price) }}</td>
+                <td>{{ "%0.0f"|format(entry.total_price) }}</td>
                 <td
                   class="fst-italic {% if entry.is_active %}text-secondary{% else %}text-success{% endif %}"
                 >
                   {{ "Pending" if entry.is_active else "Cleared" }}
                 </td>
-                <td class="d-flex">
-                  <a class="me-2" href="#"> Invoice </a>
-                  <a class="text-success" href="#"> Send </a>
+                <td class="text-center">
+                  <a class="me-2" href="#">
+                    <ion-icon name="receipt-outline"></ion-icon>
+                  </a>
+                  <a class="text-success" href="#">
+                    <ion-icon name="paper-plane-outline"></ion-icon>
+                  </a>
                 </td>
               </tr>
               {% endfor %} {% else %}
