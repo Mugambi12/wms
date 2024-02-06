@@ -37,6 +37,40 @@
       </div>
     </div>
 
+    <!-- Update Service Fee Form -->
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
+          <h5 class="card-title mb-4 text-primary">Update Service Fee</h5>
+          <form
+            method="post"
+            action="{{ url_for('accounts.settings.settings') }}"
+          >
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="mb-3">
+              <label for="service_fee" class="form-label"
+                >New Service Fee:</label
+              >
+              {{ service_fee_form.service_fee(class="form-control") }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+              <button
+                type="submit"
+                name="service_fee_submit"
+                class="btn btn-primary rounded-pill"
+              >
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <!-- Add House Section Form -->
     <div class="col">
       <div class="card h-100 shadow-sm border-0">

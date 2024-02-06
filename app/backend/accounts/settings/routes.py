@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app import db
-from .forms import UnitPriceForm, AddHouseSectionForm, EditHouseSectionForm, DeleteHouseSectionForm
+from .forms import UnitPriceForm, ServiceFeeForm, AddHouseSectionForm, EditHouseSectionForm, DeleteHouseSectionForm
 from ...models.user import Settings
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
@@ -34,6 +34,29 @@ def update_unit_price(system_settings, new_unit_price):
         # Handle the case where new_unit_price cannot be converted to float
         flash('Invalid input for Unit Price. Please enter a valid number.', 'danger')
 
+def update_service_fee(system_settings, new_service_fee):
+    try:
+        # Try to convert new_service_fee to float
+        new_service_fee = float(new_service_fee)
+
+        if system_settings:
+            if system_settings.service_fee is not None:
+                system_settings.service_fee = None
+                db.session.commit()
+
+            system_settings.service_fee = new_service_fee
+            db.session.commit()
+            flash(f'Unit Price updated to "{new_service_fee}" successfully!', 'success')
+
+        else:
+            new_settings = Settings(service_fee=new_service_fee)
+            db.session.add(new_settings)
+            db.session.commit()
+            flash(f'Unit Price added as "{new_service_fee}" successfully!', 'success')
+
+    except ValueError:
+        # Handle the case where new_service_fee cannot be converted to float
+        flash('Invalid input for Unit Price. Please enter a valid number.', 'danger')
 
 def add_house_section(system_settings, house_section):
     if system_settings:
@@ -73,15 +96,18 @@ def delete_house_section(system_settings, selected_section):
 @login_required
 def settings():
     unit_price_form = UnitPriceForm()
+    service_fee_form = ServiceFeeForm()
     add_section_form = AddHouseSectionForm()
     edit_section_form = EditHouseSectionForm()
     delete_section_form = DeleteHouseSectionForm()
 
     system_settings = get_system_settings()
     new_unit_price = unit_price_form.unit_price.data
+    new_service_fee = service_fee_form.service_fee.data
 
     if system_settings:
         unit_price_form.unit_price.data = system_settings.unit_price
+        service_fee_form.service_fee.data = system_settings.service_fee
         house_sections = system_settings.house_sections.split(',') if system_settings.house_sections else []
         edit_section_form.house_sections.choices = [(section, section) for section in house_sections]
         delete_section_form.house_sections.choices = [(section, section) for section in house_sections]
@@ -89,6 +115,10 @@ def settings():
     if request.method == 'POST':
         if 'unit_price_submit' in request.form:
             update_unit_price(system_settings, new_unit_price)
+            return redirect(url_for('accounts.settings.settings'))
+
+        elif 'service_fee_submit' in request.form:
+            update_service_fee(system_settings, new_service_fee)
             return redirect(url_for('accounts.settings.settings'))
 
         elif 'add_section_submit' in request.form and add_section_form.validate_on_submit():
@@ -105,6 +135,7 @@ def settings():
 
     return render_template('accounts/settings.html',
                            unit_price_form=unit_price_form,
+                           service_fee_form=service_fee_form,
                            add_section_form=add_section_form,
                            edit_section_form=edit_section_form,
                            delete_section_form=delete_section_form,

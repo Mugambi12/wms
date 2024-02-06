@@ -7,6 +7,10 @@ class UnitPriceForm(FlaskForm):
     unit_price = FloatField('Unit Price', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+class ServiceFeeForm(FlaskForm):
+    service_fee = FloatField('Unit Price', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
 class AddHouseSectionForm(FlaskForm):
     house_sections = StringField('New House Section')
     submit = SubmitField()
