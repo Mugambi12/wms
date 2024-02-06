@@ -10,6 +10,7 @@
 <div class="invoice-wrapper" id="print-area">
   <div class="invoice">
     <div class="invoice-container">
+      <!-- Invoice Header Section -->
       <div class="invoice-head">
         <div class="invoice-head-top">
           <div class="invoice-head-top-left text-start">
@@ -22,10 +23,16 @@
         <div class="hr"></div>
         <div class="invoice-head-middle">
           <div class="invoice-head-middle-left text-start">
-            <p><span class="text-bold">Date</span>: 31/01/2024</p>
+            <p>
+              <span class="text-bold">Date</span>: {{
+              invoice_data.timestamp.strftime('%d-%m-%Y') }}
+            </p>
           </div>
           <div class="invoice-head-middle-right text-end">
-            <p><span class="text-bold">Invoice No:</span>16789</p>
+            <p>
+              <span class="text-bold">Invoice No:</span>{{
+              invoice_data.invoice_id }}
+            </p>
           </div>
         </div>
         <div class="hr"></div>
@@ -33,10 +40,10 @@
           <div class="invoice-head-bottom-left">
             <ul>
               <li class="text-bold">Invoiced To:</li>
-              <li>John Doe</li>
-              <li>Phase 1</li>
-              <li>House No. 1</li>
-              <li>+254 123 456 789</li>
+              <li><b>{{ invoice_data.customer_name.title() }}</b></li>
+              <li><b> Phase:</b> {{ invoice_data.house_section.title() }}</li>
+              <li><b> House No.:</b> {{ invoice_data.house_number }}</li>
+              <li>(+254) {{ invoice_data.mobile [-9:] }}</li>
             </ul>
           </div>
           <div class="invoice-head-bottom-right">
@@ -52,6 +59,7 @@
         </div>
       </div>
 
+      <!-- Invoice Body Section -->
       <div class="overflow-view">
         <div class="invoice-body">
           <table>
@@ -66,38 +74,54 @@
             </thead>
             <tbody>
               <tr>
-                <td>Water Usage</td>
-                <td>Monthly water consumption</td>
-                <td>KES 250</td>
-                <td>15 units</td>
-                <td class="text-end">KES 3750</td>
+                <td>{{ invoice_data.first_service }}</td>
+                <td>{{ invoice_data.first_description }}</td>
+                <td>{{ invoice_data.unit_price }}</td>
+                <td>{{ invoice_data.consumed }}</td>
+                <td class="text-end">
+                  {{ invoice_data.unit_price * invoice_data.consumed }}
+                </td>
               </tr>
               <tr>
-                <td>Service Fee</td>
-                <td>Maintenance & service charge</td>
-                <td>KES 1000</td>
-                <td>1</td>
-                <td class="text-end">KES 1000</td>
+                <td>{{ invoice_data.second_service }}</td>
+                <td>{{ invoice_data.second_description }}</td>
+                <td>{{ invoice_data.service_fee }}</td>
+                <td>{{ invoice_data.service_qty }}</td>
+                <td class="text-end">
+                  {{ invoice_data.service_fee * invoice_data.service_qty }}
+                </td>
               </tr>
             </tbody>
           </table>
           <div class="invoice-body-bottom">
             <div class="invoice-body-info-item border-bottom">
               <div class="info-item-td text-end text-bold">Sub Total:</div>
-              <div class="info-item-td text-end">KES 4750</div>
+              <div class="info-item-td text-end">
+                {{ invoice_data.sub_total_price + invoice_data.service_fee *
+                invoice_data.service_qty }}
+              </div>
             </div>
             <div class="invoice-body-info-item border-bottom">
               <div class="info-item-td text-end text-bold">VAT (5%):</div>
-              <div class="info-item-td text-end">KES 238</div>
+              <div class="info-item-td text-end">
+                {{ 0.05 * (invoice_data.sub_total_price +
+                invoice_data.service_fee * invoice_data.service_qty) }}
+              </div>
             </div>
             <div class="invoice-body-info-item">
               <div class="info-item-td text-end text-bold">Total:</div>
-              <div class="info-item-td text-end">KES 4988</div>
+              <div class="info-item-td text-end">
+                {{ (invoice_data.sub_total_price + invoice_data.service_fee *
+                invoice_data.service_qty) + (0.05 *
+                (invoice_data.sub_total_price + invoice_data.service_fee *
+                invoice_data.service_qty)) }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Invoice Footer Section -->
       <div class="invoice-foot text-center">
         <p class="text-bold">
           NOTE: This is a computer-generated receipt and does not require a

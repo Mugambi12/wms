@@ -39,6 +39,7 @@ class User(db.Model, UserMixin):
 class MeterReading(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc) + timedelta(hours=3), nullable=False)
     customer_name = db.Column(db.String(50))
     house_section = db.Column(db.String(50))
     house_number = db.Column(db.String(20))
@@ -48,7 +49,6 @@ class MeterReading(db.Model):
     service_fee = db.Column(db.Float)
     sub_total_price = db.Column(db.Float)
     total_price = db.Column(db.Float)
-    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc) + timedelta(hours=3), nullable=False)
     reading_status = db.Column(db.Boolean, default=False)
 
     def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_price, total_price):

@@ -81,19 +81,13 @@ def delete_meter_reading(meter_reading_id):
 
 from sqlalchemy import func
 
-@records_bp.route('/billing')
-@login_required
-def billing():
-    if current_user.is_authenticated:
-        billing_data = (
+def fetch_billing_data():
+    get_billing_data = (
             db.session.query(
                 MeterReading.id,
                 MeterReading.timestamp,
-                User.first_name,
-                User.last_name,
                 MeterReading.house_section,
                 MeterReading.house_number,
-                User.is_active,
                 MeterReading.reading_status,
                 MeterReading.customer_name,
                 func.lag(MeterReading.reading_value)
@@ -111,23 +105,83 @@ def billing():
             .order_by(MeterReading.timestamp.desc())
             .all()
         )
+    return get_billing_data
+
+@records_bp.route('/billing')
+@login_required
+def billing():
+    if current_user.is_authenticated:
+        billing_data = fetch_billing_data()
 
         return render_template('accounts/billing.html', hide_footer=True, billing_data=billing_data)
     else:
         return redirect(url_for('auth.login'))
 
 
+def fetch_invoice_data(invoice_id):
+    invoice = MeterReading.query.filter_by(id=invoice_id).first()
+    if invoice:
+        user = User.query.filter_by(id=invoice.user_id).first()
 
-@records_bp.route('/invoice')
-@login_required
-def invoice():
-    # Check if the user is still authenticated
-    if current_user.is_authenticated:
-        # You can add records-specific logic and data here
-        return render_template('accounts/invoice.html', hide_sidebar=True, hide_navbar=True, hide_footer=True)
+        service_qty = (
+            MeterReading.query
+            .filter(
+                MeterReading.house_section == invoice.house_section,
+                MeterReading.house_number == invoice.house_number,
+                MeterReading.reading_status == False
+            )
+            .group_by(MeterReading.house_section, MeterReading.house_number)
+            .count()
+        )
+
+        if user:
+            invoice_data = {
+                'mobile': user.mobile_number,
+                'first_service': 'Water Usage',
+                'first_description': 'Monthly water consumption',
+                'second_service': 'Service Fee',
+                'second_description': 'Maintenance & service charge',
+                'invoice_id': invoice.id,
+                'timestamp': invoice.timestamp,
+                'customer_name': invoice.customer_name,
+                'house_section': invoice.house_section,
+                'house_number': invoice.house_number,
+                'reading_value': invoice.reading_value,
+                'unit_price': invoice.unit_price,
+                'service_fee': invoice.service_fee,
+                'consumed': invoice.consumed,
+                'service_qty': service_qty,
+                'sub_total_price': invoice.sub_total_price,
+                'total_price': invoice.total_price,
+                'reading_status': invoice.reading_status,
+                'vat': '0'
+            }
+            return invoice_data
+        else:
+            return None
     else:
-        # If the user is not authenticated, redirect to the login page
+        return None
+
+
+
+@records_bp.route('/invoice/<int:invoice_id>')
+@login_required
+def invoice(invoice_id):
+    if current_user.is_authenticated:
+        invoice_data = fetch_invoice_data(invoice_id)
+        if invoice_data:
+            # Pass invoice_data to the invoice template
+            return render_template('accounts/invoice.html', invoice_data=invoice_data, hide_sidebar=True, hide_navbar=True, hide_footer=True)
+        else:
+            flash("Invoice not found", "error")
+            return redirect(url_for('accounts.records.billing'))
+    else:
         return redirect(url_for('auth.login'))
+
+
+
+
+
 
 @records_bp.route('/payments')
 @login_required

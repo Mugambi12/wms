@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <!-- Invoice Details Table -->
+  <!-- Billing Details Table -->
   <div class="col-md-12">
     <div class="card mb-3">
       <div class="card-header">Invoice Details Data Tables</div>
@@ -90,10 +90,11 @@
                 <td class="text-center">
                   <a
                     class="me-2"
-                    href="{{ url_for('accounts.records.invoice') }}"
+                    href="{{ url_for('accounts.records.invoice', invoice_id=entry.id) }}"
                   >
                     <ion-icon name="receipt-outline"></ion-icon>
                   </a>
+
                   <a class="text-success" href="#">
                     <ion-icon name="paper-plane-outline"></ion-icon>
                   </a>

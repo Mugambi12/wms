@@ -30,7 +30,7 @@ def register():
         new_user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
-            mobile_number=form.mobile_number.data,
+            mobile_number=form.mobile_number.data[-9:],
             password=form.password.data
         )
         db.session.add(new_user)

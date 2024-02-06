@@ -8,7 +8,7 @@ from app import db
 from ...models.user import User
 
 def handle_add_new_users(form, current_user):
-    mobile_number = form.mobile_number.data
+    mobile_number = form.mobile_number.data[-9:]
     first_name = form.first_name.data
     last_name = form.last_name.data
     email = form.email.data
