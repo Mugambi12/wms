@@ -123,7 +123,7 @@ def edit_user(user_id):
     else:
         return redirect(url_for('auth.login'))
 
-# Edit User Informations
+
 def change_password(user, form):
     if current_user.is_admin and form.current_password.data:
         if not user.check_password(form.current_password.data):
