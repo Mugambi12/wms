@@ -22,7 +22,7 @@
         <form
           class="mb-5"
           method="POST"
-          action="{{ url_for('accounts.people.edit_profile_picture') }}"
+          action="{{ url_for('accounts.people.edit_profile_picture_route') }}"
           enctype="multipart/form-data"
         >
           <!-- CSRF Token -->
@@ -109,7 +109,7 @@
             </button>
             <form
               method="post"
-              action="{{ url_for('accounts.people.delete_user', user_id=user.id) }}"
+              action="{{ url_for('accounts.people.delete_user_route', user_id=user.id) }}"
             >
               <button type="submit" class="btn btn-sm btn-danger rounded-pill">
                 Confirm Deletion
