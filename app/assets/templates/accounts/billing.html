@@ -45,18 +45,21 @@
       <div class="card-header">Invoice Details Data Tables</div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-striped data-table" style="width: 100%">
+          <table
+            class="table table-striped text-center data-table"
+            style="width: 100%"
+          >
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Customer Name</th>
-                <th scope="col">House Section</th>
-                <th scope="col">House Number</th>
-                <th scope="col">Prev. Reading</th>
-                <th scope="col">Curr. Reading</th>
+                <th scope="col">Name</th>
+                <th scope="col">Section</th>
+                <th scope="col">House</th>
+                <th scope="col">Prev. Read.</th>
+                <th scope="col">Curr. Read.</th>
                 <th scope="col">Consumed</th>
-                <th scope="col">Unit Price</th>
-                <th scope="col">Sub Total</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Subtotal</th>
                 <th scope="col">Service Fee</th>
                 <th scope="col">Total</th>
                 <th scope="col">Status</th>
@@ -68,7 +71,7 @@
               sort(attribute='id', reverse=true) %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ entry.customer_name.title() }}</td>
+                <td class="text-start">{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
                 <td>
@@ -87,7 +90,7 @@
                 >
                   {{ "Cleared" if entry.reading_status else "Pending" }}
                 </td>
-                <td class="text-center">
+                <td>
                   <a
                     class="me-2"
                     href="{{ url_for('accounts.records.invoice', invoice_id=entry.id) }}"
