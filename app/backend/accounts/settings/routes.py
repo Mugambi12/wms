@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app import db
-from .forms import UnitPriceForm, ServiceFeeForm, AddHouseSectionForm, EditHouseSectionForm, DeleteHouseSectionForm
+from .forms import CompanyNameForm, UnitPriceForm, ServiceFeeForm, AddHouseSectionForm, EditHouseSectionForm, DeleteHouseSectionForm
 from ...models.user import Settings
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
@@ -10,9 +10,29 @@ settings_bp = Blueprint('settings', __name__, url_prefix='/settings')
 def get_system_settings():
     return Settings.query.first()
 
+def update_company_name(system_settings, new_company_name):
+    try:
+        if system_settings:
+            if system_settings.company_name is not None:
+                system_settings.company_name = None
+                db.session.commit()
+
+            system_settings.company_name = new_company_name
+            db.session.commit()
+            flash(f'Company name updated to "{new_company_name}" successfully!', 'success')
+
+        else:
+            new_settings = Settings(company_name=new_company_name)
+            db.session.add(new_settings)
+            db.session.commit()
+            flash(f'Company name set to "{new_company_name}" successfully!', 'success')
+
+    except ValueError:
+        flash('Invalid input for company name. Please enter a valid name.', 'danger')
+
+
 def update_unit_price(system_settings, new_unit_price):
     try:
-        # Try to convert new_unit_price to float
         new_unit_price = float(new_unit_price)
 
         if system_settings:
@@ -31,12 +51,10 @@ def update_unit_price(system_settings, new_unit_price):
             flash(f'Unit Price added as "{new_unit_price}" successfully!', 'success')
 
     except ValueError:
-        # Handle the case where new_unit_price cannot be converted to float
         flash('Invalid input for Unit Price. Please enter a valid number.', 'danger')
 
 def update_service_fee(system_settings, new_service_fee):
     try:
-        # Try to convert new_service_fee to float
         new_service_fee = float(new_service_fee)
 
         if system_settings:
@@ -55,7 +73,6 @@ def update_service_fee(system_settings, new_service_fee):
             flash(f'Unit Price added as "{new_service_fee}" successfully!', 'success')
 
     except ValueError:
-        # Handle the case where new_service_fee cannot be converted to float
         flash('Invalid input for Unit Price. Please enter a valid number.', 'danger')
 
 def add_house_section(system_settings, house_section):
@@ -95,6 +112,7 @@ def delete_house_section(system_settings, selected_section):
 @settings_bp.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
+    company_name_form = CompanyNameForm()
     unit_price_form = UnitPriceForm()
     service_fee_form = ServiceFeeForm()
     add_section_form = AddHouseSectionForm()
@@ -102,10 +120,12 @@ def settings():
     delete_section_form = DeleteHouseSectionForm()
 
     system_settings = get_system_settings()
+    new_company_name = company_name_form.company_name.data
     new_unit_price = unit_price_form.unit_price.data
     new_service_fee = service_fee_form.service_fee.data
 
     if system_settings:
+        company_name_form.company_name.data = system_settings.company_name
         unit_price_form.unit_price.data = system_settings.unit_price
         service_fee_form.service_fee.data = system_settings.service_fee
         house_sections = system_settings.house_sections.split(',') if system_settings.house_sections else []
@@ -113,7 +133,11 @@ def settings():
         delete_section_form.house_sections.choices = [(section, section) for section in house_sections]
 
     if request.method == 'POST':
-        if 'unit_price_submit' in request.form:
+        if 'company_name_submit' in request.form:
+            update_company_name(system_settings, new_company_name)
+            return redirect(url_for('accounts.settings.settings'))
+
+        elif 'unit_price_submit' in request.form:
             update_unit_price(system_settings, new_unit_price)
             return redirect(url_for('accounts.settings.settings'))
 
@@ -134,6 +158,7 @@ def settings():
         return redirect(url_for('accounts.settings.settings'))
 
     return render_template('accounts/settings.html',
+                           company_name_form=company_name_form,
                            unit_price_form=unit_price_form,
                            service_fee_form=service_fee_form,
                            add_section_form=add_section_form,

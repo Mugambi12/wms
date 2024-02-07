@@ -6,7 +6,7 @@ from app.backend.models.user import User, db
 from app.backend.accounts import accounts_bp
 
 class LoginForm(FlaskForm):
-    mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(min=10, max=20)])
+    mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(min=9, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
@@ -19,6 +19,6 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_mobile_number(self, field):
-        mobile_number = field.data[-9:]
+        mobile_number = field.data.strip()[-9:]
         if User.query.filter_by(mobile_number=mobile_number).first():
             raise ValidationError('Mobile number is already registered.')

@@ -66,11 +66,13 @@ class MeterReading(db.Model):
 
 class Settings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String(255))
     unit_price = db.Column(db.Float)
     service_fee = db.Column(db.Float)
     house_sections = db.Column(db.String(255))
 
-    def __init__(self, unit_price=None, service_fee=None, house_sections=None):
+    def __init__(self, company_name=None, unit_price=None, service_fee=None, house_sections=None):
+        self.company_name = company_name
         self.unit_price = unit_price
         self.service_fee = service_fee
         self.house_sections = house_sections

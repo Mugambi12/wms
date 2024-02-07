@@ -10,7 +10,10 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(mobile_number=form.mobile_number.data).first()
+        mobile_number_last_9 = form.mobile_number.data.strip()[-9:]
+
+        user = User.query.filter_by(mobile_number=mobile_number_last_9).first()
+
         if user and user.check_password(form.password.data):
             if user.is_active:
                 login_user(user)
@@ -22,6 +25,7 @@ def login():
         else:
             flash('Invalid mobile number or password. Please try again.', 'danger')
     return render_template('auth/login.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
