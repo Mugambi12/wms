@@ -8,7 +8,7 @@ def get_system_settings():
 
 def update_company_name(system_settings, new_company_name):
     try:
-        if system_settings:
+        if system_settings is not None:
             if new_company_name is None:
                 if system_settings.company_name is not None:
                     system_settings.company_name = None
@@ -139,3 +139,119 @@ def delete_house_section(system_settings, selected_section):
             flash(f'House section "{selected_section.title()}" deleted successfully!', 'success')
 
     return redirect(url_for('accounts.settings.settings'))
+
+def update_bank_name(system_settings, new_bank_name):
+    try:
+        if system_settings:
+            if new_bank_name is None:
+                if system_settings.bank_name is not None:
+                    system_settings.bank_name = None
+                    db.session.commit()
+                    flash('Company name removed successfully!', 'success')
+                else:
+                    flash('Company name is already empty.', 'info')
+            else:
+                system_settings.bank_name = new_bank_name
+                db.session.commit()
+                flash(f'Company name updated to "{new_bank_name}" successfully!', 'success')
+        else:
+            if new_bank_name is not None:
+                new_settings = Settings(bank_name=new_bank_name)
+                db.session.add(new_settings)
+                db.session.commit()
+                flash(f'Company name set to "{new_bank_name}" successfully!', 'success')
+            else:
+                flash('Failed to update company name. No system settings found.', 'danger')
+
+    except ValueError:
+        flash('Invalid input for company name. Please enter a valid name.', 'danger')
+
+def update_paybill(system_settings, new_paybill):
+    try:
+        if system_settings:
+            if new_paybill is None:
+                if system_settings.paybill is not None:
+                    system_settings.paybill = None
+                    db.session.commit()
+                    flash('Service fee removed successfully!', 'success')
+            else:
+                new_paybill = int(new_paybill)
+                if system_settings.paybill is not None:
+                    system_settings.paybill = new_paybill
+                    flash(f'Service fee updated to {new_paybill} successfully!', 'success')
+                else:
+                    system_settings.paybill = new_paybill
+                    flash(f'Service fee added as {new_paybill} successfully!', 'success')
+                db.session.commit()
+        else:
+            if new_paybill is not None:
+                new_paybill = int(new_paybill)
+                new_settings = Settings(paybill=new_paybill)
+                db.session.add(new_settings)
+                db.session.commit()
+                flash(f'Service fee added as {new_paybill} successfully!', 'success')
+            else:
+                flash('Failed to add service fee. No system settings found.', 'danger')
+
+    except ValueError:
+        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
+
+def update_account_number(system_settings, new_account_number):
+    try:
+        if system_settings:
+            if new_account_number is None:
+                if system_settings.account_number is not None:
+                    system_settings.account_number = None
+                    db.session.commit()
+                    flash('Service fee removed successfully!', 'success')
+            else:
+                new_account_number = int(new_account_number)
+                if system_settings.account_number is not None:
+                    system_settings.account_number = new_account_number
+                    flash(f'Service fee updated to {new_account_number} successfully!', 'success')
+                else:
+                    system_settings.account_number = new_account_number
+                    flash(f'Service fee added as {new_account_number} successfully!', 'success')
+                db.session.commit()
+        else:
+            if new_account_number is not None:
+                new_account_number = int(new_account_number)
+                new_settings = Settings(account_number=new_account_number)
+                db.session.add(new_settings)
+                db.session.commit()
+                flash(f'Service fee added as {new_account_number} successfully!', 'success')
+            else:
+                flash('Failed to add service fee. No system settings found.', 'danger')
+
+    except ValueError:
+        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
+
+def update_contact_number(system_settings, new_contact_number):
+    try:
+        if system_settings:
+            if new_contact_number is None:
+                if system_settings.contact_number is not None:
+                    system_settings.contact_number = None
+                    db.session.commit()
+                    flash('Service fee removed successfully!', 'success')
+            else:
+                new_contact_number = int(new_contact_number)
+                if system_settings.contact_number is not None:
+                    system_settings.contact_number = new_contact_number
+                    flash(f'Service fee updated to {new_contact_number} successfully!', 'success')
+                else:
+                    system_settings.contact_number = new_contact_number
+                    flash(f'Service fee added as {new_contact_number} successfully!', 'success')
+                db.session.commit()
+        else:
+            if new_contact_number is not None:
+                new_contact_number = int(new_contact_number)
+                new_settings = Settings(contact_number=new_contact_number)
+                db.session.add(new_settings)
+                db.session.commit()
+                flash(f'Service fee added as {new_contact_number} successfully!', 'success')
+            else:
+                flash('Failed to add service fee. No system settings found.', 'danger')
+
+    except ValueError:
+        flash('Invalid input for service fee. Please enter a valid number.', 'danger')

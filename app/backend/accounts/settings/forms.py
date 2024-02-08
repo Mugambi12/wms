@@ -1,7 +1,7 @@
 # app/backend/accounts/settings/forms.py
 from flask_wtf import FlaskForm
-from wtforms import FloatField, StringField, SubmitField, SelectField
-from wtforms.validators import DataRequired
+from wtforms import FloatField, StringField, SubmitField, SelectField, IntegerField
+from wtforms.validators import DataRequired, Length
 
 class CompanyNameForm(FlaskForm):
     company_name = StringField('Company Name')
@@ -28,3 +28,18 @@ class DeleteHouseSectionForm(FlaskForm):
     house_sections = SelectField('Select House Section to Delete', choices=[], coerce=str)
     submit = SubmitField()
 
+class BankNameForm(FlaskForm):
+    bank_name = StringField('Bank Name')
+    submit = SubmitField('Submit')
+
+class PayBillForm(FlaskForm):
+    paybill = IntegerField('PayBill Number')
+    submit = SubmitField('Submit')
+
+class AccountNumberForm(FlaskForm):
+    account_number = IntegerField('Account Number')
+    submit = SubmitField('Submit')
+
+class ContactNumberForm(FlaskForm):
+    contact_number = IntegerField('Contant Number', validators=[Length(min=9, max=20)])
+    submit = SubmitField('Submit')

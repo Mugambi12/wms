@@ -239,10 +239,6 @@
                         <!-- Form Type -->
                         <input type="hidden" name="form_type" value="edit" />
 
-                        <p>
-                          <b>House {{ reading.house_number }}</b> in
-                          <b>{{ reading.house_section.title() }}</b>.
-                        </p>
                         <div class="row">
                           <div class="col-md-6 mb-3">
                             {{ edit_form.house_section.label(class="form-label")
@@ -261,6 +257,15 @@
                             disabled="disabled") }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house number.
+                            </div>
+                          </div>
+
+                          <div class="col-md-6 mb-3">
+                            {{ edit_form.customer_name.label(class="form-label")
+                            }} {{ edit_form.customer_name(class="form-control",
+                            required="required", value=reading.customer_name) }}
+                            <div class="invalid-feedback d-none">
+                              Please enter a valid house section.
                             </div>
                           </div>
 
@@ -303,7 +308,6 @@
                           <div class="col-md-6 mb-3">
                             {{ edit_form.timestamp.label(class="form-label") }}
                             {{ edit_form.timestamp(class="form-control",
-                            required="required",
                             value=reading.timestamp.strftime('%d-%m-%Y')) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading date.

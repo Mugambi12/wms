@@ -9,6 +9,7 @@ class AddMeterReadingForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class EditMeterReadingForm(FlaskForm):
+    customer_name = StringField('Customer Name', validators=[DataRequired()])
     house_section = StringField('House Section', validators=[DataRequired()])
     house_number = StringField('House Number', validators=[DataRequired()])
     reading_value = FloatField('Reading Value', validators=[DataRequired()])

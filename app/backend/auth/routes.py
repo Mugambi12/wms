@@ -50,10 +50,8 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'success')
 
-    # Create a response object
     response = make_response(redirect(url_for('landing.landing')))
 
-    # Set Cache-Control headers to prevent caching
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'

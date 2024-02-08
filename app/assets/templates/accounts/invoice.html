@@ -40,20 +40,54 @@
           <div class="invoice-head-bottom-left">
             <ul class="text-start">
               <li class="text-bold">Invoiced To:</li>
-              <li><b>Name:</b> {{ invoice_data.customer_name.title() }}</li>
-              <li><b>Phase:</b> {{ invoice_data.house_section.title() }}</li>
-              <li><b>House No.:</b> {{ invoice_data.house_number }}</li>
-              <li><b>Contact No.:</b> (+254){{ invoice_data.mobile[-9:] }}</li>
+              <li>
+                <b>Name:</b> {% if invoice_data.customer_name %}{{
+                invoice_data.customer_name.title() }}{% else %}Bank Name{% endif
+                %}
+              </li>
+              <li>
+                <b>Phase:</b> {% if invoice_data.house_section %}{{
+                invoice_data.house_section.title() }}{% else %}Bank Name{% endif
+                %}
+              </li>
+              <li>
+                <b>House No.:</b> {% if invoice_data.house_number %}{{
+                invoice_data.house_number }}{% else %}Bank Name{% endif %}
+              </li>
+              <li>
+                <b>Meter Reading:</b> {% if invoice_data.reading_value %}{{
+                invoice_data.reading_value }} Units {% else %}Meter Reading{%
+                endif %}
+              </li>
+              <li>
+                <b>Contact No.:</b> {% if invoice_data.mobile %}(+254){{
+                invoice_data.mobile[-9:] }}{% else %}Bank Name{% endif %}
+              </li>
             </ul>
           </div>
           <div class="invoice-head-bottom-right">
             <ul class="text-end">
               <li class="text-bold">Pay To:</li>
-              <li>AquaFlow Inc.</li>
-              <li>M-Pesa/Bank Name</li>
-              <li>Pay Bill No,</li>
-              <li>Account Number</li>
-              <li>+254 123 456 789</li>
+              <li>
+                <b>Name:</b> {% if company_name %}{{ company_name.title() }}{%
+                endif %}
+              </li>
+              <li>
+                <b>Gateway:</b> {% if bank_name %}{{ bank_name.title() }}{% else
+                %}Bank Name{% endif %}
+              </li>
+              <li>
+                <b>Pay Bill No:</b> {% if paybill %}{{ paybill }},{% else
+                %}123456{% endif %}
+              </li>
+              <li>
+                <b>Account No.:</b> {% if account_number %}{{ account_number
+                }}{% else %}123456789{% endif %}
+              </li>
+              <li>
+                <b>Contant No.:</b> {% if contact_number %}{{ contact_number
+                }}{% else %}123456789{% endif %}
+              </li>
             </ul>
           </div>
         </div>

@@ -16,6 +16,7 @@
     </p>
   </div>
 
+  <!-- Table 1 -->
   <div class="col-md-12">
     <div class="card mt-3 mb-3">
       <div class="card-header">System Settings</div>
@@ -283,6 +284,159 @@
                       </div>
                     </div>
                   </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table 2 -->
+  <div class="col-md-12">
+    <div class="card mt-3 mb-3">
+      <div class="card-header">System Settings</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped" style="width: 100%">
+            <thead class="table-primary">
+              <tr>
+                <th class="text-center" scope="col">#</th>
+                <th class="ms-2" scope="col">Setting</th>
+                <th class="ms-2" scope="col">Value</th>
+                <th class="ms-2" scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Bank Name Form -->
+              <tr class="table-light">
+                <td class="text-center" scope="row">1</td>
+                <td>Bank Name</td>
+                <td>
+                  <form
+                    method="post"
+                    action="{{ url_for('accounts.settings.settings') }}"
+                    id="bank_name_form"
+                  >
+                    <!-- CSRF Token -->
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    />
+                    {{ bank_name_form.bank_name(class="form-control",
+                    placeholder="Enter bank name") }}
+                  </form>
+                </td>
+                <td class="text-center">
+                  <button
+                    type="submit"
+                    name="bank_name_submit"
+                    form="bank_name_form"
+                    class="btn btn-sm btn-outline-primary rounded-pill"
+                  >
+                    Update
+                  </button>
+                </td>
+              </tr>
+
+              <!-- PayBill Number Form -->
+              <tr class="table-secondary">
+                <td class="text-center" scope="row">2</td>
+                <td>PayBill Number</td>
+                <td>
+                  <form
+                    method="post"
+                    action="{{ url_for('accounts.settings.settings') }}"
+                    id="paybill_form"
+                  >
+                    <!-- CSRF Token -->
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    />
+                    <!-- Input field for PayBill Number with placeholder -->
+                    {{ paybill_form.paybill(class="form-control",
+                    placeholder="Enter PayBill number") }}
+                  </form>
+                </td>
+                <td class="text-center">
+                  <button
+                    type="submit"
+                    name="paybill_submit"
+                    form="paybill_form"
+                    class="btn btn-sm btn-outline-primary rounded-pill"
+                  >
+                    Update
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Accont Number Form -->
+              <tr class="table-secondary">
+                <td class="text-center" scope="row">3</td>
+                <td>Accont Number</td>
+                <td>
+                  <form
+                    method="post"
+                    action="{{ url_for('accounts.settings.settings') }}"
+                    id="account_number_form"
+                  >
+                    <!-- CSRF Token -->
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    />
+                    <!-- Input field for accont number with placeholder -->
+                    {{ account_number_form.account_number(class="form-control",
+                    placeholder="Enter accont number") }}
+                  </form>
+                </td>
+                <td class="text-center">
+                  <button
+                    type="submit"
+                    name="account_number_submit"
+                    form="account_number_form"
+                    class="btn btn-sm btn-outline-primary rounded-pill"
+                  >
+                    Update
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Contant Number Form -->
+              <tr class="table-secondary">
+                <td class="text-center" scope="row">4</td>
+                <td>Contant Number</td>
+                <td>
+                  <form
+                    method="post"
+                    action="{{ url_for('accounts.settings.settings') }}"
+                    id="contact_number_form"
+                  >
+                    <!-- CSRF Token -->
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    />
+                    <!-- Input field for contant number with placeholder -->
+                    {{ contact_number_form.contact_number(class="form-control",
+                    placeholder="Enter contant number") }}
+                  </form>
+                </td>
+                <td class="text-center">
+                  <button
+                    type="submit"
+                    name="contact_number_submit"
+                    form="contact_number_form"
+                    class="btn btn-sm btn-outline-primary rounded-pill"
+                  >
+                    Update
+                  </button>
                 </td>
               </tr>
             </tbody>

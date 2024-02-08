@@ -62,6 +62,7 @@ def get_meter_readings(current_user):
 
 def edit_meter_reading_logic(edited_reading):
     edit_meter_reading_form = EditMeterReadingForm(
+        customer_name=edited_reading.customer_name,
         house_section=edited_reading.house_section,
         house_number=edited_reading.house_number,
         reading_value=edited_reading.reading_value,
@@ -76,6 +77,7 @@ def edit_meter_reading_logic(edited_reading):
         try:
             # Update the form with the submitted data
             if edit_meter_reading_form.validate_on_submit():
+                edited_reading.customer_name = edit_meter_reading_form.customer_name.data
                 edited_reading.house_section = edit_meter_reading_form.house_section.data
                 edited_reading.house_number = edit_meter_reading_form.house_number.data
                 edited_reading.reading_value = edit_meter_reading_form.reading_value.data
