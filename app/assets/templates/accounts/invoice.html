@@ -174,7 +174,7 @@
 
         <div class="invoice-btns mt-3">
           <button type="button" class="invoice-btn" onclick="printInvoice()">
-            <ion-icon name="print-outline"></ion-icon> Print
+            <ion-icon name="print-outline"></ion-icon> Print/Download
           </button>
           <script>
             function printInvoice() {
@@ -182,13 +182,17 @@
             }
           </script>
 
-          <button type="button" class="invoice-btn ms-2">
-            <ion-icon name="cloud-download-outline"></ion-icon> Download
-          </button>
+          <!--
+            <button type="button" class="invoice-btn ms-2">
+                <ion-icon name="cloud-download-outline"></ion-icon> Download
+            </button>
+          -->
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
 {% endblock %}

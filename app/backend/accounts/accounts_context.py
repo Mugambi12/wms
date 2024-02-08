@@ -1,7 +1,9 @@
 # app/backend/accounts/accounts_context.py
 from flask import g
 from datetime import datetime, timedelta, timezone
-from ..models.user import Settings
+from app import db
+from ..models.user import MeterReading, Settings
+from sqlalchemy import func
 
 def accounts_context():
     settings = Settings.query.first()
@@ -12,7 +14,9 @@ def accounts_context():
     account_number = settings.account_number if settings else '123456789'
     contact_number = settings.contact_number if settings else '0722000111'
 
-    bill = 2500
+    # Calculate total bill for each user with false status reading
+    total_bill = db.session.query(func.sum(MeterReading.total_price)).filter(MeterReading.reading_status == False).scalar()
+    total_bill = total_bill or 0
 
     return {
         'company_name': company_name,
@@ -20,7 +24,7 @@ def accounts_context():
         'paybill': paybill,
         'account_number': account_number,
         'contact_number': contact_number,
-        'bill': bill
+        'total_bill': total_bill
     }
 
 

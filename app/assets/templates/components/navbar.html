@@ -11,7 +11,7 @@
       class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}gradient-text{% endif %}"
       href="#"
     >
-      {{ company_name.title() }}
+      {% if company_name %}{{ company_name.title() }}{% else %}ApoGen{% endif %}
     </a>
 
     <!-- Navbar Toggler -->
@@ -89,8 +89,8 @@
             <a class="nav-link text-dark">
               Bill
               <span
-                class="fw-bold {% if bill > 0 %}text-danger{% else %}text-success{% endif %}"
-                >KES {% if bill > 0 %}-{% endif %} {{ bill }}</span
+                class="fw-bold {% if total_bill > 0 %}text-danger{% else %}text-success{% endif %}"
+                >KES {% if total_bill > 0 %}-{% endif %} {{ total_bill }}</span
               >
             </a>
           </li>
