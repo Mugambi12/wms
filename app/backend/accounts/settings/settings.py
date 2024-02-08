@@ -32,7 +32,6 @@ def update_company_name(system_settings, new_company_name):
     except ValueError:
         flash('Invalid input for company name. Please enter a valid name.', 'danger')
 
-
 def update_unit_price(system_settings, new_unit_price):
     try:
         if system_settings:
