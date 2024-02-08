@@ -175,27 +175,48 @@
   <div class="row">
     <div class="col-md-12">
       <div class="float-start ms-3">
-        <a
-          href="{{ url_for('accounts.people.download_users', format='csv') }}"
-          class="btn btn-sm me-2 btn-primary"
-          download="people_list.csv"
+        <form
+          action="{{ url_for('accounts.people.download_users') }}"
+          method="get"
+          class="d-inline"
         >
-          <ion-icon name="download-outline"></ion-icon> CSV
-        </a>
-        <a
-          href="{{ url_for('accounts.people.download_users', format='excel') }}"
-          class="btn btn-sm me-2 btn-success"
-          download="people_list.xlsx"
+          <button
+            type="submit"
+            class="btn btn-sm me-2 btn-primary"
+            name="format"
+            value="csv"
+          >
+            <ion-icon name="download-outline"></ion-icon> CSV
+          </button>
+        </form>
+        <form
+          action="{{ url_for('accounts.people.download_users') }}"
+          method="get"
+          class="d-inline"
         >
-          <ion-icon name="download-outline"></ion-icon> Excel
-        </a>
-        <a
-          href="{{ url_for('accounts.people.download_users', format='pdf') }}"
-          class="btn btn-sm me-2 btn-danger"
-          download="people_list.pdf"
+          <button
+            type="submit"
+            class="btn btn-sm me-2 btn-success"
+            name="format"
+            value="excel"
+          >
+            <ion-icon name="download-outline"></ion-icon> Excel
+          </button>
+        </form>
+        <form
+          action="{{ url_for('accounts.people.download_users') }}"
+          method="get"
+          class="d-inline"
         >
-          <ion-icon name="download-outline"></ion-icon> PDF
-        </a>
+          <button
+            type="submit"
+            class="btn btn-sm me-2 btn-danger"
+            name="format"
+            value="pdf"
+          >
+            <ion-icon name="download-outline"></ion-icon> PDF
+          </button>
+        </form>
       </div>
     </div>
   </div>
