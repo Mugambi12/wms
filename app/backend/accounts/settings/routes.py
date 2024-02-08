@@ -30,7 +30,6 @@ def update_company_name(system_settings, new_company_name):
     except ValueError:
         flash('Invalid input for company name. Please enter a valid name.', 'danger')
 
-
 def update_unit_price(system_settings, new_unit_price):
     try:
         new_unit_price = float(new_unit_price)
@@ -61,19 +60,20 @@ def update_service_fee(system_settings, new_service_fee):
             if system_settings.service_fee is not None:
                 system_settings.service_fee = None
                 db.session.commit()
-
-            system_settings.service_fee = new_service_fee
-            db.session.commit()
-            flash(f'Unit Price updated to "{new_service_fee}" successfully!', 'success')
-
+                flash(f'Service fee updated to {new_service_fee:.2f} successfully!', 'success')
+            else:
+                system_settings.service_fee = new_service_fee
+                db.session.commit()
+                flash(f'Service fee added as {new_service_fee:.2f} successfully!', 'success')
         else:
             new_settings = Settings(service_fee=new_service_fee)
             db.session.add(new_settings)
             db.session.commit()
-            flash(f'Unit Price added as "{new_service_fee}" successfully!', 'success')
+            flash(f'Service fee added as {new_service_fee:.2f} successfully!', 'success')
 
     except ValueError:
-        flash('Invalid input for Unit Price. Please enter a valid number.', 'danger')
+        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
+
 
 def add_house_section(system_settings, house_section):
     if system_settings:

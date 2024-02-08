@@ -269,3 +269,22 @@ a.sidebar-link:hover {
   background-color: #f0f0f0;
   z-index: 1000;
 }
+
+.navbar-brand {
+  font-size: 24px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #ff6e6e, #78e8bc, #4780ec);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}

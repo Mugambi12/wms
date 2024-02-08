@@ -8,10 +8,10 @@
   <div class="container-fluid">
     <!-- Brand -->
     <a
-      class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+      class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}gradient-text{% endif %}"
       href="#"
     >
-      Aqua<span class="text-info">Flow</span>
+      {{ company_name.title() }}
     </a>
 
     <!-- Navbar Toggler -->
