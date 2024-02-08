@@ -23,7 +23,8 @@ def login():
             else:
                 flash('Your account is inactive. Please contact support for assistance.', 'danger')
         else:
-            flash('Invalid mobile number or password. Please try again.', 'danger')
+            flash('Account not found. Please check your mobile number or password and try again.', 'warning')
+
     return render_template('auth/login.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
 
 

@@ -4,15 +4,15 @@ from wtforms import FloatField, StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
 class CompanyNameForm(FlaskForm):
-    company_name = StringField('Company Name', validators=[DataRequired()])
+    company_name = StringField('Company Name')
     submit = SubmitField('Submit')
 
 class UnitPriceForm(FlaskForm):
-    unit_price = FloatField('Unit Price', validators=[DataRequired()])
+    unit_price = FloatField('Unit Price')
     submit = SubmitField('Submit')
 
 class ServiceFeeForm(FlaskForm):
-    service_fee = FloatField('Service Fees', validators=[DataRequired()])
+    service_fee = FloatField('Service Fees')
     submit = SubmitField('Submit')
 
 class AddHouseSectionForm(FlaskForm):

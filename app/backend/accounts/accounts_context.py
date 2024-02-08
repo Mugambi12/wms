@@ -4,13 +4,16 @@ from datetime import datetime, timedelta, timezone
 from ..models.user import Settings
 
 def accounts_context():
-    # Retrieve the company name from the database
-    company = Settings.query.first()
-    company_name = company.company_name if company else 'ApoGen'
+    settings = Settings.query.first()
+    get_company_name = settings.company_name
+    company_name = get_company_name if get_company_name else 'ApoGen'
 
     bill = int('2500')
 
-    return {'company_name': company_name, 'bill': bill}
+    return {
+        'company_name': company_name,
+        'bill': bill
+        }
 
 
 def inject_now():
