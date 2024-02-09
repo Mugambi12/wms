@@ -96,16 +96,21 @@
                     class="me-2"
                     href="{{ url_for('accounts.records.invoice', invoice_id=entry.id) }}"
                   >
-                    <ion-icon name="receipt-outline"></ion-icon>
+                    <ion-icon
+                      name="receipt-outline"
+                      class="text-primary"
+                    ></ion-icon>
                   </a>
 
                   <a
-                    class="text-success"
                     href=""
                     data-bs-toggle="modal"
                     data-bs-target="#paymentModal"
                   >
-                    <ion-icon name="card-outline"></ion-icon>
+                    <ion-icon
+                      name="card-outline"
+                      class="text-success"
+                    ></ion-icon>
                   </a>
                 </td>
 
@@ -125,7 +130,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h5 class="modal-title" id="paymentModalLabel">
-                          Modal title
+                          Payment Confirmation
                         </h5>
                         <button
                           type="button"
@@ -134,7 +139,9 @@
                           aria-label="Close"
                         ></button>
                       </div>
-                      <div class="modal-body">...</div>
+
+                      <div class="modal-body">silas</div>
+
                       <div class="modal-footer justify-content-between">
                         <button
                           type="button"
@@ -147,7 +154,7 @@
                           type="button"
                           class="btn btn-sm btn-primary rounded-pill"
                         >
-                          Upload
+                          Update
                         </button>
                       </div>
                     </div>

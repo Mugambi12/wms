@@ -53,31 +53,31 @@
 
             <div class="row">
               <!-- First Name -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.first_name.label(class="form-label") }} {{
-                form.first_name(class="form-control") }}
+                form.first_name(class="form-control form-control-sm") }}
               </div>
 
               <!-- Last Name -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.last_name.label(class="form-label") }} {{
-                form.last_name(class="form-control") }}
+                form.last_name(class="form-control form-control-sm") }}
               </div>
 
               <!-- Mobile Number -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.mobile_number.label(class="form-label") }} {{
-                form.mobile_number(class="form-control") }}
+                form.mobile_number(class="form-control form-control-sm") }}
               </div>
 
               <!-- Email -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.email.label(class="form-label") }} {{
-                form.email(class="form-control") }}
+                form.email(class="form-control form-control-sm") }}
               </div>
 
               <!-- House Section -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.house_section.label(class="form-label") }}
                 <select
                   class="form-select"
@@ -95,17 +95,17 @@
               </div>
 
               <!-- House Number -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.house_number.label(class="form-label") }} {{
-                form.house_number(class="form-control") }}
+                form.house_number(class="form-control form-control-sm") }}
               </div>
 
               <!-- Password -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.password.label(class="form-label") }}
                 <div class="input-group border rounded-3">
-                  {{ form.password(class="form-control border-0",
-                  id="reg_password") }}
+                  {{ form.password(class="form-control form-control-sm
+                  border-0", id="reg_password") }}
                   <button
                     class="btn btn-light"
                     type="button"
@@ -122,11 +122,11 @@
               </div>
 
               <!-- Confirm Password -->
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-2">
                 {{ form.confirm_password.label(class="form-label") }}
                 <div class="input-group border rounded-3">
-                  {{ form.confirm_password(class="form-control border-0",
-                  id="confirm_password") }}
+                  {{ form.confirm_password(class="form-control form-control-sm
+                  border-0", id="confirm_password") }}
                   <button
                     class="btn btn-light"
                     type="button"

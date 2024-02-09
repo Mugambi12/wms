@@ -2,9 +2,140 @@
 
 <!-- #MAIN BODY SECTION -->
 <div class="container-fluid">
-  <h4>Payment Page</h4>
+  <!-- Page Title Details -->
+  <div class="text-center">
+    <h2 class="fw-bold text-success mb-2">Invoice Payment</h2>
+    <p class="text-muted fst-italic">
+      Streamline payments processes and effortlessly track invoices.
+    </p>
+  </div>
 
-  <!-- The correct URL generation for the accounts route -->
+  <!-- Billing Details Table -->
+  <div class="col-md-12">
+    <div class="card mb-3">
+      <div class="card-header">Invoice Details Data Tables</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table
+            class="table table-striped text-center data-table"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Section</th>
+                <th scope="col">House</th>
+                <th scope="col">Prev. Read.</th>
+                <th scope="col">Curr. Read.</th>
+                <th scope="col">Consumed</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col">Service</th>
+                <th scope="col">Total</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if billing_data %} {% for entry in billing_data |
+              sort(attribute='id', reverse=true) %} {% if not
+              entry.reading_status %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td class="text-start">{{ entry.customer_name.title() }}</td>
+                <td>{{ entry.house_section.title() }}</td>
+                <td>{{ entry.house_number }}</td>
+                <td>
+                  {{ "%0.0f"|format(entry.prev_reading) if entry.prev_reading is
+                  not none else "None" }}
+                </td>
+                <td>{{ "%0.0f"|format(entry.curr_reading) }}</td>
+
+                <td>{{ "%0.0f"|format(entry.consumed) }}</td>
+                <td>{{ "%0.0f"|format(entry.unit_price) }}</td>
+                <td>{{ "%0.0f"|format(entry.sub_total_price) }}</td>
+                <td>{{ "%0.0f"|format(entry.service_fee) }}</td>
+                <td>{{ "%0.0f"|format(entry.total_price) }}</td>
+                <td
+                  class="fst-italic {% if entry.reading_status %}text-success{% else %}text-secondary{% endif %}"
+                >
+                  {{ "Cleared" if entry.reading_status else "Pending" }}
+                </td>
+                <td>
+                  <a
+                    class="me-2"
+                    href="{{ url_for('accounts.records.invoice', invoice_id=entry.id) }}"
+                  >
+                    <ion-icon name="receipt-outline"></ion-icon>
+                  </a>
+
+                  <a
+                    class="text-success"
+                    href=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#paymentModal"
+                  >
+                    <ion-icon name="card-outline"></ion-icon>
+                  </a>
+                </td>
+
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="paymentModal"
+                  tabindex="-1"
+                  aria-labelledby="paymentModalLabel"
+                  aria-hidden="true"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                >
+                  <div
+                    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="paymentModalLabel">
+                          Payment Confirmation
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">...</div>
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-secondary rounded-pill"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-primary rounded-pill"
+                        >
+                          Upload
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tr>
+              {% endif %} {% endfor %} {% else %}
+              <tr>
+                <td colspan="12">No billing data available</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

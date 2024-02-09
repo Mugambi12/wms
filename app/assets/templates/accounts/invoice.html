@@ -14,12 +14,24 @@
       <div class="invoice-head">
         <div class="invoice-head-top">
           <div class="invoice-head-top-left text-start">
-            <h3 class="text-dark">Aqua<span class="text-info">Flow</span></h3>
+            {% if company_name %} {% set company_words = company_name.split() %}
+            <h3 class="text-dark">
+              {% for word in company_words %}
+              <span
+                class="text-{{ loop.cycle('info', 'danger', 'primary', 'warning', 'success', 'dark') }}"
+                >{{ word.title() }}</span
+              >
+              {% endfor %}
+            </h3>
+            {% else %}
+            <h3 class="text-info">Apo<span class="text-danger">Gen</span></h3>
+            {% endif %}
           </div>
           <div class="invoice-head-top-right text-end">
             <h3>Invoice</h3>
           </div>
         </div>
+
         <div class="hr"></div>
         <div class="invoice-head-middle">
           <div class="invoice-head-middle-left text-start">
@@ -35,6 +47,7 @@
             </p>
           </div>
         </div>
+
         <div class="hr"></div>
         <div class="invoice-head-bottom">
           <div class="invoice-head-bottom-left">

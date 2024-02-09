@@ -32,7 +32,7 @@
           </h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-danger"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
@@ -54,19 +54,26 @@
               <!-- House Section -->
               <div class="mb-2">
                 {{ form.house_section.label(class="form-label") }}
-                <select
-                  class="form-select"
-                  name="house_section"
-                  id="house_section"
-                  required
-                >
-                  <option value="" selected disabled>
-                    Select House Section
-                  </option>
-                  {% for section in house_sections %}
-                  <option value="{{ section[0] }}">{{ section[0] }}</option>
-                  {% endfor %}
-                </select>
+                <div class="input-group">
+                  <label
+                    class="input-group-text input-group-text-sm"
+                    for="house_section"
+                    >Options</label
+                  >
+                  <select
+                    class="form-select form-select-sm"
+                    name="house_section"
+                    id="house_section"
+                    required
+                  >
+                    <option value="" selected disabled>
+                      Select House Section
+                    </option>
+                    {% for section in house_sections %}
+                    <option value="{{ section[0] }}">{{ section[0] }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
                 <div class="invalid-feedback">
                   Please select a house section.
                 </div>
@@ -75,8 +82,8 @@
               <!-- House Number -->
               <div class="mb-2">
                 {{ form.house_number.label(class="form-label") }} {{
-                form.house_number(class="form-control", id="house_number",
-                required="required") }}
+                form.house_number(class="form-control form-control-sm",
+                id="house_number", required="required") }}
                 <div class="invalid-feedback">
                   Please provide a house number.
                 </div>
@@ -85,7 +92,8 @@
               <!-- Reading Value -->
               <div class="mb-2">
                 {{ form.reading_value.label(class="form-label") }} {{
-                form.reading_value(class="form-control", required="required") }}
+                form.reading_value(class="form-control form-control-sm",
+                required="required") }}
                 <div class="invalid-feedback">
                   Please provide a valid reading value.
                 </div>
@@ -239,9 +247,9 @@
                         <div class="row">
                           <div class="col-md-6 mb-2">
                             {{ edit_form.house_section.label(class="form-label")
-                            }} {{ edit_form.house_section(class="form-control",
-                            required="required", value=reading.house_section,
-                            disabled="disabled") }}
+                            }} {{ edit_form.house_section(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.house_section, disabled="disabled") }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house section.
                             </div>
@@ -249,9 +257,9 @@
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.house_number.label(class="form-label")
-                            }} {{ edit_form.house_number(class="form-control",
-                            required="required", value=reading.house_number,
-                            disabled="disabled") }}
+                            }} {{ edit_form.house_number(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.house_number, disabled="disabled") }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house number.
                             </div>
@@ -259,8 +267,9 @@
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.customer_name.label(class="form-label")
-                            }} {{ edit_form.customer_name(class="form-control",
-                            required="required", value=reading.customer_name) }}
+                            }} {{ edit_form.customer_name(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.customer_name) }}
                             <div class="invalid-feedback d-none">
                               Please enter a valid house section.
                             </div>
@@ -268,8 +277,9 @@
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.reading_value.label(class="form-label")
-                            }} {{ edit_form.reading_value(class="form-control",
-                            required="required", value=reading.reading_value) }}
+                            }} {{ edit_form.reading_value(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.reading_value) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -277,8 +287,9 @@
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.consumed.label(class="form-label") }}
-                            {{ edit_form.consumed(class="form-control",
-                            required="required", value=reading.consumed) }}
+                            {{ edit_form.consumed(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.consumed) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -286,8 +297,9 @@
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.unit_price.label(class="form-label") }}
-                            {{ edit_form.unit_price(class="form-control",
-                            required="required", value=reading.unit_price) }}
+                            {{ edit_form.unit_price(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.unit_price) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -295,8 +307,9 @@
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.total_price.label(class="form-label")
-                            }} {{ edit_form.total_price(class="form-control",
-                            required="required", value=reading.total_price) }}
+                            }} {{ edit_form.total_price(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.total_price) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading value.
                             </div>
@@ -304,7 +317,8 @@
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.timestamp.label(class="form-label") }}
-                            {{ edit_form.timestamp(class="form-control",
+                            {{ edit_form.timestamp(class="form-control
+                            form-control-sm",
                             value=reading.timestamp.strftime('%d-%m-%Y')) }}
                             <div class="invalid-feedback">
                               Please enter a valid reading date.

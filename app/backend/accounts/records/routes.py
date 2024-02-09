@@ -35,61 +35,48 @@ def meter_readings():
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
 def edit_meter_reading(meter_reading_id):
-    if current_user.is_authenticated:
-        edited_reading = MeterReading.query.get_or_404(meter_reading_id)
+    edited_reading = MeterReading.query.get_or_404(meter_reading_id)
 
-        result = edit_meter_reading_logic(edited_reading)
+    result = edit_meter_reading_logic(edited_reading)
 
-        if result['success']:
-            flash(result['message'], 'success')
-            return redirect(url_for('accounts.records.meter_readings'))
-        else:
-            flash(result['message'], 'danger')
-            return render_template('accounts/meter_readings.html', form=result['form'], meter_reading=edited_reading, hide_footer=True)
+    if result['success']:
+        flash(result['message'], 'success')
+        return redirect(url_for('accounts.records.meter_readings'))
     else:
-        return redirect(url_for('auth.login'))
+        flash(result['message'], 'danger')
+        return render_template('accounts/meter_readings.html', form=result['form'], meter_reading=edited_reading, hide_footer=True)
 
 
 @records_bp.route('/delete_meter_reading/<int:meter_reading_id>', methods=['POST'])
 @login_required
 def delete_meter_reading(meter_reading_id):
-    if current_user.is_authenticated:
-        result = delete_meter_reading_logic(meter_reading_id)
+    result = delete_meter_reading_logic(meter_reading_id)
 
-        if result['success']:
-            flash(result['message'], 'success')
-        else:
-            flash(result['message'], 'danger')
-
-        return redirect(url_for('accounts.records.meter_readings'))
+    if result['success']:
+        flash(result['message'], 'success')
     else:
-        return redirect(url_for('auth.login'))
+        flash(result['message'], 'danger')
+
+    return redirect(url_for('accounts.records.meter_readings'))
 
 
 @records_bp.route('/billing')
 @login_required
 def billing():
-    if current_user.is_authenticated:
-        billing_data = fetch_billing_data()
+    billing_data = fetch_billing_data()
 
-        return render_template('accounts/billing.html', hide_footer=True, billing_data=billing_data)
-    else:
-        return redirect(url_for('auth.login'))
+    return render_template('accounts/billing.html', hide_footer=True, billing_data=billing_data)
 
 
 @records_bp.route('/invoice/<int:invoice_id>')
 @login_required
 def invoice(invoice_id):
-    if current_user.is_authenticated:
-        invoice_data = fetch_invoice_data(invoice_id)
-        if invoice_data:
-            return render_template('accounts/invoice.html', invoice_data=invoice_data, hide_sidebar=True, hide_navbar=True, hide_footer=True)
-        else:
-            flash("Invoice not found", "error")
-            return redirect(url_for('accounts.records.billing'))
+    invoice_data = fetch_invoice_data(invoice_id)
+    if invoice_data:
+        return render_template('accounts/invoice.html', invoice_data=invoice_data, hide_sidebar=True, hide_navbar=True, hide_footer=True)
     else:
-        return redirect(url_for('auth.login'))
-
+        flash("Invoice not found", "error")
+        return redirect(url_for('accounts.records.billing'))
 
 
 
@@ -98,10 +85,6 @@ def invoice(invoice_id):
 @records_bp.route('/payments')
 @login_required
 def payments():
-    # Check if the user is still authenticated
-    if current_user.is_authenticated:
-        # You can add records-specific logic and data here
-        return render_template('accounts/payments.html', hide_footer=True)
-    else:
-        # If the user is not authenticated, redirect to the login page
-        return redirect(url_for('auth.login'))
+    billing_data = fetch_billing_data()
+
+    return render_template('accounts/payments.html', hide_footer=True, billing_data=billing_data)

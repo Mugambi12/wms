@@ -35,7 +35,7 @@
             >
             <input
               type="file"
-              class="form-control"
+              class="form-control form-control-sm"
               id="profileImage"
               name="profile_image"
               accept=".jpg, .jpeg, .png"
@@ -46,7 +46,7 @@
           <!-- Submit Button -->
           <button
             type="submit"
-            class="btn btn-secondary btn-block rounded-pill"
+            class="btn btn-sm btn-secondary btn-block rounded-pill"
           >
             Upload Picture
           </button>
@@ -66,57 +66,60 @@
             </button>
           </li>
         </ul>
-        {% endif %}
-      </div>
-    </div>
 
-    <!-- Delete User Modal -->
-    <div
-      class="modal fade"
-      id="deleteUserModal"
-      tabindex="-1"
-      aria-labelledby="deleteUserModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="deleteUserModalLabel">
-              Confirm Deletion
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            Delete the account for
-            <strong
-              >{{ user.first_name.title() }} {{ user.last_name.title()
-              }}</strong
-            >? This can't be undone.
-          </div>
+        <!-- Delete User Modal -->
+        <div
+          class="modal fade"
+          id="deleteUserModal"
+          tabindex="-1"
+          aria-labelledby="deleteUserModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">
+                  Confirm Deletion
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                Delete the account for
+                <strong
+                  >{{ user.first_name.title() }} {{ user.last_name.title()
+                  }}</strong
+                >? This can't be undone.
+              </div>
 
-          <div class="modal-footer justify-content-between">
-            <button
-              type="button"
-              class="btn btn-sm btn-secondary rounded-pill"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <form
-              method="post"
-              action="{{ url_for('accounts.people.delete_user_route', user_id=user.id) }}"
-            >
-              <button type="submit" class="btn btn-sm btn-danger rounded-pill">
-                Confirm Deletion
-              </button>
-            </form>
+              <div class="modal-footer justify-content-between">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-secondary rounded-pill"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <form
+                  method="post"
+                  action="{{ url_for('accounts.people.delete_user_route', user_id=user.id) }}"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-danger rounded-pill"
+                  >
+                    Confirm Deletion
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
 
@@ -195,41 +198,42 @@
             <div class="row">
               <div class="col-md-6">
                 <!-- Mobile Number -->
-                <div class="mb-3">
+                <div class="mb-2">
                   {{ form.mobile_number.label(class="form-label") }} {{
-                  form.mobile_number(class="form-control", required=true) }}
+                  form.mobile_number(class="form-control form-control-sm",
+                  required=true) }}
                 </div>
 
                 <!-- First Name -->
-                <div class="mb-3">
+                <div class="mb-2">
                   {{ form.first_name.label(class="form-label") }} {{
-                  form.first_name(class="form-control") }}
+                  form.first_name(class="form-control form-control-sm") }}
                 </div>
 
                 <!-- Last Name -->
-                <div class="mb-3">
+                <div class="mb-2">
                   {{ form.last_name.label(class="form-label") }} {{
-                  form.last_name(class="form-control") }}
+                  form.last_name(class="form-control form-control-sm") }}
                 </div>
               </div>
 
               <div class="col-md-6">
                 <!-- Email -->
-                <div class="mb-3">
+                <div class="mb-2">
                   {{ form.email.label(class="form-label") }} {{
-                  form.email(class="form-control") }}
+                  form.email(class="form-control form-control-sm") }}
                 </div>
 
                 <!-- House Section -->
-                <div class="mb-3">
+                <div class="mb-2">
                   {{ form.house_section.label(class="form-label") }} {{
-                  form.house_section(class="form-control") }}
+                  form.house_section(class="form-control form-control-sm") }}
                 </div>
 
                 <!-- House Number -->
-                <div class="mb-3">
+                <div class="mb-2">
                   {{ form.house_number.label(class="form-label") }} {{
-                  form.house_number(class="form-control") }}
+                  form.house_number(class="form-control form-control-sm") }}
                 </div>
               </div>
             </div>
@@ -246,12 +250,13 @@
               <h3>Password Section</h3>
 
               <!-- Current Password -->
-              <div class="mb-3">
+              <div class="mb-2">
                 {{ form.current_password.label(class="form-label
                 visually-hidden") }}
                 <div class="input-group border rounded-3">
-                  {{ form.current_password(class="form-control border-0",
-                  id="currentPassword", placeholder="Current Password") }}
+                  {{ form.current_password(class="form-control form-control-sm
+                  border-0", id="currentPassword", placeholder="Current
+                  Password") }}
                   <button
                     class="btn btn-light"
                     type="button"
@@ -268,12 +273,12 @@
               </div>
 
               <!-- New Password -->
-              <div class="mb-3">
+              <div class="mb-2">
                 {{ form.new_password.label(class="form-label visually-hidden")
                 }}
                 <div class="input-group border rounded-3">
-                  {{ form.new_password(class="form-control border-0",
-                  id="newPassword", placeholder="New Password") }}
+                  {{ form.new_password(class="form-control form-control-sm
+                  border-0", id="newPassword", placeholder="New Password") }}
                   <button
                     class="btn btn-light"
                     type="button"
@@ -290,13 +295,13 @@
               </div>
 
               <!-- Confirm New Password -->
-              <div class="mb-3">
+              <div class="mb-2">
                 {{ form.confirm_new_password.label(class="form-label
                 visually-hidden") }}
                 <div class="input-group border rounded-3">
-                  {{ form.confirm_new_password(class="form-control border-0",
-                  id="confirmNewPassword", placeholder="Confirm New Password")
-                  }}
+                  {{ form.confirm_new_password(class="form-control
+                  form-control-sm border-0", id="confirmNewPassword",
+                  placeholder="Confirm New Password") }}
                   <button
                     class="btn btn-light"
                     type="button"
@@ -359,8 +364,11 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="text-center">
-          <button type="submit" class="btn btn-primary btn-block rounded-pill">
+        <div class="float-end mt-3">
+          <button
+            type="submit"
+            class="btn btn-sm btn-success btn-block rounded-pill"
+          >
             Save Changes
           </button>
         </div>

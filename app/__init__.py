@@ -24,8 +24,7 @@ def create_app():
     # Initialize the database with the Flask app
     db.init_app(app)
     login_manager.init_app(app)
-
-    # Other configurations and initializations go here
+    login_manager.login_view = 'auth.login'
 
     # Import blueprints
     from .backend.landing.routes import landing_bp
