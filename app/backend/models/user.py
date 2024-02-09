@@ -90,10 +90,10 @@ class Settings(db.Model):
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, nullable=False)
-    payment_date = db.Column(db.Date, nullable=False)
+    payment_date = db.Column(db.DateTime, default=datetime.now(timezone.utc) + timedelta(hours=3), nullable=False)
     payment_method = db.Column(db.String(50))
     reference_number = db.Column(db.String(50))
-    status = db.Column(db.String(20))  # e.g., "Pending", "Processed"
+    status = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __init__(self, amount, payment_date, user_id, payment_method=None, reference_number=None, status="Pending"):

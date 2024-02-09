@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block content %}
 
 <!-- #MAIN BODY SECTION -->
-<div class="container-fluid">
+<section class="container-fluid">
   <!-- Page Title Details -->
   <div class="text-center">
     <h2 class="fw-bold text-success mb-2">Invoice Management</h2>
@@ -99,12 +99,60 @@
                     <ion-icon name="receipt-outline"></ion-icon>
                   </a>
 
-                  <!--
-                    <a class="text-success" href="#">
-                        <ion-icon name="paper-plane-outline"></ion-icon>
-                    </a>
-                  -->
+                  <a
+                    class="text-success"
+                    href=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#paymentModal"
+                  >
+                    <ion-icon name="card-outline"></ion-icon>
+                  </a>
                 </td>
+
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="paymentModal"
+                  tabindex="-1"
+                  aria-labelledby="paymentModalLabel"
+                  aria-hidden="true"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                >
+                  <div
+                    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="paymentModalLabel">
+                          Modal title
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">...</div>
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-secondary rounded-pill"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-primary rounded-pill"
+                        >
+                          Upload
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </tr>
               {% endif %} {% endfor %} {% else %}
               <tr>
@@ -117,6 +165,6 @@
       </div>
     </div>
   </div>
-</div>
+</section>
 
 {% endblock %}

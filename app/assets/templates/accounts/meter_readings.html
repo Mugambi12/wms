@@ -52,7 +52,7 @@
 
             <div class="row mb-3">
               <!-- House Section -->
-              <div class="mb-3">
+              <div class="mb-2">
                 {{ form.house_section.label(class="form-label") }}
                 <select
                   class="form-select"
@@ -67,16 +67,13 @@
                   <option value="{{ section[0] }}">{{ section[0] }}</option>
                   {% endfor %}
                 </select>
-                <div class="form-text">
-                  Choose the house section from the list.
-                </div>
                 <div class="invalid-feedback">
                   Please select a house section.
                 </div>
               </div>
 
               <!-- House Number -->
-              <div class="mb-3">
+              <div class="mb-2">
                 {{ form.house_number.label(class="form-label") }} {{
                 form.house_number(class="form-control", id="house_number",
                 required="required") }}
@@ -86,7 +83,7 @@
               </div>
 
               <!-- Reading Value -->
-              <div class="mb-3">
+              <div class="mb-2">
                 {{ form.reading_value.label(class="form-label") }} {{
                 form.reading_value(class="form-control", required="required") }}
                 <div class="invalid-feedback">
@@ -99,7 +96,7 @@
           <div class="modal-footer justify-content-between">
             <button
               type="button"
-              class="btn btn-secondary rounded-pill"
+              class="btn btn-sm btn-secondary rounded-pill"
               data-bs-dismiss="modal"
             >
               Close
@@ -108,7 +105,7 @@
             <button
               name="add"
               type="submit"
-              class="btn btn-primary rounded-pill"
+              class="btn btn-sm btn-primary rounded-pill"
             >
               Submit
             </button>
@@ -240,7 +237,7 @@
                         <input type="hidden" name="form_type" value="edit" />
 
                         <div class="row">
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.house_section.label(class="form-label")
                             }} {{ edit_form.house_section(class="form-control",
                             required="required", value=reading.house_section,
@@ -250,7 +247,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.house_number.label(class="form-label")
                             }} {{ edit_form.house_number(class="form-control",
                             required="required", value=reading.house_number,
@@ -260,7 +257,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.customer_name.label(class="form-label")
                             }} {{ edit_form.customer_name(class="form-control",
                             required="required", value=reading.customer_name) }}
@@ -269,7 +266,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.reading_value.label(class="form-label")
                             }} {{ edit_form.reading_value(class="form-control",
                             required="required", value=reading.reading_value) }}
@@ -278,7 +275,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.consumed.label(class="form-label") }}
                             {{ edit_form.consumed(class="form-control",
                             required="required", value=reading.consumed) }}
@@ -287,7 +284,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.unit_price.label(class="form-label") }}
                             {{ edit_form.unit_price(class="form-control",
                             required="required", value=reading.unit_price) }}
@@ -296,7 +293,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.total_price.label(class="form-label")
                             }} {{ edit_form.total_price(class="form-control",
                             required="required", value=reading.total_price) }}
@@ -305,7 +302,7 @@
                             </div>
                           </div>
 
-                          <div class="col-md-6 mb-3">
+                          <div class="col-md-6 mb-2">
                             {{ edit_form.timestamp.label(class="form-label") }}
                             {{ edit_form.timestamp(class="form-control",
                             value=reading.timestamp.strftime('%d-%m-%Y')) }}
@@ -332,7 +329,7 @@
                         <button
                           name=""
                           type="submit"
-                          class="btn btn-primary btn-block rounded-pill"
+                          class="btn btn-sm btn-primary btn-block rounded-pill"
                         >
                           Save Changes
                         </button>
@@ -387,7 +384,7 @@
                       <div class="modal-footer justify-content-between">
                         <button
                           type="button"
-                          class="btn btn-secondary rounded-pill"
+                          class="btn btn-sm btn-secondary rounded-pill"
                           data-bs-dismiss="modal"
                         >
                           Cancel
@@ -395,7 +392,7 @@
                         <button
                           name=""
                           type="submit"
-                          class="btn btn-danger rounded-pill"
+                          class="btn btn-sm btn-danger rounded-pill"
                         >
                           Confirm
                         </button>
