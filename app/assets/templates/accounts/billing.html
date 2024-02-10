@@ -92,34 +92,36 @@
                   {{ "Cleared" if entry.reading_status else "Pending" }}
                 </td>
                 <td>
+                  <!-- Invoicing Button -->
                   <a
                     class="me-2"
                     href="{{ url_for('accounts.records.invoice', invoice_id=entry.id) }}"
                   >
                     <ion-icon
-                      name="receipt-outline"
+                      name="print-outline"
                       class="text-primary"
                     ></ion-icon>
                   </a>
 
+                  <!-- Make Payment Button -->
                   <a
-                    href=""
+                    action="{{ url_for('accounts.records.make_payment', payment_id=entry.id) }}"
                     data-bs-toggle="modal"
-                    data-bs-target="#paymentModal"
+                    data-bs-target="#paymentModal{{ entry.id }}"
                   >
                     <ion-icon
-                      name="card-outline"
+                      name="cash-outline"
                       class="text-success"
                     ></ion-icon>
                   </a>
                 </td>
 
-                <!-- Modal -->
+                <!-- Payment Modal -->
                 <div
                   class="modal fade"
-                  id="paymentModal"
+                  id="paymentModal{{ entry.id }}"
                   tabindex="-1"
-                  aria-labelledby="paymentModalLabel"
+                  aria-labelledby="paymentModalLabel{{ entry.id }}"
                   aria-hidden="true"
                   data-bs-backdrop="static"
                   data-bs-keyboard="false"
@@ -128,9 +130,10 @@
                     class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
                   >
                     <div class="modal-content">
+                      <!-- Modal Header -->
                       <div class="modal-header">
                         <h5 class="modal-title" id="paymentModalLabel">
-                          Payment Confirmation
+                          Make Payment
                         </h5>
                         <button
                           type="button"
@@ -140,21 +143,194 @@
                         ></button>
                       </div>
 
-                      <div class="modal-body">silas</div>
+                      <!-- Modal Body -->
+                      <div class="modal-body">
+                        <!-- Payment Form -->
+                        <form
+                          method="post"
+                          action="{{ url_for('accounts.records.make_payment', payment_id=entry.id) }}"
+                          class="row justify-content-center mt-4"
+                          id="paymentForm"
+                        >
+                          <!-- CSRF Token -->
+                          <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                          />
+                          <!-- Form Type -->
+                          <input type="hidden" name="form_type" value="edit" />
 
-                      <div class="modal-footer justify-content-between">
+                          <div class="row">
+                            <div class="col-md-6 mb-2">
+                              {{
+                              make_payment.house_section.label(class="form-label")
+                              }} {{
+                              make_payment.house_section(class="form-control
+                              form-control-sm", required="required",
+                              value=entry.house_section, disabled="disabled") }}
+                              <div class="invalid-feedback d-none">
+                                Please enter a valid house section.
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                              {{
+                              make_payment.house_number.label(class="form-label")
+                              }} {{
+                              make_payment.house_number(class="form-control
+                              form-control-sm", required="required",
+                              value=entry.house_number, disabled="disabled") }}
+                              <div class="invalid-feedback d-none">
+                                Please enter a valid house number.
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                              {{
+                              make_payment.customer_name.label(class="form-label")
+                              }} {{
+                              make_payment.customer_name(class="form-control
+                              form-control-sm", required="required",
+                              value=entry.customer_name) }}
+                              <div class="invalid-feedback d-none">
+                                Please enter a valid house section.
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                              {{
+                              make_payment.reading_value.label(class="form-label")
+                              }} {{
+                              make_payment.reading_value(class="form-control
+                              form-control-sm", required="required",
+                              value=entry.reading_value) }}
+                              <div class="invalid-feedback">
+                                Please enter a valid reading value.
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                              {{ make_payment.consumed.label(class="form-label")
+                              }} {{ make_payment.consumed(class="form-control
+                              form-control-sm", required="required",
+                              value=entry.consumed) }}
+                              <div class="invalid-feedback">
+                                Please enter a valid reading value.
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                              {{
+                              make_payment.unit_price.label(class="form-label")
+                              }} {{ make_payment.unit_price(class="form-control
+                              form-control-sm", required="required",
+                              value=entry.unit_price) }}
+                              <div class="invalid-feedback">
+                                Please enter a valid reading value.
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                              {{
+                              make_payment.total_price.label(class="form-label")
+                              }} {{ make_payment.total_price(class="form-control
+                              form-control-sm", required="required",
+                              value=entry.total_price) }}
+                              <div class="invalid-feedback">
+                                Please enter a valid reading value.
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                              {{
+                              make_payment.timestamp.label(class="form-label")
+                              }} {{ make_payment.timestamp(class="form-control
+                              form-control-sm",
+                              value=entry.timestamp.strftime('%d-%m-%Y')) }}
+                              <div class="invalid-feedback">
+                                Please enter a valid reading date.
+                              </div>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                              {{
+                              make_payment.reading_status.label(class="form-label")
+                              }} {{
+                              make_payment.reading_status(class="form-check-input",
+                              checked=entry.reading_status) }}
+                              <div class="invalid-feedback">
+                                Please enter a valid reading status.
+                              </div>
+                            </div>
+                          </div>
+
+                          <p>
+                            This is a payment for house number in house section.
+                          </p>
+                          <!-- Payment Amount -->
+                          <div class="mb-3">
+                            <label for="paymentAmount" class="form-label"
+                              >Amount</label
+                            >
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="paymentAmount"
+                              name="paymentAmount"
+                              required
+                            />
+                          </div>
+                          <!-- Payment Method -->
+                          <div class="mb-3">
+                            <label for="paymentMethod" class="form-label"
+                              >Payment Method</label
+                            >
+                            <select
+                              class="form-select"
+                              id="paymentMethod"
+                              name="paymentMethod"
+                              required
+                            >
+                              <option value="">Select Payment Method</option>
+                              <option value="credit_card">Credit Card</option>
+                              <option value="debit_card">Debit Card</option>
+                              <option value="bank_transfer">
+                                Bank Transfer
+                              </option>
+                              <option value="paypal">PayPal</option>
+                              <option value="m_pesa">M-Pesa</option>
+                            </select>
+                          </div>
+                          <!-- Reference Number -->
+                          <div class="mb-3">
+                            <label for="referenceNumber" class="form-label"
+                              >Reference Number</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="referenceNumber"
+                              name="referenceNumber"
+                            />
+                          </div>
+                        </form>
+                      </div>
+                      <!-- Modal Footer -->
+                      <div class="modal-footer">
                         <button
                           type="button"
-                          class="btn btn-sm btn-secondary rounded-pill"
+                          class="btn btn-secondary"
                           data-bs-dismiss="modal"
                         >
                           Close
                         </button>
                         <button
-                          type="button"
-                          class="btn btn-sm btn-primary rounded-pill"
+                          type="submit"
+                          class="btn btn-primary"
+                          form="paymentForm"
                         >
-                          Update
+                          Make Payment
                         </button>
                       </div>
                     </div>

@@ -2,10 +2,11 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_required, current_user
 from app import db
-from .forms import AddMeterReadingForm, EditMeterReadingForm
+from .forms import AddMeterReadingForm, EditMeterReadingForm, MakePaymentForm
 from ...models.user import MeterReading, User, Settings
 from .meter_readings import handle_add_meter_reading, get_meter_readings, edit_meter_reading_logic, delete_meter_reading_logic
 from .billing import fetch_billing_data, fetch_invoice_data
+from .payment import make_payment_logic
 
 records_bp = Blueprint('records', __name__, url_prefix='/records')
 
@@ -64,8 +65,23 @@ def delete_meter_reading(meter_reading_id):
 @login_required
 def billing():
     billing_data = fetch_billing_data()
+    make_payment_form = MakePaymentForm()
 
-    return render_template('accounts/billing.html', hide_footer=True, billing_data=billing_data)
+    return render_template('accounts/billing.html', make_payment=make_payment_form, billing_data=billing_data, hide_footer=True)
+
+@records_bp.route('/make_payment/<int:payment_id>', methods=['GET', 'POST'])
+@login_required
+def make_payment(payment_id):
+    edited_reading = MeterReading.query.get_or_404(payment_id)
+
+    result = make_payment_logic(edited_reading)
+
+    if result['success']:
+        flash(result['message'], 'success')
+        return redirect(url_for('accounts.records.billing'))
+    else:
+        flash(result['message'], 'danger')
+        return render_template('accounts/billing.html', form=result['form'], meter_reading=edited_reading, hide_footer=True)
 
 
 @records_bp.route('/invoice/<int:invoice_id>')
