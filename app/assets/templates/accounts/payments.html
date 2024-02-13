@@ -39,8 +39,8 @@
             </thead>
             <tbody>
               {% if billing_data %} {% for entry in billing_data |
-              sort(attribute='id', reverse=true) %} {% if not
-              entry.reading_status %}
+              sort(attribute='id', reverse=true) %} {% if01 entry.reading_status
+              %}
               <tr>
                 <td>{{ loop.index }}</td>
                 <td class="text-start">{{ entry.customer_name.title() }}</td>

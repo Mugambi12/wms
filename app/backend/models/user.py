@@ -96,7 +96,7 @@ class Payment(db.Model):
     status = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __init__(self, amount, payment_date, user_id, payment_method=None, reference_number=None, status="Pending"):
+    def __init__(self, amount, payment_date, user_id, payment_method=None, reference_number=None, status=False):
         self.amount = amount
         self.payment_date = payment_date
         self.user_id = user_id

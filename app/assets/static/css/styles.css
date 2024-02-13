@@ -70,19 +70,23 @@ body {
   animation: fadeInUp 0.5s forwards ease-out;
   transition: opacity 0.3s ease-in-out; /* Smooth transition effect */
 }
-.flashes .success {
+.success {
   background-color: #4caf50; /* Green */
   color: white;
 }
-.flashes .danger {
+.danger {
   background-color: #f44336; /* Red */
   color: white;
 }
-.flashes .info {
+.error {
+  background-color: #f44336; /* Red */
+  color: white;
+}
+.info {
   background-color: #0dcaf0; /* Blue */
   color: white;
 }
-.flashes .warning {
+.warning {
   background-color: #ffc107; /* Yellow */
   color: black;
 }
