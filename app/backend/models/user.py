@@ -70,7 +70,7 @@ class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     reading_id = db.Column(db.Integer, db.ForeignKey('meter_reading.id'), nullable=True)
-    bill_id = db.Column(db.String(20))
+    bill_id = db.Column(db.Integer)
     amount = db.Column(db.Float, nullable=False)
     payment_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)

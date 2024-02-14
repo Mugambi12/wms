@@ -76,34 +76,35 @@ def billing():
 def make_payment(payment_id):
     meter_reading = MeterReading.query.get_or_404(payment_id)
 
-    # Instantiate the payment form
     form = MakePaymentForm()
 
     if form.validate_on_submit():
-        # Extract payment information from the form
         bill_id = form.bill_id.data
         payment_amount = form.payment_amount.data
         payment_method = form.payment_method.data
         reference_number = form.reference_number.data
         status = form.status.data
+        user_id = meter_reading.user_id
 
         result = make_payment_logic(
+            bill_id,
             meter_reading,
             payment_amount,
             payment_method,
             reference_number,
             status,
-            bill_id
+            user_id=user_id,
+            reading_id=meter_reading.id
         )
 
         if result['success']:
             flash(result['message'], 'success')
-            return redirect(url_for('accounts.records.meter_readings'))
+            return redirect(url_for('accounts.records.billing'))
         else:
             flash(result['message'], 'danger')
 
-    # Render the template with the form and meter_reading object
     return render_template('accounts/billing.html', form=form, meter_reading=meter_reading)
+
 
 
 
@@ -135,9 +136,12 @@ def fetch_payment_data():
 
         # Iterate over each payment record
         for payment in payments:
-            # Create a dictionary to store payment details
+            # Create a dictionary to store payment details, including user_id and reading_id
             payment_details = {
                 'id': payment.id,
+                'user_id': payment.user_id,
+                'reading_id': payment.reading_id,
+                'bill_id': payment.bill_id,
                 'amount': payment.amount,
                 'payment_date': payment.payment_date,
                 'payment_method': payment.payment_method,
