@@ -4,132 +4,51 @@
 <div class="container-fluid">
   <!-- Page Title Details -->
   <div class="text-center">
-    <h2 class="fw-bold text-success mb-2">Invoice Payment</h2>
-    <p class="text-muted fst-italic">
-      Streamline payments processes and effortlessly track invoices.
-    </p>
+    <h2 class="fw-bold text-success mb-2">Payment History</h2>
+    <p class="text-muted fst-italic">A track of payments history processed.</p>
   </div>
 
   <!-- Billing Details Table -->
   <div class="col-md-12">
     <div class="card mb-3">
-      <div class="card-header">Invoice Details Data Tables</div>
+      <div class="card-header">Payment History Data Tables</div>
       <div class="card-body">
         <div class="table-responsive">
+          <!-- Payment Details Table -->
           <table
             class="table table-striped text-center data-table"
             style="width: 100%"
           >
             <thead>
               <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Name</th>
-                <th scope="col">Section</th>
-                <th scope="col">House</th>
-                <th scope="col">Prev. Read.</th>
-                <th scope="col">Curr. Read.</th>
-                <th scope="col">Consumed</th>
-                <th scope="col">Rate</th>
-                <th scope="col">Subtotal</th>
-                <th scope="col">Service</th>
-                <th scope="col">Total</th>
+                <th scope="col">NO.</th>
+                <th scope="col">Payment ID</th>
+                <th scope="col">Payment Date</th>
+                <th scope="col">Reference Number</th>
+                <th scope="col">Payment Method</th>
+                <th scope="col">Amount</th>
+                <th scope="col">User ID</th>
+                <th scope="col">Reading ID</th>
+                <th scope="col">Bill ID</th>
                 <th scope="col">Status</th>
-                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {% if billing_data %} {% for entry in billing_data |
-              sort(attribute='id', reverse=true) %} {% if01 entry.reading_status
-              %}
+              {% for payment in payment_data | sort(attribute='id',
+              reverse=true) %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td class="text-start">{{ entry.customer_name.title() }}</td>
-                <td>{{ entry.house_section.title() }}</td>
-                <td>{{ entry.house_number }}</td>
-                <td>
-                  {{ "%0.0f"|format(entry.prev_reading) if entry.prev_reading is
-                  not none else "None" }}
-                </td>
-                <td>{{ "%0.0f"|format(entry.curr_reading) }}</td>
-
-                <td>{{ "%0.0f"|format(entry.consumed) }}</td>
-                <td>{{ "%0.0f"|format(entry.unit_price) }}</td>
-                <td>{{ "%0.0f"|format(entry.sub_total_price) }}</td>
-                <td>{{ "%0.0f"|format(entry.service_fee) }}</td>
-                <td>{{ "%0.0f"|format(entry.total_price) }}</td>
-                <td
-                  class="fst-italic {% if entry.reading_status %}text-success{% else %}text-secondary{% endif %}"
-                >
-                  {{ "Cleared" if entry.reading_status else "Pending" }}
-                </td>
-                <td>
-                  <a
-                    class="me-2"
-                    href="{{ url_for('accounts.records.invoice', invoice_id=entry.id) }}"
-                  >
-                    <ion-icon name="receipt-outline"></ion-icon>
-                  </a>
-
-                  <a
-                    class="text-success"
-                    href=""
-                    data-bs-toggle="modal"
-                    data-bs-target="#paymentModal"
-                  >
-                    <ion-icon name="card-outline"></ion-icon>
-                  </a>
-                </td>
-
-                <!-- Modal -->
-                <div
-                  class="modal fade"
-                  id="paymentModal"
-                  tabindex="-1"
-                  aria-labelledby="paymentModalLabel"
-                  aria-hidden="true"
-                  data-bs-backdrop="static"
-                  data-bs-keyboard="false"
-                >
-                  <div
-                    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
-                  >
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="paymentModalLabel">
-                          Payment Confirmation
-                        </h5>
-                        <button
-                          type="button"
-                          class="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
-                      </div>
-                      <div class="modal-body">...</div>
-                      <div class="modal-footer justify-content-between">
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-secondary rounded-pill"
-                          data-bs-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-primary rounded-pill"
-                        >
-                          Upload
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <td>{{ payment.id }}</td>
+                <td>{{ payment.payment_date.strftime('%d-%m-%Y') }}</td>
+                <td>{{ payment.reference_number }}</td>
+                <td>{{ payment.payment_method }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.user_id }}</td>
+                <td>{{ payment.reading_id }}</td>
+                <td>{{ payment.bill_id }}</td>
+                <td>{{ "Paid" if payment.status else "Pending" }}</td>
               </tr>
-              {% endif %} {% endfor %} {% else %}
-              <tr>
-                <td colspan="12">No billing data available</td>
-              </tr>
-              {% endif %}
+              {% endfor %}
             </tbody>
           </table>
         </div>

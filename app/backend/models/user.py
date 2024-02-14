@@ -51,6 +51,8 @@ class MeterReading(db.Model):
     total_price = db.Column(db.Float)
     reading_status = db.Column(db.Boolean, default=False)
 
+    payments = db.relationship('Payment', backref='meter_reading', lazy=True)
+
     def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_price, total_price):
         self.house_section = house_section
         self.house_number = house_number
@@ -62,6 +64,28 @@ class MeterReading(db.Model):
         self.service_fee = service_fee
         self.sub_total_price = sub_total_price
         self.total_price = total_price
+
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    reading_id = db.Column(db.Integer, db.ForeignKey('meter_reading.id'), nullable=True)
+    bill_id = db.Column(db.String(20))
+    amount = db.Column(db.Float, nullable=False)
+    payment_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    payment_method = db.Column(db.String(50), nullable=False)
+    reference_number = db.Column(db.String(50))
+    status = db.Column(db.Boolean, default=False)
+
+    def __init__(self, bill_id, amount, payment_date, payment_method, user_id, reference_number=None, status=False, reading_id=None):
+        self.bill_id = bill_id
+        self.amount = amount
+        self.payment_date = payment_date
+        self.payment_method = payment_method
+        self.reference_number = reference_number
+        self.status = status
+        self.user_id = user_id
+        self.reading_id = reading_id
 
 
 class Settings(db.Model):
@@ -84,28 +108,3 @@ class Settings(db.Model):
         self.paybill = paybill
         self.account_number = account_number
         self.contact_number = contact_number
-
-
-
-class Payment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float, nullable=False)
-    payment_date = db.Column(db.DateTime, default=datetime.now(timezone.utc) + timedelta(hours=3), nullable=False)
-    payment_method = db.Column(db.String(50))
-    reference_number = db.Column(db.String(50))
-    status = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __init__(self, amount, payment_date, user_id, payment_method=None, reference_number=None, status=False):
-        self.amount = amount
-        self.payment_date = payment_date
-        self.user_id = user_id
-        self.payment_method = payment_method
-        self.reference_number = reference_number
-        self.status = status
-
-    def mark_as_processed(self):
-        self.status = "Processed"
-
-    def __repr__(self):
-        return f"<Payment {self.id}: {self.amount} {self.payment_date}>"

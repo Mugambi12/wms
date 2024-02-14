@@ -131,7 +131,7 @@
                       <form
                         method="post"
                         action="{{ url_for('accounts.records.make_payment', payment_id=entry.id) }}"
-                        class="row justify-content-center mt-4"
+                        class="row justify-content-center mt-3"
                         id="paymentForm"
                       >
                         <!-- Modal Header -->
@@ -158,16 +158,8 @@
                             name="csrf_token"
                             value="{{ csrf_token() }}"
                           />
-
-                          <!-- Form Type -->
-                          <input
-                            type="hidden"
-                            name="form_type"
-                            value="payment"
-                          />
-
+                          <!-- Payment Details -->
                           <div class="row">
-                            <p class="text-primary">Payment Details</p>
                             <div class="col-md-6">
                               <p>
                                 <strong>Customer Name:</strong> {{
@@ -189,71 +181,52 @@
                                 <strong>Consumed Units:</strong> {{
                                 entry.consumed }}
                               </p>
-                              <p>
-                                <strong>Invoice Number:</strong> {{ entry.id }}
-                              </p>
-                              <p>
-                                <strong>Date:</strong> {{
-                                entry.timestamp.strftime('%d-%m-%Y') }}
-                              </p>
                             </div>
+
                             <div class="col-md-6">
-                              <div class="mb-3">
-                                <label for="paymentAmount" class="form-label"
-                                  >Paid Amount</label
-                                >
+                              <div class="mb-2">
+                                {% if payment_form %} {{
+                                payment_form.bill_id.label(class="form-label")
+                                }}
                                 <input
-                                  type="number"
+                                  type=""
                                   class="form-control form-control-sm"
-                                  id="paymentAmount"
-                                  name="paymentAmount"
-                                  placeholder="Enter amount"
-                                  required
+                                  id="bill_id"
+                                  name="bill_id"
+                                  value="{{ entry.id }}"
                                 />
+                                {% endif %}
                               </div>
-                              <div class="mb-3">
-                                <label for="paymentMethod" class="form-label"
-                                  >Payment Method</label
-                                >
-                                <select
-                                  class="form-select form-select-sm"
-                                  id="paymentMethod"
-                                  name="paymentMethod"
-                                  required
-                                >
-                                  <option value="">Select Method</option>
-                                  <option value="m_pesa">M-Pesa</option>
-                                  <option value="bank_transfer">
-                                    Bank Transfer
-                                  </option>
-                                  <option value="debit_card">Debit Card</option>
-                                  <option value="credit_card">
-                                    Credit Card
-                                  </option>
-                                  <option value="paypal">PayPal</option>
-                                </select>
-                              </div>
-                              <div class="mb-3">
-                                <label for="referenceNumber" class="form-label"
-                                  >Reference Number</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control form-control-sm"
-                                  id="referenceNumber"
-                                  name="referenceNumber"
-                                  placeholder="Enter reference number"
-                                />
-                              </div>
-                              <div class="form-check mb-3">
+
+                              <div class="mb-2">
                                 {{
-                                make_payment.reading_status.label(class="form-check-label")
+                                payment_form.payment_amount.label(class="form-label")
                                 }} {{
-                                make_payment.reading_status(class="form-check-input",
-                                checked=entry.reading_status) }}
-                                <div class="invalid-feedback">
-                                  Please enter a valid reading status.
-                                </div>
+                                payment_form.payment_amount(class="form-control
+                                form-control-sm", id="payment_amount",
+                                placeholder="Enter amount", required="required")
+                                }}
+                              </div>
+                              <div class="mb-2">
+                                {{
+                                payment_form.payment_method.label(class="form-label")
+                                }} {{
+                                payment_form.payment_method(class="form-select
+                                form-select-sm", id="payment_method",
+                                required="required") }}
+                              </div>
+                              <div class="mb-2">
+                                {{
+                                payment_form.reference_number.label(class="form-label")
+                                }} {{
+                                payment_form.reference_number(class="form-control
+                                form-control-sm", id="reference_number",
+                                placeholder="Enter reference number") }}
+                              </div>
+                              <div class="mb-2">
+                                {{ payment_form.status(class="form-check-input",
+                                id="status") }} {{
+                                payment_form.status.label(class="form-label") }}
                               </div>
                             </div>
                           </div>
