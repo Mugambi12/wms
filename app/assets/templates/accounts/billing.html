@@ -89,6 +89,7 @@
                 >
                   {{ "Cleared" if entry.reading_status else "Pending" }}
                 </td>
+                <!-- Action Buttons -->
                 <td>
                   <!-- Invoicing Button -->
                   <a
@@ -184,17 +185,6 @@
                             </div>
 
                             <div class="col-md-6">
-                              <div class="mb-2">
-                                {% if payment_form %} {{
-                                payment_form.bill_id.label(class="form-label
-                                visually-hidden") }} {{
-                                payment_form.bill_id(class="form-control
-                                form-control-sm", id="bill_id",
-                                placeholder="Bill ID", value=entry.id,
-                                type="hidden", required="required") }} {% endif
-                                %}
-                              </div>
-
                               <div class="mb-2">
                                 {{
                                 payment_form.payment_amount.label(class="form-label")

@@ -4,14 +4,15 @@ from datetime import datetime, timezone, timedelta
 from app import db
 from ...models.user import Payment
 
-def make_payment_logic(bill_id, meter_reading, payment_amount, payment_method, reference_number, status, user_id, reading_id):
+def make_payment_logic(bill_id, meter_reading, payment_amount, payment_method, reference_number, status, user_id, invoice_id, invoice_amount):
     try:
         # Check if the payment amount is greater than 0
         if payment_amount <= 0:
             return {'success': False, 'message': 'Payment amount must be greater than 0'}
 
         # Extract the user_id from the meter_reading object
-        reading_id = meter_reading.id
+        invoice_id = meter_reading.id
+        invoice_amount = meter_reading.total_price
 
         # Create a new Payment object
         payment = Payment(
@@ -22,7 +23,8 @@ def make_payment_logic(bill_id, meter_reading, payment_amount, payment_method, r
             reference_number=reference_number,
             status=status,
             user_id=user_id,
-            reading_id=reading_id
+            invoice_id=invoice_id,
+            invoice_amount=invoice_amount
         )
 
         # Save the payment to the database

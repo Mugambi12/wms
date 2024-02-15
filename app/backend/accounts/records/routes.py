@@ -79,7 +79,6 @@ def make_payment(payment_id):
     form = MakePaymentForm()
 
     if form.validate_on_submit():
-        bill_id = form.bill_id.data
         payment_amount = form.payment_amount.data
         payment_method = form.payment_method.data
         reference_number = form.reference_number.data
@@ -87,14 +86,14 @@ def make_payment(payment_id):
         user_id = meter_reading.user_id
 
         result = make_payment_logic(
-            bill_id,
             meter_reading,
             payment_amount,
             payment_method,
             reference_number,
             status,
             user_id=user_id,
-            reading_id=meter_reading.id
+            invoice_amount=meter_reading.total_price,
+            invoice_id=meter_reading.id
         )
 
         if result['success']:
@@ -136,12 +135,12 @@ def fetch_payment_data():
 
         # Iterate over each payment record
         for payment in payments:
-            # Create a dictionary to store payment details, including user_id and reading_id
+            # Create a dictionary to store payment details, including user_id and invoice_id
             payment_details = {
                 'id': payment.id,
                 'user_id': payment.user_id,
-                'reading_id': payment.reading_id,
-                'bill_id': payment.bill_id,
+                'invoice_id': payment.invoice_id,
+                'invoice_amount': payment.invoice_amount,
                 'amount': payment.amount,
                 'payment_date': payment.payment_date,
                 'payment_method': payment.payment_method,

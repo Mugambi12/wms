@@ -44,9 +44,9 @@
                 <td>{{ payment.payment_method }}</td>
                 <td>{{ payment.amount }}</td>
                 <td>{{ payment.user_id }}</td>
-                <td>{{ payment.reading_id }}</td>
-                <td>{{ payment.bill_id }}</td>
-                <td>{{ "Paid" if payment.status else "Pending" }}</td>
+                <td>{{ payment.invoice_id }}</td>
+                <td>{{ payment.invoice_amount }}</td>
+                <td>{{ "Cleared" if payment.status else "Pending" }}</td>
               </tr>
               {% endfor %}
             </tbody>

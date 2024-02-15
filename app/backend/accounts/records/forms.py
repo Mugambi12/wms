@@ -26,7 +26,6 @@ from wtforms import StringField, FloatField, DateField, SelectField, IntegerFiel
 from wtforms.validators import InputRequired, NumberRange, Optional
 
 class MakePaymentForm(FlaskForm):
-    bill_id = IntegerField('Invoice No.', validators=[DataRequired()])
     payment_amount = FloatField('Paid Amount', validators=[InputRequired(), NumberRange(min=0)])
     payment_method = SelectField('Payment Method', choices=[('m_pesa', 'M-Pesa'), ('bank_transfer', 'Bank Transfer'), ('debit_card', 'Debit Card'), ('credit_card', 'Credit Card'), ('paypal', 'PayPal')], validators=[InputRequired()])
     reference_number = StringField('Reference Number', validators=[Optional()])

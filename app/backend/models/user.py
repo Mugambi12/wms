@@ -69,23 +69,23 @@ class MeterReading(db.Model):
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    reading_id = db.Column(db.Integer, db.ForeignKey('meter_reading.id'), nullable=True)
-    bill_id = db.Column(db.Integer)
+    invoice_id = db.Column(db.Integer, db.ForeignKey('meter_reading.id'), nullable=True)
+    invoice_amount = db.Column(db.Integer)
     amount = db.Column(db.Float, nullable=False)
     payment_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)
     reference_number = db.Column(db.String(50))
     status = db.Column(db.Boolean, default=False)
 
-    def __init__(self, bill_id, amount, payment_date, payment_method, user_id, reference_number=None, status=False, reading_id=None):
-        self.bill_id = bill_id
+    def __init__(self, amount, payment_date, payment_method, user_id, reference_number=None, status=False, invoice_id=None, invoice_amount=None):
+        self.invoice_amount = invoice_amount
         self.amount = amount
         self.payment_date = payment_date
         self.payment_method = payment_method
         self.reference_number = reference_number
         self.status = status
         self.user_id = user_id
-        self.reading_id = reading_id
+        self.invoice_id = invoice_id
 
 
 class Settings(db.Model):
