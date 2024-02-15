@@ -1,4 +1,4 @@
-# app/backend/models/user.py
+# File: app/backend/database/models.py
 
 # Import necessary modules
 from werkzeug.security import generate_password_hash, check_password_hash

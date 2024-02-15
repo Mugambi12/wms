@@ -1,10 +1,12 @@
-# app/__init__.py
+# File: app/__init__.py
+
 import os
-from flask import Flask
+from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf.csrf import generate_csrf
 from datetime import timedelta
+from flask_apscheduler import APScheduler
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -25,6 +27,19 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+
+    # Import payment processor
+    from app.backend.payment_processor import process_payments_with_context
+
+    # Initialize the scheduler
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+
+    # Add job to schedule the payment processing function
+    scheduler.add_job(id='process_payments', func=process_payments_with_context, trigger='interval', seconds=30)
+
+    # Start the scheduler
+    scheduler.start()
 
     # Import blueprints
     from .backend.landing.routes import landing_bp

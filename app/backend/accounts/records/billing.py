@@ -1,4 +1,5 @@
-# app/backend/accounts/records/billing.py
+# File: app/backend/accounts/records/billing.py
+
 from flask_login import current_user
 from app import db
 from ...models.user import MeterReading, User, Payment
@@ -85,31 +86,35 @@ def fetch_invoice_data(invoice_id):
         return None
 
 
+from app import db
+from ...models.user import Payment, User
+
 def fetch_payment_data():
     try:
-        # Fetch all payment records from the database
-        payments = Payment.query.all()
+        # Construct the query to fetch payment data
+        query_payment_data = (
+            db.session.query(
+                Payment.id,
+                Payment.user_id,
+                Payment.invoice_id,
+                Payment.invoice_amount,
+                Payment.amount,
+                Payment.payment_date,
+                Payment.payment_method,
+                Payment.reference_number,
+                Payment.status,
+                Payment.unique_user_id
+            )
+            .join(User)
+            .order_by(Payment.payment_date.desc())
+        )
 
-        # Initialize an empty list to store payment data
-        payment_data = []
+        # Filter the payment data based on user role
+        if not current_user.is_admin:
+            query_payment_data = query_payment_data.filter(User.id == current_user.id)
 
-        # Iterate over each payment record
-        for payment in payments:
-            # Create a dictionary to store payment details, including user_id, invoice_id and unique_user_id
-            payment_details = {
-                'id': payment.id,
-                'user_id': payment.user_id,
-                'invoice_id': payment.invoice_id,
-                'invoice_amount': payment.invoice_amount,
-                'amount': payment.amount,
-                'payment_date': payment.payment_date,
-                'payment_method': payment.payment_method,
-                'reference_number': payment.reference_number,
-                'status': payment.status,
-                'unique_user_id': payment.unique_user_id
-            }
-            # Append payment details to the payment_data list
-            payment_data.append(payment_details)
+        # Execute the query and fetch payment data
+        payment_data = query_payment_data.all()
 
         return payment_data
 

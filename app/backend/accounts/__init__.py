@@ -1,4 +1,5 @@
-# app/backend/accounts/__init__.py
+# File: app/backend/accounts/__init__.py
+
 from flask import Blueprint
 
 accounts_bp = Blueprint('accounts', __name__, url_prefix='/accounts')
