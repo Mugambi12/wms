@@ -66,7 +66,7 @@ def save_profile_picture(profile_picture):
     try:
         filename = secure_filename(f"{current_user.mobile_number}.png")
 
-        uploads_folder = os.path.join(current_app.root_path, 'assets', 'static', 'uploads', 'profile')
+        uploads_folder = os.path.join(current_app.root_path, 'frontend', 'static', 'uploads', 'profile')
         save_path = os.path.join(uploads_folder, filename)
 
         profile_picture.save(save_path)

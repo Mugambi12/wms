@@ -15,7 +15,7 @@ project_root/
 │   │   │   └── people(users)/
 │   │   │       └── routes.py
 │   │
-│   ├── assets/
+│   ├── frontend/
 │   │   ├── static/
 │   │   │   ├── css/
 │   │   │   ├── js/

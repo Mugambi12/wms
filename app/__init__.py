@@ -12,7 +12,7 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 def create_app():
-    app = Flask(__name__, template_folder='assets/templates', static_folder='assets/static')
+    app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
     # Configure database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wms.db'
@@ -20,7 +20,7 @@ def create_app():
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=4)
     app.config['SESSION_COOKIE_SECURE'] = True
     app.config['SECRET_KEY'] = 'qwertyurioupiuodsfghfdjgkjhd2345678jgfnxdz'
-    uploads_folder = os.path.join(app.root_path, 'assets', 'static', 'uploads', 'profile')
+    uploads_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'profile')
     os.makedirs(uploads_folder, exist_ok=True)
 
     # Initialize the database with the Flask app
