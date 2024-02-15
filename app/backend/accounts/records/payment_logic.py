@@ -2,7 +2,7 @@
 
 from datetime import datetime, timezone, timedelta
 from app import db
-from ...models.user import MeterReading, Payment
+from ...database.models import MeterReading, Payment
 
 def make_payment_logic(meter_reading, payment_amount, payment_method, reference_number, status, user_id, invoice_id, invoice_amount, unique_user_id):
     try:

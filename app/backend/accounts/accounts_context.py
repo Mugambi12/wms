@@ -3,7 +3,7 @@
 from flask import g
 from datetime import datetime, timedelta, timezone
 from app import db
-from ..models.user import MeterReading, Settings
+from ..database.models import MeterReading, Settings
 from sqlalchemy import func
 
 def accounts_context():

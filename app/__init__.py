@@ -57,7 +57,7 @@ def create_app():
     app.context_processor(inject_now)
 
     # Flask-Login user loader
-    from .backend.models.user import User
+    from .backend.database.models import User
 
     @login_manager.user_loader
     def load_user(user_id):

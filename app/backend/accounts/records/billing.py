@@ -2,7 +2,7 @@
 
 from flask_login import current_user
 from app import db
-from ...models.user import MeterReading, User, Payment
+from ...database.models import MeterReading, User, Payment
 
 
 from sqlalchemy import func
@@ -87,7 +87,7 @@ def fetch_invoice_data(invoice_id):
 
 
 from app import db
-from ...models.user import Payment, User
+from ...database.models import Payment, User
 
 def fetch_payment_data():
     try:

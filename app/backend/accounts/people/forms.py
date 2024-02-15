@@ -3,8 +3,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField, SubmitField, SelectField
 from wtforms.validators import EqualTo, DataRequired, Email, Length, Optional, ValidationError
 from flask_wtf.file import FileField, FileAllowed
-from app.backend.models.user import User
-from app.backend.models.user import Settings
+from app.backend.database.models import User
+from app.backend.database.models import Settings
 
 class AddUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=50)])

@@ -1,7 +1,7 @@
 # app/backend/accounts/settings/routes.py
 from flask import flash, redirect, url_for
 from app import db
-from ...models.user import Settings
+from ...database.models import Settings
 
 def get_system_settings():
     return Settings.query.first()

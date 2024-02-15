@@ -2,7 +2,7 @@
 from flask import request, flash
 from sqlalchemy.exc import SQLAlchemyError
 from app import db
-from ...models.user import MeterReading, User, Settings
+from ...database.models import MeterReading, User, Settings
 from .forms import EditMeterReadingForm
 
 

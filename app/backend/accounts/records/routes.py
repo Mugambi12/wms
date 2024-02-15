@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from app import db
 from .forms import AddMeterReadingForm, EditMeterReadingForm, MakePaymentForm
-from ...models.user import User, MeterReading, Payment, Settings
+from ...database.models import User, MeterReading, Payment, Settings
 from .meter_readings import handle_add_meter_reading, get_meter_readings, edit_meter_reading_logic, delete_meter_reading_logic
 from .billing import fetch_billing_data, fetch_invoice_data, fetch_payment_data
 from .payment_logic import make_payment_logic

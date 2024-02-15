@@ -5,7 +5,7 @@ from flask_login import current_user
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from app import db
-from ...models.user import User
+from ...database.models import User
 
 def handle_add_new_users(form, current_user):
     mobile_number = form.mobile_number.data[-9:]

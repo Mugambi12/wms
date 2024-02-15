@@ -4,7 +4,7 @@ import pandas as pd
 from flask import render_template_string
 from openpyxl import Workbook
 from xhtml2pdf import pisa
-from ...models.user import User
+from ...database.models import User
 
 def generate_csv():
     data = []
