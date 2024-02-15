@@ -22,14 +22,14 @@
             <thead>
               <tr>
                 <th scope="col">NO.</th>
+                <th scope="col">User ID</th>
+                <th scope="col">Reading ID</th>
                 <th scope="col">Payment ID</th>
                 <th scope="col">Payment Date</th>
                 <th scope="col">Reference Number</th>
                 <th scope="col">Payment Method</th>
                 <th scope="col">Amount</th>
-                <th scope="col">User ID</th>
-                <th scope="col">Reading ID</th>
-                <th scope="col">Bill ID</th>
+                <th scope="col">Invoice Amount</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
@@ -38,13 +38,13 @@
               reverse=true) %}
               <tr>
                 <td>{{ loop.index }}</td>
+                <td>{{ payment.user_id }}</td>
+                <td>{{ payment.invoice_id }}</td>
                 <td>{{ payment.id }}</td>
                 <td>{{ payment.payment_date.strftime('%d-%m-%Y') }}</td>
                 <td>{{ payment.reference_number }}</td>
                 <td>{{ payment.payment_method }}</td>
                 <td>{{ payment.amount }}</td>
-                <td>{{ payment.user_id }}</td>
-                <td>{{ payment.invoice_id }}</td>
                 <td>{{ payment.invoice_amount }}</td>
                 <td>{{ "Cleared" if payment.status else "Pending" }}</td>
               </tr>

@@ -1,7 +1,7 @@
 # app/backend/accounts/records/billing.py
 from flask_login import current_user
 from app import db
-from ...models.user import MeterReading, User
+from ...models.user import MeterReading, User, Payment
 
 from sqlalchemy import func
 
@@ -74,4 +74,37 @@ def fetch_invoice_data(invoice_id):
         else:
             return None
     else:
+        return None
+
+
+def fetch_payment_data():
+    try:
+        # Fetch all payment records from the database
+        payments = Payment.query.all()
+
+        # Initialize an empty list to store payment data
+        payment_data = []
+
+        # Iterate over each payment record
+        for payment in payments:
+            # Create a dictionary to store payment details, including user_id, invoice_id and unique_user_id
+            payment_details = {
+                'id': payment.id,
+                'user_id': payment.user_id,
+                'invoice_id': payment.invoice_id,
+                'invoice_amount': payment.invoice_amount,
+                'amount': payment.amount,
+                'payment_date': payment.payment_date,
+                'payment_method': payment.payment_method,
+                'reference_number': payment.reference_number,
+                'status': payment.status
+            }
+            # Append payment details to the payment_data list
+            payment_data.append(payment_details)
+
+        return payment_data
+
+    except Exception as e:
+        # Handle any exceptions and return None
+        print(f"An error occurred while fetching payment data: {e}")
         return None

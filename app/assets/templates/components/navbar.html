@@ -89,11 +89,23 @@
             <a class="nav-link text-dark">
               Bill
               <span
+                class="fw-bold {% if current_user.balance > 0 %}text-success{% elif current_user.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
+                >KES {% if current_user.balance > 0 %}-{% endif %} {{
+                "%0.2f"|format(current_user.balance) }}</span
+              >
+            </a>
+          </li>
+          <!--
+          <li class="nav-item">
+            <a class="nav-link text-dark">
+              Bill
+              <span
                 class="fw-bold {% if total_bill > 0 %}text-danger{% else %}text-success{% endif %}"
                 >KES {% if total_bill > 0 %}-{% endif %} {{ total_bill }}</span
               >
             </a>
           </li>
+          -->
         </ul>
 
         <!-- people Image Dropdown -->

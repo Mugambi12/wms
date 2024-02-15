@@ -101,9 +101,9 @@
                       class="text-primary"
                     ></ion-icon>
                   </a>
+
                   <!-- Make Payment Button -->
                   <a
-                    action="{{ url_for('accounts.records.make_payment', payment_id=entry.id) }}"
                     data-bs-toggle="modal"
                     data-bs-target="#paymentModal{{ entry.id }}"
                   >
@@ -133,13 +133,13 @@
                         method="post"
                         action="{{ url_for('accounts.records.make_payment', payment_id=entry.id) }}"
                         class="row justify-content-center mt-3"
-                        id="paymentForm"
+                        id="paymentForm{{ entry.id }}"
                       >
                         <!-- Modal Header -->
                         <div class="modal-header">
                           <h5
                             class="modal-title text-primary fw-bold"
-                            id="paymentModalLabel"
+                            id="paymentModalLabel{{ entry.id }}"
                           >
                             Make Payment
                           </h5>
@@ -231,7 +231,7 @@
                           <button
                             type="submit"
                             class="btn btn-sm btn-primary rounded-pill"
-                            form="paymentForm"
+                            form="paymentForm{{ entry.id }}"
                           >
                             Confirm Payment
                           </button>

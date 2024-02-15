@@ -5,11 +5,12 @@ from app import db
 from .forms import AddMeterReadingForm, EditMeterReadingForm, MakePaymentForm
 from ...models.user import User, MeterReading, Payment, Settings
 from .meter_readings import handle_add_meter_reading, get_meter_readings, edit_meter_reading_logic, delete_meter_reading_logic
-from .billing import fetch_billing_data, fetch_invoice_data
+from .billing import fetch_billing_data, fetch_invoice_data, fetch_payment_data
 from .payment_logic import make_payment_logic
 
 
 records_bp = Blueprint('records', __name__, url_prefix='/records')
+
 
 @records_bp.route('/meter_readings', methods=['GET', 'POST'])
 @login_required
@@ -123,45 +124,9 @@ def invoice(invoice_id):
 
 
 
-
-# Define the fetch_payment_data function
-def fetch_payment_data():
-    try:
-        # Fetch all payment records from the database
-        payments = Payment.query.all()
-
-        # Initialize an empty list to store payment data
-        payment_data = []
-
-        # Iterate over each payment record
-        for payment in payments:
-            # Create a dictionary to store payment details, including user_id and invoice_id
-            payment_details = {
-                'id': payment.id,
-                'user_id': payment.user_id,
-                'invoice_id': payment.invoice_id,
-                'invoice_amount': payment.invoice_amount,
-                'amount': payment.amount,
-                'payment_date': payment.payment_date,
-                'payment_method': payment.payment_method,
-                'reference_number': payment.reference_number,
-                'status': payment.status
-            }
-            # Append payment details to the payment_data list
-            payment_data.append(payment_details)
-
-        return payment_data
-
-    except Exception as e:
-        # Handle any exceptions and return None
-        print(f"An error occurred while fetching payment data: {e}")
-        return None
-
-
 @records_bp.route('/payments')
 @login_required
 def payments():
-    billing_data = fetch_billing_data()
     payment_data = fetch_payment_data()
 
-    return render_template('accounts/payments.html', billing_data=billing_data, payment_data=payment_data, hide_footer=True)
+    return render_template('accounts/payments.html', payment_data=payment_data, hide_footer=True)

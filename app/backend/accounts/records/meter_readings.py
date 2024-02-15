@@ -35,7 +35,7 @@ def handle_add_meter_reading(form, current_user):
             reading_value=reading_value,
             house_section=house_section,
             house_number=house_number,
-            user_id=current_user.id,
+            user_id=user.id,
             customer_name=customer,
             consumed=consumed,
             unit_price=unit_price,

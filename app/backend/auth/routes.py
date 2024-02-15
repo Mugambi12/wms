@@ -23,32 +23,56 @@ def login():
             else:
                 flash('Your account is inactive. Please contact support for assistance.', 'danger')
         else:
-            flash('Account not found. Please check your mobile number or password and try again.', 'warning')
+            flash('Invalid mobile number or password. Please check and try again.', 'warning')
 
     return render_template('auth/login.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
 
 
+@auth_bp.route('/register/admin', methods=['GET', 'POST'])
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        # Check if the user already exists
+        existing_user = User.query.filter_by(mobile_number=form.mobile_number.data[-9:]).first()
+        if existing_user:
+            flash('User already exists. Please log in instead.', 'warning')
+            return redirect(url_for('auth.login'))
+
+        # Create a new user
         new_user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             mobile_number=form.mobile_number.data[-9:],
             password=form.password.data
         )
+
+        # Check if it's the admin registration route
+        if 'admin' in request.url_rule.rule:
+            new_user.is_admin = True
+
+        new_user.unique_user_id = new_user.generate_unique_user_id()
+
         db.session.add(new_user)
         db.session.commit()
         flash('Registration successful! You can now log in.', 'success')
         return redirect(url_for('auth.login'))
+    else:
+        if request.method == 'POST':
+            if 'mobile_number' in form.errors:
+                flash('Invalid mobile number. Please enter a valid mobile number.', 'danger')
+            if 'password' or 'confirm_password' in form.errors:
+                flash('Passwords do not match. Please re-enter your password.', 'danger')
+
     return render_template('auth/register.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+
 
 @auth_bp.route('/logout')
 @login_required
 def logout():
+    user_name = current_user.first_name.title()
     logout_user()
-    flash('You have been logged out.', 'success')
+    flash(f'Goodbye, {user_name}! You have been successfully logged out.', 'info')
 
     response = make_response(redirect(url_for('landing.landing')))
 
@@ -57,3 +81,4 @@ def logout():
     response.headers['Expires'] = '0'
 
     return response
+

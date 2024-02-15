@@ -239,6 +239,8 @@
                 <th scope="col">Status</th>
                 <th scope="col">Account</th>
                 <th scope="col">Action</th>
+                <th scope="col">Balance</th>
+                <th scope="col">AccountID</th>
               </tr>
             </thead>
             <tbody>
@@ -278,6 +280,8 @@
                   <span class="text-muted">No Edit Permission</span>
                   {% endif %}
                 </td>
+                <td>{{ person.balance }}</td>
+                <td>{{ person.unique_user_id }}</td>
               </tr>
               {% endfor %}
             </tbody>
