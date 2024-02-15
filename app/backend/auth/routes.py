@@ -51,6 +51,10 @@ def register():
         if 'admin' in request.url_rule.rule:
             new_user.is_admin = True
 
+        # Check if it's not the admin registration route
+        if 'admin' not in request.url_rule.rule:
+            new_user.is_active = False
+
         new_user.unique_user_id = new_user.generate_unique_user_id()
 
         db.session.add(new_user)

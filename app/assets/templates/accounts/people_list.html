@@ -230,7 +230,9 @@
           <table class="table table-striped data-table" style="width: 100%">
             <thead>
               <tr>
-                <th scope="col">ID</th>
+                <th scope="col">NO.</th>
+                <th scope="col">Balance</th>
+                <th scope="col">AccountID</th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Mobile Number</th>
                 <th scope="col">Email</th>
@@ -239,14 +241,14 @@
                 <th scope="col">Status</th>
                 <th scope="col">Account</th>
                 <th scope="col">Action</th>
-                <th scope="col">Balance</th>
-                <th scope="col">AccountID</th>
               </tr>
             </thead>
             <tbody>
               {% for person in people_list %}
               <tr>
                 <th scope="row">{{ person.id }}</th>
+                <td>{{ person.balance }}</td>
+                <td>{{ person.unique_user_id }}</td>
                 <td>
                   {{ person.first_name.title() ~ " " ~ person.last_name.title()
                   }}
@@ -280,8 +282,6 @@
                   <span class="text-muted">No Edit Permission</span>
                   {% endif %}
                 </td>
-                <td>{{ person.balance }}</td>
-                <td>{{ person.unique_user_id }}</td>
               </tr>
               {% endfor %}
             </tbody>

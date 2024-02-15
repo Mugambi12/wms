@@ -5,6 +5,7 @@ from app import db
 from ...models.user import MeterReading, User, Settings
 from .forms import EditMeterReadingForm
 
+
 def handle_add_meter_reading(form, current_user):
     try:
         house_section = form.house_section.data
@@ -30,6 +31,7 @@ def handle_add_meter_reading(form, current_user):
         total_price = sub_total_price + service_fee
 
         customer = f"{user.first_name} {user.last_name}" if user else None
+        unique_user_id = user.unique_user_id
 
         new_meter_reading = MeterReading(
             reading_value=reading_value,
@@ -41,7 +43,8 @@ def handle_add_meter_reading(form, current_user):
             unit_price=unit_price,
             service_fee=service_fee,
             sub_total_price=sub_total_price,
-            total_price=total_price
+            total_price=total_price,
+            unique_user_id=unique_user_id
         )
 
         db.session.add(new_meter_reading)
@@ -57,8 +60,16 @@ def handle_add_meter_reading(form, current_user):
     except Exception as e:
         return {'success': False, 'message': f'Error: {str(e)}'}
 
+
 def get_meter_readings(current_user):
-    return MeterReading.query.filter_by(user_id=current_user.id).all()
+    query_meter_reading_data = MeterReading.query
+
+    if not current_user.is_admin:
+        query_meter_reading_data = query_meter_reading_data.filter(MeterReading.user_id == current_user.id)
+
+    meter_reading_data = query_meter_reading_data.all()
+    return meter_reading_data
+
 
 def edit_meter_reading_logic(edited_reading):
     edit_meter_reading_form = EditMeterReadingForm(
@@ -98,6 +109,7 @@ def edit_meter_reading_logic(edited_reading):
             flash(f'Error updating meter reading: {str(e)}', 'danger')
 
     return {'success': False, 'message': 'Error updating meter reading.', 'form': edit_meter_reading_form}
+
 
 def delete_meter_reading_logic(meter_reading_id):
     try:

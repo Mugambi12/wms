@@ -31,6 +31,7 @@
                 <th scope="col">Amount</th>
                 <th scope="col">Invoice Amount</th>
                 <th scope="col">Status</th>
+                <th scope="col">UniqueID</th>
               </tr>
             </thead>
             <tbody>
@@ -47,6 +48,7 @@
                 <td>{{ payment.amount }}</td>
                 <td>{{ payment.invoice_amount }}</td>
                 <td>{{ "Cleared" if payment.status else "Pending" }}</td>
+                <td>{{ payment.unique_user_id }}</td>
               </tr>
               {% endfor %}
             </tbody>

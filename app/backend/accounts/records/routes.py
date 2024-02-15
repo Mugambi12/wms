@@ -94,7 +94,8 @@ def make_payment(payment_id):
             status,
             user_id=user_id,
             invoice_amount=meter_reading.total_price,
-            invoice_id=meter_reading.id
+            invoice_id=meter_reading.id,
+            unique_user_id=meter_reading.unique_user_id
         )
 
         if result['success']:

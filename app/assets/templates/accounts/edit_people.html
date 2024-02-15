@@ -168,7 +168,7 @@
               Password
             </a>
           </li>
-          {# % if current_user.is_admin % #}
+          {% if current_user.is_admin %}
           <li class="nav-item" role="presentation">
             <a
               class="nav-link rounded-pill"
@@ -182,7 +182,7 @@
               Status
             </a>
           </li>
-          {# % endif % #}
+          {% endif %}
         </ul>
 
         <!-- Tab Content -->

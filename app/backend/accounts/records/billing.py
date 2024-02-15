@@ -3,33 +3,40 @@ from flask_login import current_user
 from app import db
 from ...models.user import MeterReading, User, Payment
 
+
 from sqlalchemy import func
 
+
 def fetch_billing_data():
-    get_billing_data = (
-            db.session.query(
-                MeterReading.id,
-                MeterReading.timestamp,
-                MeterReading.house_section,
-                MeterReading.house_number,
-                MeterReading.reading_status,
-                MeterReading.customer_name,
-                func.lag(MeterReading.reading_value)
-                .over(partition_by=(MeterReading.house_section, MeterReading.house_number), order_by=MeterReading.timestamp)
-                .label('prev_reading'),
-                MeterReading.reading_value.label('curr_reading'),
-                MeterReading.consumed,
-                MeterReading.unit_price,
-                MeterReading.sub_total_price,
-                MeterReading.service_fee,
-                MeterReading.total_price
-            )
-            .join(User)
-            .filter(User.id == current_user.id)
-            .order_by(MeterReading.timestamp.desc())
-            .all()
+    query_billing_data = (
+        db.session.query(
+            MeterReading.id,
+            MeterReading.timestamp,
+            MeterReading.house_section,
+            MeterReading.house_number,
+            MeterReading.reading_status,
+            MeterReading.customer_name,
+            func.lag(MeterReading.reading_value)
+            .over(partition_by=(MeterReading.house_section, MeterReading.house_number), order_by=MeterReading.timestamp)
+            .label('prev_reading'),
+            MeterReading.reading_value.label('curr_reading'),
+            MeterReading.consumed,
+            MeterReading.unit_price,
+            MeterReading.sub_total_price,
+            MeterReading.service_fee,
+            MeterReading.total_price,
+            MeterReading.unique_user_id
         )
-    return get_billing_data
+        .join(User)
+        .order_by(MeterReading.timestamp.desc())
+    )
+
+    if not current_user.is_admin:
+        query_billing_data = query_billing_data.filter(User.id == current_user.id)
+
+    billing_data = query_billing_data.all()
+
+    return billing_data
 
 
 def fetch_invoice_data(invoice_id):
@@ -68,7 +75,8 @@ def fetch_invoice_data(invoice_id):
                 'sub_total_price': invoice.sub_total_price,
                 'total_price': invoice.total_price,
                 'reading_status': invoice.reading_status,
-                'vat': '0'
+                'vat': '0',
+                'unique_user_id': invoice.unique_user_id
             }
             return invoice_data
         else:
@@ -97,7 +105,8 @@ def fetch_payment_data():
                 'payment_date': payment.payment_date,
                 'payment_method': payment.payment_method,
                 'reference_number': payment.reference_number,
-                'status': payment.status
+                'status': payment.status,
+                'unique_user_id': payment.unique_user_id
             }
             # Append payment details to the payment_data list
             payment_data.append(payment_details)

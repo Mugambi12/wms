@@ -250,9 +250,6 @@
                             }} {{ edit_form.house_section(class="form-control
                             form-control-sm", required="required",
                             value=reading.house_section, disabled="disabled") }}
-                            <div class="invalid-feedback d-none">
-                              Please enter a valid house section.
-                            </div>
                           </div>
 
                           <div class="col-md-6 mb-2">
@@ -260,9 +257,6 @@
                             }} {{ edit_form.house_number(class="form-control
                             form-control-sm", required="required",
                             value=reading.house_number, disabled="disabled") }}
-                            <div class="invalid-feedback d-none">
-                              Please enter a valid house number.
-                            </div>
                           </div>
 
                           <div class="col-md-6 mb-2">
@@ -270,9 +264,6 @@
                             }} {{ edit_form.customer_name(class="form-control
                             form-control-sm", required="required",
                             value=reading.customer_name) }}
-                            <div class="invalid-feedback d-none">
-                              Please enter a valid house section.
-                            </div>
                           </div>
 
                           <div class="col-md-6 mb-2">
@@ -280,9 +271,6 @@
                             }} {{ edit_form.reading_value(class="form-control
                             form-control-sm", required="required",
                             value=reading.reading_value) }}
-                            <div class="invalid-feedback">
-                              Please enter a valid reading value.
-                            </div>
                           </div>
 
                           <div class="col-md-6 mb-2">
@@ -297,9 +285,6 @@
                             {{ edit_form.unit_price(class="form-control
                             form-control-sm", required="required",
                             value=reading.unit_price) }}
-                            <div class="invalid-feedback">
-                              Please enter a valid reading value.
-                            </div>
                           </div>
 
                           <div class="col-md-6 mb-2">
@@ -307,9 +292,6 @@
                             }} {{ edit_form.total_price(class="form-control
                             form-control-sm", required="required",
                             value=reading.total_price) }}
-                            <div class="invalid-feedback">
-                              Please enter a valid reading value.
-                            </div>
                           </div>
 
                           <div class="col-md-6 mb-2">
@@ -317,9 +299,6 @@
                             {{ edit_form.timestamp(class="form-control
                             form-control-sm",
                             value=reading.timestamp.strftime('%d-%m-%Y')) }}
-                            <div class="invalid-feedback">
-                              Please enter a valid reading date.
-                            </div>
                           </div>
 
                           <div class="col-md-12 mb-3">
@@ -328,9 +307,6 @@
                             }} {{
                             edit_form.reading_status(class="form-check-input",
                             checked=reading.reading_status) }}
-                            <div class="invalid-feedback">
-                              Please enter a valid reading status.
-                            </div>
                           </div>
                         </div>
                       </div>
