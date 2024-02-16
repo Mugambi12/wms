@@ -229,15 +229,15 @@
         <div class="table-responsive">
           <table class="table table-striped data-table" style="width: 100%">
             <thead>
-              <tr>
+              <tr class="text-center">
                 <th scope="col">NO.</th>
-                <th scope="col">Balance</th>
                 <th scope="col">AccountID</th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Mobile Number</th>
                 <th scope="col">Email</th>
                 <th scope="col">House Section</th>
                 <th scope="col">House Number</th>
+                <th scope="col">Acc. Bal.</th>
                 <th scope="col">Status</th>
                 <th scope="col">Account</th>
                 <th scope="col">Action</th>
@@ -247,7 +247,6 @@
               {% for person in people_list %}
               <tr>
                 <th scope="row">{{ person.id }}</th>
-                <td>{{ person.balance }}</td>
                 <td>{{ person.unique_user_id }}</td>
                 <td>
                   {{ person.first_name.title() ~ " " ~ person.last_name.title()
@@ -255,8 +254,14 @@
                 </td>
                 <td>{{ person.mobile_number }}</td>
                 <td>{{ person.email }}</td>
-                <td>{{ person.house_section }}</td>
-                <td>{{ person.house_number }}</td>
+                <td class="text-center">{{ person.house_section }}</td>
+                <td class="text-center">{{ person.house_number }}</td>
+                <td
+                  class="fw-bold text-center {% if person.balance > 0 %}text-success{% elif person.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
+                >
+                  {{ "%0.0f"|format(person.balance) }}
+                </td>
+
                 <td>
                   {% if person.is_active %}
                   <span class="text-success">Active</span>
