@@ -1,4 +1,6 @@
-from sqlalchemy import func, and_
+# File: app/backend/payment_processor.py
+
+from sqlalchemy import func
 from app import create_app, db
 from .database.models import User, MeterReading, Payment
 
@@ -26,44 +28,11 @@ def process_payments():
         users = User.query.filter(User.unique_user_id.in_(user_ids)).all()
         user_mapping = {user.unique_user_id: user for user in users}
 
-        # Store user status in dictionaries
-        user_payment_status = {}
-        user_reading_status = {}
+        # Update user balances
+        update_user_balances(payment_data, meter_reading_data, user_mapping)
 
-        # Update user balances and reading/payment status
-        for payment, meter_reading in zip(payment_data, meter_reading_data):
-            user_id = payment.unique_user_id
-            total_payment_amount = payment.total_payment_amount or 0
-            total_meter_reading_total_price = meter_reading.total_meter_reading_total_price or 0
-            balance_difference = total_payment_amount - total_meter_reading_total_price
-
-            # Update user balance
-            if user_id in user_mapping:
-                user_mapping[user_id].balance = balance_difference
-            else:
-                # If the user doesn't exist, create a new user entry with the calculated balance
-                new_user = User(unique_user_id=user_id, balance=balance_difference)
-                db.session.add(new_user)
-
-            # Store payment status
-            user_payment_status[user_id] = total_payment_amount >= total_meter_reading_total_price
-
-            # Store reading status
-            user_reading_status[user_id] = total_payment_amount >= total_meter_reading_total_price
-
-        # Batch update MeterReading and Payment statuses
-        meter_reading_ids = set([meter_reading.unique_user_id for meter_reading in meter_reading_data])
-        payments = Payment.query.filter(and_(Payment.unique_user_id.in_(meter_reading_ids), Payment.status==False)).all()
-        meter_readings = MeterReading.query.filter(MeterReading.unique_user_id.in_(meter_reading_ids)).order_by(MeterReading.unique_user_id, MeterReading.id).all()
-        total_payment_amount_so_far = {user_id: 0 for user_id in meter_reading_ids}
-        for reading in meter_readings:
-            user_id = reading.unique_user_id
-            total_payment_amount_so_far[user_id] += reading.total_price
-            reading.reading_status = bool(user_reading_status[user_id])
-
-        for payment in payments:
-            user_id = payment.unique_user_id
-            payment.status = bool(user_payment_status[user_id])
+        # Update MeterReading statuses
+        update_meter_reading_statuses(meter_reading_data)
 
         # Commit changes to the database
         db.session.commit()
@@ -71,3 +40,38 @@ def process_payments():
     except Exception as e:
         print(f"An error occurred while processing payments: {e}")
         db.session.rollback()
+
+def update_user_balances(payment_data, meter_reading_data, user_mapping):
+    for payment, meter_reading in zip(payment_data, meter_reading_data):
+        user_id = payment.unique_user_id
+        total_payment_amount = payment.total_payment_amount or 0
+        total_meter_reading_total_price = meter_reading.total_meter_reading_total_price or 0
+        balance_difference = total_payment_amount - total_meter_reading_total_price
+
+        # Update user balance
+        if user_id in user_mapping:
+            user_mapping[user_id].balance = balance_difference
+        else:
+            # If the user doesn't exist, create a new user entry with the calculated balance
+            new_user = User(unique_user_id=user_id, balance=balance_difference)
+            db.session.add(new_user)
+
+
+def update_meter_reading_statuses(meter_reading_data):
+    for meter_reading in meter_reading_data:
+        user_id = meter_reading.unique_user_id
+        all_payments_by_a_user = Payment.query.filter_by(unique_user_id=user_id).all()
+        meter_readings = MeterReading.query.filter_by(unique_user_id=user_id).order_by(MeterReading.id).all()
+
+        total_payments_so_far = sum(payment.amount for payment in all_payments_by_a_user)
+        total_price_so_far = meter_reading.total_meter_reading_total_price or 0
+
+        for reading in meter_readings:
+            total_price_so_far += reading.total_price
+
+            if total_price_so_far > total_payments_so_far:
+                for reading_to_update in meter_readings:
+                    reading_to_update.reading_status = False
+                break
+            else:
+                reading.reading_status = True

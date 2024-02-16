@@ -29,6 +29,7 @@
 
     <!-- People Dropdown -->
     <li class="sidebar-item">
+      {% if current_user.is_admin %}
       <a
         href="{{ url_for('accounts.people.people_list') }}"
         class="sidebar-link"
@@ -36,6 +37,15 @@
         <ion-icon name="people-outline" class="text-success"></ion-icon>
         <span>People List</span>
       </a>
+      {% else %}
+      <a
+        href="{{ url_for('accounts.people.edit_user', user_id=current_user.id) }}"
+        class="sidebar-link"
+      >
+        <ion-icon name="person-outline" class="text-success"></ion-icon>
+        <span>Profile</span>
+      </a>
+      {% endif %}
     </li>
 
     <!-- Records and Water Supply Dropdown -->
@@ -49,7 +59,7 @@
         aria-controls="records_water"
       >
         <ion-icon name="water-outline" class="text-primary"></ion-icon>
-        <span>Water Supply</span>
+        <span>Hydro Services</span>
       </a>
       <ul
         id="records_water"
@@ -60,7 +70,7 @@
           <a
             href="{{ url_for('accounts.records.meter_readings') }}"
             class="sidebar-link"
-            >Readings</a
+            >Meter Readings</a
           >
         </li>
         <li class="sidebar-item">
@@ -68,7 +78,7 @@
             href="{{ url_for('accounts.records.billing') }}"
             class="sidebar-link"
           >
-            Invoices
+            Invoice Manager
           </a>
         </li>
         <li class="sidebar-item">
@@ -76,7 +86,7 @@
             href="{{ url_for('accounts.records.payments') }}"
             class="sidebar-link"
           >
-            Payments
+            Payment History
           </a>
         </li>
       </ul>

@@ -2,6 +2,12 @@
 {% extends "base.html" %} {% block content %}
 
 <div class="container-fluid">
+    <div class="text-center mt-3">
+      <h3 class="mb-2 fw-bold text-primary"> {% if current_user.is_admin %} Edit User Information {% else %} My Profile Information  {% endif %}</h3>
+      <p class="mb-4 text-muted fst-italic">
+        Enhance your profile and connect with our vibrant community.
+      </p>
+    </div>
   <div class="row">
     <!-- Profile Picture -->
     <div class="col-md-3 mt-5 px-3">
@@ -124,11 +130,7 @@
     </div>
 
     <!-- Edit User Information -->
-    <div class="col-md-9 mt-3 px-3">
-      <div for="editUserForm" class="form-label text-center mb-4">
-        <h3 class="h4 text-dark fw-bold">Edit User Information</h3>
-      </div>
-
+    <div class="col-md-9 mt-3">
       <form
         method="POST"
         action="{{ url_for('accounts.people.edit_user', user_id=user.id) }}"
@@ -363,7 +365,7 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="float-end mt-3">
+        <div class="text-center mt-3">
           <button
             type="submit"
             class="btn btn-sm btn-success btn-block rounded-pill"

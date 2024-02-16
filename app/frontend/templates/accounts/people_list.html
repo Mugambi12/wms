@@ -235,16 +235,16 @@
           <table class="table table-striped data-table" style="width: 100%">
             <thead>
               <tr class="text-center">
-                <th scope="col">NO.</th>
-                <th scope="col">AccountID</th>
-                <th scope="col">Full Name</th>
-                <th scope="col">Mobile Number</th>
+                <th scope="col">Count</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Mobile</th>
                 <th scope="col">Email</th>
-                <th scope="col">House Section</th>
-                <th scope="col">House Number</th>
-                <th scope="col">Acc. Bal.</th>
+                <th scope="col">Section</th>
+                <th scope="col">House #</th>
+                <th scope="col">Balance</th>
                 <th scope="col">Status</th>
-                <th scope="col">Account</th>
+                <th scope="col">Type</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -266,31 +266,23 @@
                 >
                   {{ "%0.0f"|format(person.balance) }}
                 </td>
-
                 <td>
-                  {% if person.is_active %}
-                  <span class="text-success">Active</span>
-                  {% else %}
-                  <span class="text-danger">Inactive</span>
-                  {% endif %}
+                  {% if person.is_active %}<span class="text-success"
+                    >Active</span
+                  >{% else %}<span class="text-danger">Inactive</span>{% endif
+                  %}
                 </td>
                 <td>
-                  {% if person.is_admin %}
-                  <span class="text-success">Admin</span>
-                  {% else %}
-                  <span class="text-info">Regular</span>
-                  {% endif %}
+                  {% if person.is_admin %}<span class="text-success">Admin</span
+                  >{% else %}<span class="text-info">Regular</span>{% endif %}
                 </td>
                 <td>
-                  {% if current_user.is_admin or current_user.id == person.id %}
-                  <a
+                  {% if current_user.is_admin or current_user.id == person.id
+                  %}<a
                     href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
-                  >
-                    <ion-icon name="create-outline"></ion-icon>Edit
-                  </a>
-                  {% else %}
-                  <span class="text-muted">No Edit Permission</span>
-                  {% endif %}
+                    ><ion-icon name="create-outline"></ion-icon>Edit</a
+                  >{% else %}<span class="text-muted">No Edit Permission</span
+                  >{% endif %}
                 </td>
               </tr>
               {% endfor %}

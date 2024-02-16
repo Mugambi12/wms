@@ -143,14 +143,14 @@
           >
             <thead>
               <tr>
-                <th scope="col">NO.</th>
+                <th scope="col">Count</th>
                 <th scope="col">Name</th>
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
                 <th scope="col">Section</th>
-                <th scope="col">House</th>
-                <th scope="col">Curr. Read.</th>
-                <th scope="col">Consumption</th>
+                <th scope="col">House #</th>
+                <th scope="col">Reading</th>
+                <th scope="col">Usage</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
               </tr>
@@ -298,7 +298,7 @@
                             {{ edit_form.timestamp.label(class="form-label") }}
                             {{ edit_form.timestamp(class="form-control
                             form-control-sm",
-                            value=reading.timestamp.strftime('%d-%m-%Y')) }}
+                            value=reading.timestamp.strftime('%Y-%m-%d')) }}
                           </div>
                         </div>
                       </div>
