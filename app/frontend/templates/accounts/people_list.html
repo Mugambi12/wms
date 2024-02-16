@@ -175,6 +175,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="float-start ms-3">
+        <!-- Download CSV -->
         <form
           action="{{ url_for('accounts.people.download_users') }}"
           method="get"
@@ -189,6 +190,8 @@
             <ion-icon name="download-outline"></ion-icon> CSV
           </button>
         </form>
+
+        <!-- Download Excel -->
         <form
           action="{{ url_for('accounts.people.download_users') }}"
           method="get"
@@ -203,6 +206,8 @@
             <ion-icon name="download-outline"></ion-icon> Excel
           </button>
         </form>
+
+        <!-- Download PDF -->
         <form
           action="{{ url_for('accounts.people.download_users') }}"
           method="get"

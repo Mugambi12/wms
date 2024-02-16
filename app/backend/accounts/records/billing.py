@@ -1,11 +1,9 @@
 # File: app/backend/accounts/records/billing.py
 
+from sqlalchemy import func
 from flask_login import current_user
 from app import db
 from ...database.models import MeterReading, User, Payment
-
-
-from sqlalchemy import func
 
 
 def fetch_billing_data():
@@ -85,9 +83,6 @@ def fetch_invoice_data(invoice_id):
     else:
         return None
 
-
-from app import db
-from ...database.models import Payment, User
 
 def fetch_payment_data():
     try:

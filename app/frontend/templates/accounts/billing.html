@@ -51,6 +51,8 @@
             <thead>
               <tr>
                 <th scope="col">No.</th>
+                <th scope="col">Reading ID</th>
+                <th scope="col">AccountID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Section</th>
                 <th scope="col">House</th>
@@ -63,15 +65,16 @@
                 <th scope="col">Total</th>
                 <th scope="col">Status</th>
                 <th scope="col">Actions</th>
-                <th scope="col">ID</th>
               </tr>
             </thead>
             <tbody>
               {% if billing_data %} {% for entry in billing_data |
               sort(attribute='id', reverse=true) %} {% if not
-              entry.reading_status %}
+              entry.reading_status or entry.reading_status %}
               <tr>
                 <td>{{ loop.index }}</td>
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.unique_user_id }}</td>
                 <td class="text-start">{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
@@ -114,7 +117,6 @@
                     ></ion-icon>
                   </a>
                 </td>
-                <td>{{ entry.unique_user_id }}</td>
 
                 <!-- Payment Modal -->
                 <div

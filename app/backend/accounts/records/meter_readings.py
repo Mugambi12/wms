@@ -81,8 +81,7 @@ def edit_meter_reading_logic(edited_reading):
         consumed=edited_reading.consumed,
         unit_price=edited_reading.unit_price,
         total_price=edited_reading.total_price,
-        timestamp=edited_reading.timestamp,
-        reading_status=edited_reading.reading_status
+        timestamp=edited_reading.timestamp
     )
 
     if request.method == 'POST':
@@ -97,7 +96,6 @@ def edit_meter_reading_logic(edited_reading):
                 edited_reading.consumed = edit_meter_reading_form.consumed.data
                 edited_reading.unit_price = edit_meter_reading_form.unit_price.data
                 edited_reading.total_price = edit_meter_reading_form.total_price.data
-                edited_reading.reading_status = edit_meter_reading_form.reading_status.data
 
                 db.session.commit()
 

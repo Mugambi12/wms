@@ -29,6 +29,7 @@ def people_list():
     else:
         return redirect(url_for('auth.login'))
 
+
 @people_bp.route('/add_user', methods=['GET', 'POST'])
 @login_required
 def add_user():
@@ -49,6 +50,8 @@ def add_user():
     else:
         return redirect(url_for('auth.login'))
 
+
+# Updated route
 @people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def edit_user(user_id):
@@ -64,16 +67,20 @@ def edit_user(user_id):
                 if not validate_new_password(form.new_password.data):
                     flash('New password must be at least 6 characters long.', 'danger')
                     return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
+                else:
+                    # Change password only if new password is provided
+                    change_password(user, form)
 
-            if change_password(user, form):
-                form.populate_obj(user)
-                db.session.commit()
-                flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
-                return redirect(url_for('accounts.people.people_list'))
+            # Update user profile
+            form.populate_obj(user)
+            db.session.commit()
+            flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
+            return redirect(url_for('accounts.people.people_list'))
 
         return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
     else:
         return redirect(url_for('auth.login'))
+
 
 @people_bp.route('/edit_profile_picture', methods=['GET', 'POST'])
 @login_required
@@ -92,6 +99,7 @@ def edit_profile_picture_route():
         return render_template('accounts/edit_people.html', form=form)
     else:
         return redirect(url_for('auth.login'))
+
 
 @people_bp.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required

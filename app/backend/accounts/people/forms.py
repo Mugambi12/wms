@@ -6,6 +6,7 @@ from flask_wtf.file import FileField, FileAllowed
 from app.backend.database.models import User
 from app.backend.database.models import Settings
 
+
 class AddUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=50)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(max=50)])
@@ -33,9 +34,7 @@ class EditUserForm(FlaskForm):
     is_active = BooleanField('Active', validators=[Optional()])
     is_admin = BooleanField('Admin', validators=[Optional()])
     current_password = PasswordField('Current Password', validators=[Optional()])
-    new_password = PasswordField('New Password', validators=[
-        Optional(), Length(min=6), EqualTo('confirm_new_password', message='Passwords must match')
-    ])
+    new_password = PasswordField('New Password', validators=[Optional(), Length(min=6), EqualTo('confirm_new_password', message='Passwords must match')])
     confirm_new_password = PasswordField('Confirm New Password', validators=[Optional()])
 
     def populate_house_sections(self):
@@ -47,6 +46,7 @@ class EditUserForm(FlaskForm):
             # Set choices with existing value selected
             self.house_section.choices = [(section, section) for section in settings.house_sections.split(',')]
             self.house_section.data = current_house_section
+
 
 class EditProfilePictureForm(FlaskForm):
     profile_image = FileField('Profile Image', validators=[DataRequired(), FileAllowed(['jpg', 'png', 'jpeg'])])

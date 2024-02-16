@@ -32,9 +32,9 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
         db.session.add(payment)
         db.session.commit()
 
-        # Update the reading status to paid
-        meter_reading.reading_status = True
-        db.session.commit()
+        ## Update the reading status to paid
+        #meter_reading.reading_status = True
+        #db.session.commit()
 
         return {'success': True, 'message': 'Payment successful'}
 

@@ -17,7 +17,6 @@ class EditMeterReadingForm(FlaskForm):
     unit_price = FloatField('Unit Price', validators=[DataRequired()])
     total_price = FloatField('Total Price', validators=[DataRequired()])
     timestamp = DateField('Reading Date', validators=[DataRequired()])
-    reading_status = BooleanField('Reading Status')
     submit = SubmitField('Update')
 
 
