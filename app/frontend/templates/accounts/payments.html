@@ -28,10 +28,11 @@
                 <th scope="col">Payment Date</th>
                 <th scope="col">Reference Number</th>
                 <th scope="col">Payment Method</th>
-                <th scope="col">Amount</th>
                 <th scope="col">Invoice Amount</th>
+                <th scope="col">Paid Amount</th>
                 <th scope="col">Status</th>
                 <th scope="col">UniqueID</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -45,15 +46,92 @@
                 <td>{{ payment.payment_date.strftime('%d-%m-%Y') }}</td>
                 <td>{{ payment.reference_number }}</td>
                 <td>{{ payment.payment_method }}</td>
-                <td>{{ payment.amount }}</td>
                 <td>{{ payment.invoice_amount }}</td>
+                <td>{{ payment.amount }}</td>
                 <td
                   class="fst-italic {% if payment.status %}text-success{% else %}text-secondary{% endif %}"
                 >
                   {{ "Confirmed" if payment.status else "Pending" }}
                 </td>
                 <td>{{ payment.unique_user_id }}</td>
+                <td>
+                  <!-- Delete Meter Reading Button -->
+                  <a
+                    action="#deleteConfirmationModal_{{ payment.id }}"
+                    class=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteConfirmationModal_{{ payment.id }}"
+                  >
+                    <ion-icon
+                      name="trash-outline"
+                      class="text-danger"
+                    ></ion-icon>
+                  </a>
+                </td>
               </tr>
+
+              <!-- Delete Meter Reading Confirmation Modal -->
+              <div
+                class="modal fade"
+                id="deleteConfirmationModal_{{ payment.id }}"
+                tabindex="-1"
+                aria-labelledby="deleteConfirmationModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteConfirmationModalLabel">
+                        Confirm Deletion
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <!-- Delete Meter Reading Form -->
+                    <form
+                      method="post"
+                      action="{{ url_for('accounts.records.delete_payment', payment_id=payment.id) }}"
+                    >
+                      <div class="modal-body">
+                        <!-- CSRF Token -->
+                        <input
+                          type="hidden"
+                          name="csrf_token"
+                          value="{{ csrf_token() }}"
+                        />
+                        <!-- Form Type -->
+                        <input type="hidden" name="form_type" value="delete" />
+                        <p>
+                          Delete payment <b>ID {{ payment.id }}</b> of
+                          <b>KES {{ "%0.0f"|format(payment.amount) }}</b> for
+                          invoice <b>{{ payment.invoice_id }}</b> (KES {{
+                          "%0.0f"|format(payment.invoice_amount) }})?
+                        </p>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-secondary rounded-pill"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          name=""
+                          type="submit"
+                          class="btn btn-sm btn-danger rounded-pill"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
               {% endfor %}
             </tbody>
           </table>

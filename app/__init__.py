@@ -36,7 +36,7 @@ def create_app():
     scheduler.init_app(app)
 
     # Add job to schedule the payment processing function
-    scheduler.add_job(id='process_payments', func=process_payments_with_context, trigger='interval', seconds=30)
+    scheduler.add_job(id='process_payments', func=process_payments_with_context, trigger='interval', minutes=2)
 
     # Start the scheduler
     scheduler.start()

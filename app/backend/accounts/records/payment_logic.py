@@ -42,3 +42,18 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
         # If an error occurs during payment processing, rollback the session and return an error message
         db.session.rollback()
         return {'success': False, 'message': f'An error occurred during payment processing: {str(e)}'}
+
+
+def delete_payment_logic(payment_id):
+    try:
+        payments = Payment.query.get(payment_id)
+
+        if payments:
+            db.session.delete(payments)
+            db.session.commit()
+            return {'success': True, 'message': 'Payment deleted successfully.'}
+        else:
+            return {'success': False, 'message': 'Payment not found.'}
+
+    except Exception as e:
+        return {'success': False, 'message': f'Error deleting payment: {str(e)}'}

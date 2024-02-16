@@ -7,7 +7,7 @@ from .forms import AddMeterReadingForm, EditMeterReadingForm, MakePaymentForm
 from ...database.models import User, MeterReading, Payment, Settings
 from .meter_readings import handle_add_meter_reading, get_meter_readings, edit_meter_reading_logic, delete_meter_reading_logic
 from .billing import fetch_billing_data, fetch_invoice_data, fetch_payment_data
-from .payment_logic import make_payment_logic
+from .payment_logic import make_payment_logic, delete_payment_logic
 
 
 records_bp = Blueprint('records', __name__, url_prefix='/records')
@@ -108,12 +108,6 @@ def make_payment(payment_id):
     return render_template('accounts/billing.html', form=form, meter_reading=meter_reading)
 
 
-
-
-
-
-
-
 @records_bp.route('/invoice/<int:invoice_id>')
 @login_required
 def invoice(invoice_id):
@@ -125,10 +119,22 @@ def invoice(invoice_id):
         return redirect(url_for('accounts.records.billing'))
 
 
-
 @records_bp.route('/payments')
 @login_required
 def payments():
     payment_data = fetch_payment_data()
 
     return render_template('accounts/payments.html', payment_data=payment_data, hide_footer=True)
+
+
+@records_bp.route('/delete_payment/<int:payment_id>', methods=['GET', 'POST'])
+@login_required
+def delete_payment(payment_id):
+    result = delete_payment_logic(payment_id)
+
+    if result['success']:
+        flash(result['message'], 'success')
+    else:
+        flash(result['message'], 'danger')
+
+    return redirect(url_for('accounts.records.payments'))
