@@ -47,7 +47,11 @@
                 <td>{{ payment.payment_method }}</td>
                 <td>{{ payment.amount }}</td>
                 <td>{{ payment.invoice_amount }}</td>
-                <td>{{ "Cleared" if payment.status else "Pending" }}</td>
+                <td
+                  class="fst-italic {% if payment.status %}text-success{% else %}text-secondary{% endif %}"
+                >
+                  {{ "Confirmed" if payment.status else "Pending" }}
+                </td>
                 <td>{{ payment.unique_user_id }}</td>
               </tr>
               {% endfor %}
