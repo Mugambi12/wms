@@ -37,7 +37,7 @@
               <ion-icon name="cash" style="font-size: 2rem"></ion-icon>
             </div>
             <div class="col-md-9">
-              <div class="card-text fs-6">$ 25k</div>
+              <div class="card-text fs-6">KES 650k</div>
               <div class="card-title fw-bold fs-5">Revenue</div>
             </div>
           </div>
@@ -69,7 +69,7 @@
               <ion-icon name="cash" style="font-size: 2rem"></ion-icon>
             </div>
             <div class="col-md-9">
-              <div class="card-text fs-6">$ 20k</div>
+              <div class="card-text fs-6">KES 120k</div>
               <div class="card-title fw-bold fs-5">Expenses</div>
             </div>
           </div>
@@ -88,11 +88,9 @@
           <div class="row">
             <div class="col-md-4 text-center p-3">
               <p class="text-muted mb-2">Overview Of Latest Month</p>
-              <b class="fw-bold mb-3 h5" id="currentMonthEarnings"
-                >$ 231,475.00</b
-              >
+              <b class="fw-bold mb-3 h5" id="currentMonthEarnings">KES 0.00</b>
               <p class="text-muted mb-2">Current Month Earnings</p>
-              <b class="fw-bold mb-3 h5" id="currentMonthWater">700 Units</b>
+              <b class="fw-bold mb-3 h5" id="currentMonthWater">0 Units</b>
               <p class="text-muted mb-2">Water Consumed</p>
 
               <div
@@ -210,18 +208,19 @@
 
       // Function to update the current month earnings and water consumed
       function updateData() {
-        const monthSelect = document.getElementById("monthSelect");
-        const selectedMonth = parseInt(monthSelect.value);
-
         // Fetch actual data for the selected month (replace with your actual data fetching logic)
-        const actualEarnings = "KES 50,000.00"; // Replace with actual earnings data
-        const actualWater = "500 Units"; // Replace with actual water consumption data
+        const actualEarnings =
+          "KES " + (Math.floor(Math.random() * 50000) + 50000).toFixed(2); // Random earnings between 50000 and 100000
+        const actualWater = Math.floor(Math.random() * 500) + 500 + " Units"; // Random water between 500 and 1000 units
 
         // Update the HTML with the fetched data
         document.getElementById("currentMonthEarnings").innerText =
           actualEarnings;
         document.getElementById("currentMonthWater").innerText = actualWater;
       }
+
+      // Simulate fetching actual data for the current month when the page loads
+      updateData();
     </script>
 
     <!-- Doughnut Chart -->
