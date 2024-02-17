@@ -1,12 +1,288 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- #MAIN BODY SECTION -->
-<div class="container-fluid">
-  <h4>Dashboard Page</h4>
-  <h6>Dashboard</h6>
-  <h6>Usage Statistics</h6>
+<!-- DataTables Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+<script src="{{ url_for('static', filename='js/datatables/jquery-3.5.1.js') }}"></script>
 
-  <!-- The correct URL generation for the accounts route -->
+<!-- #MAIN BODY SECTION -->
+<div class="container-fluid px-3">
+  <div class="row mt-3">
+    <!-- Bar Chart -->
+    <div class="col-md-9 mb-3">
+      <div class="card h-100 border-0 shadow">
+        <div class="card-header fw-bold border-0">
+          <span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
+          Dashboard
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 text-center p-3">
+              <p class="text-muted mb-2">Overview Of Latest Month</p>
+              <b class="fw-bold mb-3 h5" id="currentMonthEarnings"
+                >KES XXX,XXX.XX</b
+              >
+              <p class="text-muted mb-2">Current Month Earnings</p>
+              <b class="fw-bold mb-3 h5" id="currentMonthWater">XXX Units</b>
+              <p class="text-muted mb-2">Water Consumed</p>
+
+              <div class="input-group input-group-sm mt-5">
+                <select
+                  class="form-select form-select-sm outline-none"
+                  aria-label=".form-select-sm example"
+                  id="monthSelect"
+                >
+                  <option value="1">Jan</option>
+                  <option value="2">Feb</option>
+                  <option value="3">Mar</option>
+                  <option value="4">Apr</option>
+                  <option value="5">May</option>
+                  <option value="6">Jun</option>
+                  <option value="7">Jul</option>
+                  <option value="8">Aug</option>
+                  <option value="9">Sep</option>
+                  <option value="10">Oct</option>
+                  <option value="11">Nov</option>
+                  <option value="12">Dec</option>
+                </select>
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                  onclick="updateChartData()"
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <canvas class="chart1" width="400" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Define myChart variable outside the scope to make it accessible globally
+      let myChart;
+
+      // Wait for the DOM content to load
+      document.addEventListener("DOMContentLoaded", function () {
+        const chart1 = document.querySelectorAll(".chart1");
+
+        chart1.forEach(function (chart) {
+          var ctx = chart.getContext("2d");
+
+          // Function to generate random data for water consumed and revenue for each month
+          function generateRandomData() {
+            var waterData = [];
+            var revenueData = [];
+            for (var i = 0; i < 12; i++) {
+              waterData.push(Math.floor(Math.random() * 700)); // Adjust the range as needed for water consumed
+              revenueData.push(Math.floor(Math.random() * 1000)); // Adjust the range as needed for revenue
+            }
+            return {
+              water: waterData,
+              revenue: revenueData,
+            };
+          }
+
+          var data = generateRandomData();
+
+          myChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ],
+              datasets: [
+                {
+                  label: "Water Consumed",
+                  data: data.water,
+                  backgroundColor: "rgba(54, 162, 235, 0.6)", // Use a single color for water consumed across all months
+                  borderColor: "rgba(54, 162, 235, 1)",
+                  borderWidth: 1,
+                  barThickness: 8, // Adjust the thickness of the bars
+                  borderRadius: 15, // Adjust the rounding of the bar ends
+                },
+                {
+                  label: "Revenue",
+                  data: data.revenue,
+                  backgroundColor: "rgba(255, 99, 132, 0.6)", // Use a different color for revenue across all months
+                  borderColor: "rgba(255, 99, 132, 1)",
+                  borderWidth: 1,
+                  barThickness: 8, // Adjust the thickness of the bars
+                  borderRadius: 15, // Adjust the rounding of the bar ends
+                },
+              ],
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: true,
+                  position: "bottom",
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: false,
+                  grid: {
+                    color: "rgba(0, 0, 0, 0.1)", // Adjust the color of the grid lines
+                  },
+                },
+              },
+            },
+          });
+        });
+      });
+
+      // Function to update the current month earnings and water consumed
+      function updateData() {
+        const monthSelect = document.getElementById("monthSelect");
+        const selectedMonth = parseInt(monthSelect.value);
+
+        // Fetch actual data for the selected month (replace with your actual data fetching logic)
+        const actualEarnings = "KES 50,000.00"; // Replace with actual earnings data
+        const actualWater = "500 Units"; // Replace with actual water consumption data
+
+        // Update the HTML with the fetched data
+        document.getElementById("currentMonthEarnings").innerText =
+          actualEarnings;
+        document.getElementById("currentMonthWater").innerText = actualWater;
+      }
+    </script>
+
+    <!-- Doughnut Chart -->
+    <div class="col-md-3 mb-3">
+      <div class="card h-100 border-0 shadow">
+        <div class="card-header border-0">
+          <span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
+          Overview Performance
+        </div>
+
+        <div class="card-body">
+          <canvas class="chart2" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const chart2 = document.querySelectorAll(".chart2");
+
+      chart2.forEach(function (chart) {
+        var ctx = chart.getContext("2d");
+
+        // Function to generate random data for doughnut chart
+        function generateRandomData() {
+          return [
+            Math.floor(Math.random() * 1000),
+            Math.floor(Math.random() * 1000),
+            Math.floor(Math.random() * 1000),
+          ];
+        }
+
+        var data = generateRandomData();
+
+        var myChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Total Invoice Amount",
+              "Total Payment Amount",
+              "Total Units Consumed",
+            ],
+            datasets: [
+              {
+                label: "# of Votes",
+                data: data,
+                backgroundColor: [
+                  "rgba(255, 99, 132, 0.4)",
+                  "rgba(54, 162, 235, 0.4)",
+                  "rgba(255, 206, 86, 0.4)",
+                ],
+                borderColor: [
+                  "rgba(255, 99, 132, 0.2)",
+                  "rgba(54, 162, 235, 0.2)",
+                  "rgba(255, 206, 86, 0.2)",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+              },
+            },
+            scales: {
+              display: false,
+            },
+          },
+        });
+      });
+    </script>
+  </div>
+
+  <!-- Four Bootstrap Cards -->
+  <div class="row">
+    <div class="col-md-3 mb-3">
+      <div class="card bg-primary text-white h-100">
+        <div class="card-body py-5">Primary Card</div>
+        <div class="card-footer d-flex">
+          View Details
+          <span class="ms-auto">
+            <i class="bi bi-chevron-right"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-warning text-dark h-100">
+        <div class="card-body py-5">Warning Card</div>
+        <div class="card-footer d-flex">
+          View Details
+          <span class="ms-auto">
+            <i class="bi bi-chevron-right"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-success text-white h-100">
+        <div class="card-body py-5">Success Card</div>
+        <div class="card-footer d-flex">
+          View Details
+          <span class="ms-auto">
+            <i class="bi bi-chevron-right"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-danger text-white h-100">
+        <div class="card-body py-5">Danger Card</div>
+        <div class="card-footer d-flex">
+          View Details
+          <span class="ms-auto">
+            <i class="bi bi-chevron-right"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

@@ -50,8 +50,7 @@
           >
             <thead>
               <tr>
-                <th scope="col">Count</th>
-                <th scope="col">Invoice</th>
+                <th scope="col">#</th>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Section</th>
@@ -73,7 +72,6 @@
               entry.reading_status or entry.reading_status %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ entry.id }}</td>
                 <td>{{ entry.unique_user_id }}</td>
                 <td class="text-start">{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
@@ -166,6 +164,9 @@
                           <!-- Payment Details -->
                           <div class="row">
                             <div class="col-md-6 mt-3">
+                              <p>
+                                <strong>Invoice Number:</strong> {{ entry.id }}
+                              </p>
                               <p>
                                 <strong>Customer Name:</strong> {{
                                 entry.customer_name.title() }}

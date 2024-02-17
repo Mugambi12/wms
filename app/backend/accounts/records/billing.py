@@ -27,7 +27,7 @@ def fetch_billing_data():
             MeterReading.unique_user_id
         )
         .join(User)
-        .order_by(MeterReading.timestamp.desc())
+        .order_by(MeterReading.id.desc())
     )
 
     if not current_user.is_admin:
@@ -36,6 +36,41 @@ def fetch_billing_data():
     billing_data = query_billing_data.all()
 
     return billing_data
+
+
+def fetch_payment_data():
+    try:
+        # Construct the query to fetch payment data
+        query_payment_data = (
+            db.session.query(
+                Payment.id,
+                Payment.user_id,
+                Payment.invoice_id,
+                Payment.invoice_amount,
+                Payment.amount,
+                Payment.payment_date,
+                Payment.payment_method,
+                Payment.reference_number,
+                Payment.status,
+                Payment.unique_user_id
+            )
+            .join(User)
+            .order_by(Payment.payment_date.desc())
+        )
+
+        # Filter the payment data based on user role
+        if not current_user.is_admin:
+            query_payment_data = query_payment_data.filter(User.id == current_user.id)
+
+        # Execute the query and fetch payment data
+        payment_data = query_payment_data.all()
+
+        return payment_data
+
+    except Exception as e:
+        # Handle any exceptions and return None
+        print(f"An error occurred while fetching payment data: {e}")
+        return None
 
 
 def fetch_invoice_data(invoice_id):
@@ -81,39 +116,4 @@ def fetch_invoice_data(invoice_id):
         else:
             return None
     else:
-        return None
-
-
-def fetch_payment_data():
-    try:
-        # Construct the query to fetch payment data
-        query_payment_data = (
-            db.session.query(
-                Payment.id,
-                Payment.user_id,
-                Payment.invoice_id,
-                Payment.invoice_amount,
-                Payment.amount,
-                Payment.payment_date,
-                Payment.payment_method,
-                Payment.reference_number,
-                Payment.status,
-                Payment.unique_user_id
-            )
-            .join(User)
-            .order_by(Payment.payment_date.desc())
-        )
-
-        # Filter the payment data based on user role
-        if not current_user.is_admin:
-            query_payment_data = query_payment_data.filter(User.id == current_user.id)
-
-        # Execute the query and fetch payment data
-        payment_data = query_payment_data.all()
-
-        return payment_data
-
-    except Exception as e:
-        # Handle any exceptions and return None
-        print(f"An error occurred while fetching payment data: {e}")
         return None

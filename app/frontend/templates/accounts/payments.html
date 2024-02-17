@@ -21,17 +21,17 @@
           >
             <thead>
               <tr>
-                <th scope="col">Count</th>
+                <th scope="col">#</th>
                 <th scope="col">UserID</th>
                 <th scope="col">InvoiceID</th>
                 <th scope="col">PayID</th>
+                <th scope="col">UserID</th>
                 <th scope="col">Pay Date</th>
                 <th scope="col">Ref.</th>
                 <th scope="col">Method</th>
                 <th scope="col">Inv. Amt.</th>
                 <th scope="col">Paid Amt.</th>
                 <th scope="col">Status</th>
-                <th scope="col">UID</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -43,6 +43,7 @@
                 <td>{{ payment.user_id }}</td>
                 <td>{{ payment.invoice_id }}</td>
                 <td>{{ payment.id }}</td>
+                <td>{{ payment.unique_user_id }}</td>
                 <td>{{ payment.payment_date.strftime('%d-%m-%Y') }}</td>
                 <td>{{ payment.reference_number }}</td>
                 <td>{{ payment.payment_method }}</td>
@@ -51,9 +52,8 @@
                 <td
                   class="fst-italic {% if payment.status %}text-success{% else %}text-secondary{% endif %}"
                 >
-                  {{ "Confirmed" if payment.status else "Pending" }}
+                  {{ "Cleared" if payment.status else "Pending" }}
                 </td>
-                <td>{{ payment.unique_user_id }}</td>
                 <td>
                   <!-- Confirm Payment Received Button -->
                   <a action="#" class="me-2">

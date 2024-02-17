@@ -57,8 +57,11 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
             db.session.add(new_user)
 
 
-def update_meter_reading_statuses(meter_reading_data):
-    for meter_reading in meter_reading_data:
+
+def update_meter_reading_statuses():
+    all_meter_readings = MeterReading.query.all()
+
+    for meter_reading in all_meter_readings:
         user_id = meter_reading.unique_user_id
         all_payments_by_a_user = Payment.query.filter_by(unique_user_id=user_id).all()
         meter_readings = MeterReading.query.filter_by(unique_user_id=user_id).order_by(MeterReading.id).all()
@@ -71,7 +74,7 @@ def update_meter_reading_statuses(meter_reading_data):
 
             if total_price_so_far > total_payments_so_far:
                 for reading_to_update in meter_readings:
-                    reading_to_update.reading_status = False
+                    reading_to_update.reading_status = True
                 break
             else:
-                reading.reading_status = True
+                reading.reading_status = False
