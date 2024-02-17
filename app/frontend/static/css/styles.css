@@ -26,6 +26,16 @@ button {
 button:focus {
   box-shadow: none !important;
 }
+input,
+input:focus,
+input:active,
+select,
+textarea {
+  border: none !important;
+  border-bottom: 1px solid #0000004d !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 body {
   font-family: "Poppins", sans-serif;
 }

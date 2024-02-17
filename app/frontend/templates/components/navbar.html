@@ -77,15 +77,40 @@
 
         <!-- people Information and Dropdown -->
         <ul class="navbar-nav me-3">
-          <li class="nav-item me-3">
-            <a class="nav-link text-dark position-relative" href="#">
+          <li class="nav-item dropdown me-3">
+            <button
+              class="nav-link text-dark position-relative"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               <ion-icon name="notifications-outline" class="me-1"></ion-icon>
               <span
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
               >
                 99+ <span class="visually-hidden">unread messages</span>
               </span>
-            </a>
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-start border-0 shadow mt-2"
+              aria-labelledby="notificationsDropdown"
+            >
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Notification 1</a
+                >
+              </li>
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Notification 2</a
+                >
+              </li>
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Notification 3</a
+                >
+              </li>
+            </ul>
           </li>
 
           <li class="nav-item">
@@ -106,6 +131,7 @@
               >
             </a>
           </li>
+
           <!--
           <li class="nav-item">
             <a class="nav-link text-dark">
