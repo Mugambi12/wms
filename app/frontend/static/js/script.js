@@ -1,3 +1,4 @@
+// Dynamic DataTable Initialization
 $(document).ready(function () {
   $(".data-table").each(function (_, table) {
     $(table).DataTable();
@@ -10,6 +11,7 @@ $(document).ready(function () {
 //   document.querySelector("#sidebar").classList.toggle("expand");
 // });
 
+// Persistent Sidebar State Handling
 const hamBurger = document.querySelector(".toggle-btn");
 const sidebar = document.querySelector("#sidebar");
 

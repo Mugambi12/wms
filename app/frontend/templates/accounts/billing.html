@@ -53,10 +53,10 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Section</th>
                 <th scope="col">House #</th>
+                <th scope="col">ID</th>
                 <th scope="col">Prev. Read.</th>
                 <th scope="col">Curr. Read.</th>
                 <th scope="col">Usage</th>
@@ -74,10 +74,10 @@
               entry.reading_status or entry.reading_status %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ entry.unique_user_id }}</td>
                 <td class="text-start">{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
+                <td>{{ entry.unique_user_id }}</td>
                 <td>
                   {{ "%0.0f"|format(entry.prev_reading) if entry.prev_reading is
                   not none else "None" }}

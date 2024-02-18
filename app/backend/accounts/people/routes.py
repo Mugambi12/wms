@@ -51,7 +51,6 @@ def add_user():
         return redirect(url_for('auth.login'))
 
 
-# Updated route
 @people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def edit_user(user_id):

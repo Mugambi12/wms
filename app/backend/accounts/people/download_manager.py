@@ -1,10 +1,12 @@
-# app/backend/accounts/people/download_manager.py
+# File: app/backend/accounts/people/download_manager.py
+
 from io import BytesIO
 import pandas as pd
 from flask import render_template_string
 from openpyxl import Workbook
 from xhtml2pdf import pisa
 from ...database.models import User
+
 
 def generate_csv():
     data = []
@@ -62,26 +64,47 @@ def generate_pdf(people_list):
 
         <table class="table table-bordered">
         <thead class="table-primary">
-            <tr>
-            <th>ID</th>
-            <th>Full Name</th>
-            <th>Mobile Number</th>
-            <th>Email</th>
-            <th>House Section</th>
-            <th>House Number</th>
-            <th>Status</th>
-            </tr>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">Email</th>
+                <th scope="col">Section</th>
+                <th scope="col">House #</th>
+                <th scope="col">Balance</th>
+                <th scope="col">Status</th>
+                <th scope="col">Type</th>
+              </tr>
         </thead>
         <tbody>
             {% for person in people_list %}
             <tr>
-            <td>{{ person.id }}</td>
-            <td>{{ person.first_name }} {{ person.last_name }}</td>
-            <td>{{ person.mobile_number }}</td>
-            <td>{{ person.email }}</td>
-            <td>{{ person.house_section }}</td>
-            <td>{{ person.house_number }}</td>
-            <td>{{ 'Active' if person.is_active else 'Inactive' }}</td>
+                <th scope="row">{{ person.id }}</th>
+                <td>{{ person.unique_user_id }}</td>
+                <td class="text-start">
+                  {{ person.first_name.title() ~ " " ~ person.last_name.title()
+                  }}
+                </td>
+                <td>{{ person.mobile_number }}</td>
+                <td>{{ person.email }}</td>
+                <td>{{ person.house_section }}</td>
+                <td>{{ person.house_number }}</td>
+                <td
+                  class="fw-bold text-center {% if person.balance > 0 %}text-success{% elif person.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
+                >
+                  {{ "%0.0f"|format(person.balance) }}
+                </td>
+                <td>
+                  {% if person.is_active %}<span class="text-success"
+                    >Active</span
+                  >{% else %}<span class="text-danger">Inactive</span>{% endif
+                  %}
+                </td>
+                <td>
+                  {% if person.is_admin %}<span class="text-success">Admin</span
+                  >{% else %}<span class="text-info">Regular</span>{% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

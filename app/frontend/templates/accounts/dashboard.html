@@ -301,7 +301,7 @@
         <!-- Sticky Notes -->
         <div
           class="card border-0 rounded shadow mb-3 p-0"
-          style="background-color: rgba(255, 218, 124, 0.4)"
+          style="background-color: rgba(255, 224, 146, 0.5)"
         >
           <div class="card-body bg-opacity-25">
             <h5
@@ -312,7 +312,7 @@
             <textarea
               id="sticky-note-input"
               class="form-control border-0"
-              style="resize: none; height: 150px; background-color: transparent"
+              style="resize: none; height: 250px; background-color: transparent"
               placeholder="Type your notes here..."
             ></textarea>
           </div>
@@ -339,7 +339,7 @@
         <!-- All Admins List -->
         <div class="card border-0 shadow" style="padding-bottom: 5px">
           <h5 class="card-title px-3 mt-3">All Admins</h5>
-          <div class="card-body" style="max-height: 350px; overflow-y: auto">
+          <div class="card-body" style="max-height: 220px; overflow-y: auto">
             <!-- Admin 1 -->
             <div class="admin-item row align-items-center mb-3">
               <div class="col-md-3">
@@ -387,216 +387,6 @@
             </div>
 
             <!-- Admin 3 -->
-            <div class="admin-item row align-items-center">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Sarah Patel</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 2 hour ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-danger">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 4 -->
-            <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">John Doe</h6>
-                  <p class="text-muted small mb-0 fst-italic">Active Now</p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-success">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 5 -->
-            <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Emma Johnson</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 5 min ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-info">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 6 -->
-            <div class="admin-item row align-items-center">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Sarah Patel</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 2 hour ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-danger">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 7 -->
-            <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">John Doe</h6>
-                  <p class="text-muted small mb-0 fst-italic">Active Now</p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-success">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 8 -->
-            <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Emma Johnson</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 5 min ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-info">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 9 -->
-            <div class="admin-item row align-items-center">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Sarah Patel</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 2 hour ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-danger">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 10 -->
-            <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">John Doe</h6>
-                  <p class="text-muted small mb-0 fst-italic">Active Now</p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-success">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 11 -->
-            <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Emma Johnson</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 5 min ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-info">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 12 -->
             <div class="admin-item row align-items-center">
               <div class="col-md-3">
                 <img
