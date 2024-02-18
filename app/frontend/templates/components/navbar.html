@@ -77,6 +77,44 @@
 
         <!-- people Information and Dropdown -->
         <ul class="navbar-nav me-3">
+          <!-- Messages -->
+          <li class="nav-item dropdown me-3">
+            <button
+              class="nav-link text-dark position-relative"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <ion-icon name="mail-unread-outline"></ion-icon>
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              >
+                2 <span class="visually-hidden">unread messages</span>
+              </span>
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-start border-0 shadow mt-2"
+              aria-labelledby="notificationsDropdown"
+            >
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Messages 1</a
+                >
+              </li>
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Messages 2</a
+                >
+              </li>
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Messages 3</a
+                >
+              </li>
+            </ul>
+          </li>
+
+          <!-- Notifications -->
           <li class="nav-item dropdown me-3">
             <button
               class="nav-link text-dark position-relative"
@@ -113,6 +151,7 @@
             </ul>
           </li>
 
+          <!-- Current User Name -->
           <li class="nav-item">
             <a class="nav-link text-dark">
               Hello
@@ -122,6 +161,7 @@
             </a>
           </li>
 
+          <!-- Current User Balance -->
           <li class="nav-item">
             <a class="nav-link text-dark">
               Balance
@@ -153,12 +193,21 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
+            {% if current_user.profile_image is not none %}
+            <img
+              src="{{ current_user.profile_image }}"
+              alt="{{ current_user.first_name.title() }}'s Profile Image"
+              class="rounded-circle img-fluid profile-image"
+              style="width: 40px; height: 40px; object-fit: cover"
+            />
+            {% else %}
             <img
               src="{{ url_for('static', filename='images/user.png') }}"
               alt="logo image"
               height="40px"
               width="40px"
             />
+            {% endif %}
           </button>
 
           <ul
