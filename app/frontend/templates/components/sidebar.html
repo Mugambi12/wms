@@ -48,7 +48,90 @@
       {% endif %}
     </li>
 
-    <!-- Records and Water Supply Dropdown -->
+    <!-- Meter Readings -->
+    <li class="sidebar-item">
+      <a
+        href="{{ url_for('accounts.records.meter_readings') }}"
+        class="sidebar-link"
+      >
+        <ion-icon name="water-outline" class="text-info"></ion-icon>
+        <span>Meter Readings</span>
+      </a>
+    </li>
+
+    <!-- Invoices -->
+    <li class="sidebar-item">
+      <a href="{{ url_for('accounts.records.billing') }}" class="sidebar-link">
+        <ion-icon name="logo-paypal" class="text-success"></ion-icon>
+        <span>Invoices</span>
+      </a>
+    </li>
+
+    <!-- Payment -->
+    <li class="sidebar-item">
+      <a href="{{ url_for('accounts.records.payments') }}" class="sidebar-link">
+        <ion-icon name="recording-outline" class="text-primary"></ion-icon>
+        <span>Payment History</span>
+      </a>
+    </li>
+
+    <!-- Messages -->
+    <li class="sidebar-item">
+      <a
+        href="{{ url_for('accounts.messages.messages') }}"
+        class="sidebar-link"
+      >
+        <ion-icon
+          name="chatbubble-ellipses-outline"
+          class="text-warning"
+        ></ion-icon>
+        <span>Messages</span>
+      </a>
+    </li>
+
+    <!-- Settings -->
+    {% if current_user.is_admin %}
+    <li class="sidebar-item">
+      <a
+        href="{{ url_for('accounts.settings.settings') }}"
+        class="sidebar-link"
+      >
+        <ion-icon name="cog-outline" class="text-info"></ion-icon>
+        <span>Settings</span>
+      </a>
+    </li>
+    {% endif %}
+
+    <!-- Security Options -->
+    <li class="sidebar-item">
+      <a
+        href="{{ url_for('accounts.security.security_options') }}"
+        class="sidebar-link"
+      >
+        <ion-icon
+          name="shield-checkmark-outline"
+          class="text-danger"
+        ></ion-icon>
+        <span>Security Options</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Logout -->
+  <div class="sidebar-footer">
+    <a
+      class="sidebar-link"
+      href="{{ url_for('auth.logout') }}"
+      onclick="localStorage.clear();"
+    >
+      <ion-icon name="power-outline" class="text-danger"></ion-icon>
+      <span>Logout</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Records and Water Supply Dropdown -->
+<!--
     <li class="sidebar-item">
       <a
         href="#records_water_supply"
@@ -91,102 +174,6 @@
         </li>
       </ul>
     </li>
-
-    <!-- Messages -->
-    <li class="sidebar-item">
-      <a
-        href="{{ url_for('accounts.messages.messages') }}"
-        class="sidebar-link"
-      >
-        <ion-icon
-          name="chatbubble-ellipses-outline"
-          class="text-warning"
-        ></ion-icon>
-        <span>Messages</span>
-      </a>
-    </li>
-
-    <!-- Settings -->
-    <li class="sidebar-item">
-      <a
-        href="{{ url_for('accounts.settings.settings') }}"
-        class="sidebar-link"
-      >
-        <ion-icon name="cog-outline" class="text-info"></ion-icon>
-        <span>Settings</span>
-      </a>
-    </li>
-
-    <!-- Security Options -->
-    <li class="sidebar-item">
-      <a
-        href="{{ url_for('accounts.security.security_options') }}"
-        class="sidebar-link"
-      >
-        <ion-icon
-          name="shield-checkmark-outline"
-          class="text-danger"
-        ></ion-icon>
-        <span>Security Options</span>
-      </a>
-    </li>
-  </ul>
-
-  <!-- Logout -->
-  <div class="sidebar-footer">
-    <a
-      class="sidebar-link"
-      href="{{ url_for('auth.logout') }}"
-      onclick="localStorage.clear();"
-    >
-      <ion-icon name="power-outline" class="text-danger"></ion-icon>
-      <span>Logout</span>
-    </a>
-  </div>
-</aside>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Get all sidebar links
-    const sidebarLinks = document.querySelectorAll(".sidebar-link");
-
-    // Loop through each link
-    sidebarLinks.forEach(function (link) {
-      // Add click event listener to each link
-      link.addEventListener("click", function (event) {
-        // Check if the clicked link is already active
-        const isActive =
-          this.closest(".sidebar-item").classList.contains("active");
-
-        // If the clicked link is not already active
-        if (!isActive) {
-          // Remove active class from all links' parent elements
-          document
-            .querySelectorAll(".sidebar-item.active")
-            .forEach(function (item) {
-              item.classList.remove("active");
-            });
-
-          // Add active class to the clicked link's parent element
-          this.closest(".sidebar-item").classList.add("active");
-
-          // Store the active link's href in sessionStorage
-          sessionStorage.setItem("activeLink", this.getAttribute("href"));
-        }
-      });
-    });
-
-    // Retrieve active link from sessionStorage
-    const activeLink = sessionStorage.getItem("activeLink");
-
-    // If an active link is stored, add active class to it
-    if (activeLink) {
-      document
-        .querySelector(`.sidebar-link[href="${activeLink}"]`)
-        .closest(".sidebar-item")
-        .classList.add("active");
-    }
-  });
-</script>
+    -->
 
 {% endif %}

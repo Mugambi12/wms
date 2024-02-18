@@ -2,12 +2,15 @@
 {% extends "base.html" %} {% block content %}
 
 <div class="container-fluid">
-    <div class="text-center mt-3">
-      <h3 class="mb-2 fw-bold text-primary"> {% if current_user.is_admin %} Edit User Information {% else %} My Profile Information  {% endif %}</h3>
-      <p class="mb-4 text-muted fst-italic">
-        Enhance your profile and connect with our vibrant community.
-      </p>
-    </div>
+  <div class="text-center mt-3">
+    <h3 class="mb-2 fw-bold text-primary">
+      {% if current_user.is_admin %} Edit User Information {% else %} My Profile
+      Information {% endif %}
+    </h3>
+    <p class="mb-4 text-muted fst-italic">
+      Enhance your profile and connect with our vibrant community.
+    </p>
+  </div>
   <div class="row">
     <!-- Profile Picture -->
     <div class="col-md-3 mt-5 px-3">
@@ -252,12 +255,12 @@
               <h3>Password Section</h3>
 
               <!-- Current Password -->
-              <div class="mb-2">
+              <div class="mb-3">
                 {{ form.current_password.label(class="form-label
                 visually-hidden") }}
-                <div class="input-group border rounded-3">
-                  {{ form.current_password(class="form-control form-control-sm
-                  border-0", id="currentPassword", placeholder="Current Password") }}
+                <div class="input-group rounded-3">
+                  {{ form.current_password(class="form-control form-control-sm",
+                  id="currentPassword", placeholder="Current Password") }}
                   <button
                     class="btn btn-light"
                     type="button"
@@ -271,15 +274,15 @@
                     ></ion-icon>
                   </button>
                 </div>
-              </div
+              </div>
 
               <!-- New Password -->
-              <div class="mb-2">
+              <div class="mb-3">
                 {{ form.new_password.label(class="form-label visually-hidden")
                 }}
-                <div class="input-group border rounded-3">
-                  {{ form.new_password(class="form-control form-control-sm
-                  border-0", id="newPassword", placeholder="New Password") }}
+                <div class="input-group rounded-3">
+                  {{ form.new_password(class="form-control form-control-sm",
+                  id="newPassword", placeholder="New Password") }}
                   <button
                     class="btn btn-light"
                     type="button"
@@ -296,12 +299,12 @@
               </div>
 
               <!-- Confirm New Password -->
-              <div class="mb-2">
+              <div class="mb-3">
                 {{ form.confirm_new_password.label(class="form-label
                 visually-hidden") }}
-                <div class="input-group border rounded-3">
+                <div class="input-group rounded-3">
                   {{ form.confirm_new_password(class="form-control
-                  form-control-sm border-0", id="confirmNewPassword",
+                  form-control-sm", id="confirmNewPassword",
                   placeholder="Confirm New Password") }}
                   <button
                     class="btn btn-light"
@@ -329,7 +332,7 @@
           >
             <h3>Status Section</h3>
             <!-- Active Status -->
-            <div class="mb-3 form-check">
+            <div class="form-check mb-3">
               <input
                 type="checkbox"
                 class="form-check-input"
@@ -342,11 +345,13 @@
                 endif
                 %}
               />
-              <label class="form-check-label" for="isActive">Active</label>
+              <label class="form-check-label font-weight-bold" for="isActive"
+                >Active</label
+              >
             </div>
 
             <!-- Admin Status -->
-            <div class="mb-3 form-check">
+            <div class="form-check mb-3">
               <input
                 type="checkbox"
                 class="form-check-input"
@@ -359,7 +364,9 @@
                 endif
                 %}
               />
-              <label class="form-check-label" for="isAdmin">Admin</label>
+              <label class="form-check-label font-weight-bold" for="isAdmin"
+                >Admin</label
+              >
             </div>
           </div>
         </div>
@@ -377,4 +384,5 @@
     </div>
   </div>
 
-{% endblock %}
+  {% endblock %}
+</div>

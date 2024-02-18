@@ -22,6 +22,8 @@ def create_app():
     app.config['SECRET_KEY'] = 'qwertyurioupiuodsfghfdjgkjhd2345678jgfnxdz'
     uploads_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'profile')
     os.makedirs(uploads_folder, exist_ok=True)
+    tmp_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'tmp')
+    os.makedirs(tmp_folder, exist_ok=True)
 
     # Initialize the database with the Flask app
     db.init_app(app)
