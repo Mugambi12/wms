@@ -2,131 +2,143 @@
 
 <!-- Sidebar -->
 <aside id="sidebar">
-  <div class="d-flex mt-2">
-    <!-- Toggle Button -->
-    <button class="toggle-btn" type="button">
-      <ion-icon name="apps-outline" class="text-dark"></ion-icon>
-    </button>
+  <!-- Sidebar Content -->
+  <div class="sidebar-content">
+    <div class="d-flex mt-2">
+      <!-- Toggle Button -->
+      <button class="toggle-btn-desktop" type="button">
+        <ion-icon name="apps-outline" class="text-dark"></ion-icon>
+      </button>
 
-    <!-- Sidebar Logo -->
-    <div class="sidebar-logo">
-      <a href="#" class="text-info">Apo<span class="text-danger">Gen</span></a>
+      <!-- Sidebar Logo -->
+      <div class="sidebar-logo navbar-brand">
+        <a href="#" class="text-info"
+          >Apo<span class="text-danger">Gen</span></a
+        >
+      </div>
     </div>
-  </div>
 
-  <!-- Sidebar Navigation -->
-  <ul class="sidebar-nav">
-    <!-- Dashboard -->
-    <li class="sidebar-item">
-      <a
-        href="{{ url_for('accounts.dashboard.dashboard') }}"
-        class="sidebar-link"
-      >
-        <ion-icon name="bar-chart" class="text-primary me-2"></ion-icon>
-        <span>Dashboard</span>
-      </a>
-    </li>
+    <!-- Sidebar Navigation -->
+    <ul class="sidebar-nav">
+      <!-- Dashboard -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.dashboard.dashboard') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="bar-chart" class="text-primary me-2"></ion-icon>
+          <span>Dashboard</span>
+        </a>
+      </li>
 
-    <!-- People Dropdown -->
-    <li class="sidebar-item">
+      <!-- People Dropdown -->
+      <li class="sidebar-item">
+        {% if current_user.is_admin %}
+        <a
+          href="{{ url_for('accounts.people.people_list') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="people-outline" class="text-success"></ion-icon>
+          <span>People List</span>
+        </a>
+        {% else %}
+        <a
+          href="{{ url_for('accounts.people.edit_user', user_id=current_user.id) }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="person-outline" class="text-success"></ion-icon>
+          <span>Profile</span>
+        </a>
+        {% endif %}
+      </li>
+
+      <!-- Meter Readings -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.records.meter_readings') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="water-outline" class="text-info"></ion-icon>
+          <span>Meter Readings</span>
+        </a>
+      </li>
+
+      <!-- Invoices -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.records.billing') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="logo-paypal" class="text-success"></ion-icon>
+          <span>Invoices</span>
+        </a>
+      </li>
+
+      <!-- Payment -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.records.payments') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="recording-outline" class="text-primary"></ion-icon>
+          <span>Payment History</span>
+        </a>
+      </li>
+
+      <!-- Messages -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.messages.messages') }}"
+          class="sidebar-link"
+        >
+          <ion-icon
+            name="chatbubble-ellipses-outline"
+            class="text-warning"
+          ></ion-icon>
+          <span>Messages</span>
+        </a>
+      </li>
+
+      <!-- Settings -->
       {% if current_user.is_admin %}
-      <a
-        href="{{ url_for('accounts.people.people_list') }}"
-        class="sidebar-link"
-      >
-        <ion-icon name="people-outline" class="text-success"></ion-icon>
-        <span>People List</span>
-      </a>
-      {% else %}
-      <a
-        href="{{ url_for('accounts.people.edit_user', user_id=current_user.id) }}"
-        class="sidebar-link"
-      >
-        <ion-icon name="person-outline" class="text-success"></ion-icon>
-        <span>Profile</span>
-      </a>
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.settings.settings') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="cog-outline" class="text-info"></ion-icon>
+          <span>Settings</span>
+        </a>
+      </li>
       {% endif %}
-    </li>
 
-    <!-- Meter Readings -->
-    <li class="sidebar-item">
+      <!-- Security Options -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.security.security_options') }}"
+          class="sidebar-link"
+        >
+          <ion-icon
+            name="shield-checkmark-outline"
+            class="text-danger"
+          ></ion-icon>
+          <span>Security Options</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <!-- Logout Button -->
       <a
-        href="{{ url_for('accounts.records.meter_readings') }}"
         class="sidebar-link"
+        href="{{ url_for('auth.logout') }}"
+        onclick="localStorage.clear();"
       >
-        <ion-icon name="water-outline" class="text-info"></ion-icon>
-        <span>Meter Readings</span>
+        <ion-icon name="power-outline" class="text-danger"></ion-icon>
+        <span>Logout</span>
       </a>
-    </li>
-
-    <!-- Invoices -->
-    <li class="sidebar-item">
-      <a href="{{ url_for('accounts.records.billing') }}" class="sidebar-link">
-        <ion-icon name="logo-paypal" class="text-success"></ion-icon>
-        <span>Invoices</span>
-      </a>
-    </li>
-
-    <!-- Payment -->
-    <li class="sidebar-item">
-      <a href="{{ url_for('accounts.records.payments') }}" class="sidebar-link">
-        <ion-icon name="recording-outline" class="text-primary"></ion-icon>
-        <span>Payment History</span>
-      </a>
-    </li>
-
-    <!-- Messages -->
-    <li class="sidebar-item">
-      <a
-        href="{{ url_for('accounts.messages.messages') }}"
-        class="sidebar-link"
-      >
-        <ion-icon
-          name="chatbubble-ellipses-outline"
-          class="text-warning"
-        ></ion-icon>
-        <span>Messages</span>
-      </a>
-    </li>
-
-    <!-- Settings -->
-    {% if current_user.is_admin %}
-    <li class="sidebar-item">
-      <a
-        href="{{ url_for('accounts.settings.settings') }}"
-        class="sidebar-link"
-      >
-        <ion-icon name="cog-outline" class="text-info"></ion-icon>
-        <span>Settings</span>
-      </a>
-    </li>
-    {% endif %}
-
-    <!-- Security Options -->
-    <li class="sidebar-item">
-      <a
-        href="{{ url_for('accounts.security.security_options') }}"
-        class="sidebar-link"
-      >
-        <ion-icon
-          name="shield-checkmark-outline"
-          class="text-danger"
-        ></ion-icon>
-        <span>Security Options</span>
-      </a>
-    </li>
-  </ul>
-
-  <!-- Logout -->
-  <div class="sidebar-footer">
-    <a
-      class="sidebar-link"
-      href="{{ url_for('auth.logout') }}"
-      onclick="localStorage.clear();"
-    >
-      <ion-icon name="power-outline" class="text-danger"></ion-icon>
-      <span>Logout</span>
-    </a>
+    </div>
   </div>
 </aside>
 

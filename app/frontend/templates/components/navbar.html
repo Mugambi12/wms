@@ -6,6 +6,11 @@
   class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-dark{% endif %}"
 >
   <div class="container-fluid">
+    <!-- Toggle Button -->
+    <button class="toggle-btn-mobile" type="button">
+      <ion-icon name="apps-outline" class="text-dark"></ion-icon>
+    </button>
+
     <!-- Brand -->
     <a
       class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}gradient-text{% endif %}"

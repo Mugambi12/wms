@@ -131,6 +131,7 @@ body {
   height: 100vh;
 }
 
+/* Sidebar */
 #sidebar {
   width: 70px;
   min-width: 70px;
@@ -145,14 +146,20 @@ body {
   min-width: 260px;
 }
 
-.toggle-btn {
+.toggle-btn-desktop,
+.toggle-btn-mobile {
   background-color: transparent;
   cursor: pointer;
   border: 0;
   padding: 1rem 1.5rem;
 }
 
-.toggle-btn ion-icon {
+.toggle-btn-mobile {
+  display: none;
+}
+
+.toggle-btn-desktop ion-icon,
+.toggle-btn-mobile ion-icon {
   color: #000;
   font-size: 1.5rem;
 }
@@ -163,7 +170,7 @@ body {
 
 .sidebar-logo a {
   color: #000;
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
@@ -257,6 +264,44 @@ a.sidebar-link:hover {
   z-index: 1000;
 }
 
+/* CSS for Small Screens (Mobile) */
+@media screen and (max-width: 767px) {
+  #sidebar {
+    display: none;
+  }
+
+  .toggle-btn-desktop {
+    display: none;
+  }
+
+  .toggle-btn-mobile {
+    display: block;
+  }
+
+  .sidebar-content {
+    padding-left: 0;
+  }
+
+  .sidebar-logo {
+    margin: auto 30px;
+  }
+
+  .sidebar-nav {
+    margin-top: 20px;
+    padding: 0rem;
+    flex: 1 1 auto;
+  }
+
+  .main {
+    padding-left: 0;
+  }
+
+  #sidebar.expand .sidebar-link {
+    display: block;
+  }
+}
+
+/* Navbar */
 .navbar-brand {
   font-size: 24px;
   letter-spacing: 1px;
