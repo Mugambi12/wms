@@ -17,7 +17,7 @@
               <ion-icon name="people" style="font-size: 2rem"></ion-icon>
             </div>
             <div class="col-md-9">
-              <div class="card-text fs-6">102 Houses</div>
+              <div class="card-text fs-6">{{ total_houses }} Houses</div>
               <div class="card-title fw-bold fs-5">Connections</div>
             </div>
           </div>
@@ -33,7 +33,7 @@
               <ion-icon name="cash" style="font-size: 2rem"></ion-icon>
             </div>
             <div class="col-md-9">
-              <div class="card-text fs-6">KES 650k</div>
+              <div class="card-text fs-6">KES {{ total_revenue }}</div>
               <div class="card-title fw-bold fs-5">Revenue</div>
             </div>
           </div>
@@ -49,7 +49,7 @@
               <ion-icon name="water" style="font-size: 2rem"></ion-icon>
             </div>
             <div class="col-md-9">
-              <div class="card-text fs-6">1.5k Units</div>
+              <div class="card-text fs-6">{{ total_consumption }} Units</div>
               <div class="card-title fw-bold fs-5">Consamption</div>
             </div>
           </div>
@@ -65,7 +65,7 @@
               <ion-icon name="cash" style="font-size: 2rem"></ion-icon>
             </div>
             <div class="col-md-9">
-              <div class="card-text fs-6">KES 120k</div>
+              <div class="card-text fs-6">KES {{ total_expenses }}</div>
               <div class="card-title fw-bold fs-5">Expenses</div>
             </div>
           </div>
@@ -305,110 +305,124 @@
         >
           <div class="card-body bg-opacity-25">
             <h5
-              class="card-title text-center mb-4 border-bottom border-dark border-opacity-50 rounded"
+              class="card-title mb-4 border-bottom border-dark border-opacity-50 rounded"
             >
               Sticky Note
             </h5>
-            <textarea
-              id="sticky-note-input"
-              class="form-control border-0"
-              style="resize: none; height: 250px; background-color: transparent"
-              placeholder="Type your notes here..."
-            ></textarea>
+            <!-- Sticky Note Form -->
+            <form
+              method="post"
+              action="{{ url_for('accounts.dashboard.save_sticky_note') }}"
+              id="sticky-note-form"
+            >
+              <!-- CSRF Token -->
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
+
+              {% for note in sticky_note_content %}
+              <textarea
+                id="sticky-note-input"
+                name="content"
+                class="form-control border-0 text-start sticky-note"
+                style="
+                  resize: none;
+                  height: 250px;
+                  background-color: transparent;
+                "
+                placeholder="Type your notes here..."
+              >
+                        {% if note.user_id == current_user.id %}
+                            {{ note.content if note else '' }}
+                        {% endif %}
+                    </textarea
+              >
+              {% endfor %}
+
+              <!-- Submit Button -->
+              <!-- <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill">
+                            Save Changes
+                        </button>
+                    </div> -->
+            </form>
           </div>
         </div>
 
         <script>
-          // Load existing sticky notes from localStorage
-          window.addEventListener("load", function () {
-            var savedNote = localStorage.getItem("stickyNote");
-            if (savedNote) {
-              document.getElementById("sticky-note-input").value = savedNote;
-            }
-          });
-
-          // Save sticky note content to localStorage on input
-          document
-            .getElementById("sticky-note-input")
-            .addEventListener("input", function () {
-              var noteText = this.value;
-              localStorage.setItem("stickyNote", noteText);
+          // Listen for changes in the textarea
+          document.querySelectorAll(".sticky-note").forEach((textarea) => {
+            textarea.addEventListener("input", function () {
+              // Trigger form submission whenever content changes
+              document.getElementById("sticky-note-form").submit();
             });
+          });
         </script>
 
         <!-- All Admins List -->
-        <div class="card border-0 shadow" style="padding-bottom: 5px">
+        <div
+          class="card border-0 shadow admin-list"
+          style="padding-bottom: 5px"
+        >
           <h5 class="card-title px-3 mt-3">All Admins</h5>
-          <div class="card-body" style="max-height: 220px; overflow-y: auto">
-            <!-- Admin 1 -->
+          <div class="card-body" style="max-height: 250px; overflow-y: auto">
+            {% for user in people_list %} {% if user.is_admin %}
+            <!-- Admin Item -->
             <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
+              <div class="col-md-3 col-4">
+                {% if user.profile_image is not none %}
+                <img
+                  src="{{ user.profile_image }}"
+                  alt="{{ user.first_name.title() }}'s Profile Image"
+                  class="rounded-circle img-fluid profile-image"
+                  style="width: 40px; height: 40px; object-fit: cover"
+                />
+                {% else %}
                 <img
                   src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
+                  alt="logo image"
+                  height="40px"
+                  width="40px"
                 />
+                {% endif %}
               </div>
-              <div class="col-md-7">
+              <div class="col-md-7 col-6">
+                <!-- Adjust column width for mobile -->
                 <div>
-                  <h6 class="mb-0">John Doe</h6>
-                  <p class="text-muted small mb-0 fst-italic">Active Now</p>
+                  <h6 class="mb-0">
+                    {{ user.first_name.title() }} {{ user.last_name.title() }}
+                  </h6>
+                  {% if user.last_login is not none and user.last_logout is not
+                  none %} {% if user.last_login > user.last_logout %}
+                  <p class="text-success small mb-0 fst-italic">Active now</p>
+                  {% elif user.last_logout > user.last_login %} {% set
+                  time_difference = now - user.last_logout %} {% if
+                  time_difference.days > 0 %} {% set time_unit = 'days' %} {%
+                  set time_value = time_difference.days %} {% elif
+                  time_difference.seconds // 3600 > 0 %} {% set time_unit =
+                  'hours' %} {% set time_value = time_difference.seconds // 3600
+                  %} {% else %} {% set time_unit = 'minutes' %} {% set
+                  time_value = time_difference.seconds // 60 %} {% endif %}
+                  <p class="text-muted small mb-0 fst-italic">
+                    Active {{ time_value }} {{ time_unit }} ago
+                  </p>
+                  {% endif %} {% endif %}
                 </div>
               </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-success">
+              <div class="col-md-2 col-2 text-end">
+                <!-- Adjust column width for mobile -->
+                <a
+                  href="{{ url_for('accounts.people.edit_user', user_id=user.id) }}"
+                  class="{% if user.last_login is not none and user.last_logout is not none %} {% if user.last_login > user.last_logout %} text-success {% elif user.last_logout > user.last_login %} text-secondary {% endif %} {% endif %}"
+                >
                   <ion-icon name="ellipse"></ion-icon>
                 </a>
               </div>
             </div>
 
-            <!-- Admin 2 -->
-            <div class="admin-item row align-items-center mb-3">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Emma Johnson</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 5 min ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-info">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
-
-            <!-- Admin 3 -->
-            <div class="admin-item row align-items-center">
-              <div class="col-md-3">
-                <img
-                  src="{{ url_for('static', filename='images/user.png') }}"
-                  class="img-thumbnail border-0"
-                  alt="Default Profile Picture"
-                />
-              </div>
-              <div class="col-md-7">
-                <div>
-                  <h6 class="mb-0">Sarah Patel</h6>
-                  <p class="text-muted small mb-0 fst-italic">
-                    Active 2 hour ago
-                  </p>
-                </div>
-              </div>
-              <div class="col-md-2 text-end">
-                <a href="#" class="text-danger">
-                  <ion-icon name="ellipse"></ion-icon>
-                </a>
-              </div>
-            </div>
+            {% endif %} {% endfor %}
           </div>
         </div>
       </div>

@@ -320,3 +320,10 @@ a.sidebar-link:hover {
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+@media screen and (max-width: 767px) {
+  .img-thumbnail {
+    height: 50px;
+    width: 50px;
+  }
+}

@@ -28,6 +28,5 @@ def accounts_context():
         'total_bill': total_bill
     }
 
-
 def inject_now():
     return {'now': datetime.utcnow() + timedelta(hours=3)}

@@ -24,6 +24,10 @@ class User(db.Model, UserMixin):
     balance = db.Column(db.Float, default=0)
     unique_user_id = db.Column(db.String(6), unique=True, nullable=True)
 
+    # New fields for tracking last login and logout
+    last_login = db.Column(db.DateTime)
+    last_logout = db.Column(db.DateTime)
+
     # Establishing a one-to-many relationship with meter readings and payments
     meter_readings = db.relationship('MeterReading', backref='user', lazy=True)
     payments = db.relationship('Payment', backref='user', lazy=True)
@@ -48,6 +52,7 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
 
 
 # Define MeterReading model
@@ -111,6 +116,17 @@ class Payment(db.Model):
         self.user_id = user_id
         self.invoice_id = invoice_id
         self.unique_user_id = unique_user_id
+
+
+# Define Sticky Notes model
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def __init__(self, user_id, content):
+        self.user_id = user_id
+        self.content = content
 
 
 # Define Settings model
