@@ -1,6 +1,13 @@
 {% if not hide_navbar %}
 
 <!-- Navbar -->
+<head>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/components/navbar.css') }}"
+  />
+</head>
+
 <header
   id="navbar"
   class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-dark{% endif %}"

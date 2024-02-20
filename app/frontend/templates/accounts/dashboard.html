@@ -8,9 +8,9 @@
   </div>
 
   <!-- Four Bootstrap Cards -->
-  <div class="row mt-3 px-3 text-dark">
+  <div class="row px-3 text-dark">
     <div class="col-md-3 mb-3">
-      <div class="card border-0 shadow bg-primary h-100 bg-opacity-50">
+      <div class="card border-0 shadow-sm bg-primary h-100 bg-opacity-50">
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-3 text-center">
@@ -26,7 +26,7 @@
     </div>
 
     <div class="col-md-3 mb-3">
-      <div class="card border-0 shadow bg-warning h-100 bg-opacity-50">
+      <div class="card border-0 shadow-sm bg-warning h-100 bg-opacity-50">
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-3 text-center">
@@ -42,7 +42,7 @@
     </div>
 
     <div class="col-md-3 mb-3">
-      <div class="card border-0 shadow bg-info h-100 bg-opacity-50">
+      <div class="card border-0 shadow-sm bg-info h-100 bg-opacity-50">
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-3 text-center">
@@ -50,7 +50,7 @@
             </div>
             <div class="col-md-9">
               <div class="card-text fs-6">{{ total_consumption }} Units</div>
-              <div class="card-title fw-bold fs-5">Consamption</div>
+              <div class="card-title fw-bold fs-5">Consumption</div>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
     </div>
 
     <div class="col-md-3 mb-3">
-      <div class="card border-0 shadow bg-danger h-100 bg-opacity-50">
+      <div class="card border-0 shadow-sm bg-danger h-100 bg-opacity-50">
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-3 text-center">
@@ -75,10 +75,10 @@
   </div>
 
   <!-- Charts Data -->
-  <div class="row mt-3 px-3">
+  <div class="row px-3">
     <!-- Bar Chart -->
     <div class="col-md-9 mb-3">
-      <div class="card h-100 border-0 shadow">
+      <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Performance Overview</h5>
           <div class="row">
@@ -221,7 +221,7 @@
 
     <!-- Doughnut Chart -->
     <div class="col-md-3 mb-3">
-      <div class="card h-100 border-0 shadow">
+      <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Overview Performance</h5>
           <canvas class="chart2" width="400" height="200"></canvas>
@@ -293,133 +293,24 @@
     </script>
   </div>
 
-  <!-- Table Data -->
-  <div class="row mt-3 mb-3 px-3">
-    <!-- A Calendar -->
-    <div class="col-md-4 mb-3">
-      <div class="card border-0 rounded shadow mb-3 p-0">
-        <div class="card-body p-0">
-          <!-- Month Header -->
-          <div class="bg-info text-white text-center py-3 bg-opacity-75">
-            <span id="currentMonth" class="fw-bold fs-5"></span>
-          </div>
-          <!-- Weekday Header -->
-          <div class="d-flex text-center bg-warning bg-opacity-50">
-            <div class="col">Sun</div>
-            <div class="col">Mon</div>
-            <div class="col">Tue</div>
-            <div class="col">Wed</div>
-            <div class="col">Thu</div>
-            <div class="col">Fri</div>
-            <div class="col">Sat</div>
-          </div>
-          <!-- Calendar Days Placeholder -->
-          <div id="calendarDays" class="p-3"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recent Activities Table -->
-    <div class="col-md-8 mb-3">
-      <div class="card border-0 shadow">
-        <div class="card-body">
-          <h5 class="card-title mb-4">Delinquent Invoices</h5>
-
-          <div class="table-responsive">
-            <table
-              class="table table-borderless data-table"
-              style="width: 100%"
-            >
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Section</th>
-                  <th scope="col">House#</th>
-                  <th scope="col">Usage</th>
-                  <th scope="col">Subtotal</th>
-                  <th scope="col">Service</th>
-                  <th scope="col">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for invoice in invoices %} {% if not invoice.reading_status
-                %}
-                <tr>
-                  <td>{{ loop.index }}</td>
-                  <td class="text-start">
-                    {% set first_name = invoice.customer_name.split()[0] %} {{
-                    first_name.title() }}
-                  </td>
-
-                  <td>{{ invoice.house_section.title() }}</td>
-                  <td>{{ invoice.house_number }}</td>
-                  <td>{{ "%0.0f"|format(invoice.consumed) }}</td>
-                  <td>{{ "%0.0f"|format(invoice.sub_total_price) }}</td>
-                  <td>{{ "%0.0f"|format(invoice.service_fee) }}</td>
-                  <td>{{ "%0.0f"|format(invoice.total_price) }}</td>
-                </tr>
-                {% endif %} {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sticky Notes -->
+  <!-- Calendar, Sticky Notes and List of Admins -->
+  <div class="row px-3">
+    <!-- List of Admins -->
     <div class="col-md-4 mb-3">
       <div
-        class="card border-0 rounded shadow mb-3 p-0"
-        style="background-color: rgba(255, 224, 146, 0.5)"
-      >
-        <div class="card-body bg-opacity-25">
-          <h5
-            class="card-title mb-4 border-bottom border-dark border-opacity-50 rounded"
-          >
-            Sticky Note
-          </h5>
-          <!-- Sticky Note Form -->
-          <form
-            method="post"
-            action="{{ url_for('accounts.dashboard.save_sticky_note') }}"
-            id="sticky-note-form"
-            style="max-height: 180px; overflow-y: auto"
-          >
-            <!-- CSRF Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
-            <textarea
-              id="sticky-note-input"
-              name="content"
-              class="form-control border-0 text-start sticky-note"
-              style="resize: none; height: 150px; background-color: transparent"
-              placeholder="Type your notes here..."
-            >
-{% for note in sticky_note_content %}{% if note.user_id == current_user.id %}{{ note.content }}{% endif %}{% endfor %}</textarea
-            >
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- All Admins List -->
-    <div class="col-md-4 mb-3">
-      {% if current_user.is_admin %}
-      <div
-        class="card border-0 rounded shadow mb-3 p-0"
+        class="card border-0 rounded shadow-sm h-100"
         style="padding-bottom: 5px"
       >
+        {% if current_user.is_admin %}
         <h5 class="card-title px-3 mt-3">All Admins</h5>
         <div class="card-body" style="max-height: 250px; overflow-y: auto">
           {% for user in people_list %}
-          <!-- Admin Item -->
           <div class="row align-items-center mb-3">
             <div class="col-md-3 col-4">
               {% if user.profile_image is not none %}
               <img
                 src="{{ user.profile_image }}"
-                alt="{{ user.first_name.title() }}'s Profile Image"
+                alt="{{ user.first_name|title }}'s Profile Image"
                 class="rounded-circle img-fluid profile-image"
                 style="width: 40px; height: 40px; object-fit: cover"
               />
@@ -433,43 +324,143 @@
               {% endif %}
             </div>
             <div class="col-md-7 col-6">
-              <!-- Adjust column width for mobile -->
               <div>
                 <h6 class="mb-0">
-                  {{ user.first_name.title() }} {{ user.last_name.title() }}
+                  {{ user.first_name|title }} {{ user.last_name|title }}
                 </h6>
                 {% if user.last_login is not none and user.last_logout is not
                 none %} {% if user.last_login > user.last_logout %}
                 <p class="text-success small mb-0 fst-italic">Active now</p>
                 {% elif user.last_logout > user.last_login %} {% set
                 time_difference = now - user.last_logout %} {% if
-                time_difference.days > 0 %} {% set time_unit = 'days' %} {% set
-                time_value = time_difference.days %} {% elif
-                time_difference.seconds // 3600 > 0 %} {% set time_unit =
-                'hours' %} {% set time_value = time_difference.seconds // 3600
-                %} {% else %} {% set time_unit = 'minutes' %} {% set time_value
-                = time_difference.seconds // 60 %} {% endif %}
+                time_difference.days > 0 %} {% set time_unit = 'days' %}
                 <p class="text-muted small mb-0 fst-italic">
-                  Active {{ time_value }} {{ time_unit }} ago
+                  Active {{ time_difference.days }} {{ time_unit }} ago
                 </p>
-                {% endif %} {% endif %}
+                {% elif time_difference.seconds // 3600 > 0 %} {% set time_unit
+                = 'hours' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.seconds // 3600 }} {{ time_unit }}
+                  ago
+                </p>
+                {% else %} {% set time_unit = 'minutes' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.seconds // 60 }} {{ time_unit }} ago
+                </p>
+                {% endif %} {% endif %} {% endif %}
               </div>
             </div>
             <div class="col-md-2 col-2 text-end">
-              <!-- Adjust column width for mobile -->
               <a
                 href="{{ url_for('accounts.people.edit_user', user_id=user.id) }}"
-                class="{% if user.last_login is not none and user.last_logout is not none %} {% if user.last_login > user.last_logout %} text-success {% elif user.last_logout > user.last_login %} text-secondary {% endif %} {% endif %}"
+                class="{% if user.last_login is not none and user.last_logout is not none %}{% if user.last_login > user.last_logout %}text-success{% elif user.last_logout > user.last_login %}text-secondary{% endif %}{% endif %}"
               >
                 <ion-icon name="ellipse"></ion-icon>
               </a>
             </div>
           </div>
-
           {% endfor %}
         </div>
+        {% endif %}
       </div>
-      {% endif %}
+    </div>
+
+    <!-- Calendar -->
+    <div class="col-md-4 mb-3">
+      <div class="card border-0 rounded shadow-sm h-100">
+        <div class="card-body p-0">
+          <div class="bg-info text-white text-center py-3">
+            <span id="currentMonth" class="fw-bold fs-5"></span>
+          </div>
+          <div class="d-flex text-center bg-warning">
+            <div class="col">Sun</div>
+            <div class="col">Mon</div>
+            <div class="col">Tue</div>
+            <div class="col">Wed</div>
+            <div class="col">Thu</div>
+            <div class="col">Fri</div>
+            <div class="col">Sat</div>
+          </div>
+          <div id="calendarDays" class="p-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Notes -->
+    <div class="col-md-4 mb-3">
+      <div
+        class="card border-0 rounded shadow-sm h-100"
+        style="background-color: rgba(255, 224, 146, 0.5)"
+      >
+        <div class="card-body">
+          <h5 class="card-title mb-4 border-bottom border-dark rounded">
+            Sticky Note
+          </h5>
+          <form
+            method="post"
+            action="{{ url_for('accounts.dashboard.save_sticky_note') }}"
+            id="sticky-note-form"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <textarea
+              id="sticky-note-input"
+              name="content"
+              class="form-control border-0 text-start sticky-note"
+              style="resize: none; height: 150px; background-color: transparent"
+              placeholder="Type your notes here..."
+            >
+                {% for note in sticky_note_content %}
+                  {% if note.user_id == current_user.id %}
+                    {{ note.content }}
+                  {% endif %}
+                {% endfor %}
+              </textarea
+            >
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delinquent Invoices Table -->
+  <div class="col-md-12 mb-3 px-3">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title mb-4">Delinquent Invoices</h5>
+        <div class="table-responsive">
+          <table class="table table-borderless data-table">
+            <!-- Table Headings -->
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Section</th>
+                <th>House#</th>
+                <th>Usage</th>
+                <th>Subtotal</th>
+                <th>Service</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for invoice in invoices %} {% if not invoice.reading_status %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td class="text-start">
+                  {{ invoice.customer_name.split()[0]|title }}
+                </td>
+                <td>{{ invoice.house_section.title }}</td>
+                <td>{{ invoice.house_number }}</td>
+                <td>{{ "%0.0f"|format(invoice.consumed) }}</td>
+                <td>{{ "%0.0f"|format(invoice.sub_total_price) }}</td>
+                <td>{{ "%0.0f"|format(invoice.service_fee) }}</td>
+                <td>{{ "%0.0f"|format(invoice.total_price) }}</td>
+              </tr>
+              {% endif %} {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

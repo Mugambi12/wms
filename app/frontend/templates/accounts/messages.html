@@ -1,14 +1,78 @@
 {% extends "base.html" %} {% block content %}
+<head>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/components/chats.css') }}"
+  />
+</head>
 
 <div class="container-fluid">
-  <div class="text-center mt-3">
-    <h2 class="mb-2 fw-bold text-primary">Community Members</h2>
-    <p class="mb-4 text-muted fst-italic">
-      Discover and connect with our vibrant community.
-    </p>
-  </div>
+  <div class="chat-container-fluid">
+    <div class="text-center mt-3">
+      <h2 class="mb-2 fw-bold text-primary">Join Our Chat Community</h2>
+      <p class="mb-3 text-muted fst-italic">
+        Discover and connect with fellow members.
+      </p>
+    </div>
 
-  <!-- The correct URL generation for the accounts route -->
+    <div class="chat-container">
+      <!-- Contacts Sidebar -->
+      <div class="chat-sidebar">
+        <h3 class="fw-bold mt-3">Contacts</h3>
+        <ul class="contacts-list">
+          <li class="contact-item">
+            <img src="https://via.placeholder.com/50" alt="John Doe" />
+            <div>
+              <h6>John Doe</h6>
+              <p>Online</p>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <img src="https://via.placeholder.com/50" alt="Muga Moe" />
+            <div>
+              <h6>Muga Moe</h6>
+              <p>5 minutes ago</p>
+            </div>
+          </li>
+          <!-- More contacts here -->
+        </ul>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-area">
+        <h4 class="fw-bold mb-2">Chats</h4>
+        <ul class="message-list">
+          <li class="message-item incoming">
+            <div class="message-content">
+              <p>Hello there!</p>
+              <span class="message-time">10:00 AM</span>
+            </div>
+          </li>
+
+          <li class="message-item outgoing">
+            <div class="message-content">
+              <p>Hi! How are you?</p>
+              <span class="message-time">10:05 AM</span>
+            </div>
+          </li>
+
+          <li class="message-item incoming">
+            <div class="message-content">
+              <p>I'm good, thank you!</p>
+              <span class="message-time">10:10 AM</span>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Message Input -->
+        <div class="message-input">
+          <input type="text" placeholder="Type your message..." />
+          <button><ion-icon name="send"></ion-icon></button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

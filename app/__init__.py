@@ -17,7 +17,7 @@ def create_app():
     # Configure database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wms.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1.5)
     app.config['SESSION_COOKIE_SECURE'] = True
     app.config['SECRET_KEY'] = 'qwertyurioupiuodsfghfdjgkjhd2345678jgfnxdz'
     uploads_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'profile')

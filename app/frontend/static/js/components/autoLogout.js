@@ -2,7 +2,7 @@ let inactivityTimeout;
 
 function resetInactivityTimer() {
   clearTimeout(inactivityTimeout);
-  inactivityTimeout = setTimeout(redirectAfterInactivity, 180000); // 3 minutes in milliseconds
+  inactivityTimeout = setTimeout(redirectAfterInactivity, 600000); // 10 minutes in milliseconds
 }
 
 function redirectAfterInactivity() {
