@@ -34,8 +34,8 @@ def login():
     return render_template('auth/login.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
 
 
-@auth_bp.route('/register/apogen_admin', methods=['GET', 'POST'])
 @auth_bp.route('/register', methods=['GET', 'POST'])
+@auth_bp.route('/register/apogen_admin', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():

@@ -14,9 +14,11 @@
 >
   <div class="container-fluid">
     <!-- Toggle Button -->
+    {% if current_user.is_authenticated %}
     <button class="toggle-btn-mobile" type="button">
       <ion-icon name="apps-outline" class="text-dark"></ion-icon>
     </button>
+    {% endif %}
 
     <!-- Brand -->
     <a

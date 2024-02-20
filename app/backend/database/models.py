@@ -129,6 +129,21 @@ class Note(db.Model):
         self.content = content
 
 
+# Define Message model
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    is_read = db.Column(db.Boolean, default=False)
+
+    def __init__(self, sender_id, receiver_id, content):
+        self.sender_id = sender_id
+        self.receiver_id = receiver_id
+        self.content = content
+
+
 # Define Settings model
 class Settings(db.Model):
     id = db.Column(db.Integer, primary_key=True)

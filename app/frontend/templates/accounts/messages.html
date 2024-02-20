@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% block content %}
+
 <head>
   <link
     rel="stylesheet"
@@ -20,73 +21,164 @@
       <div class="chat-sidebar">
         <h3 class="fw-bold mt-3">Contacts</h3>
         <ul class="contacts-list">
+          {% for user in all_users %}
           <li class="contact-item">
-            <img src="https://via.placeholder.com/50" alt="John Doe" />
-            <div>
-              <h6>John Doe</h6>
-              <p>Online</p>
-            </div>
-            <span class="unread-badge">2</span>
+            <button
+              href=""
+              data-receiver-id="{{ user.id }}"
+              data-bs-target="#chatMessagesConversationArea{{ user.id }}"
+              onclick="selectContact('{{ user.id }}')"
+            >
+              <img
+                src="https://via.placeholder.com/50"
+                alt="{{ user.first_name }}"
+              />
+              <div>
+                <h6>{{ user.first_name }} {{ user.last_name }}</h6>
+                <p>Online</p>
+              </div>
+              <span class="unread-badge">
+                {{ unread_message_counts[user.id] or 0 }}
+              </span>
+            </button>
           </li>
-
-          <li class="contact-item">
-            <img src="https://via.placeholder.com/50" alt="Muga Moe" />
-            <div>
-              <h6>Muga Moe</h6>
-              <p>5 minutes ago</p>
-            </div>
-            <span class="unread-badge">1</span>
-          </li>
-          <!-- More contacts here -->
+          {% endfor %}
         </ul>
       </div>
 
       <!-- Chat Area -->
-      <div class="chat-area">
-        <h4 class="fw-bold mb-2">Chats</h4>
-        <ul class="message-list">
-          <li class="message-item incoming">
-            <div class="message-content">
-              <p>Hello there!</p>
-              <p class="message-time">
-                <span>10:00 AM</span>
-              </p>
-            </div>
-          </li>
+      <div class="chat-area" id="chatMessagesConversationArea">
+        <div id="chatMessagesConversationAreaLabel">
+          <h4 class="fw-bold mb-2">Chats</h4>
+          <!-- No Conversation Message -->
+          <p id="noConversationMessage" class="d-none">
+            No conversation with this user at the moment.
+          </p>
+          <!-- Chat Messages List -->
+          <ul class="message-list" id="messageList">
+            <!-- Messages will be loaded dynamically here -->
+            {% for message in all_messages %}
 
-          <li class="message-item outgoing">
-            <div class="message-content">
-              <p>Hi! How are you?</p>
-              <p class="message-time">
-                <span>10:05 AM</span>
-              </p>
-            </div>
-          </li>
-          <li class="message-item incoming">
-            <div class="message-content">
-              <p>I'm good, thank you!</p>
-              <p class="message-time">
-                <span>10:10 AM</span>
-              </p>
-            </div>
-          </li>
+            <!-- Incoming Messages -->
+            {% if message.receiver_id == current_user.id %}
+            <li class="message-item incoming">
+              <div class="message-content">
+                <p>{{ message.content }}</p>
+                <p class="message-time">
+                  <span>{{ message.timestamp.strftime('%H:%M') }}</span>
+                </p>
+              </div>
+            </li>
+            {% endif %}
 
-          <li class="message-item outgoing">
-            <div class="message-content">
-              <p>Glad! Have great time.</p>
-              <p class="message-time">
-                <span>10:15 AM</span>
-              </p>
-            </div>
-          </li>
-        </ul>
+            <!-- Outgoing Messages -->
+            {% if message.sender_id == current_user.id %}
+            <li class="message-item outgoing">
+              <div class="message-content">
+                <p>{{ message.content }}</p>
+                <p class="message-time">
+                  <span>{{ message.timestamp.strftime('%H:%M') }}</span>
+                </p>
+              </div>
+            </li>
+            {% endif %} {% endfor %}
+          </ul>
 
-        <!-- Message Input -->
-        <div class="message-input">
-          <input type="text" placeholder="Type your message..." />
-          <button><ion-icon name="send"></ion-icon></button>
+          <!-- Message Input -->
+          <div class="message-input">
+            <form
+              method="post"
+              action="{{ url_for('accounts.messages.messages') }}"
+              id="sendMessageForm"
+            >
+              <!-- CSRF Token -->
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
+              <input
+                type="hidden"
+                name="receiver_id"
+                id="receiverId"
+                value=""
+              />
+              <input
+                type="text"
+                name="content"
+                id="connect"
+                placeholder="Type your message..."
+              />
+              <button type="submit"><ion-icon name="send"></ion-icon></button>
+            </form>
+          </div>
         </div>
       </div>
+
+      <script>
+        function selectContact(userId) {
+          // Set the selected contact's ID in the message input form
+          document.getElementById("receiverId").value = userId;
+          // Load conversation messages for the selected contact
+          loadConversationMessages(userId);
+        }
+
+        function loadConversationMessages(userId) {
+          // AJAX request to fetch conversation messages for the selected contact
+          $.ajax({
+            url: "/messages", // URL endpoint to fetch messages
+            type: "GET",
+            data: { user_id: userId }, // Pass the selected user's ID as data
+            success: function (response) {
+              if (response.trim() === "") {
+                // If no conversations are found, display the no conversation message
+                document.getElementById("messageList").innerHTML = "";
+                document
+                  .getElementById("noConversationMessage")
+                  .classList.remove("d-none");
+              } else {
+                // Replace the content of the message list with the fetched messages
+                document.getElementById("messageList").innerHTML = response;
+                // Hide the no conversation message
+                document
+                  .getElementById("noConversationMessage")
+                  .classList.add("d-none");
+              }
+            },
+            error: function (error) {
+              console.log("Error loading conversation messages:", error);
+            },
+          });
+        }
+      </script>
+    </div>
+
+    <!-- Table with Conversation Message -->
+    <div class="container-fluid">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">id</th>
+            <th scope="col">Sender</th>
+            <th scope="col">Receiver</th>
+            <th scope="col">Content</th>
+            <th scope="col">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for message in all_messages %}
+          <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ message.id }}</td>
+            <td>{{ message.sender_id }}</td>
+            <td>{{ message.receiver_id }}</td>
+            <td>{{ message.content }}</td>
+            <td>{{ message.timestamp }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

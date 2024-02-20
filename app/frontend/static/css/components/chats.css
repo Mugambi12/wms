@@ -42,7 +42,7 @@ body {
   flex-direction: column;
 }
 .main {
-  overflow-y: unset;
+  overflow-y: auto;
 }
 .chat-container {
   display: flex;
@@ -66,7 +66,7 @@ body {
   overflow-y: auto;
   max-height: 60vh;
 }
-.contact-item {
+.contact-item button {
   display: flex;
   align-items: center;
   padding: 10px 0;
@@ -75,21 +75,21 @@ body {
   transition: background-color 0.3s ease;
   justify-content: space-between;
 }
-.contact-item:hover {
+.contact-item button:hover {
   background-color: #f7f7f7;
 }
-.contact-item img {
+.contact-item button img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   margin-right: 10px;
 }
-.contact-item h6 {
+.contact-item button h6 {
   margin: 0;
   font-size: 16px;
   color: #333;
 }
-.contact-item p {
+.contact-item button p {
   margin: 0;
   font-size: 14px;
   color: #777;
