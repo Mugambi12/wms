@@ -69,9 +69,8 @@
               </tr>
             </thead>
             <tbody>
-              {% if billing_data %} {% for entry in billing_data |
-              sort(attribute='id', reverse=true) %} {% if not
-              entry.reading_status or entry.reading_status %}
+              {% for entry in billing_data | sort(attribute='id', reverse=true)
+              %} {% if not entry.reading_status or entry.reading_status %}
               <tr>
                 <td>{{ loop.index }}</td>
                 <td class="text-start">{{ entry.customer_name.title() }}</td>
@@ -248,11 +247,7 @@
                   </div>
                 </div>
               </tr>
-              {% endif %} {% endfor %} {% else %}
-              <tr>
-                <td colspan="12">No billing data available</td>
-              </tr>
-              {% endif %}
+              {% endif %} {% endfor %}
             </tbody>
           </table>
         </div>

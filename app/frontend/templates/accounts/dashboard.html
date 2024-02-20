@@ -408,14 +408,7 @@
               class="form-control border-0 text-start sticky-note"
               style="resize: none; height: 150px; background-color: transparent"
               placeholder="Type your notes here..."
-            >
-                {% for note in sticky_note_content %}
-                  {% if note.user_id == current_user.id %}
-                    {{ note.content }}
-                  {% endif %}
-                {% endfor %}
-              </textarea
-            >
+            >{% for note in sticky_note_content %}{% if note.user_id == current_user.id %}{{ note.content }}{% endif %}{% endfor %}</textarea>
           </form>
         </div>
       </div>
@@ -463,6 +456,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <!-- A Calendar -->
