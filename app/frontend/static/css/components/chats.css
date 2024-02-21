@@ -42,7 +42,7 @@ body {
   flex-direction: column;
 }
 .main {
-  overflow-y: auto;
+  overflow-y: unset;
 }
 .chat-container {
   display: flex;
@@ -51,7 +51,7 @@ body {
 
 .chat-sidebar {
   flex: 1;
-  background-color: aquamarine;
+  background-color: #f3f3f3;
   border-right: 1px solid #ccc;
   max-height: 73vh;
 }
@@ -106,7 +106,7 @@ body {
   flex: 3;
   padding: 20px;
   max-height: 73vh;
-  background-color: rgba(0, 255, 255, 0.2);
+  background-color: #f8f8f8;
 }
 .message-list {
   background-color: #fff;

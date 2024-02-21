@@ -82,33 +82,37 @@
         <div class="card-body">
           <h5 class="card-title">Performance Overview</h5>
           <div class="row">
+            <!-- Performance Overview -->
             <div class="col-md-4 text-center p-3">
-              <p class="text-muted mb-2">Overview Of Latest Month</p>
-              <b class="fw-bold mb-3 h5" id="currentMonthEarnings">KES 0.00</b>
-              <p class="text-muted mb-2">Current Month Earnings</p>
-              <b class="fw-bold mb-3 h5" id="currentMonthWater">0 Units</b>
-              <p class="text-muted mb-2">Water Consumed</p>
+              <p class="text-muted mb-3" id="overviewMonth">
+                Overview Of January
+              </p>
+              <h5 class="fw-bold mb-4" id="currentMonthEarnings">KES 0.00</h5>
+              <p class="text-muted mb-3">Revenue Generated</p>
+              <h5 class="fw-bold mb-4" id="currentMonthWater">0 Units</h5>
+              <p class="text-muted mb-3">Water Consumed</p>
 
               <div
-                class="input-group input-group-sm justify-content-between mt-5"
+                class="input-group input-group-sm mt-5 justify-content-between"
               >
                 <button
-                  class="btn btn-info me-1"
+                  class="btn btn-outline-info me-1"
                   type="button"
                   onclick="previousMonth()"
                 >
                   Previous
                 </button>
                 <button
-                  class="btn btn-success"
+                  class="btn btn-outline-success"
                   type="button"
-                  onclick="currentMonth()"
+                  onclick="nextMonth()"
                 >
-                  Current
+                  Next
                 </button>
               </div>
             </div>
 
+            <!-- Doughnut Chart -->
             <div class="col-md-8">
               <canvas class="chart1" width="400" height="200"></canvas>
             </div>
@@ -116,108 +120,6 @@
         </div>
       </div>
     </div>
-
-    <script>
-      // Define myChart variable outside the scope to make it accessible globally
-      let myChart;
-
-      // Wait for the DOM content to load
-      document.addEventListener("DOMContentLoaded", function () {
-        const chart1 = document.querySelectorAll(".chart1");
-
-        chart1.forEach(function (chart) {
-          var ctx = chart.getContext("2d");
-
-          // Function to generate random data for water consumed and revenue for each month
-          function generateRandomData() {
-            var waterData = [];
-            var revenueData = [];
-            for (var i = 0; i < 12; i++) {
-              waterData.push(Math.floor(Math.random() * 700)); // Adjust the range as needed for water consumed
-              revenueData.push(Math.floor(Math.random() * 1000)); // Adjust the range as needed for revenue
-            }
-            return {
-              water: waterData,
-              revenue: revenueData,
-            };
-          }
-
-          var data = generateRandomData();
-
-          myChart = new Chart(ctx, {
-            type: "bar",
-            data: {
-              labels: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-              ],
-              datasets: [
-                {
-                  label: "Water Consumed",
-                  data: data.water,
-                  backgroundColor: "rgba(54, 162, 235, 0.6)", // Use a single color for water consumed across all months
-                  borderColor: "rgba(54, 162, 235, 1)",
-                  borderWidth: 1,
-                  barThickness: 8, // Adjust the thickness of the bars
-                  borderRadius: 15, // Adjust the rounding of the bar ends
-                },
-                {
-                  label: "Revenue",
-                  data: data.revenue,
-                  backgroundColor: "rgba(255, 99, 132, 0.6)", // Use a different color for revenue across all months
-                  borderColor: "rgba(255, 99, 132, 1)",
-                  borderWidth: 1,
-                  barThickness: 8, // Adjust the thickness of the bars
-                  borderRadius: 15, // Adjust the rounding of the bar ends
-                },
-              ],
-            },
-            options: {
-              plugins: {
-                legend: {
-                  display: true,
-                  position: "top",
-                },
-              },
-              scales: {
-                y: {
-                  beginAtZero: false,
-                  grid: {
-                    color: "rgba(0, 0, 0, 0.1)", // Adjust the color of the grid lines
-                  },
-                },
-              },
-            },
-          });
-        });
-      });
-
-      // Function to update the current month earnings and water consumed
-      function updateData() {
-        // Fetch actual data for the selected month (replace with your actual data fetching logic)
-        const actualEarnings =
-          "KES " + (Math.floor(Math.random() * 50000) + 50000).toFixed(2); // Random earnings between 50000 and 100000
-        const actualWater = Math.floor(Math.random() * 500) + 500 + " Units"; // Random water between 500 and 1000 units
-
-        // Update the HTML with the fetched data
-        document.getElementById("currentMonthEarnings").innerText =
-          actualEarnings;
-        document.getElementById("currentMonthWater").innerText = actualWater;
-      }
-
-      // Simulate fetching actual data for the current month when the page loads
-      updateData();
-    </script>
 
     <!-- Doughnut Chart -->
     <div class="col-md-3 mb-3">
@@ -228,69 +130,6 @@
         </div>
       </div>
     </div>
-
-    <script>
-      const chart2 = document.querySelectorAll(".chart2");
-
-      chart2.forEach(function (chart) {
-        var ctx = chart.getContext("2d");
-
-        // Function to generate random data for doughnut chart
-        function generateRandomData() {
-          return [
-            Math.floor(Math.random() * 1000),
-            Math.floor(Math.random() * 1000),
-            Math.floor(Math.random() * 1000),
-          ];
-        }
-
-        var data = generateRandomData();
-
-        var myChart = new Chart(ctx, {
-          type: "doughnut",
-          data: {
-            labels: ["Invoice", "Payment", "Units"],
-            datasets: [
-              {
-                label: "# of Votes",
-                data: data,
-                backgroundColor: [
-                  "rgba(255, 99, 132, 0.4)",
-                  "rgba(54, 162, 235, 0.4)",
-                  "rgba(255, 206, 86, 0.4)",
-                ],
-                borderColor: [
-                  "rgba(255, 99, 132, 0.2)",
-                  "rgba(54, 162, 235, 0.2)",
-                  "rgba(255, 206, 86, 0.2)",
-                ],
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            layout: {
-              padding: {
-                top: 20,
-              },
-            },
-            plugins: {
-              legend: {
-                display: true,
-                position: "top",
-                labels: {
-                  usePointStyle: true,
-                  pointStyle: "circle",
-                },
-              },
-            },
-            scales: {
-              display: false,
-            },
-          },
-        });
-      });
-    </script>
   </div>
 
   <!-- Calendar, Sticky Notes and List of Admins -->
@@ -307,13 +146,14 @@
           {% for user in people_list %}
           <div class="row align-items-center mb-3">
             <div class="col-md-3 col-4">
-                {% set profile_image = user.profile_image if user.profile_image is not none else url_for('static', filename='images/user.png') %}
-                <img
-                  src="{{ profile_image }}"
-                  alt="{{ user.first_name|title }}'s Profile Image"
-                  class="rounded-circle img-fluid profile-image"
-                  style="width: 40px; height: 40px; object-fit: cover"
-                />
+              {% set profile_image = user.profile_image if user.profile_image is
+              not none else url_for('static', filename='images/user.png') %}
+              <img
+                src="{{ profile_image }}"
+                alt="{{ user.first_name|title }}'s Profile Image"
+                class="rounded-circle img-fluid profile-image"
+                style="width: 40px; height: 40px; object-fit: cover"
+              />
             </div>
             <div class="col-md-7 col-6">
               <div>
@@ -400,7 +240,9 @@
               class="form-control border-0 text-start sticky-note"
               style="resize: none; height: 150px; background-color: transparent"
               placeholder="Type your notes here..."
-            >{% for note in sticky_note_content %}{% if note.user_id == current_user.id %}{{ note.content }}{% endif %}{% endfor %}</textarea>
+            >
+{% for note in sticky_note_content %}{% if note.user_id == current_user.id %}{{ note.content }}{% endif %}{% endfor %}</textarea
+            >
           </form>
         </div>
       </div>
@@ -448,7 +290,6 @@
       </div>
     </div>
   </div>
-</div>
 </div>
 
 <!-- A Calendar -->
@@ -553,6 +394,196 @@
       timeoutId = setTimeout(() => {
         document.getElementById("sticky-note-form").submit();
       }, 2500);
+    });
+  });
+</script>
+
+<!-- Bar Chart -->
+<script>
+  // Define myChart variable outside the scope to make it accessible globally
+  let myChart;
+
+  // Define an array containing the names of the months
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  // Variable to track the currently displayed month
+  let currentMonthIndex = new Date().getMonth(); // Initialize with the current month
+
+  // Function to update the current month earnings and water consumed
+  function updateData() {
+    // Fetch actual data for the selected month (replace with your actual data fetching logic)
+    const actualEarnings =
+      "KES " + (Math.floor(Math.random() * 50000) + 50000).toFixed(2); // Random earnings between 50000 and 100000
+    const actualWater = Math.floor(Math.random() * 500) + 500 + " Units"; // Random water between 500 and 1000 units
+
+    // Update the HTML with the fetched data
+    document.getElementById("currentMonthEarnings").innerText = actualEarnings;
+    document.getElementById("currentMonthWater").innerText = actualWater;
+
+    // Update the overview month dynamically
+    document.getElementById("overviewMonth").innerText =
+      "Overview Of " + months[currentMonthIndex];
+  }
+
+  // Function to handle click on "Previous" button
+  function previousMonth() {
+    currentMonthIndex--; // Decrement the month index
+    if (currentMonthIndex < 0) {
+      currentMonthIndex = months.length - 1; // Wrap around to the last month
+    }
+    updateData(); // Update displayed data for the new month
+  }
+
+  // Function to handle click on "Next" button
+  function nextMonth() {
+    currentMonthIndex++; // Increment the month index
+    if (currentMonthIndex >= months.length) {
+      currentMonthIndex = 0; // Wrap around to the first month
+    }
+    updateData(); // Update displayed data for the new month
+  }
+
+  // Wait for the DOM content to load
+  document.addEventListener("DOMContentLoaded", function () {
+    updateData(); // Update displayed data when the page loads
+
+    const chart1 = document.querySelector(".chart1");
+    const ctx = chart1.getContext("2d");
+
+    // Function to generate random data for water consumed and revenue for each month
+    function generateRandomData() {
+      const waterData = [];
+      const revenueData = [];
+      for (let i = 0; i < 12; i++) {
+        waterData.push(Math.floor(Math.random() * 700)); // Adjust the range as needed for water consumed
+        revenueData.push(Math.floor(Math.random() * 1000)); // Adjust the range as needed for revenue
+      }
+      return {
+        water: waterData,
+        revenue: revenueData,
+      };
+    }
+
+    const data = generateRandomData();
+
+    myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: months.map((month) => month.substring(0, 3)),
+        datasets: [
+          {
+            label: "Water Consumed",
+            data: data.water,
+            backgroundColor: "rgba(54, 162, 235, 0.6)", // Use a single color for water consumed across all months
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+            barThickness: 8, // Adjust the thickness of the bars
+            borderRadius: 15, // Adjust the rounding of the bar ends
+          },
+          {
+            label: "Revenue",
+            data: data.revenue,
+            backgroundColor: "rgba(255, 99, 132, 0.6)", // Use a different color for revenue across all months
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+            barThickness: 8, // Adjust the thickness of the bars
+            borderRadius: 15, // Adjust the rounding of the bar ends
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            position: "top",
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            grid: {
+              color: "rgba(0, 0, 0, 0.1)", // Adjust the color of the grid lines
+            },
+          },
+        },
+      },
+    });
+  });
+</script>
+
+<!-- Doughnut Chart -->
+<script>
+  const chart2 = document.querySelectorAll(".chart2");
+
+  chart2.forEach(function (chart) {
+    var ctx = chart.getContext("2d");
+
+    // Function to generate random data for doughnut chart
+    function generateRandomData() {
+      return [
+        Math.floor(Math.random() * 1000),
+        Math.floor(Math.random() * 1000),
+        Math.floor(Math.random() * 1000),
+      ];
+    }
+
+    var data = generateRandomData();
+
+    var myChart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["Invoice", "Payment", "Units"],
+        datasets: [
+          {
+            label: "# of Votes",
+            data: data,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.4)",
+              "rgba(54, 162, 235, 0.4)",
+              "rgba(255, 206, 86, 0.4)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        layout: {
+          padding: {
+            top: 20,
+          },
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: "top",
+            labels: {
+              usePointStyle: true,
+              pointStyle: "circle",
+            },
+          },
+        },
+        scales: {
+          display: false,
+        },
+      },
     });
   });
 </script>
