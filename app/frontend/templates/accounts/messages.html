@@ -58,69 +58,6 @@
             </a>
           </li>
 
-          <!-- Chat Self -->
-          <li class="contact-item">
-            <a
-              href="{{ url_for('accounts.messages.messages', user_id=current_user.id) }}"
-            >
-              {% set profile_image = current_user.profile_image if
-              current_user.profile_image is not none else url_for('static',
-              filename='images/user.png') %}
-              <img
-                src="{{ profile_image }}"
-                alt="{{ current_user.first_name|title }}'s Profile Image"
-                class="rounded-circle img-fluid profile-image"
-              />
-
-              <div class="col ms-2">
-                <h6>@{{ current_user.first_name }}</h6>
-                <p class="text-success small mb-0 fst-italic">Online</p>
-              </div>
-            </a>
-          </li>
-
-          <!-- Chat Self -->
-          <li class="contact-item">
-            <a
-              href="{{ url_for('accounts.messages.messages', user_id=current_user.id) }}"
-            >
-              {% set profile_image = current_user.profile_image if
-              current_user.profile_image is not none else url_for('static',
-              filename='images/user.png') %}
-              <img
-                src="{{ profile_image }}"
-                alt="{{ current_user.first_name|title }}'s Profile Image"
-                class="rounded-circle img-fluid profile-image"
-              />
-
-              <div class="col ms-2">
-                <h6>@{{ current_user.first_name }}</h6>
-                <p class="text-success small mb-0 fst-italic">Online</p>
-              </div>
-            </a>
-          </li>
-
-          <!-- Chat Self -->
-          <li class="contact-item">
-            <a
-              href="{{ url_for('accounts.messages.messages', user_id=current_user.id) }}"
-            >
-              {% set profile_image = current_user.profile_image if
-              current_user.profile_image is not none else url_for('static',
-              filename='images/user.png') %}
-              <img
-                src="{{ profile_image }}"
-                alt="{{ current_user.first_name|title }}'s Profile Image"
-                class="rounded-circle img-fluid profile-image"
-              />
-
-              <div class="col ms-2">
-                <h6>@{{ current_user.first_name }}</h6>
-                <p class="text-success small mb-0 fst-italic">Online</p>
-              </div>
-            </a>
-          </li>
-
           <!-- Chat Individuals -->
           {% set sorted_users = all_users | sort(attribute='id') %} {% for user
           in sorted_users %} {% if user.id != current_user.id %}
@@ -249,7 +186,7 @@
 
           <!-- Message Input -->
           <form
-            class="message-input"
+            class="message-input {% if not messages %}d-none{% endif %}"
             method="post"
             action="{{ url_for('accounts.messages.messages') }}"
             id="sendMessageForm"

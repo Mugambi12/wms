@@ -41,6 +41,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 .main {
   overflow-y: unset;
 }
@@ -128,6 +129,7 @@ body {
 }
 #noConversationMessage {
   margin-top: 150px;
+  margin-bottom: 100px;
 }
 .message-content {
   padding: 8px 16px;
@@ -267,6 +269,7 @@ body {
   .chat-area {
     order: 2;
     padding: 8px 0;
+    width: 100%;
     margin-bottom: 16px;
   }
   .message-list {
@@ -274,6 +277,9 @@ body {
     max-height: calc(100vh - 120px);
     padding: 5px 10px;
     overflow-y: auto;
+  }
+  #noConversationMessage {
+    margin-top: 80px;
   }
 
   .message-input {
