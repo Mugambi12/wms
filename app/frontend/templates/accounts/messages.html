@@ -9,18 +9,17 @@
 
 <div class="container-fluid">
   <div class="chat-container-fluid">
-    <div class="text-center mt-3">
-      <h2 class="mb-2 fw-bold text-primary">Join Our Chat Community</h2>
+    <div class="text-center mt-2">
+      <h2 class="mb-1 fw-bold text-primary">Join Our Chat Community</h2>
       <p class="mb-3 text-muted fst-italic">
         Discover and connect with fellow members.
       </p>
     </div>
 
-    <!-- File: accounts/messages.html -->
-
+    <!-- Messages -->
     <div class="chat-container">
       <!-- Contacts Sidebar -->
-      <div class="chat-sidebar">
+      <div class="chat-sidebar rounded-start shadow">
         <h3 class="fw-bold mt-3">Contacts</h3>
         <ul class="contacts-list">
           {% for user in all_users %}
@@ -37,34 +36,37 @@
                 style="width: 40px; height: 40px; object-fit: cover"
               />
 
-              {% if user.id == current_user.id %}
-              <h6>Myself</h6>
-              {% else %}
-              <h6>
-                {{ user.first_name.title() }} {{ user.last_name.title() }}
-              </h6>
-              {% endif %}
+              <div class="col ms-2">
+                {% if user.id == current_user.id %}
+                <h6>Myself</h6>
+                {% else %}
+                <h6>
+                  {{ user.first_name.title() }} {{ user.last_name.title() }}
+                </h6>
+                {% endif %}
 
-              <!-- Last Seen Online -->
-              {% if user.last_login is not none and user.last_logout is not none
-              %} {% if user.last_login > user.last_logout %}
-              <p class="text-success small mb-0 fst-italic">Online</p>
-              {% elif user.last_logout > user.last_login %} {% set
-              time_difference = now - user.last_logout %} {% if
-              time_difference.days > 0 %} {% set time_unit = 'days' %}
-              <p class="text-muted small mb-0 fst-italic">
-                Active {{ time_difference.days }} {{ time_unit }} ago
-              </p>
-              {% elif time_difference.seconds // 3600 > 0 %} {% set time_unit =
-              'hrs' %}
-              <p class="text-muted small mb-0 fst-italic">
-                Active {{ time_difference.seconds // 3600 }} {{ time_unit }} ago
-              </p>
-              {% else %} {% set time_unit = 'min' %}
-              <p class="text-muted small mb-0 fst-italic">
-                Active {{ time_difference.seconds // 60 }} {{ time_unit }} ago
-              </p>
-              {% endif %} {% endif %} {% endif %}
+                <!-- Last Seen Online -->
+                {% if user.last_login is not none and user.last_logout is not
+                none %} {% if user.last_login > user.last_logout %}
+                <p class="text-success small mb-0 fst-italic">Online</p>
+                {% elif user.last_logout > user.last_login %} {% set
+                time_difference = now - user.last_logout %} {% if
+                time_difference.days > 0 %} {% set time_unit = 'days' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.days }} {{ time_unit }} ago
+                </p>
+                {% elif time_difference.seconds // 3600 > 0 %} {% set time_unit
+                = 'hrs' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.seconds // 3600 }} {{ time_unit }}
+                  ago
+                </p>
+                {% else %} {% set time_unit = 'min' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.seconds // 60 }} {{ time_unit }} ago
+                </p>
+                {% endif %} {% endif %} {% endif %}
+              </div>
             </a>
           </li>
           {% endfor %}
@@ -72,15 +74,15 @@
       </div>
 
       <!-- Chat Area -->
-      <div class="chat-area">
+      <div class="chat-area rounded-end shadow-sm">
         <div id="chatMessagesConversationAreaLabel">
-          <h4 class="fw-bold mb-2">Chats</h4>
+          <h4 class="fw-bold mb-1">Chats</h4>
           <!-- No Conversation Message -->
           <ul
             class="{% if not messages %}message-list text-center{% else %}d-none{% endif %}"
           >
             <li id="noConversationMessage" class="message-item">
-              No conversation with this user at the moment.
+              No conversations yet. Choose someone to start chatting with.
             </li>
           </ul>
 
@@ -157,34 +159,6 @@
           </form>
         </div>
       </div>
-    </div>
-
-    <!-- Table with Conversation Message -->
-    <div class="container-fluid">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">id</th>
-            <th scope="col">Sender</th>
-            <th scope="col">Receiver</th>
-            <th scope="col">Content</th>
-            <th scope="col">Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for message in all_messages %}
-          <tr>
-            <th scope="row">{{ loop.index }}</th>
-            <td>{{ message.id }}</td>
-            <td>{{ message.sender_id }}</td>
-            <td>{{ message.receiver_id }}</td>
-            <td>{{ message.content }}</td>
-            <td>{{ message.timestamp }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
     </div>
   </div>
 </div>
