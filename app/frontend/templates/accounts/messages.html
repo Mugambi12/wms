@@ -19,10 +19,45 @@
     <!-- Messages -->
     <div class="chat-container">
       <!-- Contacts Sidebar -->
-      <div class="chat-sidebar rounded-start shadow">
+      <div class="chat-sidebar rounded-start shadow-sm">
         <h3 class="fw-bold mt-3">Contacts</h3>
         <ul class="contacts-list">
-          {% for user in all_users %}
+          <!-- Broadcast Message -->
+          <li class="contact-item">
+            <a href="">
+              <img src="https://via.placeholder.com/50" alt="Broadcast" />
+              <div>
+                <h6>Broadcast</h6>
+                <p>All members</p>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chat Self -->
+          <li class="contact-item">
+            <a
+              href="{{ url_for('accounts.messages.messages', user_id=current_user.id) }}"
+            >
+              {% set profile_image = current_user.profile_image if
+              current_user.profile_image is not none else url_for('static',
+              filename='images/user.png') %}
+              <img
+                src="{{ profile_image }}"
+                alt="{{ current_user.first_name|title }}'s Profile Image"
+                class="rounded-circle img-fluid profile-image"
+                style="width: 40px; height: 40px; object-fit: cover"
+              />
+
+              <div class="col ms-2">
+                <h6>@{{ current_user.first_name }}</h6>
+                <p class="text-success small mb-0 fst-italic">Online</p>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chat Individuals -->
+          {% set sorted_users = all_users | sort(attribute='id') %} {% for user
+          in sorted_users %} {% if user.id != current_user.id %}
           <li class="contact-item">
             <a
               href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
@@ -35,48 +70,40 @@
                 class="rounded-circle img-fluid profile-image"
                 style="width: 40px; height: 40px; object-fit: cover"
               />
-
               <div class="col ms-2">
-                {% if user.id == current_user.id %}
-                <h6>Myself</h6>
-                {% else %}
                 <h6>
                   {{ user.first_name.title() }} {{ user.last_name.title() }}
                 </h6>
-                {% endif %}
-
                 <!-- Last Seen Online -->
                 {% if user.last_login is not none and user.last_logout is not
                 none %} {% if user.last_login > user.last_logout %}
                 <p class="text-success small mb-0 fst-italic">Online</p>
-                {% elif user.last_logout > user.last_login %} {% set
-                time_difference = now - user.last_logout %} {% if
-                time_difference.days > 0 %} {% set time_unit = 'days' %}
+                {% else %} {% set time_difference = now - user.last_logout %} {%
+                if time_difference.days > 0 %} {% set time_unit = 'days' %} {%
+                elif time_difference.seconds // 3600 > 0 %} {% set time_unit =
+                'hrs' %} {% else %} {% set time_unit = 'min' %} {% endif %}
                 <p class="text-muted small mb-0 fst-italic">
-                  Active {{ time_difference.days }} {{ time_unit }} ago
+                  Active {{ time_difference.days if time_unit == 'days' else
+                  time_difference.seconds // 3600 if time_unit == 'hrs' else
+                  time_difference.seconds // 60 }} {{ time_unit }} ago
                 </p>
-                {% elif time_difference.seconds // 3600 > 0 %} {% set time_unit
-                = 'hrs' %}
-                <p class="text-muted small mb-0 fst-italic">
-                  Active {{ time_difference.seconds // 3600 }} {{ time_unit }}
-                  ago
-                </p>
-                {% else %} {% set time_unit = 'min' %}
-                <p class="text-muted small mb-0 fst-italic">
-                  Active {{ time_difference.seconds // 60 }} {{ time_unit }} ago
-                </p>
-                {% endif %} {% endif %} {% endif %}
+                {% endif %} {% endif %}
               </div>
+              {% set unread_count = unread_sent_message_counts[user.id] if
+              user.id in unread_sent_message_counts else 0 %} {% if unread_count
+              > 0 %}
+              <span class="unread-message-count">{{ unread_count }}</span>
+              {% endif %}
             </a>
           </li>
-          {% endfor %}
+          {% endif %} {% endfor %}
         </ul>
       </div>
 
       <!-- Chat Area -->
       <div class="chat-area rounded-end shadow-sm">
         <div id="chatMessagesConversationAreaLabel">
-          <h4 class="fw-bold mb-1">Chats</h4>
+          <h4 class="fw-bold mb-1 ms-3">Chats</h4>
           <!-- No Conversation Message -->
           <ul
             class="{% if not messages %}message-list text-center{% else %}d-none{% endif %}"
@@ -161,6 +188,35 @@
       </div>
     </div>
   </div>
+
+  <!--
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">id</th>
+        <th scope="col">Sender</th>
+        <th scope="col">Receiver</th>
+        <th scope="col">Message</th>
+        <th scope="col">Time</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for message in all_messages %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ message.id }}</td>
+        <td>{{ message.sender_id }}</td>
+        <td>{{ message.receiver_id }}</td>
+        <td>{{ message.content }}</td>
+        <td>{{ message.timestamp }}</td>
+        <td>{{ message.is_read }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  -->
 </div>
 
 {% endblock %}

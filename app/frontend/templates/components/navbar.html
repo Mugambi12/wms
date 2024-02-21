@@ -14,11 +14,13 @@
 >
   <div class="container-fluid">
     <!-- Toggle Button -->
-    {% if current_user.is_authenticated %}
-    <button class="toggle-btn-mobile" type="button">
-      <ion-icon name="apps-outline" class="text-dark"></ion-icon>
-    </button>
-    {% endif %}
+    <span>
+      {% if current_user.is_authenticated %}
+      <button class="toggle-btn-mobile" type="button">
+        <ion-icon name="apps-outline" class="text-dark"></ion-icon>
+      </button>
+      {% endif %}
+    </span>
 
     <!-- Brand -->
     <a
@@ -90,49 +92,23 @@
         {% endif %} {% if current_user.is_authenticated %}
 
         <!-- people Information and Dropdown -->
-        <ul class="navbar-nav me-3">
+        <ul class="navbar-nav me-3 dropdown-menu-dark">
           <!-- Messages -->
-          <li class="nav-item dropdown me-3">
-            <button
+          <li class="nav-item">
+            <a
               class="nav-link text-dark position-relative"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              href="{{ url_for('accounts.messages.messages') }}"
             >
               <ion-icon name="mail-unread-outline"></ion-icon>
+              {% if unread_message_counts[current_user.id] > 0 %}
               <span
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
               >
                 {{ unread_message_counts[current_user.id] or 0 }}
                 <span class="visually-hidden">unread messages</span>
               </span>
-            </button>
-            <ul
-              class="dropdown-menu dropdown-menu-start border-0 shadow mt-2"
-              aria-labelledby="notificationsDropdown"
-            >
-              <li class="dropdown-item small">
-                <a
-                  href="{{ url_for('accounts.messages.messages') }}"
-                  class="text-decoration-none text-dark"
-                  >Messages 1</a
-                >
-              </li>
-              <li class="dropdown-item small">
-                <a
-                  href="{{ url_for('accounts.messages.messages') }}"
-                  class="text-decoration-none text-dark"
-                  >Messages 2</a
-                >
-              </li>
-              <li class="dropdown-item small">
-                <a
-                  href="{{ url_for('accounts.messages.messages') }}"
-                  class="text-decoration-none text-dark"
-                  >Messages 3</a
-                >
-              </li>
-            </ul>
+              {% endif %}
+            </a>
           </li>
 
           <!-- Notifications -->

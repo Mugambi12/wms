@@ -6,11 +6,21 @@ from app import db
 from ...database.models import Message, User
 from .forms import MessageForm
 
+
 messages_bp = Blueprint('messages', __name__, url_prefix='/accounts')
+
 
 def get_unread_message_count(user_id):
     try:
         unread_count = Message.query.filter_by(receiver_id=user_id, is_read=False).count()
+        return unread_count
+    except Exception as e:
+        print(f"Error retrieving unread message count: {e}")
+        return None
+
+def get_sent_unread_message_count(user_id):
+    try:
+        unread_count = Message.query.filter_by(sender_id=user_id, is_read=False).count()
         return unread_count
     except Exception as e:
         print(f"Error retrieving unread message count: {e}")
@@ -28,6 +38,7 @@ def get_user_messages(user_id):
         db.session.commit()
 
     return messages
+
 
 @messages_bp.route('/messages', methods=['GET', 'POST'])
 @login_required
@@ -49,6 +60,7 @@ def messages():
 
     all_users = User.query.all()
     unread_message_counts = {user.id: get_unread_message_count(user.id) for user in all_users}
+    unread_sent_message_counts = {user.id: get_sent_unread_message_count(user.id) for user in all_users}
 
     selected_user_id = request.args.get('user_id')
     messages = []
@@ -61,7 +73,7 @@ def messages():
                             messages=messages,
                             all_users=all_users,
                             unread_message_counts=unread_message_counts,
+                            unread_sent_message_counts=unread_sent_message_counts,
                             hide_footer=True,
 
                             all_messages=all_messages)
-
