@@ -28,23 +28,43 @@
             <a
               href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
             >
+              {% set profile_image = user.profile_image if user.profile_image is
+              not none else url_for('static', filename='images/user.png') %}
               <img
-                src="https://via.placeholder.com/50"
-                alt="{{ user.first_name }}"
+                src="{{ profile_image }}"
+                alt="{{ user.first_name|title }}'s Profile Image"
+                class="rounded-circle img-fluid profile-image"
+                style="width: 40px; height: 40px; object-fit: cover"
               />
-              <div>
-                {% if user.id == current_user.id %}
-                <h6>Myself</h6>
-                {% else %}
-                <h6>
-                  {{ user.first_name.title() }} {{ user.last_name.title() }}
-                </h6>
-                {% endif %}
-                <p>Online</p>
-              </div>
-              <span class="unread-badge"
-                >{{ unread_message_counts[user.id] or 0 }}</span
-              >
+
+              {% if user.id == current_user.id %}
+              <h6>Myself</h6>
+              {% else %}
+              <h6>
+                {{ user.first_name.title() }} {{ user.last_name.title() }}
+              </h6>
+              {% endif %}
+
+              <!-- Last Seen Online -->
+              {% if user.last_login is not none and user.last_logout is not none
+              %} {% if user.last_login > user.last_logout %}
+              <p class="text-success small mb-0 fst-italic">Online</p>
+              {% elif user.last_logout > user.last_login %} {% set
+              time_difference = now - user.last_logout %} {% if
+              time_difference.days > 0 %} {% set time_unit = 'days' %}
+              <p class="text-muted small mb-0 fst-italic">
+                Active {{ time_difference.days }} {{ time_unit }} ago
+              </p>
+              {% elif time_difference.seconds // 3600 > 0 %} {% set time_unit =
+              'hrs' %}
+              <p class="text-muted small mb-0 fst-italic">
+                Active {{ time_difference.seconds // 3600 }} {{ time_unit }} ago
+              </p>
+              {% else %} {% set time_unit = 'min' %}
+              <p class="text-muted small mb-0 fst-italic">
+                Active {{ time_difference.seconds // 60 }} {{ time_unit }} ago
+              </p>
+              {% endif %} {% endif %} {% endif %}
             </a>
           </li>
           {% endfor %}

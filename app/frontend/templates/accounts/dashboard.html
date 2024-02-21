@@ -307,21 +307,13 @@
           {% for user in people_list %}
           <div class="row align-items-center mb-3">
             <div class="col-md-3 col-4">
-              {% if user.profile_image is not none %}
-              <img
-                src="{{ user.profile_image }}"
-                alt="{{ user.first_name|title }}'s Profile Image"
-                class="rounded-circle img-fluid profile-image"
-                style="width: 40px; height: 40px; object-fit: cover"
-              />
-              {% else %}
-              <img
-                src="{{ url_for('static', filename='images/user.png') }}"
-                alt="logo image"
-                height="40px"
-                width="40px"
-              />
-              {% endif %}
+                {% set profile_image = user.profile_image if user.profile_image is not none else url_for('static', filename='images/user.png') %}
+                <img
+                  src="{{ profile_image }}"
+                  alt="{{ user.first_name|title }}'s Profile Image"
+                  class="rounded-circle img-fluid profile-image"
+                  style="width: 40px; height: 40px; object-fit: cover"
+                />
             </div>
             <div class="col-md-7 col-6">
               <div>
