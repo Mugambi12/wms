@@ -58,7 +58,9 @@
           <!-- Chat Individuals -->
           {% set sorted_users = all_users | sort(attribute='id') %} {% for user
           in sorted_users %} {% if user.id != current_user.id %}
-          <li class="contact-item">
+          <li
+            class="contact-item {% if chatting_user_first_name == user.first_name %}bg-secondary bg-opacity-25{% endif %}"
+          >
             <a
               href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
             >
@@ -105,13 +107,13 @@
         <div id="chatMessagesConversationAreaLabel">
           {% if chatting_user_first_name and chatting_user_first_name !=
           current_user.first_name %}
-          <h4 class="fw-bold mb-1 ms-3 text-center">
+          <h5 class="fw-bold mb-1 ms-3 text-center">
             Chatting with {{ chatting_user_first_name|title }}
-          </h4>
+          </h5>
           {% elif chatting_user_first_name == current_user.first_name %}
-          <h4 class="fw-bold mb-1 ms-3 text-center">Chatting with Yourself</h4>
+          <h5 class="fw-bold mb-1 ms-3 text-center">Chatting with Yourself</h5>
           {% else %}
-          <h4 class="fw-bold mb-1 ms-3 text-center">Not Currently Chatting</h4>
+          <h5 class="fw-bold mb-1 ms-3 text-center">No Open Conversation</h5>
           {% endif %}
 
           <!-- No Conversation Message -->
