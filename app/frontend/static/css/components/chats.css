@@ -51,7 +51,7 @@ body {
 
 .chat-sidebar {
   flex: 1;
-  background-color: #f3f3f3;
+  background-color: aqua;
   border-right: 1px solid #ccc;
   max-height: 73vh;
 }
@@ -65,6 +65,7 @@ body {
   overflow-y: auto;
   height: 61.5vh;
   background-color: #fff;
+  scroll-behavior: smooth;
 }
 .contact-item a {
   width: 100%;
@@ -106,7 +107,7 @@ body {
   flex: 3;
   padding: 20px;
   max-height: 73vh;
-  background-color: #f8f8f8;
+  background-color: #f3f3f3;
 }
 .message-list {
   background-color: #fff;
@@ -117,6 +118,7 @@ body {
   height: 53vh;
   border-radius: 10px;
   margin-bottom: 5px;
+  scroll-behavior: smooth;
 }
 .message-item {
   margin-bottom: 20px;

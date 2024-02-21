@@ -103,7 +103,7 @@
       <!-- Chat Area -->
       <div class="chat-area rounded-end shadow-sm">
         <div id="chatMessagesConversationAreaLabel">
-          <h4 class="fw-bold mb-1 ms-3">Chats</h4>
+          <h5 class="fw-bold mb-1 ms-3">Chatting ...</h5>
           <!-- No Conversation Message -->
           <ul
             class="{% if not messages %}message-list text-center{% else %}d-none{% endif %}"
@@ -160,6 +160,14 @@
               </div>
             </li>
             {% endif %} {% endfor %}
+
+            <script>
+              var messageList = document.querySelector(".message-list");
+
+              messageList.style.scrollBehavior = "auto";
+
+              messageList.scrollTop = messageList.scrollHeight;
+            </script>
           </ul>
 
           <!-- Message Input -->
