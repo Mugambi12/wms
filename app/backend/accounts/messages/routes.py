@@ -18,13 +18,14 @@ def get_unread_message_count(user_id):
         print(f"Error retrieving unread message count: {e}")
         return None
 
-def get_sent_unread_message_count(user_id):
+def get_received_unread_message_count(user_id):
     try:
         unread_count = Message.query.filter_by(sender_id=user_id, is_read=False).count()
         return unread_count
     except Exception as e:
         print(f"Error retrieving unread message count: {e}")
         return None
+
 
 def get_user_messages(user_id):
     messages = Message.query.filter(
@@ -60,7 +61,7 @@ def messages():
 
     all_users = User.query.all()
     unread_message_counts = {user.id: get_unread_message_count(user.id) for user in all_users}
-    unread_sent_message_counts = {user.id: get_sent_unread_message_count(user.id) for user in all_users}
+    unread_sent_message_counts = {user.id: get_received_unread_message_count(user.id) for user in all_users}
 
     selected_user_id = request.args.get('user_id')
     messages = []
