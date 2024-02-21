@@ -16,6 +16,8 @@
       </p>
     </div>
 
+    <!-- File: accounts/messages.html -->
+
     <div class="chat-container">
       <!-- Contacts Sidebar -->
       <div class="chat-sidebar">
@@ -23,49 +25,66 @@
         <ul class="contacts-list">
           {% for user in all_users %}
           <li class="contact-item">
-            <button
-              href=""
-              data-receiver-id="{{ user.id }}"
-              data-bs-target="#chatMessagesConversationArea{{ user.id }}"
-              onclick="selectContact('{{ user.id }}')"
+            <a
+              href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
             >
               <img
                 src="https://via.placeholder.com/50"
                 alt="{{ user.first_name }}"
               />
               <div>
-                <h6>{{ user.first_name }} {{ user.last_name }}</h6>
+                {% if user.id == current_user.id %}
+                <h6>Myself</h6>
+                {% else %}
+                <h6>
+                  {{ user.first_name.title() }} {{ user.last_name.title() }}
+                </h6>
+                {% endif %}
                 <p>Online</p>
               </div>
-              <span class="unread-badge">
-                {{ unread_message_counts[user.id] or 0 }}
-              </span>
-            </button>
+              <span class="unread-badge"
+                >{{ unread_message_counts[user.id] or 0 }}</span
+              >
+            </a>
           </li>
           {% endfor %}
         </ul>
       </div>
 
       <!-- Chat Area -->
-      <div class="chat-area" id="chatMessagesConversationArea">
+      <div class="chat-area">
         <div id="chatMessagesConversationAreaLabel">
           <h4 class="fw-bold mb-2">Chats</h4>
           <!-- No Conversation Message -->
-          <p id="noConversationMessage" class="d-none">
-            No conversation with this user at the moment.
-          </p>
-          <!-- Chat Messages List -->
-          <ul class="message-list" id="messageList">
-            <!-- Messages will be loaded dynamically here -->
-            {% for message in all_messages %}
+          <ul
+            class="{% if not messages %}message-list text-center{% else %}d-none{% endif %}"
+          >
+            <li id="noConversationMessage" class="message-item">
+              No conversation with this user at the moment.
+            </li>
+          </ul>
 
+          <!-- Chat Messages List -->
+          <ul class="{% if messages %}message-list{% endif %}">
+            {% for message in messages %}
             <!-- Incoming Messages -->
-            {% if message.receiver_id == current_user.id %}
+            {% if message.receiver_id == current_user.id and message.sender_id
+            != current_user.id %}
             <li class="message-item incoming">
               <div class="message-content">
                 <p>{{ message.content }}</p>
                 <p class="message-time">
-                  <span>{{ message.timestamp.strftime('%H:%M') }}</span>
+                  <span
+                    >{{ message.timestamp.strftime('%d %b %Y') if (now -
+                    message.timestamp).total_seconds() > 365*24*3600 else
+                    message.timestamp.strftime('%d %b %H:%M') if (now -
+                    message.timestamp).total_seconds() > 24*3600 else
+                    message.timestamp.strftime('%H:%M') }}</span
+                  >
+                  <span
+                    class="ms-1 {% if message.is_read %}text-success{% endif %}"
+                    >{% if message.is_read %}Read{% else %}Sent{% endif %}</span
+                  >
                 </p>
               </div>
             </li>
@@ -77,7 +96,17 @@
               <div class="message-content">
                 <p>{{ message.content }}</p>
                 <p class="message-time">
-                  <span>{{ message.timestamp.strftime('%H:%M') }}</span>
+                  <span
+                    >{{ message.timestamp.strftime('%d %b %Y') if (now -
+                    message.timestamp).total_seconds() > 365*24*3600 else
+                    message.timestamp.strftime('%d %b %H:%M') if (now -
+                    message.timestamp).total_seconds() > 24*3600 else
+                    message.timestamp.strftime('%H:%M') }}</span
+                  >
+                  <span
+                    class="ms-1 {% if message.is_read %}text-success{% endif %}"
+                    >{% if message.is_read %}Read{% else %}Sent{% endif %}</span
+                  >
                 </p>
               </div>
             </li>
@@ -85,72 +114,29 @@
           </ul>
 
           <!-- Message Input -->
-          <div class="message-input">
-            <form
-              method="post"
-              action="{{ url_for('accounts.messages.messages') }}"
-              id="sendMessageForm"
-            >
-              <!-- CSRF Token -->
-              <input
-                type="hidden"
-                name="csrf_token"
-                value="{{ csrf_token() }}"
-              />
-              <input
-                type="hidden"
-                name="receiver_id"
-                id="receiverId"
-                value=""
-              />
-              <input
-                type="text"
-                name="content"
-                id="connect"
-                placeholder="Type your message..."
-              />
-              <button type="submit"><ion-icon name="send"></ion-icon></button>
-            </form>
-          </div>
+          <form
+            class="message-input"
+            method="post"
+            action="{{ url_for('accounts.messages.messages') }}"
+            id="sendMessageForm"
+          >
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input
+              type="hidden"
+              name="receiver_id"
+              value="{{ request.args.get('user_id') }}"
+            />
+            <input
+              type="text"
+              name="content"
+              id="connect"
+              placeholder="Type your message..."
+            />
+            <button type="submit"><ion-icon name="send"></ion-icon></button>
+          </form>
         </div>
       </div>
-
-      <script>
-        function selectContact(userId) {
-          // Set the selected contact's ID in the message input form
-          document.getElementById("receiverId").value = userId;
-          // Load conversation messages for the selected contact
-          loadConversationMessages(userId);
-        }
-
-        function loadConversationMessages(userId) {
-          // AJAX request to fetch conversation messages for the selected contact
-          $.ajax({
-            url: "/messages", // URL endpoint to fetch messages
-            type: "GET",
-            data: { user_id: userId }, // Pass the selected user's ID as data
-            success: function (response) {
-              if (response.trim() === "") {
-                // If no conversations are found, display the no conversation message
-                document.getElementById("messageList").innerHTML = "";
-                document
-                  .getElementById("noConversationMessage")
-                  .classList.remove("d-none");
-              } else {
-                // Replace the content of the message list with the fetched messages
-                document.getElementById("messageList").innerHTML = response;
-                // Hide the no conversation message
-                document
-                  .getElementById("noConversationMessage")
-                  .classList.add("d-none");
-              }
-            },
-            error: function (error) {
-              console.log("Error loading conversation messages:", error);
-            },
-          });
-        }
-      </script>
     </div>
 
     <!-- Table with Conversation Message -->

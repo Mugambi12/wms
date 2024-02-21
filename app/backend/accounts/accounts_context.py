@@ -1,13 +1,19 @@
 # File: app/backend/accounts/accounts_context.py
 
-from flask import g
+
 from datetime import datetime, timedelta, timezone
-from app import db
-from ..database.models import MeterReading, Settings
 from sqlalchemy import func
+from app import db
+from ..database.models import User, MeterReading, Settings
+from .messages.routes import get_unread_message_count
+
 
 def accounts_context():
     settings = Settings.query.first()
+
+
+    all_users = User.query.all()
+    unread_message_counts = {user.id: get_unread_message_count(user.id) for user in all_users}
 
     company_name = settings.company_name if settings else 'ApoGen'
     bank_name = settings.bank_name if settings else 'M-Pesa'
@@ -20,6 +26,8 @@ def accounts_context():
     total_bill = total_bill or 0
 
     return {
+        'unread_message_counts': unread_message_counts,
+
         'company_name': company_name,
         'bank_name': bank_name,
         'paybill': paybill,

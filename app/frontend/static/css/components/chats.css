@@ -66,7 +66,8 @@ body {
   overflow-y: auto;
   max-height: 60vh;
 }
-.contact-item button {
+.contact-item a {
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 10px 0;
@@ -75,21 +76,21 @@ body {
   transition: background-color 0.3s ease;
   justify-content: space-between;
 }
-.contact-item button:hover {
+.contact-item a:hover {
   background-color: #f7f7f7;
 }
-.contact-item button img {
+.contact-item a img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   margin-right: 10px;
 }
-.contact-item button h6 {
+.contact-item a h6 {
   margin: 0;
   font-size: 16px;
   color: #333;
 }
-.contact-item button p {
+.contact-item a p {
   margin: 0;
   font-size: 14px;
   color: #777;
@@ -114,6 +115,9 @@ body {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+}
+#noConversationMessage {
+  margin-top: 150px;
 }
 .message-content {
   padding: 8px 16px;
