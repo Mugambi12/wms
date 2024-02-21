@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from app import db
 from ...database.models import User, Settings
 from .forms import AddUserForm, EditUserForm, EditProfilePictureForm
-from .people import handle_add_new_users, change_password, validate_new_password, save_profile_picture, delete_user
+from .utils import handle_add_new_users, change_password, validate_new_password, save_profile_picture, delete_user
 from .download_manager import generate_csv, generate_excel, generate_pdf
 
 

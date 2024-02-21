@@ -2,8 +2,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
-from app.backend.database.models import User, db
-from app.backend.accounts import accounts_bp
+from app.backend.database.models import User
 
 class LoginForm(FlaskForm):
     mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(min=9, max=20)])
@@ -13,6 +12,7 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=50)])
     last_name = StringField('Last Name', validators=[DataRequired(), Length(max=50)])
+    email = StringField('Email', validators=[DataRequired(), Length(max=50)])
     mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(min=9, max=20)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6), EqualTo('confirm_password', message='Passwords must match')])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired()])

@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from .forms import CompanyNameForm, UnitPriceForm, ServiceFeeForm, AddHouseSectionForm, EditHouseSectionForm, DeleteHouseSectionForm, BankNameForm, PayBillForm, AccountNumberForm, ContactNumberForm
-from .settings import get_system_settings, update_company_name, update_unit_price, update_service_fee, add_house_section, edit_house_section, delete_house_section, update_bank_name, update_paybill, update_account_number, update_contact_number
+from .utils import get_system_settings, update_company_name, update_unit_price, update_service_fee, add_house_section, edit_house_section, delete_house_section, update_bank_name, update_paybill, update_account_number, update_contact_number
 
 
 settings_bp = Blueprint('settings', __name__, url_prefix='/settings')

@@ -6,7 +6,9 @@ from flask_login import login_user, login_required, logout_user, current_user
 from app.backend.database.models import User, db
 from app.backend.auth.forms import LoginForm, RegistrationForm
 
+
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -35,9 +37,18 @@ def login():
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
-@auth_bp.route('/register/apogen_admin', methods=['GET', 'POST'])
 def register():
+    return _register(is_admin=False)
+
+
+@auth_bp.route('/register/apogen_admin', methods=['GET', 'POST'])
+def register_apogen_admin():
+    return _register(is_admin=True)
+
+
+def _register(is_admin=False):
     form = RegistrationForm()
+
     if form.validate_on_submit():
         # Check if the user already exists
         existing_user = User.query.filter_by(mobile_number=form.mobile_number.data[-9:]).first()
@@ -49,12 +60,12 @@ def register():
         new_user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
+            email=form.email.data,
             mobile_number=form.mobile_number.data[-9:],
             password=form.password.data
         )
 
-        # Check if it's the admin registration route
-        if 'apogen_admin' in request.url_rule.rule:
+        if is_admin:
             new_user.is_admin = True
 
         new_user.unique_user_id = new_user.generate_unique_user_id()
@@ -63,12 +74,14 @@ def register():
         db.session.commit()
         flash('Registration successful! You can now log in.', 'success')
         return redirect(url_for('auth.login'))
-    else:
-        if request.method == 'POST':
-            if 'mobile_number' in form.errors:
-                flash('Invalid mobile number. Please enter a valid mobile number.', 'danger')
-            if 'password' or 'confirm_password' in form.errors:
-                flash('Passwords do not match. Please re-enter your password.', 'danger')
+
+    elif request.method == 'POST':
+        if 'mobile_number' in form.errors:
+            flash('Invalid mobile number. Please enter a valid mobile number.', 'danger')
+        if 'email' in form.errors:
+            flash('Invalid email address. Please enter a valid email.', 'danger')
+        if 'password' or 'confirm_password' in form.errors:
+            flash('Passwords do not match. Please re-enter your password.', 'danger')
 
     return render_template('auth/register.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
 

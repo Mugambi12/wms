@@ -9,14 +9,21 @@
 
       <!-- First Section -->
       <div id="firstSection">
-        <div class="mb-3">
-          {{ form.first_name.label(class="form-label") }} {{
-          form.first_name(class="form-control") }}
+        <div class="d-flex">
+          <div class="mb-3 me-2">
+            {{ form.first_name.label(class="form-label") }} {{
+            form.first_name(class="form-control") }}
+          </div>
+
+          <div class="mb-3 ms-2">
+            {{ form.last_name.label(class="form-label") }} {{
+            form.last_name(class="form-control") }}
+          </div>
         </div>
 
         <div class="mb-3">
-          {{ form.last_name.label(class="form-label") }} {{
-          form.last_name(class="form-control") }}
+          {{ form.email.label(class="form-label") }} {{
+          form.email(class="form-control") }}
         </div>
 
         <div class="mb-3">
