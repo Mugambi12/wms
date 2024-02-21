@@ -103,7 +103,17 @@
       <!-- Chat Area -->
       <div class="chat-area rounded-end shadow-sm">
         <div id="chatMessagesConversationAreaLabel">
-          <h5 class="fw-bold mb-1 ms-3">Chatting ...</h5>
+          {% if chatting_user_first_name and chatting_user_first_name !=
+          current_user.first_name %}
+          <h4 class="fw-bold mb-1 ms-3 text-center">
+            Chatting with {{ chatting_user_first_name|title }}
+          </h4>
+          {% elif chatting_user_first_name == current_user.first_name %}
+          <h4 class="fw-bold mb-1 ms-3 text-center">Chatting with Yourself</h4>
+          {% else %}
+          <h4 class="fw-bold mb-1 ms-3 text-center">Not Currently Chatting</h4>
+          {% endif %}
+
           <!-- No Conversation Message -->
           <ul
             class="{% if not messages %}message-list text-center{% else %}d-none{% endif %}"
