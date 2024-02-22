@@ -1,9 +1,13 @@
 <!-- app/templates/auth/register.html -->
 {% extends 'base.html' %} {% block content %}
+
 <div class="container mt-5">
   <div class="card mx-auto col-md-5 p-4 shadow-sm rounded-3 border-0">
     <h2 class="mb-4 text-center">Register</h2>
-    <form method="POST" action="{{ url_for('auth.register') }}">
+    <form
+      method="POST"
+      action="{{ url_for('auth.register_apogen_admin') if 'apogen_admin' in request.path else url_for('auth.register') }}"
+    >
       <!-- CSRF Token -->
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 

@@ -3,7 +3,7 @@
 from datetime import datetime, timezone, timedelta
 from app import db
 from ...database.models import MeterReading, Payment
-from ...payment_processor import process_payments_with_context
+from ..payment_processor import process_payments_with_context
 
 def make_payment_logic(meter_reading, payment_amount, payment_method, reference_number, status, user_id, invoice_id, invoice_amount, unique_user_id):
     try:

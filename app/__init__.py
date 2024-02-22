@@ -1,7 +1,7 @@
 # File: app/__init__.py
 
 import os
-from flask import Flask, current_app
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf.csrf import generate_csrf
@@ -31,7 +31,7 @@ def create_app():
     login_manager.login_view = 'auth.login'
 
     # Import payment processor
-    from app.backend.payment_processor import process_payments_with_context
+    from app.backend.accounts.payment_processor import process_payments_with_context
 
     # Initialize the scheduler
     scheduler = APScheduler()

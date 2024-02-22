@@ -2,7 +2,7 @@
 
 from sqlalchemy import func
 from app import create_app, db
-from .database.models import User, MeterReading, Payment
+from ..database.models import User, MeterReading, Payment
 
 def process_payments_with_context():
     app = create_app()
