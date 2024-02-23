@@ -7,13 +7,21 @@ from ...database.models import Message, User
 from .forms import MessageForm
 from .utils import get_received_unread_message_count, get_unread_message_count, get_user_messages
 
-
 messages_bp = Blueprint('messages', __name__, url_prefix='/accounts')
-
 
 @messages_bp.route('/messages', methods=['GET', 'POST'])
 @login_required
 def messages():
+    """
+    Route for displaying and sending messages.
+
+    GET: Renders the message template with message form and user messages.
+    POST: Handles message form submission and sends the message.
+
+    Returns:
+        render_template: Renders the messages template.
+        redirect: Redirects to the messages route.
+    """
     form = MessageForm()
 
     if request.method == 'POST' and form.validate_on_submit():

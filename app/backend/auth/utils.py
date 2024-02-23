@@ -6,7 +6,7 @@ from flask_login import login_user, logout_user, current_user
 from app.backend.database.models import User, db
 
 
-def login_user(form):
+def _login_user(form):
     """
     Internal function for handling user login.
 
@@ -39,7 +39,7 @@ def login_user(form):
     return render_template('auth/login.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
 
 
-def register_user(form, is_admin=False):
+def _register_user(form, is_admin=False):
     """
     Internal function for registering a user.
 

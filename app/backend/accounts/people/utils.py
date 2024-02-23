@@ -1,6 +1,7 @@
 # app/backend/accounts/people/routes.py
+
 import os
-from flask import flash,  url_for, current_app
+from flask import flash, url_for, current_app
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
@@ -8,6 +9,16 @@ from app import db
 from ...database.models import User
 
 def handle_add_new_users(form, current_user):
+    """
+    Handles the addition of new users.
+
+    Args:
+        form: The form containing user data.
+        current_user: The current user performing the action.
+
+    Returns:
+        dict: A dictionary indicating the success status and a message.
+    """
     mobile_number = form.mobile_number.data[-9:]
     first_name = form.first_name.data
     last_name = form.last_name.data
@@ -49,6 +60,16 @@ def handle_add_new_users(form, current_user):
         return {'success': False, 'message': f'Error adding user: {str(e)}'}
 
 def change_password(user, form):
+    """
+    Handles changing the password for a user.
+
+    Args:
+        user: The user whose password is being changed.
+        form: The form containing password data.
+
+    Returns:
+        bool: True if the password change was successful, False otherwise.
+    """
     if current_user.is_admin and form.current_password.data:
         if not user.check_password(form.current_password.data):
             flash('Current password is incorrect.', 'danger')
@@ -60,9 +81,27 @@ def change_password(user, form):
     return True
 
 def validate_new_password(password):
+    """
+    Validates a new password.
+
+    Args:
+        password (str): The password to validate.
+
+    Returns:
+        bool: True if the password is valid, False otherwise.
+    """
     return len(password) >= 6
 
 def save_profile_picture(profile_picture):
+    """
+    Saves a user's profile picture.
+
+    Args:
+        profile_picture: The profile picture to save.
+
+    Returns:
+        bool: True if the profile picture was saved successfully, False otherwise.
+    """
     try:
         filename = secure_filename(f"{current_user.mobile_number}.png")
 
@@ -78,6 +117,15 @@ def save_profile_picture(profile_picture):
         return False
 
 def delete_user(user):
+    """
+    Deletes a user from the database.
+
+    Args:
+        user: The user to be deleted.
+
+    Returns:
+        bool: True if the user was deleted successfully, False otherwise.
+    """
     try:
         db.session.delete(user)
         db.session.commit()

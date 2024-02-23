@@ -1,7 +1,7 @@
 # File: app/__init__.py
 
 import os
-from flask import Flask
+from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf.csrf import generate_csrf

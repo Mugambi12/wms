@@ -11,6 +11,7 @@
 <aside id="sidebar">
   <!-- Sidebar Content -->
   <div class="sidebar-content">
+    <!-- Sidebar Header -->
     <div class="d-flex mt-2">
       <!-- Toggle Button -->
       <button class="toggle-btn-desktop" type="button">
@@ -92,6 +93,17 @@
         </a>
       </li>
 
+      <!-- Expenses Options -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.expenses.expenses') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="wallet-outline" class="text-danger"></ion-icon>
+          <span>Expenses</span>
+        </a>
+      </li>
+
       <!-- Messages -->
       <li class="sidebar-item">
         <a
@@ -100,7 +112,7 @@
         >
           <ion-icon
             name="chatbubble-ellipses-outline"
-            class="text-warning"
+            class="text-success"
           ></ion-icon>
           <span>Messages</span>
         </a>
@@ -127,7 +139,7 @@
         >
           <ion-icon
             name="shield-checkmark-outline"
-            class="text-danger"
+            class="text-warning"
           ></ion-icon>
           <span>Security Options</span>
         </a>

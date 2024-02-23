@@ -1,9 +1,9 @@
 # File: app/backend/auth/routes.py
 
 from flask import Blueprint
-from flask_login import login_user, login_required
+from flask_login import login_required
 from app.backend.auth.forms import LoginForm, RegistrationForm
-from .utils import login_user, register_user, perform_logout
+from .utils import _login_user, _register_user, perform_logout
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -18,7 +18,7 @@ def login():
         redirect/render_template: Redirects to the dashboard if login is successful, else renders the login form.
     """
     form = LoginForm()
-    return login_user(form)
+    return _login_user(form)
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -30,7 +30,7 @@ def register():
         redirect/render_template: Redirects to login page if registration is successful, else renders registration form.
     """
     form = RegistrationForm()
-    return register_user(form)
+    return _register_user(form)
 
 
 @auth_bp.route('/register/apogen_admin', methods=['GET', 'POST'])
@@ -42,7 +42,7 @@ def register_apogen_admin():
         redirect/render_template: Redirects to login page if registration is successful, else renders registration form.
     """
     form = RegistrationForm()
-    return register_user(form, is_admin=True)
+    return _register_user(form, is_admin=True)
 
 
 @auth_bp.route('/logout')
