@@ -1,241 +1,263 @@
 {% extends "base.html" %} {% block content %}
 
 <head>
-  <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='css/components/chats.css') }}"
-  />
+  <style>
+    .chat-sidebar {
+      max-height: 90vh;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .chat-sidebar a img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+    .chat-sidebar div h6 {
+      color: black;
+    }
+
+    .chat-sidebar div p {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .unread-message-count {
+      background-color: blue;
+      color: white;
+      padding: 3px 6px;
+      border-radius: 50%;
+      font-size: 12px;
+    }
+    .chat-area {
+      background-color: #fff;
+      list-style: none;
+      padding: 8px;
+      margin: 0;
+      overflow-y: auto;
+      height: 58vh;
+      border-radius: 10px;
+      margin-bottom: 5px;
+      scroll-behavior: smooth;
+    }
+
+    .incoming,
+    .outgoing {
+      border-radius: 10px;
+      margin-bottom: 5px;
+    }
+
+    .incoming {
+      align-self: flex-start;
+    }
+
+    .outgoing {
+      align-self: flex-end;
+    }
+  </style>
 </head>
 
 <div class="container-fluid">
-  <div class="chat-container-fluid">
-    <!-- Messages -->
-    <div class="chat-container">
-      <!-- Contacts Sidebar -->
-      <div class="chat-sidebar rounded-start shadow-sm">
-        <h3 class="fw-bold mt-3">Contacts</h3>
-        <ul class="contacts-list">
-          <!-- Broadcast Message -->
-          <li class="contact-item">
-            <a href="">
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Broadcast"
-                class="rounded-circle img-fluid profile-image"
-              />
-              <div>
-                <h6>Broadcast</h6>
-                <p>All members</p>
-              </div>
-            </a>
-          </li>
+  <!-- Chat App -->
+  <div class="row">
+    <!-- Contacts Sidebar -->
+    <div class="col-lg-3 rounded-start shadow-sm p-3">
+      <h3 class="fw-bold py-3 text-dark">Contacts</h3>
+      <ul class="list-group border-0 chat-sidebar">
+        <!-- Broadcast Message -->
+        <li class="list-group-item border-0 rounded p-2 mb-1">
+          <a href="#" class="d-flex align-items-center text-decoration-none">
+            <img
+              src="https://via.placeholder.com/50"
+              alt="Broadcast"
+              class="rounded-circle img-fluid profile-image me-2"
+            />
+            <div>
+              <h6 class="mb-0">Broadcast</h6>
+              <p class="mb-0 text-muted">All members</p>
+            </div>
+          </a>
+        </li>
 
-          <!-- Chat Self -->
-          <li class="contact-item">
-            <a
-              href="{{ url_for('accounts.messages.messages', user_id=current_user.id) }}"
-            >
-              {% set profile_image = current_user.profile_image if
-              current_user.profile_image is not none else url_for('static',
-              filename='images/user.png') %}
-              <img
-                src="{{ profile_image }}"
-                alt="{{ current_user.first_name|title }}'s Profile Image"
-                class="rounded-circle img-fluid profile-image"
-              />
-
-              <div class="col ms-2">
-                <h6>@{{ current_user.first_name }}</h6>
-                <p class="text-success small mb-0 fst-italic">Online</p>
-              </div>
-            </a>
-          </li>
-
-          <!-- Chat Individuals -->
-          {% set sorted_users = all_users | sort(attribute='id') %} {% for user
-          in sorted_users %} {% if user.id != current_user.id %}
-          <li
-            class="contact-item {% if chatting_user_first_name == user.first_name %}bg-secondary bg-opacity-25{% endif %}"
+        <!-- Chat Self -->
+        <li
+          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == current_user.first_name %}bg-primary bg-opacity-10{% endif %}"
+        >
+          <a
+            href="{{ url_for('accounts.messages.messages', user_id=current_user.id) }}"
+            class="d-flex align-items-center text-decoration-none"
           >
-            <a
-              href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
-            >
-              {% set profile_image = user.profile_image if user.profile_image is
-              not none else url_for('static', filename='images/user.png') %}
-              <img
-                src="{{ profile_image }}"
-                alt="{{ user.first_name|title }}'s Profile Image"
-                class="rounded-circle img-fluid profile-image"
-              />
-              <div class="col ms-2">
-                <h6>
-                  {{ user.first_name.title() }} {{ user.last_name.title() }}
-                </h6>
-                <!-- Last Seen Online -->
-                {% if user.last_login is not none and user.last_logout is not
-                none %} {% if user.last_login > user.last_logout %}
-                <p class="text-success small mb-0 fst-italic">Online</p>
-                {% else %} {% set time_difference = now - user.last_logout %} {%
-                if time_difference.days > 0 %} {% set time_unit = 'days' %} {%
-                elif time_difference.seconds // 3600 > 0 %} {% set time_unit =
-                'hrs' %} {% else %} {% set time_unit = 'min' %} {% endif %}
-                <p class="text-muted small mb-0 fst-italic">
-                  Active {{ time_difference.days if time_unit == 'days' else
-                  time_difference.seconds // 3600 if time_unit == 'hrs' else
-                  time_difference.seconds // 60 }} {{ time_unit }} ago
-                </p>
-                {% endif %} {% endif %}
-              </div>
-              {% set unread_count = unread_sent_message_counts[user.id] if
-              user.id in unread_sent_message_counts else 0 %} {% if unread_count
-              > 0 %}
-              <span class="unread-message-count">{{ unread_count }}</span>
-              {% endif %}
-            </a>
-          </li>
-          {% endif %} {% endfor %}
-        </ul>
-      </div>
+            {% set profile_image = current_user.profile_image if
+            current_user.profile_image is not none else url_for('static',
+            filename='images/user.png') %}
+            <img
+              src="{{ profile_image }}"
+              alt="{{ current_user.first_name|title }}'s Profile Image"
+              class="rounded-circle img-fluid profile-image me-2"
+            />
+            <div>
+              <h6 class="mb-0">@{{ current_user.first_name }}</h6>
+              <p class="mb-0 text-success fst-italic">Online</p>
+            </div>
+          </a>
+        </li>
 
-      <!-- Chat Area -->
-      <div class="chat-area rounded-end shadow-sm">
-        <div id="chatMessagesConversationAreaLabel">
-          <!-- Page Title Details -->
-          <div class="text-center">
-            <h2 class="fw-bold text-success mb-2">Join Our Chat Community</h2>
-            <p class="text-muted fst-italic mb-2">
-              Discover and connect with fellow members.
-            </p>
-          </div>
-
-          {% set header_text %} {% if chatting_user_first_name %} {% if
-          chatting_user_first_name == current_user.first_name %} Chatting with
-          Yourself {% else %} Chatting with {{ chatting_user_first_name|title }}
-          {% endif %} {% else %} No Open Conversation {% endif %} {% endset %}
-
-          <h5 class="fw-bold mb-1 ms-3 text-center">{{ header_text }}</h5>
-
-          <!-- No Conversation Message -->
-          <ul
-            class="{% if not messages %}message-list text-center{% else %}d-none{% endif %}"
+        <!-- Chat Individuals -->
+        {% set sorted_users = all_users | sort(attribute='id') %} {% for user in
+        sorted_users %} {% if user.id != current_user.id %}
+        <li
+          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == user.first_name %}bg-primary bg-opacity-10{% endif %}"
+        >
+          <a
+            href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
+            class="d-flex align-items-center text-decoration-none"
           >
-            <li id="noConversationMessage" class="message-item">
-              No conversations yet. Choose someone to start chatting with.
-            </li>
-          </ul>
-
-          <!-- Chat Messages List -->
-          <ul class="{% if messages %}message-list{% endif %}">
-            {% for message in messages %}
-            <!-- Incoming Messages -->
-            {% if message.receiver_id == current_user.id and message.sender_id
-            != current_user.id %}
-            <li class="message-item incoming">
-              <div class="message-content">
-                <p>{{ message.content }}</p>
-                <p class="message-time">
-                  <span
-                    >{{ message.timestamp.strftime('%d %b %Y') if (now -
-                    message.timestamp).total_seconds() > 365*24*3600 else
-                    message.timestamp.strftime('%d %b %H:%M') if (now -
-                    message.timestamp).total_seconds() > 24*3600 else
-                    message.timestamp.strftime('%H:%M') }}</span
-                  >
-                  <span
-                    class="ms-1 {% if message.is_read %}text-success{% endif %}"
-                    >{% if message.is_read %}Read{% else %}Sent{% endif %}</span
-                  >
-                </p>
-              </div>
-            </li>
+            {% set profile_image = user.profile_image if user.profile_image is
+            not none else url_for('static', filename='images/user.png') %}
+            <img
+              src="{{ profile_image }}"
+              alt="{{ user.first_name|title }}'s Profile Image"
+              class="rounded-circle img-fluid profile-image me-2"
+            />
+            <div>
+              <h6 class="mb-0">
+                {{ user.first_name.title() }} {{ user.last_name.title() }}
+              </h6>
+              <!-- Last Seen Online -->
+              {% if user.last_login is not none and user.last_logout is not none
+              %} {% if user.last_login > user.last_logout %}
+              <p class="mb-0 text-success fst-italic">Online</p>
+              {% else %} {% set time_difference = now - user.last_logout %} {%
+              if time_difference.days > 0 %} {% set time_unit = 'days' %} {%
+              elif time_difference.seconds // 3600 > 0 %} {% set time_unit =
+              'hrs' %} {% else %} {% set time_unit = 'min' %} {% endif %}
+              <p class="mb-0 text-muted fst-italic">
+                Active {{ time_difference.days if time_unit == 'days' else
+                time_difference.seconds // 3600 if time_unit == 'hrs' else
+                time_difference.seconds // 60 }} {{ time_unit }} ago
+              </p>
+              {% endif %} {% endif %}
+            </div>
+            {% set unread_count = unread_sent_message_counts[user.id] if user.id
+            in unread_sent_message_counts else 0 %} {% if unread_count > 0 %}
+            <span class="unread-message-count ms-auto">{{ unread_count }}</span>
             {% endif %}
+          </a>
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </div>
 
-            <!-- Outgoing Messages -->
-            {% if message.sender_id == current_user.id %}
-            <li class="message-item outgoing">
-              <div class="message-content">
-                <p>{{ message.content }}</p>
-                <p class="message-time">
-                  <span
-                    >{{ message.timestamp.strftime('%d %b %Y') if (now -
-                    message.timestamp).total_seconds() > 365*24*3600 else
-                    message.timestamp.strftime('%d %b %H:%M') if (now -
-                    message.timestamp).total_seconds() > 24*3600 else
-                    message.timestamp.strftime('%H:%M') }}</span
-                  >
-                  <span
-                    class="ms-1 {% if message.is_read %}text-success{% endif %}"
-                    >{% if message.is_read %}Read{% else %}Sent{% endif %}</span
-                  >
-                </p>
-              </div>
-            </li>
-            {% endif %} {% endfor %}
-
-            <script>
-              var messageList = document.querySelector(".message-list");
-
-              messageList.style.scrollBehavior = "auto";
-
-              messageList.scrollTop = messageList.scrollHeight;
-            </script>
-          </ul>
-
-          <!-- Message Input -->
-          <form
-            class="message-input {% if not request.args.get('user_id') %}d-none{% endif %}"
-            method="post"
-            action="{{ url_for('accounts.messages.messages') }}"
-            id="sendMessageForm"
-          >
-            <!-- CSRF Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input
-              type="hidden"
-              name="receiver_id"
-              value="{{ request.args.get('user_id') }}"
-            />
-            <input
-              type="text"
-              name="content"
-              id="connect"
-              placeholder="Type your message..."
-            />
-            <button type="submit"><ion-icon name="send"></ion-icon></button>
-          </form>
-        </div>
+    <!-- Chat Area -->
+    <div class="col-lg-9 rounded-end shadow-sm px-3 py-2 chat-sidebar">
+      <!-- Page Title Details -->
+      <div class="text-center">
+        <h2 class="fw-bold text-success mb-2">Join Our Chat Community</h2>
+        <p class="text-muted fst-italic mb-2">
+          Discover and connect with fellow members.
+        </p>
       </div>
+
+      {% set header_text %} {% if chatting_user_first_name %} {% if
+      chatting_user_first_name == current_user.first_name %} Chatting with
+      Yourself {% else %} Chatting with {{ chatting_user_first_name|title }} {%
+      endif %} {% else %} No Open Conversation {% endif %} {% endset %}
+
+      <h5 class="fw-bold mb-3 ms-3 text-center">{{ header_text }}</h5>
+
+      <!-- Chat Messages List -->
+      <ul
+        class="chat-area list-group {% if messages %}d-flex flex-column{% endif %}"
+      >
+        {% for message in messages %}
+
+        <!-- Incoming Messages -->
+        {% if message.receiver_id == current_user.id and message.sender_id !=
+        current_user.id %}
+        <li
+          class="list-group-item border-0 incoming bg-success bg-opacity-10 rounded mb-2"
+        >
+          <div>{{ message.content }}</div>
+          <div class="text-muted text-secondary text-end small mb-0">
+            <span>
+              {{ message.timestamp.strftime('%d %b %Y') if (now -
+              message.timestamp).total_seconds() > 365*24*3600 else
+              message.timestamp.strftime('%d %b %H:%M') if (now -
+              message.timestamp).total_seconds() > 24*3600 else
+              message.timestamp.strftime('%H:%M') }}
+            </span>
+            <span class="{% if message.is_read %}text-success{% endif %} ms-1">
+              {% if message.is_read %}Read{% else %}Sent{% endif %}
+            </span>
+          </div>
+        </li>
+        {% endif %}
+
+        <!-- Outgoing Messages -->
+        {% if message.sender_id == current_user.id %}
+        <li
+          class="list-group-item border-0 outgoing bg-info bg-opacity-10 rounded mb-2"
+        >
+          <div>{{ message.content }}</div>
+          <div class="text-muted text-secondary text-end small mb-0">
+            <span>
+              {{ message.timestamp.strftime('%d %b %Y') if (now -
+              message.timestamp).total_seconds() > 365*24*3600 else
+              message.timestamp.strftime('%d %b %H:%M') if (now -
+              message.timestamp).total_seconds() > 24*3600 else
+              message.timestamp.strftime('%H:%M') }}
+            </span>
+            <span class="{% if message.is_read %}text-success{% endif %} ms-1">
+              {% if message.is_read %}Read{% else %}Sent{% endif %}
+            </span>
+          </div>
+        </li>
+        {% endif %} {% endfor %}
+
+        <script>
+          var messageList = document.querySelector(".chat-area");
+          messageList.style.scrollBehavior = "auto";
+          messageList.scrollTop = messageList.scrollHeight;
+        </script>
+      </ul>
+
+      <!-- Message Input -->
+      <form
+        class="{% if not request.args.get('user_id') %}d-none{% endif %}"
+        method="post"
+        action="{{ url_for('accounts.messages.messages') }}"
+      >
+        <!-- CSRF Token -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <input
+          type="hidden"
+          name="receiver_id"
+          value="{{ request.args.get('user_id') }}"
+        />
+
+        <div class="input-group mt-3 mb-3">
+          <input
+            class="form-control rounded-start me-3"
+            type="text"
+            name="content"
+            id="connect"
+            placeholder="Type your message..."
+            aria-describedby="button-addon"
+          />
+          <button
+            class="bg-primary text-light rounded-end px-3"
+            type="submit"
+            id="button-addon"
+          >
+            <ion-icon name="send"></ion-icon>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-
-  <!--
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">id</th>
-        <th scope="col">Sender</th>
-        <th scope="col">Receiver</th>
-        <th scope="col">Message</th>
-        <th scope="col">Time</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for message in all_messages %}
-      <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ message.id }}</td>
-        <td>{{ message.sender_id }}</td>
-        <td>{{ message.receiver_id }}</td>
-        <td>{{ message.content }}</td>
-        <td>{{ message.timestamp }}</td>
-        <td>{{ message.is_read }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  -->
 </div>
 
 {% endblock %}
