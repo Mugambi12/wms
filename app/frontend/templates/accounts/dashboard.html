@@ -282,7 +282,7 @@
                 <td class="text-start">
                   {{ invoice.customer_name.split()[0]|title }}
                 </td>
-                <td>{{ invoice.house_section.title }}</td>
+                <td>{{ invoice.house_section.title() }}</td>
                 <td>{{ invoice.house_number }}</td>
                 <td>{{ "%0.0f"|format(invoice.consumed) }}</td>
                 <td>{{ "%0.0f"|format(invoice.sub_total_price) }}</td>

@@ -54,6 +54,16 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
+# Define Sticky Notes model
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def __init__(self, user_id, content):
+        self.user_id = user_id
+        self.content = content
+
 
 # Define MeterReading model
 class MeterReading(db.Model):
@@ -118,15 +128,28 @@ class Payment(db.Model):
         self.unique_user_id = unique_user_id
 
 
-# Define Sticky Notes model
-class Note(db.Model):
+# Define Expense model
+class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    expense_type = db.Column(db.String(255), nullable=False)
+    vendor = db.Column(db.String(255), nullable=False)
+    amount = db.Column(db.Float(), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, user_id, content):
+    def __init__(self, user_id, timestamp, expense_type, vendor, amount, description, status):
         self.user_id = user_id
-        self.content = content
+        self.timestamp = timestamp
+        self.expense_type = expense_type
+        self.vendor = vendor
+        self.amount = amount
+        self.description = description
+        self.status = status
+
+    def __repr__(self):
+        return f'<Expense {self.id}>'
 
 
 # Define Message model

@@ -54,7 +54,7 @@ body {
   flex: 1;
   background-color: aqua;
   border-right: 1px solid #ccc;
-  max-height: 73vh;
+  max-height: 90vh;
 }
 .chat-sidebar h3 {
   padding: 10px 20px;
@@ -64,7 +64,7 @@ body {
   padding: 0;
   margin: 0;
   overflow-y: auto;
-  height: 61.5vh;
+  height: 78vh;
   background-color: #fff;
   scroll-behavior: smooth;
 }
@@ -108,7 +108,7 @@ body {
 .chat-area {
   flex: 3;
   padding: 20px;
-  max-height: 73vh;
+  max-height: 90vh;
   background-color: #f3f3f3;
 }
 .message-list {
@@ -117,7 +117,7 @@ body {
   padding: 8px;
   margin: 0;
   overflow-y: auto;
-  height: 53vh;
+  height: 58vh;
   border-radius: 10px;
   margin-bottom: 5px;
   scroll-behavior: smooth;

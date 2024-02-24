@@ -9,13 +9,6 @@
 
 <div class="container-fluid">
   <div class="chat-container-fluid">
-    <div class="message-page-header text-center mt-2">
-      <h2 class="mb-1 fw-bold text-primary">Join Our Chat Community</h2>
-      <p class="mb-3 text-muted fst-italic">
-        Discover and connect with fellow members.
-      </p>
-    </div>
-
     <!-- Messages -->
     <div class="chat-container">
       <!-- Contacts Sidebar -->
@@ -107,16 +100,20 @@
       <!-- Chat Area -->
       <div class="chat-area rounded-end shadow-sm">
         <div id="chatMessagesConversationAreaLabel">
-          {% if chatting_user_first_name and chatting_user_first_name !=
-          current_user.first_name %}
-          <h5 class="fw-bold mb-1 ms-3 text-center">
-            Chatting with {{ chatting_user_first_name|title }}
-          </h5>
-          {% elif chatting_user_first_name == current_user.first_name %}
-          <h5 class="fw-bold mb-1 ms-3 text-center">Chatting with Yourself</h5>
-          {% else %}
-          <h5 class="fw-bold mb-1 ms-3 text-center">No Open Conversation</h5>
-          {% endif %}
+          <!-- Page Title Details -->
+          <div class="text-center">
+            <h2 class="fw-bold text-success mb-2">Join Our Chat Community</h2>
+            <p class="text-muted fst-italic mb-2">
+              Discover and connect with fellow members.
+            </p>
+          </div>
+
+          {% set header_text %} {% if chatting_user_first_name %} {% if
+          chatting_user_first_name == current_user.first_name %} Chatting with
+          Yourself {% else %} Chatting with {{ chatting_user_first_name|title }}
+          {% endif %} {% else %} No Open Conversation {% endif %} {% endset %}
+
+          <h5 class="fw-bold mb-1 ms-3 text-center">{{ header_text }}</h5>
 
           <!-- No Conversation Message -->
           <ul
@@ -186,7 +183,7 @@
 
           <!-- Message Input -->
           <form
-            class="message-input {% if not messages %}d-none{% endif %}"
+            class="message-input {% if not request.args.get('user_id') %}d-none{% endif %}"
             method="post"
             action="{{ url_for('accounts.messages.messages') }}"
             id="sendMessageForm"
