@@ -1,4 +1,5 @@
 # app/backend/accounts/people/forms.py
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField, SubmitField, SelectField
 from wtforms.validators import EqualTo, DataRequired, Email, Length, Optional, ValidationError
