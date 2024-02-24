@@ -27,7 +27,7 @@ def add_expense():
             vendor=form.vendor.data,
             amount=form.amount.data,
             description=form.description.data,
-            status='Pending'
+            status=form.status.data
         )
         db.session.add(expense)
         db.session.commit()

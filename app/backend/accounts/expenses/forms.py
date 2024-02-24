@@ -1,8 +1,8 @@
 # app/backend/accounts/expenses/forms.py
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, FloatField, TextAreaField, DateField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SelectField, FloatField, TextAreaField
+from wtforms.validators import DataRequired, Optional
 
 class AddExpenseForm(FlaskForm):
     expense_type = SelectField('Expense Type', choices=[
@@ -17,3 +17,9 @@ class AddExpenseForm(FlaskForm):
     vendor = StringField('Vendor', validators=[DataRequired()])
     amount = FloatField('Amount', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
+    status = SelectField('Status', choices=[
+    ('Pending', 'Pending'),
+    ('Approved', 'Approved'),
+    ('Completed', 'Completed'),
+    ('Rejected', 'Rejected')
+], validators=[Optional()])
