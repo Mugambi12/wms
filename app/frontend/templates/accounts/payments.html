@@ -48,7 +48,7 @@
                 <td>{{ payment.invoice_id }}</td>
                 <td>{{ payment.id }}</td>
                 <td>{{ payment.unique_user_id }}</td>
-                <td>{{ payment.payment_date.strftime('%d-%m-%Y') }}</td>
+                <td>{{ payment.payment_date.strftime('%d %b %Y') }}</td>
                 <td>{{ payment.reference_number }}</td>
                 <td>{{ payment.payment_method }}</td>
                 <td>{{ payment.invoice_amount }}</td>
@@ -119,9 +119,9 @@
                         <input type="hidden" name="form_type" value="delete" />
                         <p>
                           Delete payment <b>ID {{ payment.id }}</b> of
-                          <b>KES {{ "%0.0f"|format(payment.amount) }}</b> for
+                          <b>KES {{ payment.amount | format_amount }}</b> for
                           invoice <b>{{ payment.invoice_id }}</b> (KES {{
-                          "%0.0f"|format(payment.invoice_amount) }})?
+                          payment.invoice_amount | format_amount }})?
                         </p>
                       </div>
                       <div class="modal-footer justify-content-between">

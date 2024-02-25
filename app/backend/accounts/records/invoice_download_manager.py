@@ -159,7 +159,7 @@ def generate_invoice_pdf(invoice_data):
                             <h1>Invoice</h1>
                             </div>
                             <div class="bottom-header">
-                            <span>Date:</span> {{ invoice_data.timestamp.strftime('%d-%m-%Y') }}
+                            <span>Date:</span> {{ invoice_data.timestamp.strftime('%d %b %Y') }}
                             <span>Invoice:</span> #{{ invoice_data.invoice_id }}
                             </div>
                         </header>
@@ -265,21 +265,21 @@ def generate_invoice_pdf(invoice_data):
                                 <tr>
                                 <td>{{ invoice_data.first_service }}</td>
                                 <td>{{ invoice_data.first_description }}</td>
-                                <td>KES {{ "%0.0f"|format(invoice_data.unit_price) }}</td>
-                                <td>{{ "%0.0f"|format(invoice_data.consumed) }}</td>
+                                <td>KES {{ invoice_data.unit_price | format_amount }}</td>
+                                <td>{{ invoice_data.consumed | format_amount }}</td>
                                 <td>
-                                    KES {{ "%0.0f"|format(invoice_data.unit_price *
-                                    invoice_data.consumed) }}
+                                    KES {{ (invoice_data.unit_price *
+                                    invoice_data.consumed) | format_amount }}
                                 </td>
                                 </tr>
                                 <tr>
                                 <td>{{ invoice_data.second_service }}</td>
                                 <td>{{ invoice_data.second_description }}</td>
-                                <td>KES {{ "%0.0f"|format(invoice_data.service_fee) }}</td>
-                                <td>{{ "%0.0f"|format(invoice_data.service_qty) }}</td>
+                                <td>KES {{ invoice_data.service_fee | format_amount }}</td>
+                                <td>{{ invoice_data.service_qty | format_amount }}</td>
                                 <td>
-                                    KES {{ "%0.0f"|format(invoice_data.service_fee *
-                                    invoice_data.service_qty) }}
+                                    KES {{ (invoice_data.service_fee *
+                                    invoice_data.service_qty) | format_amount }}
                                 </td>
                                 </tr>
                             </tbody>
@@ -296,24 +296,24 @@ def generate_invoice_pdf(invoice_data):
                                     <tr>
                                     <td><b>Sub Total:</b></td>
                                     <td>
-                                        KES {{ "%0.0f"|format(invoice_data.sub_total_price +
-                                        invoice_data.service_fee * invoice_data.service_qty) }}
+                                        KES {{ (invoice_data.sub_total_price +
+                                        invoice_data.service_fee * invoice_data.service_qty) | format_amount }}
                                     </td>
                                     </tr>
                                     <tr>
                                     <td><b>VAT (5%):</b></td>
                                     <td>
-                                        KES {{ "%0.0f"|format(0.05 * (invoice_data.sub_total_price +
-                                        invoice_data.service_fee * invoice_data.service_qty)) }}
+                                        KES {{ (0.05 * (invoice_data.sub_total_price +
+                                        invoice_data.service_fee * invoice_data.service_qty)) | format_amount }}
                                     </td>
                                     </tr>
                                     <tr>
                                     <td><b>Total:</b></td>
                                     <td>
-                                        KES {{ "%0.0f"|format((invoice_data.sub_total_price +
+                                        KES {{ ((invoice_data.sub_total_price +
                                         invoice_data.service_fee * invoice_data.service_qty) + (0.05
                                         * (invoice_data.sub_total_price + invoice_data.service_fee *
-                                        invoice_data.service_qty))) }}
+                                        invoice_data.service_qty))) | format_amount }}
                                     </td>
                                     </tr>
                                 </tbody>

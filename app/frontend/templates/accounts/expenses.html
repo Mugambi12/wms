@@ -124,7 +124,6 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">ID</th>
                 <th scope="col">UserID</th>
                 <th scope="col">Date</th>
                 <th scope="col">Expense Type</th>
@@ -139,19 +138,18 @@
               {% for expense in expenses | reverse %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ expense.id }}</td>
                 <td>{{ expense.user_id }}</td>
-                <td>{{ expense.timestamp.strftime('%Y-%m-%d') }}</td>
+                <td>{{ expense.timestamp.strftime('%d %b %Y') }}</td>
                 <td>{{ expense.expense_type }}</td>
                 <td>{{ expense.vendor }}</td>
-                <td>{{ expense.amount }}</td>
+                <td>{{ expense.amount | format_amount }}</td>
                 <td>{{ expense.description }}</td>
                 <td>{{ expense.status }}</td>
                 <td>
                   <button
                     class="btn btn-sm btn-primary"
                     data-bs-toggle="modal"
-                    data-bs-target="#editExpenseModal"
+                    data-bs-target="#editExpenseModal{{ expense.id }}"
                   >
                     Edit
                   </button>
@@ -169,11 +167,9 @@
               <!-- Edit Expense Modal -->
               <div
                 class="modal fade"
-                id="editExpenseModal"
-                data-bs-backdrop="static"
-                data-bs-keyboard="false"
+                id="editExpenseModal{{ expense.id }}"
                 tabindex="-1"
-                aria-labelledby="editExpenseModalLabel"
+                aria-labelledby="editExpenseModalLabel{{ expense.id }}"
                 aria-hidden="true"
               >
                 <div
@@ -182,7 +178,10 @@
                   <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                      <h5 class="modal-title" id="editExpenseModalLabel">
+                      <h5
+                        class="modal-title"
+                        id="editExpenseModalLabel{{ expense.id }}"
+                      >
                         Edit Expense
                       </h5>
                       <button
@@ -192,39 +191,75 @@
                         aria-label="Close"
                       ></button>
                     </div>
+                    <form
+                      method="post"
+                      action="{{ url_for('accounts.expenses.edit_expense', expense_id=expense.id) }}"
+                    >
+                      <!-- CSRF Token -->
+                      <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                      />
 
-                    <!-- Modal Body -->
-                    <div class="modal-body">
-                      <form>
+                      <!-- Modal Body -->
+                      <div class="modal-body">
                         <div class="row">
                           <div class="mb-3 col-md-6">
                             <label for="expenseType" class="form-label"
                               >Expense Type</label
                             >
-                            <select class="form-select" id="expenseType">
+                            <select
+                              class="form-select"
+                              id="expenseType"
+                              name="expense_type"
+                            >
                               <option value="">Select expense type</option>
-                              <option value="equipmentAcquisition">
-                                Equipment Acquisition
+                              {% for choice in
+                              edit_expense_form.expense_type.choices %}
+                              <option
+                                value="{{ choice[0] }}"
+                                {%
+                                if
+                                choice[0] == expense.expense_type
+                                %}
+                                selected
+                                {%
+                                endif
+                                %}
+                              >
+                                {{ choice[1] }}
                               </option>
-                              <option value="infrastructureRepairs">
-                                Infrastructure Repairs
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="mb-3 col-md-6">
+                            <label for="expenseStatus" class="form-label"
+                              >Status</label
+                            >
+                            <select
+                              class="form-select"
+                              id="expenseStatus"
+                              name="status"
+                            >
+                              <option value="">Select expense type</option>
+                              {% for choice in edit_expense_form.status.choices
+                              %}
+                              <option
+                                value="{{ choice[0] }}"
+                                {%
+                                if
+                                choice[0] == expense.status
+                                %}
+                                selected
+                                {%
+                                endif
+                                %}
+                              >
+                                {{ choice[1] }}
                               </option>
-                              <option value="maintenance">
-                                Maintenance Services
-                              </option>
-                              <option value="trainingAndCertifications">
-                                Training and Certifications
-                              </option>
-                              <option value="utilities">
-                                Utilities (e.g., electricity)
-                              </option>
-                              <option value="waterQualityTesting">
-                                Water Quality Testing
-                              </option>
-                              <option value="waterTreatmentChemicals">
-                                Water Treatment Chemicals
-                              </option>
-                              <!-- Add more options as needed -->
+                              {% endfor %}
                             </select>
                           </div>
 
@@ -236,7 +271,8 @@
                               type="text"
                               class="form-control"
                               id="expenseVendor"
-                              placeholder="Enter vendor"
+                              name="vendor"
+                              value="{{ expense.vendor }}"
                             />
                           </div>
 
@@ -248,7 +284,8 @@
                               type="number"
                               class="form-control"
                               id="expenseAmount"
-                              placeholder="Enter amount"
+                              name="amount"
+                              value="{{ expense.amount }}"
                             />
                           </div>
 
@@ -260,6 +297,8 @@
                               type="datetime-local"
                               class="form-control"
                               id="expenseDate"
+                              name="timestamp"
+                              value="{{ expense.timestamp.strftime('%Y-%m-%yT%H:%M') }}"
                             />
                           </div>
                         </div>
@@ -271,26 +310,27 @@
                           <textarea
                             class="form-control"
                             id="expenseDescription"
+                            name="description"
                             rows="3"
-                            placeholder="Enter description"
-                          ></textarea>
+                          >
+{{ expense.description }}</textarea>
                         </div>
-                      </form>
-                    </div>
+                      </div>
 
-                    <!-- Modal Footer -->
-                    <div class="modal-footer justify-content-between">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        Cancel
-                      </button>
-                      <button type="button" class="btn btn-sm btn-primary">
-                        Update
-                      </button>
-                    </div>
+                      <!-- Modal Footer -->
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button type="submit" class="btn btn-sm btn-primary">
+                          Update
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -337,7 +377,7 @@
                           <li><strong>Expense ID:</strong> {{ expense.id }}</li>
                           <li>
                             <strong>Date:</strong> {{
-                            expense.timestamp.strftime('%Y-%m-%d') }}
+                            expense.timestamp.strftime('%d %b %Y') }}
                           </li>
                           <li>
                             <strong>Expense Type:</strong> {{

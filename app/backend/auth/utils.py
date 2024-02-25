@@ -68,6 +68,8 @@ def _register_user(form, is_admin=False):
 
         if is_admin:
             new_user.is_admin = True
+        else:
+            new_user.is_active = False
 
         new_user.unique_user_id = new_user.generate_unique_user_id()
 

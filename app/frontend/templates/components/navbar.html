@@ -164,7 +164,7 @@
               Balance
               <span
                 class="fw-bold {% if current_user.balance > 0 %}text-success{% elif current_user.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
-                >KES {{ "%0.0f"|format(current_user.balance) }}</span
+                >KES {{ current_user.balance | format_amount }}</span
               >
             </a>
           </li>

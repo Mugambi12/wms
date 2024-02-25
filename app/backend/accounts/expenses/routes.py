@@ -2,18 +2,21 @@
 
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
-from app.backend.accounts.expenses.forms import AddExpenseForm
+from app.backend.accounts.expenses.forms import AddExpenseForm, EditExpenseForm
 from app.backend.database.models import Expense, db
 from datetime import datetime, timezone, timedelta
 
+
 expenses_bp = Blueprint('expenses', __name__, url_prefix='/expenses')
 
-@expenses_bp.route('/')
+
+@expenses_bp.route('/expenses')
 @login_required
 def expenses():
     expenses = Expense.query.all()
     add_expense_form = AddExpenseForm()
-    return render_template('accounts/expenses.html', expenses=expenses, add_expense_form=add_expense_form, hide_footer=True)
+    edit_expense_form = EditExpenseForm()
+    return render_template('accounts/expenses.html', expenses=expenses, add_expense_form=add_expense_form, edit_expense_form=edit_expense_form, hide_footer=True)
 
 @expenses_bp.route('/add_expense', methods=['POST'])
 @login_required
@@ -35,7 +38,19 @@ def add_expense():
         return redirect(url_for('accounts.expenses.expenses'))
     return render_template('accounts/expenses.html', add_expense_form=form, hide_footer=True)
 
+@expenses_bp.route('/edit_expense/<int:expense_id>', methods=['GET', 'POST'])
+@login_required
+def edit_expense(expense_id):
+    edit_expense = Expense.query.get_or_404(expense_id)
+    edit_expense_form = EditExpenseForm(obj=edit_expense)
 
+    if edit_expense_form.validate_on_submit():
+        edit_expense_form.populate_obj(edit_expense)
+        db.session.commit()
+        flash('Expense updated successfully!', 'success')
+        return redirect(url_for('accounts.expenses.expenses'))
+
+    return render_template('accounts/expenses.html', form=edit_expense_form, expense=edit_expense, hide_footer=True)
 
 @expenses_bp.route('/delete_expense/<int:expense_id>', methods=['POST'])
 @login_required

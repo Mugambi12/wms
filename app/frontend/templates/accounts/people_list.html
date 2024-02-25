@@ -270,7 +270,7 @@
                 <td
                   class="fw-bold text-center {% if person.balance > 0 %}text-success{% elif person.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
                 >
-                  {{ "%0.0f"|format(person.balance) }}
+                  {{ person.balance | format_amount }}
                 </td>
                 <td>
                   {% if person.is_active %}<span class="text-success"

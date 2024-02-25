@@ -104,15 +104,15 @@
                 <td>{{ entry.house_number }}</td>
                 <td>{{ entry.unique_user_id }}</td>
                 <td>
-                  {{ "%0.0f"|format(entry.prev_reading) if entry.prev_reading is
+                  {{ entry.prev_reading | format_amount if entry.prev_reading is
                   not none else "None" }}
                 </td>
-                <td>{{ "%0.0f"|format(entry.curr_reading) }}</td>
-                <td>{{ "%0.0f"|format(entry.consumed) }}</td>
-                <td>{{ "%0.0f"|format(entry.unit_price) }}</td>
-                <td>{{ "%0.0f"|format(entry.sub_total_price) }}</td>
-                <td>{{ "%0.0f"|format(entry.service_fee) }}</td>
-                <td>{{ "%0.0f"|format(entry.total_price) }}</td>
+                <td>{{ entry.curr_reading | format_amount }}</td>
+                <td>{{ entry.consumed | format_amount }}</td>
+                <td>{{ entry.unit_price | format_amount }}</td>
+                <td>{{ entry.sub_total_price | format_amount }}</td>
+                <td>{{ entry.service_fee | format_amount }}</td>
+                <td>{{ entry.total_price | format_amount }}</td>
                 <td
                   class="fst-italic {% if entry.reading_status %}text-success{% else %}text-secondary{% endif %}"
                 >
@@ -208,7 +208,7 @@
                               </p>
                               <p>
                                 <strong>Amount:</strong> KES {{
-                                "%0.0f"|format(entry.total_price) }}
+                                entry.total_price | format_amount }}
                               </p>
                               <p>
                                 <strong>Consumed Units:</strong> {{

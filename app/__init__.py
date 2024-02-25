@@ -11,6 +11,11 @@ from flask_apscheduler import APScheduler
 db = SQLAlchemy()
 login_manager = LoginManager()
 
+# Define custom Jinja2 filter
+def format_amount(value):
+    return "{:,.0f}".format(value)
+
+
 def create_app():
     app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
@@ -67,5 +72,8 @@ def create_app():
 
     # Generate CSRF token and make it available in the template context
     app.jinja_env.globals['csrf_token'] = generate_csrf
+
+    # Register the filter with Jinja2
+    app.jinja_env.filters['format_amount'] = format_amount
 
     return app

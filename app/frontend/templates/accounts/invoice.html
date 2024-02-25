@@ -37,7 +37,7 @@
           <div class="invoice-head-middle-left text-start">
             <p>
               <span class="text-bold">Date</span>: {{
-              invoice_data.timestamp.strftime('%d-%m-%Y') }}
+              invoice_data.timestamp.strftime('%d %b %Y') }}
             </p>
           </div>
           <div class="invoice-head-middle-right text-end">
@@ -124,28 +124,28 @@
                 <td>{{ invoice_data.first_service }}</td>
                 <td>{{ invoice_data.first_description }}</td>
                 <td class="text-center">
-                  KES {{ "%0.0f"|format(invoice_data.unit_price) }}
+                  KES {{ invoice_data.unit_price | format_amount }}
                 </td>
                 <td class="text-center">
-                  {{ "%0.0f"|format(invoice_data.consumed) }}
+                  {{ invoice_data.consumed | format_amount }}
                 </td>
                 <td class="text-end">
-                  KES {{ "%0.0f"|format(invoice_data.unit_price *
-                  invoice_data.consumed) }}
+                  KES {{ (invoice_data.unit_price * invoice_data.consumed) |
+                  format_amount }}
                 </td>
               </tr>
               <tr>
                 <td>{{ invoice_data.second_service }}</td>
                 <td>{{ invoice_data.second_description }}</td>
                 <td class="text-center">
-                  KES {{ "%0.0f"|format(invoice_data.service_fee) }}
+                  KES {{ invoice_data.service_fee | format_amount }}
                 </td>
                 <td class="text-center">
-                  {{ "%0.0f"|format(invoice_data.service_qty) }}
+                  {{ invoice_data.service_qty | format_amount }}
                 </td>
                 <td class="text-end">
-                  KES {{ "%0.0f"|format(invoice_data.service_fee *
-                  invoice_data.service_qty) }}
+                  KES {{ (invoice_data.service_fee * invoice_data.service_qty) |
+                  format_amount }}
                 </td>
               </tr>
             </tbody>
@@ -154,24 +154,25 @@
             <div class="invoice-body-info-item border-bottom">
               <div class="info-item-td text-end text-bold">Sub Total:</div>
               <div class="info-item-td text-end">
-                KES {{ "%0.0f"|format(invoice_data.sub_total_price +
-                invoice_data.service_fee * invoice_data.service_qty) }}
+                KES {{ (invoice_data.sub_total_price + invoice_data.service_fee
+                * invoice_data.service_qty) | format_amount }}
               </div>
             </div>
             <div class="invoice-body-info-item border-bottom">
               <div class="info-item-td text-end text-bold">VAT (5%):</div>
               <div class="info-item-td text-end">
-                KES {{ "%0.0f"|format(0.05 * (invoice_data.sub_total_price +
-                invoice_data.service_fee * invoice_data.service_qty)) }}
+                KES {{ (0.05 * (invoice_data.sub_total_price +
+                invoice_data.service_fee * invoice_data.service_qty)) |
+                format_amount }}
               </div>
             </div>
             <div class="invoice-body-info-item">
               <div class="info-item-td text-end text-bold">Total:</div>
               <div class="info-item-td text-end">
-                KES {{ "%0.0f"|format((invoice_data.sub_total_price +
-                invoice_data.service_fee * invoice_data.service_qty) + (0.05 *
+                KES {{ ((invoice_data.sub_total_price + invoice_data.service_fee
+                * invoice_data.service_qty) + (0.05 *
                 (invoice_data.sub_total_price + invoice_data.service_fee *
-                invoice_data.service_qty))) }}
+                invoice_data.service_qty))) | format_amount }}
               </div>
             </div>
           </div>
