@@ -1,70 +1,26 @@
 {% extends "base.html" %} {% block content %}
 
 <head>
-  <style>
-    .chat-sidebar {
-      max-height: 90vh;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-    }
-
-    .chat-sidebar a img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
-    }
-    .chat-sidebar div h6 {
-      color: black;
-    }
-
-    .chat-sidebar div p {
-      font-size: 12px;
-      margin-top: 5px;
-    }
-
-    .unread-message-count {
-      background-color: blue;
-      color: white;
-      padding: 3px 6px;
-      border-radius: 50%;
-      font-size: 12px;
-    }
-    .chat-area {
-      background-color: #fff;
-      list-style: none;
-      padding: 8px;
-      margin: 0;
-      overflow-y: auto;
-      height: 58vh;
-      border-radius: 10px;
-      margin-bottom: 5px;
-      scroll-behavior: smooth;
-    }
-
-    .incoming,
-    .outgoing {
-      border-radius: 10px;
-      margin-bottom: 5px;
-    }
-
-    .incoming {
-      align-self: flex-start;
-    }
-
-    .outgoing {
-      align-self: flex-end;
-    }
-  </style>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/components/chats.css') }}"
+  />
 </head>
 
 <div class="container-fluid">
   <!-- Chat App -->
   <div class="row">
+    <!-- Page Title for Mobiles -->
+    <div class="col-lg-12 text-center d-block d-sm-none mt-3">
+      <h4 class="fw-bold text-success mb-2">Join Our Chat Community</h4>
+      <p class="text-muted fst-italic mb-2">
+        Discover and connect with fellow members.
+      </p>
+    </div>
+
     <!-- Contacts Sidebar -->
-    <div class="col-lg-3 rounded-start shadow-sm p-3">
-      <h3 class="fw-bold py-3 text-dark">Contacts</h3>
+    <div class="col-lg-3 rounded-start shadow-sm p-3 mb-3">
+      <div class="fw-bold text-dark text-center h4 p-2">Contacts</div>
       <ul class="list-group border-0 chat-sidebar">
         <!-- Broadcast Message -->
         <li class="list-group-item border-0 rounded p-2 mb-1">
@@ -108,7 +64,7 @@
         {% set sorted_users = all_users | sort(attribute='id') %} {% for user in
         sorted_users %} {% if user.id != current_user.id %}
         <li
-          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == user.first_name %}bg-primary bg-opacity-10{% endif %}"
+          class="mobile list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == user.first_name %}bg-primary bg-opacity-10{% endif %} d-flex align-items-center"
         >
           <a
             href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
@@ -151,10 +107,10 @@
     </div>
 
     <!-- Chat Area -->
-    <div class="col-lg-9 rounded-end shadow-sm px-3 py-2 chat-sidebar">
-      <!-- Page Title Details -->
-      <div class="text-center">
-        <h2 class="fw-bold text-success mb-2">Join Our Chat Community</h2>
+    <div class="col-lg-9 rounded-end shadow-sm p-3 chat-main">
+      <!-- Page Title for Desktops -->
+      <div class="text-center d-none d-sm-block">
+        <h4 class="fw-bold text-success mb-2">Join Our Chat Community</h4>
         <p class="text-muted fst-italic mb-2">
           Discover and connect with fellow members.
         </p>
@@ -165,32 +121,31 @@
       Yourself {% else %} Chatting with {{ chatting_user_first_name|title }} {%
       endif %} {% else %} No Open Conversation {% endif %} {% endset %}
 
-      <h5 class="fw-bold mb-3 ms-3 text-center">{{ header_text }}</h5>
+      <h5 class="fw-bold mb-2 ms-3 text-center">{{ header_text }}</h5>
 
       <!-- Chat Messages List -->
       <ul
         class="chat-area list-group {% if messages %}d-flex flex-column{% endif %}"
       >
         {% for message in messages %}
-
         <!-- Incoming Messages -->
         {% if message.receiver_id == current_user.id and message.sender_id !=
         current_user.id %}
         <li
-          class="list-group-item border-0 incoming bg-success bg-opacity-10 rounded mb-2"
+          class="list-group-item border-0 incoming bg-secondary bg-opacity-10 rounded mb-2"
         >
           <div>{{ message.content }}</div>
           <div class="text-muted text-secondary text-end small mb-0">
-            <span>
-              {{ message.timestamp.strftime('%d %b %Y') if (now -
+            <span
+              >{{ message.timestamp.strftime('%d %b %Y') if (now -
               message.timestamp).total_seconds() > 365*24*3600 else
               message.timestamp.strftime('%d %b %H:%M') if (now -
               message.timestamp).total_seconds() > 24*3600 else
-              message.timestamp.strftime('%H:%M') }}
-            </span>
-            <span class="{% if message.is_read %}text-success{% endif %} ms-1">
-              {% if message.is_read %}Read{% else %}Sent{% endif %}
-            </span>
+              message.timestamp.strftime('%H:%M') }}</span
+            >
+            <span class="{% if message.is_read %}text-success{% endif %} ms-1"
+              >{% if message.is_read %}Read{% else %}Sent{% endif %}</span
+            >
           </div>
         </li>
         {% endif %}
@@ -202,20 +157,19 @@
         >
           <div>{{ message.content }}</div>
           <div class="text-muted text-secondary text-end small mb-0">
-            <span>
-              {{ message.timestamp.strftime('%d %b %Y') if (now -
+            <span
+              >{{ message.timestamp.strftime('%d %b %Y') if (now -
               message.timestamp).total_seconds() > 365*24*3600 else
               message.timestamp.strftime('%d %b %H:%M') if (now -
               message.timestamp).total_seconds() > 24*3600 else
-              message.timestamp.strftime('%H:%M') }}
-            </span>
-            <span class="{% if message.is_read %}text-success{% endif %} ms-1">
-              {% if message.is_read %}Read{% else %}Sent{% endif %}
-            </span>
+              message.timestamp.strftime('%H:%M') }}</span
+            >
+            <span class="{% if message.is_read %}text-success{% endif %} ms-1"
+              >{% if message.is_read %}Read{% else %}Sent{% endif %}</span
+            >
           </div>
         </li>
         {% endif %} {% endfor %}
-
         <script>
           var messageList = document.querySelector(".chat-area");
           messageList.style.scrollBehavior = "auto";
@@ -231,7 +185,6 @@
       >
         <!-- CSRF Token -->
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
         <input
           type="hidden"
           name="receiver_id"

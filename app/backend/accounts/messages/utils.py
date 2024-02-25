@@ -1,4 +1,4 @@
-# File: app/backend/accounts/messages/routes.py
+# File: app/backend/accounts/messages/utils.py
 
 from flask_login import current_user
 from app import db
