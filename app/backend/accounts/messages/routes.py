@@ -18,12 +18,14 @@ def messages():
     """
     Route for displaying and sending messages.
 
-    GET: Renders the message template with message form and user messages.
-    POST: Handles message form submission and sends the message.
+    This route handles both GET and POST requests. For GET requests, it renders
+    the messages template with the message form and user messages. For POST requests,
+    it handles the message form submission, sending either a broadcast message to all
+    users or a message to a specific user.
 
     Returns:
-        render_template: Renders the messages template.
-        redirect: Redirects to the messages route.
+        render_template: Renders the messages template with appropriate context variables.
+        redirect: Redirects to the messages route after form submission.
     """
     form = MessageForm()
 
