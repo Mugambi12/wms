@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import func
 from app import db
 from ..database.models import User, MeterReading, Settings
-from .messages.routes import get_unread_message_count
+from .messages.utils import get_unread_message_count_for_navbar
 
 
 def accounts_context():
@@ -13,7 +13,7 @@ def accounts_context():
 
 
     all_users = User.query.all()
-    unread_message_counts = {user.id: get_unread_message_count(user.id) for user in all_users}
+    unread_message_counts = {user.id: get_unread_message_count_for_navbar(user.id) for user in all_users}
 
     company_name = settings.company_name if settings else 'ApoGen'
     bank_name = settings.bank_name if settings else 'M-Pesa'

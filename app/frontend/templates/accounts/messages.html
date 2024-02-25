@@ -19,12 +19,17 @@
     </div>
 
     <!-- Contacts Sidebar -->
-    <div class="col-lg-3 rounded-start shadow-sm p-3 mb-3">
+    <div class="col-lg-3 rounded-start shadow-sm py-3 chat-sidebar">
       <div class="fw-bold text-dark text-center h4 p-2">Contacts</div>
-      <ul class="list-group border-0 chat-sidebar">
+      <ul class="list-group border-0 chat-sidebar-content">
         <!-- Broadcast Message -->
-        <li class="list-group-item border-0 rounded p-2 mb-1">
-          <a href="#" class="d-flex align-items-center text-decoration-none">
+        <li
+          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == 'Broadcast Message' %}bg-primary bg-opacity-10{% endif %}"
+        >
+          <a
+            href="{{ url_for('accounts.messages.messages', user_id=0) }}"
+            class="d-flex align-items-center text-decoration-none"
+          >
             <img
               src="https://via.placeholder.com/50"
               alt="Broadcast"
@@ -143,9 +148,25 @@
               message.timestamp).total_seconds() > 24*3600 else
               message.timestamp.strftime('%H:%M') }}</span
             >
-            <span class="{% if message.is_read %}text-success{% endif %} ms-1"
-              >{% if message.is_read %}Read{% else %}Sent{% endif %}</span
-            >
+          </div>
+        </li>
+        {% elif message.receiver_id == 0 and message.sender_id !=
+        current_user.id %}
+        <li
+          class="list-group-item border-0 incoming bg-secondary bg-opacity-10 rounded mb-2"
+        >
+          <div>{{ message.content }}</div>
+          <div class="text-muted text-secondary text-end small mb-0">
+            <span class="ms-2">
+              from {{ get_sender_name(message.sender_id) }}
+            </span>
+            <span>
+              {{ message.timestamp.strftime('%d %b %Y') if (now -
+              message.timestamp).total_seconds() > 365*24*3600 else
+              message.timestamp.strftime('%d %b %H:%M') if (now -
+              message.timestamp).total_seconds() > 24*3600 else
+              message.timestamp.strftime('%H:%M') }}
+            </span>
           </div>
         </li>
         {% endif %}
@@ -170,6 +191,7 @@
           </div>
         </li>
         {% endif %} {% endfor %}
+
         <script>
           var messageList = document.querySelector(".chat-area");
           messageList.style.scrollBehavior = "auto";
@@ -211,6 +233,35 @@
       </form>
     </div>
   </div>
+
+  <!--
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">id</th>
+        <th scope="col">Sender</th>
+        <th scope="col">Receiver</th>
+        <th scope="col">Message</th>
+        <th scope="col">Time</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for message in all_messages %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ message.id }}</td>
+        <td>{{ message.sender_id }}</td>
+        <td>{{ message.receiver_id }}</td>
+        <td>{{ message.content }}</td>
+        <td>{{ message.timestamp }}</td>
+        <td>{{ message.is_read }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+   -->
 </div>
 
 {% endblock %}
