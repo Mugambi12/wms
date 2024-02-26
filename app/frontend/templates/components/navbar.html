@@ -10,7 +10,7 @@
 
 <header
   id="navbar"
-  class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-dark{% endif %}"
+  class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-info{% endif %}"
 >
   <div class="container-fluid">
     <!-- Toggle Button -->
@@ -24,7 +24,7 @@
 
     <!-- Brand -->
     <a
-      class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}gradient-text{% endif %}"
+      class="navbar-brand nav-link ms-3 {% if current_user.is_authenticated %}gradient-text{% else %}text-dark{% endif %}"
       href="{% if current_user.is_authenticated %}{{ url_for('accounts.dashboard.dashboard') }}{% else %}#{% endif %}"
     >
       {% if company_name %} {{ company_name.title() }} {% else %} ApoGen {%
@@ -41,9 +41,7 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span
-        class="navbar-toggler-icon {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-      ></span>
+      <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- Navbar Links -->
@@ -210,49 +208,27 @@
         <!-- Guest Navbar Links -->
         <ul class="navbar-nav me-3">
           <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#HOME"
-              >Home</a
-            >
+            <a class="nav-link" href="#HOME">Home</a>
           </li>
           <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#about"
-              >About Us</a
-            >
+            <a class="nav-link" href="#about">About Us</a>
           </li>
           <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#services"
-              >Services</a
-            >
+            <a class="nav-link" href="#services">Services</a>
           </li>
           <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#contact"
-              >Contact</a
-            >
+            <a class="nav-link" href="#contact">Contact</a>
           </li>
           <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#testimonials"
-              >Testimonials</a
-            >
+            <a class="nav-link" href="#testimonials">Testimonials</a>
           </li>
           <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#news"
-              >News</a
-            >
+            <a class="nav-link" href="#news">News</a>
           </li>
           <li class="nav-item ms-5">
-            <a class="nav-link text-primary" href="{{ url_for('auth.login') }}"
+            <a
+              class="nav-link text-primary border rounded px-3 border-primary"
+              href="{{ url_for('auth.login') }}"
               >Login</a
             >
           </li>

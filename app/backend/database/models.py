@@ -197,7 +197,6 @@ class Contact(db.Model):
     name = db.Column(db.String(50))
     email = db.Column(db.String(120))
     message = db.Column(db.Text)
-    #status = db.Column(db.Boolean, default=False)
 
     def __init__(self, name, email, message):
         self.name = name

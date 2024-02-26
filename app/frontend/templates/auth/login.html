@@ -1,7 +1,11 @@
 <!-- app/templates/auth/login.html -->
 {% extends 'base.html' %} {% block content %}
-<div class="container mt-5">
-  <div class="card mx-auto col-md-5 p-4 shadow-sm rounded-3 border-0">
+
+<div
+  class="container d-flex justify-content-center align-items-center"
+  style="height: 100vh"
+>
+  <div class="card col-md-5 p-5 bg-light shadow-sm rounded border-0">
     <h2 class="mb-4 text-center">Login</h2>
     <div class="text-center">
       <a href="{{ url_for('landing.landing') }}">Home</a>
