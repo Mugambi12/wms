@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-9">
               <div class="card-text fs-6">
-                {{ cards_data.total_houses }} Houses
+                {{ cards_data.total_houses | format_amount }} Houses
               </div>
               <div class="card-title fw-bold fs-5">Connections</div>
             </div>
@@ -158,7 +158,7 @@
           {% if current_user.is_admin %}All Admins{% else %}My House{% endif %}
         </h5>
 
-        <div class="card-body" style="max-height: 250px; overflow-y: auto">
+        <div class="card-body" style="max-height: 200px; overflow-y: auto">
           {% for user in users_to_display %}
           <div class="row align-items-center mb-3">
             <div class="col-md-3 col-4">
@@ -219,7 +219,7 @@
           <div class="bg-info text-white text-center py-3">
             <span id="currentMonth" class="fw-bold fs-5"></span>
           </div>
-          <div class="d-flex text-center bg-warning">
+          <div class="d-flex text-center bg-warning bg-opacity-50">
             <div class="col">Sun</div>
             <div class="col">Mon</div>
             <div class="col">Tue</div>
@@ -236,11 +236,10 @@
     <!-- Sticky Notes -->
     <div class="col-md-4 mb-3">
       <div
-        class="card border-0 rounded shadow-sm h-100"
-        style="background-color: rgba(255, 224, 146, 0.5)"
+        class="card border-0 bg-warning bg-opacity-10 rounded shadow-sm h-100"
       >
         <div class="card-body">
-          <h5 class="card-title mb-4 border-bottom border-dark rounded">
+          <h5 class="card-title border-bottom border-dark rounded">
             Sticky Note
           </h5>
           <form
@@ -253,7 +252,11 @@
               id="sticky-note-input"
               name="content"
               class="form-control border-0 text-start sticky-note"
-              style="resize: none; height: 150px; background-color: transparent"
+              style="
+                resize: none;
+                max-height: 200px;
+                background-color: transparent;
+              "
               placeholder="Type your notes here..."
             >
 {% for note in sticky_note_content %}{% if note.user_id == current_user.id %}{{ note.content }}{% endif %}{% endfor %}</textarea

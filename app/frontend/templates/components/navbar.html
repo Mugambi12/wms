@@ -25,7 +25,7 @@
     <!-- Brand -->
     <a
       class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}gradient-text{% endif %}"
-      href="{{ url_for('accounts.dashboard.dashboard') }}"
+      href="{% if current_user.is_authenticated %}{{ url_for('accounts.dashboard.dashboard') }}{% else %}#{% endif %}"
     >
       {% if company_name %} {{ company_name.title() }} {% else %} ApoGen {%
       endif %}
@@ -33,7 +33,7 @@
 
     <!-- Navbar Toggler -->
     <button
-      class="navbar-toggler"
+      class="navbar-toggler text-light"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarToggler"
@@ -49,44 +49,7 @@
     <!-- Navbar Links -->
     <div class="collapse navbar-collapse" id="navbarToggler">
       <div class="d-flex align-items-center ms-auto">
-        {% if not current_user.is_authenticated %}
-        <!-- Guest Navbar Links -->
-        <ul class="navbar-nav me-3">
-          <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#home"
-              >Home</a
-            >
-          </li>
-          <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#about"
-              >About Us</a
-            >
-          </li>
-          <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#services"
-              >Services</a
-            >
-          </li>
-          <li class="nav-item me-3">
-            <a
-              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
-              href="#contact"
-              >Contact</a
-            >
-          </li>
-          <li class="nav-item ms-5">
-            <a class="nav-link text-primary" href="{{ url_for('auth.login') }}"
-              >Login</a
-            >
-          </li>
-        </ul>
-        {% endif %} {% if current_user.is_authenticated %}
+        {% if current_user.is_authenticated %}
         <!-- Authenticated User Navbar Links -->
         <ul class="navbar-nav me-3">
           <!-- Messages -->
@@ -144,7 +107,7 @@
             </ul>
           </li>
 
-          <!-- User Information and Dropdown -->
+          <!-- User Name, Greetings -->
           <li class="nav-item">
             <a class="nav-link text-dark">
               Hello
@@ -153,6 +116,8 @@
               >
             </a>
           </li>
+
+          <!-- User Balance -->
           <li class="nav-item">
             <a class="nav-link text-dark">
               Balance
@@ -244,6 +209,43 @@
             </li>
           </ul>
         </div>
+        {% else %}
+        <!-- Guest Navbar Links -->
+        <ul class="navbar-nav me-3">
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#home"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#about"
+              >About Us</a
+            >
+          </li>
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#services"
+              >Services</a
+            >
+          </li>
+          <li class="nav-item me-3">
+            <a
+              class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
+              href="#contact"
+              >Contact</a
+            >
+          </li>
+          <li class="nav-item ms-5">
+            <a class="nav-link text-primary" href="{{ url_for('auth.login') }}"
+              >Login</a
+            >
+          </li>
+        </ul>
         {% endif %}
       </div>
     </div>
