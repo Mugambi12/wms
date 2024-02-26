@@ -122,6 +122,11 @@ a.sidebar-link:hover {
   transform: rotate(45deg);
   transition: all 0.2s ease-out;
 }
+.sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
 
 .main {
   min-height: 100vh;

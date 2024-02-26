@@ -19,7 +19,8 @@ def accounts_context():
     bank_name = settings.bank_name if settings else 'M-Pesa'
     paybill = settings.paybill if settings else '123456'
     account_number = settings.account_number if settings else '123456789'
-    contact_number = settings.contact_number if settings else '0722000111'
+    contact_number = settings.contact_number if settings and settings.contact_number else '(254)723396403'
+
 
     # Calculate total bill for each user with false status reading
     total_bill = db.session.query(func.sum(MeterReading.total_price)).filter(MeterReading.reading_status == False).scalar()

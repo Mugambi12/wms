@@ -188,3 +188,18 @@ class Settings(db.Model):
         self.paybill = paybill
         self.account_number = account_number
         self.contact_number = contact_number
+
+
+# Define Contact model
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    #timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc) + timedelta(hours=3))
+    name = db.Column(db.String(50))
+    email = db.Column(db.String(120))
+    message = db.Column(db.Text)
+    #status = db.Column(db.Boolean, default=False)
+
+    def __init__(self, name, email, message):
+        self.name = name
+        self.email = email
+        self.message = message

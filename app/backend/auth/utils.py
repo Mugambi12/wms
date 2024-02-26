@@ -28,7 +28,7 @@ def _login_user(form):
                 db.session.commit()
 
                 login_user(user)
-                flash(f'Welcome back, {user.first_name.title()}! You have successfully logged in.', 'success')
+                flash(f'Welcome back, {user.first_name.title()}!', 'success')
                 next_page = request.args.get('next')
                 return redirect(next_page or url_for('accounts.dashboard.dashboard'))
             else:
