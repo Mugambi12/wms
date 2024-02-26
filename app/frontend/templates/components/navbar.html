@@ -14,20 +14,21 @@
 >
   <div class="container-fluid">
     <!-- Toggle Button -->
+    {% if current_user.is_authenticated %}
     <span>
-      {% if current_user.is_authenticated %}
       <button class="toggle-btn-mobile" type="button">
         <ion-icon name="apps-outline" class="text-dark"></ion-icon>
       </button>
-      {% endif %}
     </span>
+    {% endif %}
 
     <!-- Brand -->
     <a
       class="navbar-brand text-center d-flex align-items-center fw-bold ms-3 {% if not current_user.is_authenticated %}text-light{% else %}gradient-text{% endif %}"
-      href="#"
+      href="{{ url_for('accounts.dashboard.dashboard') }}"
     >
-      {% if company_name %}{{ company_name.title() }}{% else %}ApoGen{% endif %}
+      {% if company_name %} {{ company_name.title() }} {% else %} ApoGen {%
+      endif %}
     </a>
 
     <!-- Navbar Toggler -->
@@ -49,50 +50,45 @@
     <div class="collapse navbar-collapse" id="navbarToggler">
       <div class="d-flex align-items-center ms-auto">
         {% if not current_user.is_authenticated %}
-        <!-- Login Button -->
+        <!-- Guest Navbar Links -->
         <ul class="navbar-nav me-3">
           <li class="nav-item me-3">
             <a
               class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
               href="#home"
+              >Home</a
             >
-              Home
-            </a>
           </li>
           <li class="nav-item me-3">
             <a
               class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
               href="#about"
+              >About Us</a
             >
-              About Us
-            </a>
           </li>
           <li class="nav-item me-3">
             <a
               class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
               href="#services"
+              >Services</a
             >
-              Services
-            </a>
           </li>
           <li class="nav-item me-3">
             <a
               class="nav-link {% if not current_user.is_authenticated %}text-light{% else %}text-dark{% endif %}"
               href="#contact"
+              >Contact</a
             >
-              Contant
-            </a>
           </li>
           <li class="nav-item ms-5">
-            <a class="nav-link text-primary" href="{{ url_for('auth.login') }}">
-              Login
-            </a>
+            <a class="nav-link text-primary" href="{{ url_for('auth.login') }}"
+              >Login</a
+            >
           </li>
         </ul>
         {% endif %} {% if current_user.is_authenticated %}
-
-        <!-- people Information and Dropdown -->
-        <ul class="navbar-nav me-3 dropdown-menu-dark">
+        <!-- Authenticated User Navbar Links -->
+        <ul class="navbar-nav me-3">
           <!-- Messages -->
           <li class="nav-item">
             <a
@@ -148,7 +144,7 @@
             </ul>
           </li>
 
-          <!-- Current User Name -->
+          <!-- User Information and Dropdown -->
           <li class="nav-item">
             <a class="nav-link text-dark">
               Hello
@@ -157,20 +153,19 @@
               >
             </a>
           </li>
-
-          <!-- Current User Balance -->
           <li class="nav-item">
             <a class="nav-link text-dark">
               Balance
               <span
                 class="fw-bold {% if current_user.balance > 0 %}text-success{% elif current_user.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
-                >KES {{ current_user.balance | format_amount }}</span
               >
+                KES {{ current_user.balance | format_amount }}
+              </span>
             </a>
           </li>
         </ul>
 
-        <!-- people Image Dropdown -->
+        <!-- User Image Dropdown -->
         <div class="btn-group">
           <button
             type="button"

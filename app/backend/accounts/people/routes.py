@@ -157,7 +157,7 @@ def delete_user_route(user_id):
     else:
         return redirect(url_for('auth.login'))
 
-from ..download_manager import download_users
+from ..components.download_manager import download_users
 
 @people_bp.route('/download_users', methods=['GET'])
 @login_required

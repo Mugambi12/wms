@@ -142,7 +142,7 @@ def delete_payment(payment_id):
     return redirect(url_for('accounts.records.payments'))
 
 
-from ..download_manager import download_meter_readings
+from ..components.download_manager import download_meter_readings
 
 @records_bp.route('/download_meter_readings', methods=['GET'])
 @login_required
@@ -150,7 +150,7 @@ def download_meter_readings_route():
     return download_meter_readings()
 
 
-from .invoice_download_manager import download_invoice
+from ..components.download_manager import download_invoice
 
 @records_bp.route('/download_invoice/<int:invoice_id>', methods=['GET'])
 @login_required

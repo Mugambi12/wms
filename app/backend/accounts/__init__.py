@@ -12,7 +12,7 @@ from .records.routes import records_bp
 from .expenses.routes import expenses_bp
 from .security.routes import security_bp
 from .settings.routes import settings_bp
-from .accounts_context import accounts_context
+from .components.accounts_context import accounts_context
 
 accounts_bp.register_blueprint(messages_bp)
 accounts_bp.register_blueprint(dashboard_bp)

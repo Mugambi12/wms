@@ -36,7 +36,7 @@ def create_app():
     login_manager.login_view = 'auth.login'
 
     # Import payment processor
-    from app.backend.accounts.payment_processor import process_payments_with_context
+    from app.backend.accounts.components.payment_processor import process_payments_with_context
 
     # Initialize the scheduler
     scheduler = APScheduler()
@@ -52,7 +52,7 @@ def create_app():
     from .backend.landing.routes import landing_bp
     from .backend.auth.routes import auth_bp
     from .backend.accounts import accounts_bp
-    from .backend.accounts.accounts_context import accounts_context, inject_now
+    from .backend.accounts.components.accounts_context import accounts_context, inject_now
 
     # Register blueprints
     app.register_blueprint(landing_bp)

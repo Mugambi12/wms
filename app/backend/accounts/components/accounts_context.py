@@ -4,8 +4,8 @@
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import func
 from app import db
-from ..database.models import User, MeterReading, Settings
-from .messages.utils import get_unread_message_count_for_navbar
+from ...database.models import User, MeterReading, Settings
+from ..messages.utils import get_unread_message_count_for_navbar
 
 
 def accounts_context():
