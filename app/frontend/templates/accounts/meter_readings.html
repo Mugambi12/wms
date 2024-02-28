@@ -37,6 +37,7 @@
             aria-label="Close"
           ></button>
         </div>
+
         <!-- Add Meter Reading Form -->
         <form
           method="post"
@@ -83,7 +84,8 @@
               <div class="mb-2">
                 {{ form.house_number.label(class="form-label") }} {{
                 form.house_number(class="form-control form-control-sm",
-                id="house_number", required="required") }}
+                id="house_number", placeholder="Enter House Number",
+                required="required") }}
                 <div class="invalid-feedback">
                   Please provide a house number.
                 </div>
@@ -93,7 +95,7 @@
               <div class="mb-2">
                 {{ form.reading_value.label(class="form-label") }} {{
                 form.reading_value(class="form-control form-control-sm",
-                required="required") }}
+                required="required", placeholder="Enter Reading Value") }}
                 <div class="invalid-feedback">
                   Please provide a valid reading value.
                 </div>

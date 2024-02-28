@@ -56,8 +56,6 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
             new_user = User(unique_user_id=user_id, balance=balance_difference)
             db.session.add(new_user)
 
-
-
 def update_meter_reading_statuses():
     all_meter_readings = MeterReading.query.all()
 

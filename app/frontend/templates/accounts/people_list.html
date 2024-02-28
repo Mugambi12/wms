@@ -56,25 +56,29 @@
               <!-- First Name -->
               <div class="col-md-6 mb-2">
                 {{ form.first_name.label(class="form-label") }} {{
-                form.first_name(class="form-control form-control-sm") }}
+                form.first_name(class="form-control form-control-sm",
+                placeholder="Enter First Name") }}
               </div>
 
               <!-- Last Name -->
               <div class="col-md-6 mb-2">
                 {{ form.last_name.label(class="form-label") }} {{
-                form.last_name(class="form-control form-control-sm") }}
+                form.last_name(class="form-control form-control-sm",
+                placeholder="Enter Last Name") }}
               </div>
 
               <!-- Mobile Number -->
               <div class="col-md-6 mb-2">
                 {{ form.mobile_number.label(class="form-label") }} {{
-                form.mobile_number(class="form-control form-control-sm") }}
+                form.mobile_number(class="form-control form-control-sm",
+                placeholder="Enter Mobile Number") }}
               </div>
 
               <!-- Email -->
               <div class="col-md-6 mb-2">
                 {{ form.email.label(class="form-label") }} {{
-                form.email(class="form-control form-control-sm") }}
+                form.email(class="form-control form-control-sm",
+                placeholder="Enter Email Address") }}
               </div>
 
               <!-- House Section -->
@@ -98,7 +102,8 @@
               <!-- House Number -->
               <div class="col-md-6 mb-2">
                 {{ form.house_number.label(class="form-label") }} {{
-                form.house_number(class="form-control form-control-sm") }}
+                form.house_number(class="form-control form-control-sm",
+                placeholder="Enter House Number") }}
               </div>
 
               <!-- Password -->
@@ -106,7 +111,7 @@
                 {{ form.password.label(class="form-label") }}
                 <div class="input-group border rounded-3">
                   {{ form.password(class="form-control form-control-sm
-                  border-0", id="reg_password") }}
+                  border-0", placeholder="Enter Password", id="reg_password") }}
                   <button
                     class="btn btn-light"
                     type="button"
@@ -126,8 +131,9 @@
               <div class="col-md-6 mb-2">
                 {{ form.confirm_password.label(class="form-label") }}
                 <div class="input-group border rounded-3">
-                  {{ form.confirm_password(class="form-control form-control-sm
-                  border-0", id="confirm_password") }}
+                  {{ form.confirm_password( class="form-control form-control-sm
+                  border-0", placeholder="Confirm Password",
+                  id="confirm_password") }}
                   <button
                     class="btn btn-light"
                     type="button"
