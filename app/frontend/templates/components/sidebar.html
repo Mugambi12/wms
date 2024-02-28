@@ -66,7 +66,7 @@
           href="{{ url_for('accounts.records.meter_readings') }}"
           class="sidebar-link"
         >
-          <ion-icon name="water-outline" class="text-info"></ion-icon>
+          <ion-icon name="speedometer-outline" class="text-info"></ion-icon>
           <span>Meter Readings</span>
         </a>
       </li>
@@ -77,8 +77,8 @@
           href="{{ url_for('accounts.records.billing') }}"
           class="sidebar-link"
         >
-          <ion-icon name="logo-paypal" class="text-success"></ion-icon>
-          <span>Invoices</span>
+          <ion-icon name="receipt-outline" class="text-secondary"></ion-icon>
+          <span>Invoices & Payment</span>
         </a>
       </li>
 
@@ -88,7 +88,7 @@
           href="{{ url_for('accounts.records.payments') }}"
           class="sidebar-link"
         >
-          <ion-icon name="recording-outline" class="text-primary"></ion-icon>
+          <ion-icon name="wallet-outline" class="text-primary"></ion-icon>
           <span>Payment History</span>
         </a>
       </li>
@@ -99,7 +99,7 @@
           href="{{ url_for('accounts.expenses.expenses') }}"
           class="sidebar-link"
         >
-          <ion-icon name="wallet-outline" class="text-danger"></ion-icon>
+          <ion-icon name="card-outline" class="text-danger"></ion-icon>
           <span>Expenses</span>
         </a>
       </li>
@@ -125,7 +125,7 @@
           href="{{ url_for('accounts.settings.settings') }}"
           class="sidebar-link"
         >
-          <ion-icon name="cog-outline" class="text-info"></ion-icon>
+          <ion-icon name="settings-outline" class="text-info"></ion-icon>
           <span>Settings</span>
         </a>
       </li>
@@ -151,7 +151,7 @@
         href="{{ url_for('auth.logout') }}"
         onclick="localStorage.clear();"
       >
-        <ion-icon name="power-outline" class="text-danger"></ion-icon>
+        <ion-icon name="log-out-outline" class="text-danger"></ion-icon>
         <span>Logout</span>
       </a>
     </div>
