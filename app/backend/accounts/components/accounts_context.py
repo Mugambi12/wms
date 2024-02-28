@@ -11,7 +11,7 @@ def accounts_context():
     unread_message_counts = {user.id: get_unread_message_count_for_navbar(user.id) for user in all_users}
 
     settings = Settings.query.first()
-    company_name = settings.company_name if settings and settings.company_name is not None else 'ApoGen'
+    company_name = settings.company_name if settings and settings.company_name is not None else 'Apo Gen'
     bank_name = settings.bank_name if settings and settings.bank_name is not None else 'M-Pesa'
     paybill = settings.paybill if settings and settings.paybill is not None else 'N/A'
     account_number = settings.account_number if settings and settings.account_number is not None else '254723396403'

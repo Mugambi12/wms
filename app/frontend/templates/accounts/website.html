@@ -32,7 +32,7 @@
             <tr>
               <td class="text-center">{{ loop.index }}</td>
               <td class="text-center">{{ inquiry.id }}</td>
-              <td>{{ inquiry.name }}</td>
+              <td>{{ inquiry.timestamp.strftime('%d %b %Y') }}</td>
               <td>{{ inquiry.name }}</td>
               <td>{{ inquiry.email }}</td>
               <td>{{ inquiry.message }}</td>

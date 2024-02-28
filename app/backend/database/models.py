@@ -193,7 +193,7 @@ class Settings(db.Model):
 # Define Contact model
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    #timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc) + timedelta(hours=3))
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc) + timedelta(hours=3))
     name = db.Column(db.String(50))
     email = db.Column(db.String(120))
     message = db.Column(db.Text)
