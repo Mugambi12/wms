@@ -30,7 +30,7 @@ def process_payments():
         update_user_balances(payment_data, meter_reading_data, user_mapping)
 
         # Update MeterReading statuses
-        update_meter_reading_statuses(meter_reading_data)
+        update_meter_reading_statuses(meter_reading_data, payment_data)
 
         # Commit changes to the database
         db.session.commit()
@@ -73,22 +73,36 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
                 db.session.add(user)
 
 
-def update_meter_reading_statuses(meter_reading_data):
+def update_meter_reading_statuses(meter_reading_data, payment_data):
+    # Iterate over each meter reading data
     for meter_reading in meter_reading_data:
+        # Extract the unique user ID and total meter reading total price
         user_id = meter_reading.unique_user_id
-        all_payments_by_a_user = Payment.query.filter_by(unique_user_id=user_id).all()
-        meter_readings = MeterReading.query.filter_by(unique_user_id=user_id).order_by(MeterReading.id).all()
-        total_payments_so_far = sum(payment.amount for payment in all_payments_by_a_user)
+        total_meter_reading_total_price = meter_reading.total_meter_reading_total_price or 0
 
-        total_price_so_far = meter_reading.total_meter_reading_total_price or 0
+        # Fetch all payments made by the user
+        all_payments_by_a_user = [payment for payment in payment_data if payment.unique_user_id == user_id]
+
+        # Calculate the total payments made by the user
+        total_payments_so_far = sum(payment.total_payment_amount for payment in all_payments_by_a_user)
+
+        # Fetch meter readings for the user and order them by ID
+        meter_readings = MeterReading.query.filter_by(unique_user_id=user_id).order_by(MeterReading.id).all()
+
+        # Initialize a variable to track the total price of meter readings
         total_price_so_far = 0
 
+        # Iterate over each meter reading for the user
         for reading in meter_readings:
+            # Add the total price of the current reading to the running total
             total_price_so_far += reading.total_price
 
+            # Check if the balance has been exceeded
             if total_price_so_far > total_payments_so_far:
-                for reading_to_update in meter_readings:
+                # If the balance has been exceeded, set all successive reading statuses to False
+                for reading_to_update in meter_readings[meter_readings.index(reading):]:
                     reading_to_update.reading_status = False
                 break
             else:
+                # If the balance has not been exceeded, set the reading status to True
                 reading.reading_status = True

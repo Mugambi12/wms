@@ -33,6 +33,8 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
         db.session.add(payment)
         db.session.commit()
 
+        process_payments_with_context()
+
         ## Update the reading status to paid
         #meter_reading.reading_status = True
         #db.session.commit()
@@ -52,6 +54,9 @@ def delete_payment_logic(payment_id):
         if payments:
             db.session.delete(payments)
             db.session.commit()
+
+            process_payments_with_context()
+
             return {'success': True, 'message': 'Payment deleted successfully.'}
         else:
             return {'success': False, 'message': 'Payment not found.'}
