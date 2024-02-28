@@ -33,7 +33,7 @@ def register():
     return _register_user(form)
 
 
-@auth_bp.route('/register/apogen_admin', methods=['GET', 'POST'])
+@auth_bp.route('/register/apogen/admin', methods=['GET', 'POST'])
 def register_apogen_admin():
     """
     Route for registering an admin user.
