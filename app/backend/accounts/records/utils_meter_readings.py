@@ -68,8 +68,12 @@ def handle_add_meter_reading(form, current_user):
 def get_meter_readings(current_user):
     query_meter_reading_data = MeterReading.query
 
+    # If the user is not an admin, filter by their house section and house number
     if not current_user.is_admin:
-        query_meter_reading_data = query_meter_reading_data.filter(MeterReading.user_id == current_user.id)
+        query_meter_reading_data = query_meter_reading_data.filter(
+            MeterReading.house_section == current_user.house_section,
+            MeterReading.house_number == current_user.house_number
+        )
 
     meter_reading_data = query_meter_reading_data.all()
     return meter_reading_data

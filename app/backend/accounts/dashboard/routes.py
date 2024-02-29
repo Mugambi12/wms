@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
+from sqlalchemy import func
 from ...database.models import User, Note, MeterReading, Payment, Expense
 from app import db
 from .forms import StickyNoteForm
@@ -38,6 +39,42 @@ def get_user_list(current_user):
 
     return now, users_to_display
 
+def delinquent_household_invoices(current_user):
+    if current_user.is_admin:
+        household_invoices = db.session.query(MeterReading.customer_name,
+                                              MeterReading.house_section,
+                                              MeterReading.house_number,
+                                              MeterReading.consumed,
+                                              func.sum(MeterReading.sub_total_amount).label('sub_total_amount'),
+                                              MeterReading.service_fee,
+                                              func.sum(MeterReading.total_amount).label('total_amount'),
+                                              User.balance) \
+                                      .join(User) \
+                                      .filter(MeterReading.payment_status == False) \
+                                      .group_by(MeterReading.house_section, MeterReading.house_number, User.balance) \
+                                      .all()
+    else:
+        # Assuming user_role is stored in the user object
+        user_house_section = current_user.house_section
+        user_house_number = current_user.house_number
+
+        household_invoices = db.session.query(MeterReading.customer_name,
+                                              MeterReading.house_section,
+                                              MeterReading.house_number,
+                                              MeterReading.consumed,
+                                              func.sum(MeterReading.sub_total_amount).label('sub_total_amount'),
+                                              MeterReading.service_fee,
+                                              func.sum(MeterReading.total_amount).label('total_amount'),
+                                              User.balance) \
+                                      .join(User) \
+                                      .filter(MeterReading.payment_status == False,
+                                              MeterReading.house_section == user_house_section,
+                                              MeterReading.house_number == user_house_number) \
+                                      .group_by(MeterReading.house_section, MeterReading.house_number, User.balance) \
+                                      .all()
+
+    return household_invoices
+
 
 @dashboard_bp.route('/dashboard')
 @login_required
@@ -53,7 +90,7 @@ def dashboard():
     sticky_note_content = Note.query.all()
 
     # Delinquent Bills Data
-    invoices = MeterReading.query.all()
+    household_invoices = delinquent_household_invoices(current_user)
 
     return render_template('accounts/dashboard.html',
                            cards_data=cards_data,
@@ -64,7 +101,7 @@ def dashboard():
                             content_form=content_form,
                             sticky_note_content=sticky_note_content,
 
-                            invoices=invoices,
+                            household_invoices=household_invoices,
 
                             hide_footer=True)
 

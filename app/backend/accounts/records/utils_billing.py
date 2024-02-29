@@ -6,7 +6,7 @@ from app import db
 from ...database.models import MeterReading, User, Payment
 
 
-def fetch_billing_data():
+def fetch_billing_data(current_user):
     query_billing_data = (
         db.session.query(
             MeterReading.id,
@@ -30,15 +30,19 @@ def fetch_billing_data():
         .order_by(MeterReading.id.desc())
     )
 
+    # If the user is not an admin, filter by their house section and house number
     if not current_user.is_admin:
-        query_billing_data = query_billing_data.filter(User.id == current_user.id)
+        query_billing_data = query_billing_data.filter(
+            MeterReading.house_section == current_user.house_section,
+            MeterReading.house_number == current_user.house_number
+        )
 
     billing_data = query_billing_data.all()
 
     return billing_data
 
 
-def fetch_payment_data():
+def fetch_payment_data(current_user):
     try:
         # Construct the query to fetch payment data
         query_payment_data = (
@@ -61,6 +65,10 @@ def fetch_payment_data():
         # Filter the payment data based on user role
         if not current_user.is_admin:  # If the current user is not an admin
             query_payment_data = query_payment_data.filter(User.id == current_user.id)  # Filter by user ID
+            query_payment_data = query_payment_data.filter(
+                User.house_section == current_user.house_section,
+                User.house_number == current_user.house_number
+            )
 
         # Execute the query and fetch payment data
         payment_data = query_payment_data.all()  # Fetch all payment data
@@ -73,11 +81,15 @@ def fetch_payment_data():
         return None
 
 
-
-def fetch_invoice_data(invoice_id):
+def fetch_invoice_data(current_user, invoice_id):
     invoice = MeterReading.query.filter_by(id=invoice_id).first()
     if invoice:
-        user = User.query.filter_by(id=invoice.user_id).first()
+        # Check if the current user is an admin
+        if current_user.is_admin:
+            user = User.query.filter_by(id=invoice.user_id).first()
+        else:
+            # If the current user is not an admin, filter invoices by the user's house section and house number
+            user = User.query.filter_by(id=current_user.id).first()
 
         service_qty = (
             MeterReading.query

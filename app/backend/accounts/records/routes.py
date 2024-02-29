@@ -69,7 +69,7 @@ def delete_meter_reading(meter_reading_id):
 @records_bp.route('/billing')
 @login_required
 def billing():
-    billing_data = fetch_billing_data()
+    billing_data = fetch_billing_data(current_user)
     make_payment_form = MakePaymentForm()
 
     return render_template('accounts/billing.html', make_payment=make_payment_form, billing_data=billing_data, payment_form=make_payment_form, hide_footer=True)
@@ -113,7 +113,7 @@ def make_payment(payment_id):
 @records_bp.route('/invoice/<int:invoice_id>')
 @login_required
 def invoice(invoice_id):
-    invoice_data = fetch_invoice_data(invoice_id)
+    invoice_data = fetch_invoice_data(current_user, invoice_id)
     if invoice_data:
         return render_template('accounts/invoice.html', invoice_data=invoice_data, hide_sidebar=True, hide_navbar=True, hide_footer=True)
     else:
@@ -124,7 +124,7 @@ def invoice(invoice_id):
 @records_bp.route('/payments')
 @login_required
 def payments():
-    payment_data = fetch_payment_data()
+    payment_data = fetch_payment_data(current_user)
 
     return render_template('accounts/payments.html', payment_data=payment_data, hide_footer=True)
 

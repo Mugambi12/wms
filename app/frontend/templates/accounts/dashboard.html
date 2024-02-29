@@ -273,7 +273,7 @@
       <div class="card-body">
         <h5 class="card-title mb-4">Delinquent Bills</h5>
         <div class="table-responsive">
-          <table class="table table-borderless data-table">
+          <table class="table table-borderless text-center data-table">
             <!-- Table Headings -->
             <thead>
               <tr>
@@ -285,23 +285,27 @@
                 <th>Subtotal</th>
                 <th>Service</th>
                 <th>Total</th>
+                <th>Balance</th>
               </tr>
             </thead>
             <tbody>
-              {% for invoice in invoices %} {% if not invoice.payment_status %}
+              {% for household_invoice in household_invoices %}
               <tr>
                 <td>{{ loop.index }}</td>
                 <td class="text-start">
-                  {{ invoice.customer_name.split()[0]|title }}
+                  {{ household_invoice[0].split()[0]|title }}
                 </td>
-                <td>{{ invoice.house_section.title() }}</td>
-                <td>{{ invoice.house_number }}</td>
-                <td>{{ invoice.consumed | format_amount }}</td>
-                <td>{{ invoice.sub_total_amount | format_amount }}</td>
-                <td>{{ invoice.service_fee | format_amount }}</td>
-                <td>{{ invoice.total_amount | format_amount }}</td>
+                <td>{{ household_invoice[1].title() }}</td>
+                <td>{{ household_invoice[2] }}</td>
+                <td>{{ household_invoice[3] | format_amount }}</td>
+                <td>{{ household_invoice[4] | format_amount }}</td>
+                <td>{{ household_invoice[5] | format_amount }}</td>
+                <td>{{ household_invoice[6] | format_amount }}</td>
+                <td class="text-danger">
+                  {{ household_invoice[7] | format_amount }}
+                </td>
               </tr>
-              {% endif %} {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
         </div>
