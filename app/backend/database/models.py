@@ -23,6 +23,7 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
     balance = db.Column(db.Float, default=0)
     unique_user_id = db.Column(db.String(6), unique=True, nullable=True)
+    main_account = db.Column(db.Boolean, default=False)
 
     # New fields for tracking last login and logout
     last_login = db.Column(db.DateTime)

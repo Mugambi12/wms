@@ -75,6 +75,7 @@ def _register_user(form, is_admin=False):
             new_user.is_active = False
 
         new_user.unique_user_id = new_user.generate_unique_user_id()
+        new_user.main_account = True
 
         db.session.add(new_user)
         db.session.commit()

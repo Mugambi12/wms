@@ -31,6 +31,9 @@ def process_payments():
         # Update user balances
         update_user_balances(payment_data, meter_reading_data, user_mapping)
 
+        # Update secondary user balances
+        #update_secondary_user_balances()
+
         # Update MeterReading statuses
         update_meter_payment_statuses(meter_reading_data, payment_data)
 
@@ -72,6 +75,24 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
             # If the user is not in the user_mapping, add it to the session
             if user.unique_user_id not in user_mapping:
                 db.session.add(user)
+
+
+#def update_secondary_user_balances():
+#    # Query users grouped by house section and house number
+#    grouped_users = User.query.group_by(User.house_section, User.house_number).all()
+#
+#    for group in grouped_users:
+#        # Find the main account user in the group
+#        main_account_user = next((user for user in group if user.main_account), None)
+#
+#        if main_account_user:
+#            # Update balances of secondary users with main account balance
+#            for user in group:
+#                if not user.main_account:
+#                    user.balance = main_account_user.balance
+#
+#    # Commit changes to the database
+#    db.session.commit()
 
 
 def update_meter_payment_statuses(meter_reading_data, payment_data):

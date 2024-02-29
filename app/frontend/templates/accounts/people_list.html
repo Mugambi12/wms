@@ -255,6 +255,7 @@
                 <th scope="col">Section</th>
                 <th scope="col">House#</th>
                 <th scope="col">Balance</th>
+                <th scope="col">Acc.</th>
                 <th scope="col">Status</th>
                 <th scope="col">Type</th>
                 <th scope="col">Action</th>
@@ -277,6 +278,11 @@
                   class="fw-bold text-center {% if person.balance > 0 %}text-success{% elif person.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
                 >
                   {{ person.balance | format_amount }}
+                </td>
+                <td>
+                  {% if person.main_account %}<span class="text-success"
+                    >Main</span
+                  >{% else %}<span class="text-danger">Sec</span>{% endif %}
                 </td>
                 <td>
                   {% if person.is_active %}<span class="text-success"

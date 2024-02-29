@@ -48,6 +48,7 @@ def handle_add_new_users(form, current_user):
         )
 
         new_user.unique_user_id = new_user.generate_unique_user_id()
+        new_user.main_account = True
 
         # Add the new user to the database
         db.session.add(new_user)

@@ -92,9 +92,21 @@ def edit_user(user_id):
                     # Change password only if new password is provided
                     change_password(user, form)
 
+            # Check if there are other users in the same house section and house number with a main account
+            all_house_accounts = User.query.filter_by(house_section=user.house_section, house_number=user.house_number).all()
+
+            # Check if there is a main account in the same house section and house number
+            if any(account.main_account for account in all_house_accounts):
+                # If there is a main account, set the current user as not the main account
+                user.main_account = False
+            else:
+                # If there are no main accounts, set the current user as the main account
+                user.main_account = True
+
             # Update user profile
             form.populate_obj(user)
             db.session.commit()
+
             flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
             return redirect(url_for('accounts.people.people_list'))
 

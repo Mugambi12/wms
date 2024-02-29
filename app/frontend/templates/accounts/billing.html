@@ -82,7 +82,6 @@
                 <th scope="col">Name</th>
                 <th scope="col">Section</th>
                 <th scope="col">House#</th>
-                <th scope="col">ID</th>
                 <th scope="col">Prev. Read.</th>
                 <th scope="col">Curr. Read.</th>
                 <th scope="col">Usage</th>
@@ -102,7 +101,6 @@
                 <td class="text-start">{{ entry.customer_name.title() }}</td>
                 <td>{{ entry.house_section.title() }}</td>
                 <td>{{ entry.house_number }}</td>
-                <td>{{ entry.unique_user_id }}</td>
                 <td>
                   {{ entry.prev_reading | format_amount if entry.prev_reading is
                   not none else "None" }}
