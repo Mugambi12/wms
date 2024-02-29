@@ -52,14 +52,14 @@ def fetch_payment_data(current_user):
                 Payment.invoice_id,
                 Payment.invoice_amount,
                 Payment.amount,
-                Payment.payment_date,
+                Payment.timestamp,
                 Payment.payment_method,
                 Payment.reference_number,
                 Payment.status,
                 Payment.unique_user_id
             )
             .join(User)  # Join Payment table with User table
-            .order_by(Payment.payment_date.desc())  # Order by payment date in descending order
+            .order_by(Payment.timestamp.desc())  # Order by payment date in descending order
         )
 
         # Filter the payment data based on user role

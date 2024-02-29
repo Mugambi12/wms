@@ -19,7 +19,7 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
         # Create a new Payment object
         payment = Payment(
             amount=payment_amount,
-            payment_date=datetime.now(timezone.utc) + timedelta(hours=3),
+            timestamp=datetime.now(timezone.utc) + timedelta(hours=3),
             payment_method=payment_method,
             reference_number=reference_number,
             status=status,

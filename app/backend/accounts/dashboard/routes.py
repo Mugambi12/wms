@@ -82,6 +82,9 @@ def dashboard():
     # Get dashboard cards data
     cards_data = dashboard_cards_data()
 
+    # Recent Transactions Data and Data
+    recent_transactions = recent_transactions_data()
+
     # Get data for the list of users
     now, users_to_display = get_user_list(current_user)
 
@@ -95,6 +98,8 @@ def dashboard():
     return render_template('accounts/dashboard.html',
                            cards_data=cards_data,
 
+                           recent_transactions=recent_transactions,
+
                             now=now,
                             users_to_display=users_to_display,
 
@@ -104,6 +109,31 @@ def dashboard():
                             household_invoices=household_invoices,
 
                             hide_footer=True)
+
+
+def recent_transactions_data():
+    meter_readings = MeterReading.query.all()
+    payments = Payment.query.all()
+    expenses = Expense.query.all()
+
+    # Add a type indicator to each transaction
+    meter_readings_with_type = [(meter_reading, 'MeterReading') for meter_reading in meter_readings]
+    payments_with_type = [(payment, 'Payment') for payment in payments]
+    expenses_with_type = [(expense, 'Expense') for expense in expenses]
+
+    # Combine all transactions with their types
+    all_transactions = meter_readings_with_type + payments_with_type + expenses_with_type
+
+    # Sort transactions by timestamp in descending order
+    sorted_transactions = sorted(all_transactions, key=lambda x: x[0].timestamp, reverse=True)
+
+    return sorted_transactions
+
+
+
+
+
+
 
 @dashboard_bp.route('/save_sticky_note', methods=['POST'])
 @login_required

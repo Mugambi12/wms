@@ -44,7 +44,7 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ payment.user_id }}</td>
                 <td>{{ payment.invoice_id }}</td>
-                <td>{{ payment.payment_date.strftime('%d %b %Y') }}</td>
+                <td>{{ payment.timestamp.strftime('%d %b %Y') }}</td>
                 <td>{{ payment.payment_method }}</td>
                 <td class="text-start">{{ payment.reference_number }}</td>
                 <td>KES {{ payment.invoice_amount | format_amount }}</td>

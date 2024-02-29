@@ -2,9 +2,12 @@
 
 <!-- #MAIN BODY SECTION -->
 <div class="container-fluid">
-  <div class="card-header fw-bold border-0 fs-5 mt-1">
-    <span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
-    Dashboard
+  <div class="container-fluid border-bottom mb-2 px-3">
+    <div class="d-flex align-items-center">
+      <ion-icon name="bar-chart" class="me-3 fs-4"></ion-icon>
+      <h2 class="fw-bold mb-0">Dashboard</h2>
+    </div>
+    <p class="fs-6 mt-2 mb-0 p-0">Welcome to your dashboard.</p>
   </div>
 
   <!-- Four Bootstrap Cards -->
@@ -98,16 +101,16 @@
           <div class="row">
             <!-- Performance Overview -->
             <div class="col-md-4 text-center p-3">
-              <p class="text-muted mb-3" id="overviewMonth">
+              <p class="text-muted mb-2" id="overviewMonth">
                 Overview Of January
               </p>
-              <h5 class="fw-bold mb-4" id="currentMonthEarnings">KES 0.00</h5>
-              <p class="text-muted mb-3">Revenue Generated</p>
+              <h5 class="fw-bold mb-3" id="currentMonthEarnings">KES 0.00</h5>
+              <p class="text-muted mb-2">Revenue Generated</p>
               <h5 class="fw-bold mb-4" id="currentMonthWater">0 Units</h5>
-              <p class="text-muted mb-3">Water Consumed</p>
+              <p class="text-muted mb-2">Water Consumed</p>
 
               <div
-                class="input-group input-group-sm mt-5 justify-content-between"
+                class="input-group input-group-sm mt-3 justify-content-between"
               >
                 <button
                   class="btn btn-outline-info me-1"
@@ -128,7 +131,7 @@
 
             <!-- Doughnut Chart -->
             <div class="col-md-8">
-              <canvas class="chart1" width="400" height="200"></canvas>
+              <canvas class="chart1" width="500" height="200"></canvas>
             </div>
           </div>
         </div>
@@ -140,7 +143,220 @@
       <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Overview Performance</h5>
-          <canvas class="chart2" width="400" height="200"></canvas>
+          <canvas class="chart2" width="500" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Only Charts Data -->
+  <div class="row px-3">
+    <!-- Line Chart -->
+    <div class="col-md-7 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title text-center mb-4">
+            Revenue and Expenses Over Time (in KES)
+          </h5>
+          <canvas
+            class="chart-revenue-expense"
+            width="500"
+            height="200"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const revenueExpenseChart = document.querySelector(
+          ".chart-revenue-expense"
+        );
+        const ctx = revenueExpenseChart.getContext("2d");
+
+        // Function to generate random data for revenue and expenses
+        function generateRandomData() {
+          const revenueData = [];
+          const expenseData = [];
+          for (let i = 0; i < 12; i++) {
+            revenueData.push(Math.floor(Math.random() * 3000) + 2000); // Random revenue between 2000 and 5000
+            expenseData.push(Math.floor(Math.random() * 2000) + 1000); // Random expense between 1000 and 3000
+          }
+          return { revenue: revenueData, expenses: expenseData };
+        }
+
+        const { revenue, expenses } = generateRandomData();
+
+        const myChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+            ],
+            datasets: [
+              {
+                label: "Revenue (KES)",
+                data: revenue, // Random revenue data for each month
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 2,
+                pointRadius: 5,
+                pointBackgroundColor: "rgba(75, 192, 192, 1)",
+                pointBorderColor: "rgba(255, 255, 255, 1)",
+                pointHoverRadius: 7,
+                pointHoverBackgroundColor: "rgba(75, 192, 192, 1)",
+                pointHoverBorderColor: "rgba(255, 255, 255, 1)",
+              },
+              {
+                label: "Expenses (KES)",
+                data: expenses, // Random expense data for each month
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 2,
+                pointRadius: 5,
+                pointBackgroundColor: "rgba(255, 99, 132, 1)",
+                pointBorderColor: "rgba(255, 255, 255, 1)",
+                pointHoverRadius: 7,
+                pointHoverBackgroundColor: "rgba(255, 99, 132, 1)",
+                pointHoverBorderColor: "rgba(255, 255, 255, 1)",
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value, index, values) {
+                    return value.toLocaleString(); // Format y-axis labels with thousands separator
+                  },
+                },
+                grid: {
+                  display: false,
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+              },
+              tooltip: {
+                mode: "nearest",
+                intersect: false,
+              },
+            },
+          },
+        });
+      });
+    </script>
+
+    <!-- Recent Transactions -->
+    <div class="col-md-5 mb-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title text-center mb-4">Recent Transactions</h5>
+          <div
+            class="list-group list-group-flush"
+            style="max-height: 250px; overflow-y: auto"
+          >
+            {% for transaction, transaction_type in recent_transactions %}
+            <div class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-4">#{{ transaction.id }}</div>
+
+                <div class="col-md-4">
+                  {% if transaction_type == 'MeterReading' %} {{
+                  transaction.customer_name }} {% elif transaction_type ==
+                  'Expense' %} {{ transaction.vendor }} {% endif %}
+                </div>
+
+                <div class="col-md-4">
+                  {% if transaction_type == 'MeterReading' %} KES {{
+                  transaction.total_amount | format_amount }} {% elif
+                  transaction_type == 'Payment' %} KES {{ transaction.amount |
+                  format_amount }} {% elif transaction_type == 'Expense' %} KES
+                  {{ transaction.amount | format_amount }} {% endif %}
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-4">
+                  {% set transaction_time_difference = now -
+                  transaction.timestamp %} {% if
+                  transaction_time_difference.days > 0 %} {% set time_unit =
+                  'days' %}
+                  <p class="text-muted small mb-0 fst-italic">
+                    {{ transaction_time_difference.days }} {{ time_unit }} ago
+                  </p>
+                  {% elif transaction_time_difference.seconds // 3600 > 0 %} {%
+                  set time_unit = 'hrs' %}
+                  <p class="text-muted small mb-0 fst-italic">
+                    {{ transaction_time_difference.seconds // 3600 }} {{
+                    time_unit }} ago
+                  </p>
+                  {% else %} {% set time_unit = 'min' %}
+                  <p class="text-muted small mb-0 fst-italic">
+                    {{ transaction_time_difference.seconds // 60 }} {{ time_unit
+                    }} ago
+                  </p>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-4">
+                  {% if transaction_type == 'Payment' %}
+                  <div
+                    class="{% if transaction.status %}text-success{% else %}text-warning{% endif %}"
+                  >
+                    {% if transaction.status %} Completed {% else %} Pending {%
+                    endif %}
+                  </div>
+                  {% elif transaction_type == 'MeterReading' %}
+                  <div
+                    class="{% if transaction.payment_status %}text-success{% else %}text-info{% endif %}"
+                  >
+                    {% if transaction.payment_status %} Paid {% else %} Invoiced
+                    {% endif %}
+                  </div>
+                  {% elif transaction_type == 'Expense' %}
+                  <div
+                    class="{% if transaction.status %}text-primary{% else %}text-danger{% endif %}"
+                  >
+                    {% if transaction.status %} {{ transaction.status }} {% else
+                    %} Pending {% endif %}
+                  </div>
+                  {% endif %}
+                </div>
+
+                <div class="col-md-4">
+                  {% if transaction_type == 'MeterReading' %}
+                  <span class="text-success">Meter Reading</span>
+                  {% elif transaction_type == 'Payment' %}
+                  <span class="text-danger">Payment</span>
+                  {% elif transaction_type == 'Expense' %}
+                  <span class="text-primary">Expense</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
@@ -519,7 +735,7 @@
           //  borderRadius: 15,
           //},
           {
-            label: "Revenue",
+            label: "Revenue (KES)",
             data: data.revenue,
             backgroundColor: "rgba(54, 162, 235, 0.6)",
             borderColor: "rgba(255, 159, 64, 1)",
@@ -528,7 +744,7 @@
             borderRadius: 15,
           },
           {
-            label: "Expenses",
+            label: "Expenses (KES)",
             data: data.expenses,
             backgroundColor: "rgba(255, 99, 132, 0.6)",
             borderColor: "rgba(255, 99, 132, 1)",
