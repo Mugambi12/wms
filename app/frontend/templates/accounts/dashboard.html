@@ -288,7 +288,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for invoice in invoices %} {% if not invoice.reading_status %}
+              {% for invoice in invoices %} {% if not invoice.payment_status %}
               <tr>
                 <td>{{ loop.index }}</td>
                 <td class="text-start">
@@ -297,9 +297,9 @@
                 <td>{{ invoice.house_section.title() }}</td>
                 <td>{{ invoice.house_number }}</td>
                 <td>{{ invoice.consumed | format_amount }}</td>
-                <td>{{ invoice.sub_total_price | format_amount }}</td>
+                <td>{{ invoice.sub_total_amount | format_amount }}</td>
                 <td>{{ invoice.service_fee | format_amount }}</td>
-                <td>{{ invoice.total_price | format_amount }}</td>
+                <td>{{ invoice.total_amount | format_amount }}</td>
               </tr>
               {% endif %} {% endfor %}
             </tbody>

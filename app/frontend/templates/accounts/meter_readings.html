@@ -174,11 +174,11 @@
                 <td>{{ reading.house_number }}</td>
                 <td>{{ reading.reading_value | format_amount }}</td>
                 <td>{{ reading.consumed | format_amount }}</td>
-                <td>{{ reading.total_price | format_amount }}</td>
+                <td>{{ reading.total_amount | format_amount }}</td>
                 <td
-                  class="fst-italic {% if reading.reading_status %}text-success{% else %}text-secondary{% endif %}"
+                  class="fst-italic {% if reading.payment_status %}text-success{% else %}text-secondary{% endif %}"
                 >
-                  {{ 'Reimbursed' if reading.reading_status else 'Delinquent' }}
+                  {{ 'Reimbursed' if reading.payment_status else 'Delinquent' }}
                 </td>
                 <td>
                   <!-- Edit Meter Reading Button -->
@@ -294,10 +294,10 @@
                           </div>
 
                           <div class="col-md-6 mb-2">
-                            {{ edit_form.total_price.label(class="form-label")
-                            }} {{ edit_form.total_price(class="form-control
+                            {{ edit_form.total_amount.label(class="form-label")
+                            }} {{ edit_form.total_amount(class="form-control
                             form-control-sm", required="required",
-                            value=reading.total_price) }}
+                            value=reading.total_amount) }}
                           </div>
 
                           <div class="col-md-6 mb-2">

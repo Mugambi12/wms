@@ -19,7 +19,7 @@ def process_payments():
 
         meter_reading_data = db.session.query(
             MeterReading.unique_user_id,
-            func.sum(MeterReading.total_price).label('total_meter_reading_total_price')
+            func.sum(MeterReading.total_amount).label('total_meter_reading_total_amount')
         ).group_by(MeterReading.unique_user_id).all()
 
         # Bulk fetch users to update their balances
@@ -32,7 +32,7 @@ def process_payments():
         update_user_balances(payment_data, meter_reading_data, user_mapping)
 
         # Update MeterReading statuses
-        update_meter_reading_statuses(meter_reading_data, payment_data)
+        update_meter_payment_statuses(meter_reading_data, payment_data)
 
         # Commit changes to the database
         db.session.commit()
@@ -51,7 +51,7 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
     # Update balances for users in each group
     for users_group in grouped_users.values():
         total_payment_amount = 0
-        total_meter_reading_total_price = 0
+        total_meter_reading_total_amount = 0
 
         # Calculate total payment amount and total meter reading total price for the group
         for user in users_group:
@@ -60,10 +60,10 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
             if payment:
                 total_payment_amount += payment.total_payment_amount or 0
             if meter_reading:
-                total_meter_reading_total_price += meter_reading.total_meter_reading_total_price or 0
+                total_meter_reading_total_amount += meter_reading.total_meter_reading_total_amount or 0
 
         # Calculate balance difference for the group
-        balance_difference = total_payment_amount - total_meter_reading_total_price
+        balance_difference = total_payment_amount - total_meter_reading_total_amount
 
         # Update balances for users in the group
         for user in users_group:
@@ -74,12 +74,12 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
                 db.session.add(user)
 
 
-def update_meter_reading_statuses(meter_reading_data, payment_data):
+def update_meter_payment_statuses(meter_reading_data, payment_data):
     # Iterate over each meter reading data
     for meter_reading in meter_reading_data:
         # Extract the unique user ID and total meter reading total price
         user_id = meter_reading.unique_user_id
-        total_meter_reading_total_price = meter_reading.total_meter_reading_total_price or 0
+        total_meter_reading_total_amount = meter_reading.total_meter_reading_total_amount or 0
 
         # Fetch all payments made by the user
         all_payments_by_a_user = [payment for payment in payment_data if payment.unique_user_id == user_id]
@@ -91,19 +91,19 @@ def update_meter_reading_statuses(meter_reading_data, payment_data):
         meter_readings = MeterReading.query.filter_by(unique_user_id=user_id).order_by(MeterReading.id).all()
 
         # Initialize a variable to track the total price of meter readings
-        total_price_so_far = 0
+        total_amount_so_far = 0
 
         # Iterate over each meter reading for the user
         for reading in meter_readings:
             # Add the total price of the current reading to the running total
-            total_price_so_far += reading.total_price
+            total_amount_so_far += reading.total_amount
 
             # Check if the balance has been exceeded
-            if total_price_so_far > total_payments_so_far:
+            if total_amount_so_far > total_payments_so_far:
                 # If the balance has been exceeded, set all successive reading statuses to False
                 for reading_to_update in meter_readings[meter_readings.index(reading):]:
-                    reading_to_update.reading_status = False
+                    reading_to_update.payment_status = False
                 break
             else:
                 # If the balance has not been exceeded, set the reading status to True
-                reading.reading_status = True
+                reading.payment_status = True

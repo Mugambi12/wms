@@ -29,8 +29,8 @@ def handle_add_meter_reading(form, current_user):
         unit_price = db.session.query(Settings.unit_price).scalar() or 0
         service_fee = db.session.query(Settings.service_fee).scalar() or 0
 
-        sub_total_price = consumed * unit_price
-        total_price = sub_total_price + service_fee
+        sub_total_amount = consumed * unit_price
+        total_amount = sub_total_amount + service_fee
 
         customer = f"{user.first_name} {user.last_name}" if user else None
         unique_user_id = user.unique_user_id
@@ -44,8 +44,8 @@ def handle_add_meter_reading(form, current_user):
             consumed=consumed,
             unit_price=unit_price,
             service_fee=service_fee,
-            sub_total_price=sub_total_price,
-            total_price=total_price,
+            sub_total_amount=sub_total_amount,
+            total_amount=total_amount,
             unique_user_id=unique_user_id
         )
 
@@ -83,7 +83,7 @@ def edit_meter_reading_logic(edited_reading):
         reading_value=edited_reading.reading_value,
         consumed=edited_reading.consumed,
         unit_price=edited_reading.unit_price,
-        total_price=edited_reading.total_price,
+        total_amount=edited_reading.total_amount,
         timestamp=edited_reading.timestamp
     )
 
@@ -98,7 +98,7 @@ def edit_meter_reading_logic(edited_reading):
                 edited_reading.timestamp = edit_meter_reading_form.timestamp.data
                 edited_reading.consumed = edit_meter_reading_form.consumed.data
                 edited_reading.unit_price = edit_meter_reading_form.unit_price.data
-                edited_reading.total_price = edit_meter_reading_form.total_price.data
+                edited_reading.total_amount = edit_meter_reading_form.total_amount.data
 
                 db.session.commit()
 

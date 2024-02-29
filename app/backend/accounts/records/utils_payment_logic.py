@@ -13,7 +13,7 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
 
         # Extract the user_id from the meter_reading object
         invoice_id = meter_reading.id
-        invoice_amount = meter_reading.total_price
+        invoice_amount = meter_reading.total_amount
         unique_user_id = meter_reading.unique_user_id
 
         # Create a new Payment object

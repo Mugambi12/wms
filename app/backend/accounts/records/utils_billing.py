@@ -13,7 +13,7 @@ def fetch_billing_data():
             MeterReading.timestamp,
             MeterReading.house_section,
             MeterReading.house_number,
-            MeterReading.reading_status,
+            MeterReading.payment_status,
             MeterReading.customer_name,
             func.lag(MeterReading.reading_value)
             .over(partition_by=(MeterReading.house_section, MeterReading.house_number), order_by=MeterReading.timestamp)
@@ -21,9 +21,9 @@ def fetch_billing_data():
             MeterReading.reading_value.label('curr_reading'),
             MeterReading.consumed,
             MeterReading.unit_price,
-            MeterReading.sub_total_price,
+            MeterReading.sub_total_amount,
             MeterReading.service_fee,
-            MeterReading.total_price,
+            MeterReading.total_amount,
             MeterReading.unique_user_id
         )
         .join(User)
@@ -84,7 +84,7 @@ def fetch_invoice_data(invoice_id):
             .filter(
                 MeterReading.house_section == invoice.house_section,
                 MeterReading.house_number == invoice.house_number,
-                MeterReading.reading_status == False
+                MeterReading.payment_status == False
             )
             .group_by(MeterReading.house_section, MeterReading.house_number)
             .count()
@@ -107,9 +107,9 @@ def fetch_invoice_data(invoice_id):
                 'service_fee': invoice.service_fee,
                 'consumed': invoice.consumed,
                 'service_qty': service_qty,
-                'sub_total_price': invoice.sub_total_price,
-                'total_price': invoice.total_price,
-                'reading_status': invoice.reading_status,
+                'sub_total_amount': invoice.sub_total_amount,
+                'total_amount': invoice.total_amount,
+                'payment_status': invoice.payment_status,
                 'vat': '0',
                 'unique_user_id': invoice.unique_user_id
             }

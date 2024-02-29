@@ -76,9 +76,9 @@ class MeterReading(db.Model):
     consumed = db.Column(db.Float)
     unit_price = db.Column(db.Float)
     service_fee = db.Column(db.Float)
-    sub_total_price = db.Column(db.Float)
-    total_price = db.Column(db.Float)
-    reading_status = db.Column(db.Boolean, default=False)
+    sub_total_amount = db.Column(db.Float)
+    total_amount = db.Column(db.Float)
+    payment_status = db.Column(db.Boolean, default=False)
     unique_user_id = db.Column(db.String(6))
 
     # Specify foreign keys explicitly
@@ -87,7 +87,7 @@ class MeterReading(db.Model):
     # Establishing a one-to-many relationship with payments
     payments = db.relationship('Payment', backref='meter_reading', lazy=True)
 
-    def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_price, total_price, unique_user_id=None):
+    def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_amount, total_amount, unique_user_id=None):
         self.house_section = house_section
         self.house_number = house_number
         self.reading_value = reading_value
@@ -96,8 +96,8 @@ class MeterReading(db.Model):
         self.consumed = consumed
         self.unit_price = unit_price
         self.service_fee = service_fee
-        self.sub_total_price = sub_total_price
-        self.total_price = total_price
+        self.sub_total_amount = sub_total_amount
+        self.total_amount = total_amount
         self.unique_user_id = unique_user_id
 
 

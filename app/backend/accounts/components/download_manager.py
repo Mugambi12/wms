@@ -218,9 +218,9 @@ def generate_meter_readings_csv():
             reading.consumed,
             reading.unit_price,
             reading.service_fee,
-            reading.sub_total_price,
-            reading.total_price,
-            'Completed' if reading.reading_status else 'Pending'
+            reading.sub_total_amount,
+            reading.total_amount,
+            'Completed' if reading.payment_status else 'Pending'
         ])
 
     csv_buffer = io.StringIO()
@@ -255,9 +255,9 @@ def generate_meter_readings_excel():
             reading.consumed,
             reading.unit_price,
             reading.service_fee,
-            reading.sub_total_price,
-            reading.total_price,
-            'Completed' if reading.reading_status else 'Pending'
+            reading.sub_total_amount,
+            reading.total_amount,
+            'Completed' if reading.payment_status else 'Pending'
         ])
 
     output = BytesIO()
@@ -322,9 +322,9 @@ def generate_meter_readings_pdf(readings_list):
                 <td>{{ reading.consumed }}</td>
                 <td>{{ reading.unit_price }}</td>
                 <td>{{ reading.service_fee }}</td>
-                <td>{{ reading.sub_total_price }}</td>
-                <td>{{ reading.total_price }}</td>
-                <td>{{ 'Completed' if reading.reading_status else 'Pending' }}</td>
+                <td>{{ reading.sub_total_amount }}</td>
+                <td>{{ reading.total_amount }}</td>
+                <td>{{ 'Completed' if reading.payment_status else 'Pending' }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -649,23 +649,23 @@ def generate_invoice_pdf(invoice_data):
                                     <tr>
                                     <td><b>Sub Total:</b></td>
                                     <td>
-                                        KES {{ (invoice_data.sub_total_price +
+                                        KES {{ (invoice_data.sub_total_amount +
                                         invoice_data.service_fee * invoice_data.service_qty) | format_amount }}
                                     </td>
                                     </tr>
                                     <tr>
                                     <td><b>VAT (5%):</b></td>
                                     <td>
-                                        KES {{ (0.05 * (invoice_data.sub_total_price +
+                                        KES {{ (0.05 * (invoice_data.sub_total_amount +
                                         invoice_data.service_fee * invoice_data.service_qty)) | format_amount }}
                                     </td>
                                     </tr>
                                     <tr>
                                     <td><b>Total:</b></td>
                                     <td>
-                                        KES {{ ((invoice_data.sub_total_price +
+                                        KES {{ ((invoice_data.sub_total_amount +
                                         invoice_data.service_fee * invoice_data.service_qty) + (0.05
-                                        * (invoice_data.sub_total_price + invoice_data.service_fee *
+                                        * (invoice_data.sub_total_amount + invoice_data.service_fee *
                                         invoice_data.service_qty))) | format_amount }}
                                     </td>
                                     </tr>
