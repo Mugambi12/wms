@@ -28,5 +28,4 @@ class MakePaymentForm(FlaskForm):
     payment_amount = FloatField('Paid Amount', validators=[InputRequired(), NumberRange(min=0)])
     payment_method = SelectField('Payment Method', choices=[('m_pesa', 'M-Pesa'), ('bank_transfer', 'Bank Transfer'), ('debit_card', 'Debit Card'), ('credit_card', 'Credit Card'), ('paypal', 'PayPal')], validators=[InputRequired()])
     reference_number = StringField('Reference Number', validators=[Optional()])
-    status = BooleanField('Payment Status')
-
+    status = BooleanField('Payment Status', default=False)

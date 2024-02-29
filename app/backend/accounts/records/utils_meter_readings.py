@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app import db
 from ...database.models import MeterReading, User, Settings
 from .forms import EditMeterReadingForm
+from ..components.payment_processor import process_payments_with_context
 
 
 def handle_add_meter_reading(form, current_user):
@@ -50,6 +51,8 @@ def handle_add_meter_reading(form, current_user):
 
         db.session.add(new_meter_reading)
         db.session.commit()
+
+        process_payments_with_context()
 
         return {'success': True, 'message': 'Meter reading added successfully!'}
 
@@ -99,6 +102,8 @@ def edit_meter_reading_logic(edited_reading):
 
                 db.session.commit()
 
+                process_payments_with_context()
+
                 return {'success': True, 'message': 'Meter reading updated successfully!', 'form': None}
 
             else:
@@ -117,6 +122,9 @@ def delete_meter_reading_logic(meter_reading_id):
         if meter_reading:
             db.session.delete(meter_reading)
             db.session.commit()
+
+            process_payments_with_context()
+
             return {'success': True, 'message': 'Meter reading deleted successfully.'}
         else:
             return {'success': False, 'message': 'Meter reading not found.'}

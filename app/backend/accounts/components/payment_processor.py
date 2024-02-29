@@ -1,4 +1,5 @@
-from sqlalchemy import func, and_
+from sqlalchemy import func
+from collections import defaultdict
 from app import create_app, db
 from ...database.models import User, MeterReading, Payment
 
@@ -6,6 +7,7 @@ def process_payments_with_context():
     app = create_app()
     with app.app_context():
         process_payments()
+
 
 def process_payments():
     try:
@@ -39,7 +41,6 @@ def process_payments():
         print(f"An error occurred while processing payments: {e}")
         db.session.rollback()
 
-from collections import defaultdict
 
 def update_user_balances(payment_data, meter_reading_data, user_mapping):
     # Create a dictionary to group users by house section and house number
