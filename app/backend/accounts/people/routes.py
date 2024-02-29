@@ -28,7 +28,7 @@ def people_list():
         # Retrieve house sections and populate the choices
         house_sections = []
         settings = Settings.query.first()
-        if settings:
+        if settings and settings.house_sections:
             house_sections = [(section, section) for section in settings.house_sections.split(',')]
 
         return render_template('accounts/people_list.html', people_list=people_list, house_sections=house_sections, form=add_form, hide_footer=True)
