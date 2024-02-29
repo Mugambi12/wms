@@ -28,10 +28,9 @@
                 <th scope="col">#</th>
                 <th scope="col">UserID</th>
                 <th scope="col">InvoiceID</th>
-                <th scope="col">UserID</th>
                 <th scope="col">Pay Date</th>
-                <th scope="col">Reference</th>
                 <th scope="col">Method</th>
+                <th scope="col">Reference ID</th>
                 <th scope="col">Inv. Amt.</th>
                 <th scope="col">Paid Amt.</th>
                 <th scope="col">Status</th>
@@ -45,12 +44,11 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ payment.user_id }}</td>
                 <td>{{ payment.invoice_id }}</td>
-                <td>{{ payment.unique_user_id }}</td>
                 <td>{{ payment.payment_date.strftime('%d %b %Y') }}</td>
-                <td>{{ payment.reference_number }}</td>
                 <td>{{ payment.payment_method }}</td>
-                <td>{{ payment.invoice_amount }}</td>
-                <td>{{ payment.amount }}</td>
+                <td class="text-start">{{ payment.reference_number }}</td>
+                <td>KES {{ payment.invoice_amount | format_amount }}</td>
+                <td>KES {{ payment.amount | format_amount }}</td>
                 <td
                   class="fst-italic {% if payment.status %}text-success{% else %}text-secondary{% endif %}"
                 >
@@ -58,9 +56,14 @@
                 </td>
                 <td>
                   <!-- Confirm Payment Received Button -->
-                  <a action="#" class="me-2">
+                  <a
+                    action="#validatePaymentModal_{{ payment.id }}"
+                    class="me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#validatePaymentModal_{{ payment.id }}"
+                  >
                     <ion-icon
-                      name="checkmark-outline"
+                      name="checkmark-done-outline"
                       class="text-success"
                     ></ion-icon>
                   </a>
@@ -79,6 +82,71 @@
                   </a>
                 </td>
               </tr>
+
+              <!-- Validate Payment Modal -->
+              <div
+                class="modal fade"
+                id="validatePaymentModal_{{ payment.id }}"
+                tabindex="-1"
+                aria-labelledby="validatePaymentModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1
+                        class="modal-title fs-5"
+                        id="validatePaymentModalLabel"
+                      >
+                        Confirm Payment Validation
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      {% if payment.status %}
+                      <p>This payment is currently marked as validated.</p>
+                      {% else %}
+                      <p>This payment is currently not validated.</p>
+                      {% endif %}
+                      <p class="ms-3"><b>Payment ID:</b> #{{ payment.id }}</p>
+                      <p class="ms-3">
+                        <b>Amount:</b> KES {{ payment.amount | format_amount }}
+                      </p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button
+                        type="button"
+                        class="btn btn-sm rounded-pill btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+                      <form
+                        action="{{ url_for('accounts.records.validate_payment', payment_id=payment.id) }}"
+                        method="post"
+                      >
+                        <input
+                          type="hidden"
+                          name="csrf_token"
+                          value="{{ csrf_token() }}"
+                        />
+                        <button
+                          type="submit"
+                          class="btn btn-sm rounded-pill btn-primary"
+                        >
+                          {% if payment.status %} Revoke Validation {% else %}
+                          Confirm Validation {% endif %}
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <!-- Delete Meter Reading Confirmation Modal -->
               <div

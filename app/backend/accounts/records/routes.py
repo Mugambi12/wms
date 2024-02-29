@@ -129,6 +129,38 @@ def payments():
     return render_template('accounts/payments.html', payment_data=payment_data, hide_footer=True)
 
 
+@records_bp.route('/validate_payment/<int:payment_id>', methods=['POST'])
+@login_required
+def validate_payment(payment_id):
+    result = validate_payment_logic(payment_id)
+
+    if result['success']:
+        flash(result['message'], 'success')
+    else:
+        flash(result['message'], 'danger')
+
+    return redirect(url_for('accounts.records.payments'))
+
+from ...database.models import Payment
+def validate_payment_logic(payment_id):
+    try:
+        payment = Payment.query.get(payment_id)
+
+        if payment:
+            # Toggle payment status
+            payment.status = not payment.status
+            db.session.commit()
+
+            return {'success': True, 'message': 'Payment status updated successfully.'}
+        else:
+            return {'success': False, 'message': 'Payment not found.'}
+
+    except Exception as e:
+        return {'success': False, 'message': f'Error updating payment status: {str(e)}'}
+
+
+
+
 @records_bp.route('/delete_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
 def delete_payment(payment_id):
