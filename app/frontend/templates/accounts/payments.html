@@ -28,10 +28,9 @@
                 <th scope="col">#</th>
                 <th scope="col">UserID</th>
                 <th scope="col">InvoiceID</th>
-                <th scope="col">PayID</th>
                 <th scope="col">UserID</th>
                 <th scope="col">Pay Date</th>
-                <th scope="col">Ref.</th>
+                <th scope="col">Reference</th>
                 <th scope="col">Method</th>
                 <th scope="col">Inv. Amt.</th>
                 <th scope="col">Paid Amt.</th>
@@ -46,7 +45,6 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ payment.user_id }}</td>
                 <td>{{ payment.invoice_id }}</td>
-                <td>{{ payment.id }}</td>
                 <td>{{ payment.unique_user_id }}</td>
                 <td>{{ payment.payment_date.strftime('%d %b %Y') }}</td>
                 <td>{{ payment.reference_number }}</td>
@@ -56,7 +54,7 @@
                 <td
                   class="fst-italic {% if payment.status %}text-success{% else %}text-secondary{% endif %}"
                 >
-                  {{ "Cleared" if payment.status else "Pending" }}
+                  {{ "Validated" if payment.status else "Pending" }}
                 </td>
                 <td>
                   <!-- Confirm Payment Received Button -->

@@ -54,16 +54,16 @@ def fetch_payment_data():
                 Payment.status,
                 Payment.unique_user_id
             )
-            .join(User)
-            .order_by(Payment.payment_date.desc())
+            .join(User)  # Join Payment table with User table
+            .order_by(Payment.payment_date.desc())  # Order by payment date in descending order
         )
 
         # Filter the payment data based on user role
-        if not current_user.is_admin:
-            query_payment_data = query_payment_data.filter(User.id == current_user.id)
+        if not current_user.is_admin:  # If the current user is not an admin
+            query_payment_data = query_payment_data.filter(User.id == current_user.id)  # Filter by user ID
 
         # Execute the query and fetch payment data
-        payment_data = query_payment_data.all()
+        payment_data = query_payment_data.all()  # Fetch all payment data
 
         return payment_data
 
@@ -71,6 +71,7 @@ def fetch_payment_data():
         # Handle any exceptions and return None
         print(f"An error occurred while fetching payment data: {e}")
         return None
+
 
 
 def fetch_invoice_data(invoice_id):
