@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
-from sqlalchemy import func
+from sqlalchemy import func, extract
 from ...database.models import User, Note, MeterReading, Payment, Expense
 from app import db
 from .forms import StickyNoteForm
@@ -28,6 +28,24 @@ def dashboard_cards_data():
     }
 
     return cards_data
+
+def recent_transactions_data():
+    meter_readings = MeterReading.query.all()
+    payments = Payment.query.all()
+    expenses = Expense.query.all()
+
+    # Add a type indicator to each transaction
+    meter_readings_with_type = [(meter_reading, 'MeterReading') for meter_reading in meter_readings]
+    payments_with_type = [(payment, 'Payment') for payment in payments]
+    expenses_with_type = [(expense, 'Expense') for expense in expenses]
+
+    # Combine all transactions with their types
+    all_transactions = meter_readings_with_type + payments_with_type + expenses_with_type
+
+    # Sort transactions by timestamp in descending order
+    sorted_transactions = sorted(all_transactions, key=lambda x: x[0].timestamp, reverse=True)
+
+    return sorted_transactions
 
 def get_user_list(current_user):
     now = datetime.utcnow() + timedelta(hours=3)
@@ -76,11 +94,39 @@ def delinquent_household_invoices(current_user):
     return household_invoices
 
 
+
+
+# Define a function to fetch actual revenue and expenses data from the database and sum them by month
+def fetch_revenue_expense_data():
+    # Fetch revenue data from payments table and sum them by month
+    revenue_data = db.session.query(func.sum(Payment.amount).label('total_amount'), extract('month', Payment.timestamp).label('month')) \
+                             .group_by(extract('month', Payment.timestamp)) \
+                             .all()
+
+    # Fetch expense data from expenses table and sum them by month
+    expense_data = db.session.query(func.sum(Expense.amount).label('total_amount'), extract('month', Expense.timestamp).label('month')) \
+                             .group_by(extract('month', Expense.timestamp)) \
+                             .all()
+
+    # Format the data into a dictionary with month as key
+    revenue_dict = {result.month: result.total_amount for result in revenue_data}
+    expense_dict = {result.month: result.total_amount for result in expense_data}
+
+    # Combine revenue and expenses data into a single dictionary
+    combined_data = {}
+    for month in range(1, 13):
+        combined_data[month] = {'revenue': revenue_dict.get(month, 0), 'expenses': expense_dict.get(month, 0)}
+
+    return combined_data
+
 @dashboard_bp.route('/dashboard')
 @login_required
 def dashboard():
     # Get dashboard cards data
     cards_data = dashboard_cards_data()
+
+    # Fetch actual revenue and expenses data from the database
+    revenue_expense_data = fetch_revenue_expense_data()
 
     # Recent Transactions Data and Data
     recent_transactions = recent_transactions_data()
@@ -98,6 +144,8 @@ def dashboard():
     return render_template('accounts/dashboard.html',
                            cards_data=cards_data,
 
+                           revenue_expense_data=revenue_expense_data,
+
                            recent_transactions=recent_transactions,
 
                             now=now,
@@ -109,26 +157,6 @@ def dashboard():
                             household_invoices=household_invoices,
 
                             hide_footer=True)
-
-
-def recent_transactions_data():
-    meter_readings = MeterReading.query.all()
-    payments = Payment.query.all()
-    expenses = Expense.query.all()
-
-    # Add a type indicator to each transaction
-    meter_readings_with_type = [(meter_reading, 'MeterReading') for meter_reading in meter_readings]
-    payments_with_type = [(payment, 'Payment') for payment in payments]
-    expenses_with_type = [(expense, 'Expense') for expense in expenses]
-
-    # Combine all transactions with their types
-    all_transactions = meter_readings_with_type + payments_with_type + expenses_with_type
-
-    # Sort transactions by timestamp in descending order
-    sorted_transactions = sorted(all_transactions, key=lambda x: x[0].timestamp, reverse=True)
-
-    return sorted_transactions
-
 
 
 
