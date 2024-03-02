@@ -1,10 +1,11 @@
 # app/backend/accounts/dashboard/routes.py
 
-from datetime import datetime, timedelta
+# Import necessary libraries and modules
+from datetime import datetime, timedelta, timezone
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from sqlalchemy import func, extract
-from ...database.models import User, Note, MeterReading, Payment, Expense
+from ...database.models import *
 from app import db
 from .forms import StickyNoteForm
 
@@ -94,10 +95,12 @@ def delinquent_household_invoices(current_user):
     return household_invoices
 
 
+def fetch_bar_chart_data():
+    # Fetch usage data from meter reading table and sum them by month
+    usage_data = db.session.query(func.sum(MeterReading.consumed).label('consumed'), extract('month', MeterReading.timestamp).label('month')) \
+                             .group_by(extract('month', MeterReading.timestamp)) \
+                             .all()
 
-
-# Define a function to fetch actual revenue and expenses data from the database and sum them by month
-def fetch_revenue_expense_data():
     # Fetch revenue data from payments table and sum them by month
     revenue_data = db.session.query(func.sum(Payment.amount).label('total_amount'), extract('month', Payment.timestamp).label('month')) \
                              .group_by(extract('month', Payment.timestamp)) \
@@ -108,56 +111,109 @@ def fetch_revenue_expense_data():
                              .group_by(extract('month', Expense.timestamp)) \
                              .all()
 
-    # Format the data into a dictionary with month as key
+    # Format the data into dictionaries with month as key
+    usage_dict = {result.month: result.consumed for result in usage_data}
     revenue_dict = {result.month: result.total_amount for result in revenue_data}
     expense_dict = {result.month: result.total_amount for result in expense_data}
 
     # Combine revenue and expenses data into a single dictionary
     combined_data = {}
     for month in range(1, 13):
-        combined_data[month] = {'revenue': revenue_dict.get(month, 0), 'expenses': expense_dict.get(month, 0)}
+        combined_data[month] = {'usage': usage_dict.get(month, 0), 'revenue': revenue_dict.get(month, 0), 'expenses': expense_dict.get(month, 0)}
 
     return combined_data
 
-@dashboard_bp.route('/dashboard')
-@login_required
+def fetch_doughnut_chart_data():
+    total_unpaid_invoices = sum(invoice.total_amount for invoice in MeterReading.query.filter_by(payment_status=False).all())
+    total_unverified_payments = sum(payment.amount for payment in Payment.query.filter_by(status=False).all())
+
+    combined_data = {
+        "Unpaid Invoices": total_unpaid_invoices,
+        "Unverified Payments": total_unverified_payments
+    }
+
+    return combined_data
+
+
+
+
+
+# Function to fetch monthly performance data
+def fetch_monthly_performance_data(month, year):
+    revenue_generated = db.session.query(func.sum(Payment.amount)) \
+                                   .filter(extract('month', Payment.timestamp) == month) \
+                                   .filter(extract('year', Payment.timestamp) == year) \
+                                   .scalar() or 0
+
+    water_consumed = db.session.query(func.sum(MeterReading.consumed)) \
+                                .filter(extract('month', MeterReading.timestamp) == month) \
+                                .filter(extract('year', MeterReading.timestamp) == year) \
+                                .scalar() or 0
+
+    return revenue_generated, water_consumed
+
+@dashboard_bp.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
+    if request.method == 'POST':
+        current_month = int(request.form['current_month'])
+        current_year = int(request.form['current_year'])
+    else:
+        # Get current month and year
+        today = datetime.now()
+        current_month = today.month
+        current_year = today.year
+
     # Get dashboard cards data
     cards_data = dashboard_cards_data()
 
-    # Fetch actual revenue and expenses data from the database
-    revenue_expense_data = fetch_revenue_expense_data()
+    # Fetch monthly performance data for the current month
+    current_monthly_performance = fetch_monthly_performance_data(current_month, current_year)
 
-    # Recent Transactions Data and Data
+    # Define the previous month
+    previous_month = current_month - 1 if current_month != 1 else 12
+    previous_year = current_year - 1 if current_month == 1 else current_year
+
+    # Define the next month
+    next_month = current_month + 1 if current_month != 12 else 1
+    next_year = current_year + 1 if current_month == 12 else current_year
+
+    # Fetch actual revenue and expenses data from the database
+    revenue_expense_data = fetch_bar_chart_data()
+
+    # Fetch actual revenue and expenses data from the database
+    doughnut_chart_data = fetch_doughnut_chart_data()
+
+    # Get recent transactions data
     recent_transactions = recent_transactions_data()
 
     # Get data for the list of users
     now, users_to_display = get_user_list(current_user)
 
-    # Sticky Notes Logic and Data
+    # Prepare sticky notes data
     content_form = StickyNoteForm()
     sticky_note_content = Note.query.all()
 
-    # Delinquent Bills Data
+    # Get delinquent bills data
     household_invoices = delinquent_household_invoices(current_user)
 
     return render_template('accounts/dashboard.html',
                            cards_data=cards_data,
-
+                           current_monthly_performance=current_monthly_performance,
+                           current_month=current_month,
+                           current_year=current_year,
+                           previous_month=previous_month,
+                           previous_year=previous_year,
+                           next_month=next_month,
+                           next_year=next_year,
                            revenue_expense_data=revenue_expense_data,
-
+                           doughnut_chart_data=doughnut_chart_data,
                            recent_transactions=recent_transactions,
-
-                            now=now,
-                            users_to_display=users_to_display,
-
-                            content_form=content_form,
-                            sticky_note_content=sticky_note_content,
-
-                            household_invoices=household_invoices,
-
-                            hide_footer=True)
-
+                           now=now,
+                           users_to_display=users_to_display,
+                           content_form=content_form,
+                           sticky_note_content=sticky_note_content,
+                           household_invoices=household_invoices,
+                           hide_footer=True)
 
 
 
