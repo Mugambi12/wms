@@ -2,12 +2,14 @@
 
 <!-- #MAIN BODY SECTION -->
 <div class="container-fluid">
-  <div class="container-fluid border-bottom mb-2 px-3">
+  <div
+    class="d-flex justify-content-between align-items-center border-bottom p-2 mb-2"
+  >
     <div class="d-flex align-items-center">
       <ion-icon name="bar-chart" class="me-3 fs-4"></ion-icon>
-      <h2 class="fw-bold mb-0">Dashboard</h2>
+      <h1 class="fw-bold mb-0">Dashboard</h1>
     </div>
-    <p class="fs-6 mt-2 mb-0 p-0">Welcome to your dashboard.</p>
+    <p class="fs-6 mb-0">Welcome to your dashboard.</p>
   </div>
 
   <!-- Four Bootstrap Cards -->
@@ -138,6 +140,159 @@
       </div>
     </div>
 
+    <!-- Bar Chart -->
+    <script>
+      // Define myChart variable outside the scope to make it accessible globally
+      let myChart;
+
+      // Define an array containing the names of the months
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      // Variable to track the currently displayed month
+      let currentMonthIndex = new Date().getMonth(); // Initialize with the current month
+
+      // Function to update the current month earnings and water consumed
+      function updateData() {
+        // Fetch actual data for the selected month (replace with your actual data fetching logic)
+        const actualEarnings =
+          "KES " + (Math.floor(Math.random() * 50000) + 50000).toFixed(2); // Random earnings between 50000 and 100000
+        const actualWater = Math.floor(Math.random() * 500) + 500 + " Units"; // Random water between 500 and 1000 units
+
+        // Update the HTML with the fetched data
+        document.getElementById("currentMonthEarnings").innerText =
+          actualEarnings;
+        document.getElementById("currentMonthWater").innerText = actualWater;
+
+        // Update the overview month dynamically
+        document.getElementById("overviewMonth").innerText =
+          "Overview Of " + months[currentMonthIndex];
+      }
+
+      // Function to handle click on "Previous" button
+      function previousMonth() {
+        currentMonthIndex--; // Decrement the month index
+        if (currentMonthIndex < 0) {
+          currentMonthIndex = months.length - 1; // Wrap around to the last month
+        }
+        updateData(); // Update displayed data for the new month
+      }
+
+      // Function to handle click on "Next" button
+      function nextMonth() {
+        currentMonthIndex++; // Increment the month index
+        if (currentMonthIndex >= months.length) {
+          currentMonthIndex = 0; // Wrap around to the first month
+        }
+        updateData(); // Update displayed data for the new month
+      }
+
+      // Wait for the DOM content to load
+      document.addEventListener("DOMContentLoaded", function () {
+        updateData(); // Update displayed data when the page loads
+
+        const chart1 = document.querySelector(".chart1");
+        const ctx = chart1.getContext("2d");
+
+        // Function to generate random data for water consumed and revenue for each month
+        function generateRandomData() {
+          const waterData = [];
+          const revenueData = [];
+          const expensesData = [];
+          for (let i = 0; i < 12; i++) {
+            waterData.push(Math.floor(Math.random() * 700)); // Adjust the range as needed for water consumed
+            revenueData.push(Math.floor(Math.random() * 1000)); // Adjust the range as needed for revenue
+            expensesData.push(Math.floor(Math.random() * 1000)); // Adjust the range as needed for expenses
+          }
+          return {
+            water: waterData,
+            revenue: revenueData,
+            expenses: expensesData,
+          };
+        }
+
+        const data = generateRandomData();
+
+        myChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: months.map((month) => month.substring(0, 3)),
+            datasets: [
+              {
+                label: "Water Consumed",
+                data: data.water,
+                backgroundColor: "rgba(255, 159, 64, 0.6)", // Orange color for water consumed
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 0,
+                barThickness: 8,
+                borderRadius: 15,
+              },
+              {
+                label: "Revenue (KES)",
+                data: data.revenue,
+                backgroundColor: "rgba(54, 162, 235, 0.6)",
+                borderColor: "rgba(255, 159, 64, 1)",
+                borderWidth: 0,
+                barThickness: 8,
+                borderRadius: 15,
+              },
+              {
+                label: "Expenses (KES)",
+                data: data.expenses,
+                backgroundColor: "rgba(255, 99, 132, 0.6)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 0,
+                barThickness: 8,
+                borderRadius: 15,
+              },
+            ],
+          },
+          options: {
+            layout: {
+              margin: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20,
+              },
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                grid: {
+                  display: false,
+                },
+              },
+              x: {
+                beginAtZero: false,
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      });
+    </script>
+
     <!-- Doughnut Chart -->
     <div class="col-md-3 mb-3">
       <div class="card h-100 border-0 shadow-sm">
@@ -147,12 +302,75 @@
         </div>
       </div>
     </div>
+
+    <!-- Doughnut Chart -->
+    <script>
+      const chart2 = document.querySelectorAll(".chart2");
+
+      chart2.forEach(function (chart) {
+        var ctx = chart.getContext("2d");
+
+        // Function to generate random data for doughnut chart
+        function generateRandomData() {
+          return [
+            Math.floor(Math.random() * 1000),
+            Math.floor(Math.random() * 1000),
+          ];
+        }
+
+        var data = generateRandomData();
+
+        var myChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: ["Unpaid Invoices", "Unverified Payments"],
+            datasets: [
+              {
+                label: "# of Votes",
+                data: data,
+                backgroundColor: [
+                  "rgba(255, 99, 132, 0.4)",
+                  "rgba(54, 162, 235, 0.4)",
+                ],
+                borderColor: [
+                  "rgba(255, 99, 132, 0.2)",
+                  "rgba(54, 162, 235, 0.2)",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            layout: {
+              padding: {
+                top: 20,
+              },
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+                labels: {
+                  usePointStyle: true,
+                  pointStyle: "circle",
+                },
+              },
+            },
+            scales: {
+              grid: {
+                display: false,
+              },
+            },
+          },
+        });
+      });
+    </script>
   </div>
 
   <!-- Admin Only Charts Data -->
   <div class="row">
     <!-- Line Chart -->
-    <!--
+
     <div class="col-md-7 mb-4">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body">
@@ -267,7 +485,6 @@
         });
       });
     </script>
-    -->
   </div>
 
   <!-- Calendar, Sticky Notes and List of Admins -->
@@ -391,6 +608,52 @@
     </div>
   </div>
 
+  <!-- Delinquent Bills Table -->
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-4">Delinquent Bills</h5>
+      <div class="table-responsive">
+        <table
+          class="table table-borderless table-hover text-center data-table"
+        >
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Section</th>
+              <th scope="col">House#</th>
+              <th scope="col">Usage</th>
+              <th scope="col">Subtotal</th>
+              <th scope="col">Service</th>
+              <th scope="col">Total</th>
+              <th scope="col">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for household_invoice in household_invoices %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td class="text-start">
+                {% set names = household_invoice[0].split() %} {{ names[0]|title
+                }} {{ names[1]|title }}
+              </td>
+              <td>{{ household_invoice[1].title() }}</td>
+              <td>{{ household_invoice[2] }}</td>
+              <td>{{ household_invoice[3] | format_amount }}</td>
+              <td>KES {{ household_invoice[4] | format_amount }}</td>
+              <td>KES {{ household_invoice[5] | format_amount }}</td>
+              <td>KES {{ household_invoice[6] | format_amount }}</td>
+              <td class="text-danger">
+                KES {{ household_invoice[7] | format_amount }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <!-- Recent Transactions -->
   <div class="card border-0 shadow-sm">
     <div class="card-body">
@@ -465,51 +728,6 @@
                   %} Pending {% endif %}
                 </span>
                 {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Delinquent Bills Table -->
-  <div class="card border-0 shadow-sm mb-3">
-    <div class="card-body">
-      <h5 class="card-title mb-4">Delinquent Bills</h5>
-      <div class="table-responsive">
-        <table
-          class="table table-borderless table-hover text-center data-table"
-        >
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Section</th>
-              <th scope="col">House#</th>
-              <th scope="col">Usage</th>
-              <th scope="col">Subtotal</th>
-              <th scope="col">Service</th>
-              <th scope="col">Total</th>
-              <th scope="col">Balance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for household_invoice in household_invoices %}
-            <tr>
-              <td>{{ loop.index }}</td>
-              <td class="text-start">
-                {{ household_invoice[0].split()[0]|title }}
-              </td>
-              <td>{{ household_invoice[1].title() }}</td>
-              <td>{{ household_invoice[2] }}</td>
-              <td>{{ household_invoice[3] | format_amount }}</td>
-              <td>{{ household_invoice[4] | format_amount }}</td>
-              <td>{{ household_invoice[5] | format_amount }}</td>
-              <td>{{ household_invoice[6] | format_amount }}</td>
-              <td class="text-danger">
-                {{ household_invoice[7] | format_amount }}
               </td>
             </tr>
             {% endfor %}
@@ -622,224 +840,6 @@
       timeoutId = setTimeout(() => {
         document.getElementById("sticky-note-form").submit();
       }, 2500);
-    });
-  });
-</script>
-
-<!-- Bar Chart -->
-<script>
-  // Define myChart variable outside the scope to make it accessible globally
-  let myChart;
-
-  // Define an array containing the names of the months
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  // Variable to track the currently displayed month
-  let currentMonthIndex = new Date().getMonth(); // Initialize with the current month
-
-  // Function to update the current month earnings and water consumed
-  function updateData() {
-    // Fetch actual data for the selected month (replace with your actual data fetching logic)
-    const actualEarnings =
-      "KES " + (Math.floor(Math.random() * 50000) + 50000).toFixed(2); // Random earnings between 50000 and 100000
-    const actualWater = Math.floor(Math.random() * 500) + 500 + " Units"; // Random water between 500 and 1000 units
-
-    // Update the HTML with the fetched data
-    document.getElementById("currentMonthEarnings").innerText = actualEarnings;
-    document.getElementById("currentMonthWater").innerText = actualWater;
-
-    // Update the overview month dynamically
-    document.getElementById("overviewMonth").innerText =
-      "Overview Of " + months[currentMonthIndex];
-  }
-
-  // Function to handle click on "Previous" button
-  function previousMonth() {
-    currentMonthIndex--; // Decrement the month index
-    if (currentMonthIndex < 0) {
-      currentMonthIndex = months.length - 1; // Wrap around to the last month
-    }
-    updateData(); // Update displayed data for the new month
-  }
-
-  // Function to handle click on "Next" button
-  function nextMonth() {
-    currentMonthIndex++; // Increment the month index
-    if (currentMonthIndex >= months.length) {
-      currentMonthIndex = 0; // Wrap around to the first month
-    }
-    updateData(); // Update displayed data for the new month
-  }
-
-  // Wait for the DOM content to load
-  document.addEventListener("DOMContentLoaded", function () {
-    updateData(); // Update displayed data when the page loads
-
-    const chart1 = document.querySelector(".chart1");
-    const ctx = chart1.getContext("2d");
-
-    // Function to generate random data for water consumed and revenue for each month
-    function generateRandomData() {
-      const waterData = [];
-      const revenueData = [];
-      const expensesData = [];
-      for (let i = 0; i < 12; i++) {
-        waterData.push(Math.floor(Math.random() * 700)); // Adjust the range as needed for water consumed
-        revenueData.push(Math.floor(Math.random() * 1000)); // Adjust the range as needed for revenue
-        expensesData.push(Math.floor(Math.random() * 1000)); // Adjust the range as needed for expenses
-      }
-      return {
-        water: waterData,
-        revenue: revenueData,
-        expenses: expensesData,
-      };
-    }
-
-    const data = generateRandomData();
-
-    myChart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: months.map((month) => month.substring(0, 3)),
-        datasets: [
-          //{
-          //  label: "Water Consumed",
-          //  data: data.water,
-          //  backgroundColor: "rgba(255, 159, 64, 0.6)", // Orange color for water consumed
-          //  borderColor: "rgba(54, 162, 235, 1)",
-          //  borderWidth: 0,
-          //  barThickness: 8,
-          //  borderRadius: 15,
-          //},
-          {
-            label: "Revenue (KES)",
-            data: data.revenue,
-            backgroundColor: "rgba(54, 162, 235, 0.6)",
-            borderColor: "rgba(255, 159, 64, 1)",
-            borderWidth: 0,
-            barThickness: 8,
-            borderRadius: 15,
-          },
-          {
-            label: "Expenses (KES)",
-            data: data.expenses,
-            backgroundColor: "rgba(255, 99, 132, 0.6)",
-            borderColor: "rgba(255, 99, 132, 1)",
-            borderWidth: 0,
-            barThickness: 8,
-            borderRadius: 15,
-          },
-        ],
-      },
-      options: {
-        layout: {
-          margin: {
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: 20,
-          },
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: "top",
-          },
-        },
-        scales: {
-          y: {
-            beginAtZero: false,
-            grid: {
-              display: false,
-            },
-          },
-          x: {
-            beginAtZero: false,
-            grid: {
-              display: false,
-            },
-          },
-        },
-      },
-    });
-  });
-</script>
-
-<!-- Doughnut Chart -->
-<script>
-  const chart2 = document.querySelectorAll(".chart2");
-
-  chart2.forEach(function (chart) {
-    var ctx = chart.getContext("2d");
-
-    // Function to generate random data for doughnut chart
-    function generateRandomData() {
-      return [
-        Math.floor(Math.random() * 1000),
-        Math.floor(Math.random() * 1000),
-        Math.floor(Math.random() * 1000),
-      ];
-    }
-
-    var data = generateRandomData();
-
-    var myChart = new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: ["Invoice", "Payment", "Units"],
-        datasets: [
-          {
-            label: "# of Votes",
-            data: data,
-            backgroundColor: [
-              "rgba(255, 99, 132, 0.4)",
-              "rgba(54, 162, 235, 0.4)",
-              "rgba(255, 206, 86, 0.4)",
-            ],
-            borderColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-            ],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        layout: {
-          padding: {
-            top: 20,
-          },
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: "top",
-            labels: {
-              usePointStyle: true,
-              pointStyle: "circle",
-            },
-          },
-        },
-        scales: {
-          grid: {
-            display: false,
-          },
-        },
-      },
     });
   });
 </script>

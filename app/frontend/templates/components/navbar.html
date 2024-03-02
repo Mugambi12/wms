@@ -126,6 +126,17 @@
               </span>
             </a>
           </li>
+
+          <!-- Account -->
+          <li class="nav-item">
+            <a class="nav-link text-dark position-relative">
+              <span
+                class="badge ms-2 {% if current_user.is_admin %}bg-danger{% else %}bg-info{% endif %}"
+              >
+                {% if current_user.is_admin %}Admin{% else %}Standard{% endif %}
+              </span>
+            </a>
+          </li>
         </ul>
 
         <!-- User Image Dropdown -->
