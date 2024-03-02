@@ -189,17 +189,16 @@
               document.addEventListener("DOMContentLoaded", function () {
                 const ctx = document.getElementById("barChart").getContext("2d");
 
-                // Function to extract revenue and expenses data
                 function extractData(data, key) {
                   return Object.values(data).map(month => month[key]);
                 }
 
-                // Extract actual revenue and expenses data
-                const usageData = extractData({{ revenue_expense_data | tojson }}, 'usage');
-                const revenueData = extractData({{ revenue_expense_data | tojson }}, 'revenue');
-                const expensesData = extractData({{ revenue_expense_data | tojson }}, 'expenses');
+                const revenueExpenseData = {{ revenue_expense_data | tojson }};
+                const usageData = extractData(revenueExpenseData, 'usage');
+                const revenueData = extractData(revenueExpenseData, 'revenue');
+                const expensesData = extractData(revenueExpenseData, 'expenses');
 
-                const myChart = new Chart(ctx, {
+                const myBarChart = new Chart(ctx, {
                   type: "bar",
                   data: {
                     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -207,30 +206,29 @@
                       {
                         label: "Usage (KES)",
                         data: usageData,
-                          backgroundColor: "rgba(255, 159, 64, 0.6)",
+                        backgroundColor: "rgba(255, 159, 64, 0.6)",
                         borderColor: "rgba(75, 192, 192, 1)",
-                          borderWidth: 0,
-                          barThickness: 8,
-                          borderRadius: 15,
-
+                        borderWidth: 0,
+                        barThickness: 8,
+                        borderRadius: 15,
                       },
                       {
                         label: "Revenue (KES)",
                         data: revenueData,
-                          backgroundColor: "rgba(54, 162, 235, 0.6)",
+                        backgroundColor: "rgba(54, 162, 235, 0.6)",
                         borderColor: "rgba(75, 192, 192, 1)",
-                          borderWidth: 0,
-                          barThickness: 8,
-                          borderRadius: 15,
+                        borderWidth: 0,
+                        barThickness: 8,
+                        borderRadius: 15,
                       },
                       {
                         label: "Expenses (KES)",
                         data: expensesData,
-                          backgroundColor: "rgba(255, 99, 132, 0.6)",
+                        backgroundColor: "rgba(255, 99, 132, 0.6)",
                         borderColor: "rgba(255, 99, 132, 1)",
-                          borderWidth: 0,
-                          barThickness: 8,
-                          borderRadius: 15,
+                        borderWidth: 0,
+                        barThickness: 8,
+                        borderRadius: 15,
                       },
                     ],
                   },
@@ -277,24 +275,20 @@
       <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Pending Activities</h5>
-          <canvas class="chart2" width="500" height="200"></canvas>
+          <canvas class="doughnutChart" width="500" height="200"></canvas>
         </div>
         <!-- Doughnut Chart -->
         <script>
-          const chart2 = document.querySelectorAll(".chart2");
+          document.querySelectorAll(".doughnutChart").forEach(function (chart) {
+            const ctx = chart.getContext("2d");
 
-          chart2.forEach(function (chart) {
-            var ctx = chart.getContext("2d");
-
-            // Function to extract data for doughnut chart
             function extractData(data) {
               return Object.values(data);
             }
 
-            // Fetch data for doughnut chart
             const chartData = {{ doughnut_chart_data | tojson }};
 
-            var myChart = new Chart(ctx, {
+            const myDoughnutChart = new Chart(ctx, {
               type: "doughnut",
               data: {
                 labels: Object.keys(chartData),
