@@ -14,7 +14,9 @@
 
   <!-- Four Bootstrap Cards -->
   <div class="row text-dark">
-    <div class="col-md-3 mb-3">
+    <div
+      class="{% if current_user.is_admin %} col-md-3 {% else %} col-md-3 {% endif %} mb-3"
+    >
       <div class="card border-0 shadow-sm bg-primary h-100 bg-opacity-25">
         <div class="card-body">
           <div class="row align-items-center">
@@ -26,34 +28,48 @@
             </div>
             <div class="col-md-9">
               <div class="card-text fs-6">
-                {{ cards_data.total_houses | format_amount }} Houses
+                {{ cards_data.total_houses | format_amount }} {% if
+                current_user.is_admin %}Houses{% else %}People{% endif %}
               </div>
-              <div class="card-title fw-bold fs-5">Connections</div>
+              <div class="card-title fw-bold fs-5">
+                {% if current_user.is_admin %}Connections{% else %}Household {%
+                endif %}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-md-2 mb-3">
+    <div
+      class="{% if current_user.is_admin %} col-md-2 {% else %} col-md-3 {% endif %} mb-3"
+    >
       <div class="card border-0 shadow-sm bg-warning h-100 bg-opacity-25">
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-3 text-center">
-              <ion-icon name="cash-outline" style="font-size: 2rem"></ion-icon>
+              <ion-icon
+                name="{% if current_user.is_admin %}cash-outline{% else %}wallet-outline{% endif %}"
+                style="font-size: 2rem"
+              ></ion-icon>
             </div>
             <div class="col-md-9">
               <div class="card-text fs-6">
                 KES {{ cards_data.total_revenue | format_amount }}
               </div>
-              <div class="card-title fw-bold fs-5">Revenue</div>
+              <div class="card-title fw-bold fs-5">
+                {% if current_user.is_admin %} Revenue {% else %} Expenditure {%
+                endif %}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-md-3 mb-3">
+    <div
+      class="{% if current_user.is_admin %} col-md-3 {% else %} col-md-3 {% endif %} mb-3"
+    >
       <div class="card border-0 shadow-sm bg-info h-100 bg-opacity-25">
         <div class="card-body">
           <div class="row align-items-center">
@@ -71,13 +87,15 @@
       </div>
     </div>
 
-    <div class="col-md-2 mb-3">
+    <div
+      class="{% if current_user.is_admin %} col-md-2 {% else %} col-md-3 {% endif %} mb-3"
+    >
       <div class="card border-0 shadow-sm bg-danger h-100 bg-opacity-25">
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-3 text-center">
               <ion-icon
-                name="wallet-outline"
+                name="{% if current_user.is_admin %}wallet-outline{% else %}cash-outline{% endif %}"
                 style="font-size: 2rem"
               ></ion-icon>
             </div>
@@ -85,14 +103,19 @@
               <div class="card-text fs-6">
                 KES {{ cards_data.total_expenses | format_amount }}
               </div>
-              <div class="card-title fw-bold fs-5">Expenses</div>
+              <div class="card-title fw-bold fs-5">
+                {% if current_user.is_admin %} Expenses {% else %} Arrears {%
+                endif %}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-md-2 mb-3">
+    <div
+      class="{% if current_user.is_admin %} col-md-2 {% else %} d-none {% endif %} mb-3"
+    >
       <div class="card border-0 shadow-sm bg-success h-100 bg-opacity-25">
         <div class="card-body">
           <div class="row align-items-center">
