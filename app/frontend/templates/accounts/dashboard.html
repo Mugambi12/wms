@@ -459,7 +459,7 @@
   </div>
 
   <!-- Delinquent Bills Table -->
-  <div class="card border-0 shadow-sm">
+  <div class="card border-0 shadow-sm mb-3">
     <div class="card-body">
       <h5 class="card-title mb-4">Delinquent Bills</h5>
       <div class="table-responsive">
@@ -507,7 +507,7 @@
   <!-- Recent Transactions -->
   <div class="card border-0 shadow-sm mb-3">
     <div class="card-body">
-      <h5 class="card-title mb-3">Recent Transactions (30)</h5>
+      <h5 class="card-title mb-3">Recent Transactions</h5>
 
       <div class="table-responsive">
         <table class="table table-borderless table-hover data-table">
@@ -539,7 +539,9 @@
               <td>
                 {% if transaction_type == 'MeterReading' %} {{
                 transaction.customer_name }} {% elif transaction_type ==
-                'Expense' %} {{ transaction.vendor }} {% endif %}
+                'Payment' %} {{ transaction.customer_name }} {% elif
+                transaction_type == 'Expense' %} {{ transaction.vendor }} {%
+                endif %}
               </td>
               <td>
                 {% if transaction_type == 'MeterReading' %} KES {{
@@ -559,21 +561,21 @@
               </td>
               <td>
                 {% if transaction_type == 'Payment' %}
-                <span class="badge bg-success">
-                  {% if transaction.status %} Completed {% else %} Pending {%
+                <span
+                  class="badge {% if transaction.status %}bg-success{% else %}bg-primary{% endif %}"
+                >
+                  {% if transaction.status %} Verified {% else %} Pending {%
                   endif %}
                 </span>
                 {% elif transaction_type == 'MeterReading' %}
                 <span
-                  class="{% if transaction.payment_status %}badge bg-success{% else %}badge bg-info{% endif %}"
+                  class="badge {% if transaction.payment_status %}bg-success{% else %}bg-info{% endif %}"
                 >
                   {% if transaction.payment_status %} Paid {% else %} Invoiced
                   {% endif %}
                 </span>
                 {% elif transaction_type == 'Expense' %}
-                <span
-                  class="{% if transaction.status %}badge bg-primary{% else %}badge bg-danger{% endif %}"
-                >
+                <span class="badge bg-danger">
                   {% if transaction.status %} {{ transaction.status }} {% else
                   %} Pending {% endif %}
                 </span>

@@ -1,4 +1,4 @@
-# app/backend/accounts/dashboard/routes.py
+# File: app/backend/accounts/dashboard/routes.py
 
 # Import necessary libraries and modules
 from datetime import datetime, timedelta, timezone
@@ -29,6 +29,58 @@ def dashboard_cards_data():
     }
 
     return cards_data
+
+def fetch_monthly_performance_data(month, year):
+    revenue_generated = db.session.query(func.sum(Payment.amount)) \
+                                   .filter(extract('month', Payment.timestamp) == month) \
+                                   .filter(extract('year', Payment.timestamp) == year) \
+                                   .scalar() or 0
+
+    water_consumed = db.session.query(func.sum(MeterReading.consumed)) \
+                                .filter(extract('month', MeterReading.timestamp) == month) \
+                                .filter(extract('year', MeterReading.timestamp) == year) \
+                                .scalar() or 0
+
+    return revenue_generated, water_consumed
+
+def fetch_bar_chart_data():
+    # Fetch usage data from meter reading table and sum them by month
+    usage_data = db.session.query(func.sum(MeterReading.consumed).label('consumed'), extract('month', MeterReading.timestamp).label('month')) \
+                             .group_by(extract('month', MeterReading.timestamp)) \
+                             .all()
+
+    # Fetch revenue data from payments table and sum them by month
+    revenue_data = db.session.query(func.sum(Payment.amount).label('total_amount'), extract('month', Payment.timestamp).label('month')) \
+                             .group_by(extract('month', Payment.timestamp)) \
+                             .all()
+
+    # Fetch expense data from expenses table and sum them by month
+    expense_data = db.session.query(func.sum(Expense.amount).label('total_amount'), extract('month', Expense.timestamp).label('month')) \
+                             .group_by(extract('month', Expense.timestamp)) \
+                             .all()
+
+    # Format the data into dictionaries with month as key
+    usage_dict = {result.month: result.consumed for result in usage_data}
+    revenue_dict = {result.month: result.total_amount for result in revenue_data}
+    expense_dict = {result.month: result.total_amount for result in expense_data}
+
+    # Combine revenue and expenses data into a single dictionary
+    combined_data = {}
+    for month in range(1, 13):
+        combined_data[month] = {'usage': usage_dict.get(month, 0), 'revenue': revenue_dict.get(month, 0), 'expenses': expense_dict.get(month, 0)}
+
+    return combined_data
+
+def fetch_doughnut_chart_data():
+    total_unpaid_invoices = sum(invoice.total_amount for invoice in MeterReading.query.filter_by(payment_status=False).all())
+    total_unverified_payments = sum(payment.amount for payment in Payment.query.filter_by(status=False).all())
+
+    combined_data = {
+        "Unpaid Invoices": total_unpaid_invoices,
+        "Unverified Payments": total_unverified_payments
+    }
+
+    return combined_data
 
 def recent_transactions_data():
     meter_readings = MeterReading.query.all()
@@ -93,64 +145,6 @@ def delinquent_household_invoices(current_user):
                                       .all()
 
     return household_invoices
-
-
-def fetch_bar_chart_data():
-    # Fetch usage data from meter reading table and sum them by month
-    usage_data = db.session.query(func.sum(MeterReading.consumed).label('consumed'), extract('month', MeterReading.timestamp).label('month')) \
-                             .group_by(extract('month', MeterReading.timestamp)) \
-                             .all()
-
-    # Fetch revenue data from payments table and sum them by month
-    revenue_data = db.session.query(func.sum(Payment.amount).label('total_amount'), extract('month', Payment.timestamp).label('month')) \
-                             .group_by(extract('month', Payment.timestamp)) \
-                             .all()
-
-    # Fetch expense data from expenses table and sum them by month
-    expense_data = db.session.query(func.sum(Expense.amount).label('total_amount'), extract('month', Expense.timestamp).label('month')) \
-                             .group_by(extract('month', Expense.timestamp)) \
-                             .all()
-
-    # Format the data into dictionaries with month as key
-    usage_dict = {result.month: result.consumed for result in usage_data}
-    revenue_dict = {result.month: result.total_amount for result in revenue_data}
-    expense_dict = {result.month: result.total_amount for result in expense_data}
-
-    # Combine revenue and expenses data into a single dictionary
-    combined_data = {}
-    for month in range(1, 13):
-        combined_data[month] = {'usage': usage_dict.get(month, 0), 'revenue': revenue_dict.get(month, 0), 'expenses': expense_dict.get(month, 0)}
-
-    return combined_data
-
-def fetch_doughnut_chart_data():
-    total_unpaid_invoices = sum(invoice.total_amount for invoice in MeterReading.query.filter_by(payment_status=False).all())
-    total_unverified_payments = sum(payment.amount for payment in Payment.query.filter_by(status=False).all())
-
-    combined_data = {
-        "Unpaid Invoices": total_unpaid_invoices,
-        "Unverified Payments": total_unverified_payments
-    }
-
-    return combined_data
-
-
-
-
-
-# Function to fetch monthly performance data
-def fetch_monthly_performance_data(month, year):
-    revenue_generated = db.session.query(func.sum(Payment.amount)) \
-                                   .filter(extract('month', Payment.timestamp) == month) \
-                                   .filter(extract('year', Payment.timestamp) == year) \
-                                   .scalar() or 0
-
-    water_consumed = db.session.query(func.sum(MeterReading.consumed)) \
-                                .filter(extract('month', MeterReading.timestamp) == month) \
-                                .filter(extract('year', MeterReading.timestamp) == year) \
-                                .scalar() or 0
-
-    return revenue_generated, water_consumed
 
 @dashboard_bp.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -228,7 +222,6 @@ def save_sticky_note():
         return '', 204
     flash('Failed to update sticky note.', 'danger')
     return redirect(url_for('accounts.dashboard.dashboard'))
-
 
 def get_sticky_note_content():
     return Note.query.filter_by(user_id=current_user.id).first()

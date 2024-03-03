@@ -20,7 +20,9 @@ def create_app():
     app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
     # Configure database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///water_management_system.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///watermanagement.db'
+    # Replace 'your_username', 'your_password', 'localhost', and 'your_database' with your MySQL credentials
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://apogen:Apogen2023@localhost/watermanagement'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1.5)
     app.config['SESSION_COOKIE_SECURE'] = True

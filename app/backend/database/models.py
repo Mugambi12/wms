@@ -106,6 +106,7 @@ class MeterReading(db.Model):
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     invoice_amount = db.Column(db.Integer)
+    customer_name = db.Column(db.String(50))
     amount = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)
@@ -117,8 +118,9 @@ class Payment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     invoice_id = db.Column(db.Integer, db.ForeignKey('meter_reading.id'), nullable=True)
 
-    def __init__(self, amount, timestamp, payment_method, user_id, reference_number=None, status=False, invoice_id=None, invoice_amount=None, unique_user_id=None):
+    def __init__(self, customer_name, amount, timestamp, payment_method, user_id, reference_number=None, status=False, invoice_id=None, invoice_amount=None, unique_user_id=None):
         self.invoice_amount = invoice_amount
+        self.customer_name = customer_name
         self.amount = amount
         self.timestamp = timestamp
         self.payment_method = payment_method
