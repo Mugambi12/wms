@@ -26,8 +26,8 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">UserID</th>
                 <th scope="col">InvoiceID</th>
+                <th scope="col">Name</th>
                 <th scope="col">Pay Date</th>
                 <th scope="col">Method</th>
                 <th scope="col">Reference ID</th>
@@ -42,11 +42,11 @@
               reverse=true) %}
               <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ payment.user_id }}</td>
                 <td>{{ payment.invoice_id }}</td>
+                <td>{{ payment.customer_name | title }}</td>
                 <td>{{ payment.timestamp.strftime('%d %b %Y') }}</td>
                 <td>{{ payment.payment_method }}</td>
-                <td class="text-start">{{ payment.reference_number }}</td>
+                <td>{{ payment.reference_number }}</td>
                 <td>KES {{ payment.invoice_amount | format_amount }}</td>
                 <td>KES {{ payment.amount | format_amount }}</td>
                 <td
@@ -68,6 +68,19 @@
                     ></ion-icon>
                   </a>
 
+                  <!-- Edit Payment Button -->
+                  <a
+                    action="editPaymentModal_{{ payment.id }}"
+                    class="me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editPaymentModal_{{ payment.id }}"
+                  >
+                    <ion-icon
+                      name="create-outline"
+                      class="text-primary"
+                    ></ion-icon>
+                  </a>
+
                   <!-- Delete Payment Button -->
                   <a
                     action="#deleteConfirmationModal_{{ payment.id }}"
@@ -83,6 +96,88 @@
                 </td>
               </tr>
 
+              <!-- Edit Payment Modal -->
+              <div
+                class="modal fade"
+                id="editPaymentModal_{{ payment.id }}"
+                tabindex="-1"
+                aria-labelledby="editPaymentModalLabel"
+                aria-hidden="true"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+              >
+                <div
+                  class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                >
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editPaymentModalLabel">
+                        Modal title
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+
+                    <form
+                      method="post"
+                      action="{{ url_for('accounts.records.edit_payment', payment_id=payment.id) }}"
+                    >
+                      <!-- CSRF Token -->
+                      <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                      />
+                      <div class="modal-body">
+                        <div class="form-group mb-2">
+                          <label for="payment_method">Payment Method:</label>
+                          <select id="payment_method" name="payment_method" class="form-select" required>
+                            {% for key, label in form.payment_method.choices %}
+                            <option value="{{ key }}" {% if key == payment.payment_method %} selected {% endif %}>{{ label }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                          {{ form.amount.label(class="form-label") }}
+                          {{ form.amount(class="form-control", required="required", value=payment.amount) }}
+                        </div>
+
+                        <div class="form-group mb-2">
+                          {{ form.reference_number.label(class="form-label") }}
+                          {{ form.reference_number(class="form-control", value=payment.reference_number) }}
+                        </div>
+
+                        <div class="form-group mb-2">
+                          {{ form.timestamp.label(class="form-label") }}
+                          {{ form.timestamp(class="form-control", value=payment.timestamp.strftime('%Y-%m-%d')) }}
+                        </div>
+                      </div>
+
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm rounded-pill btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-sm rounded-pill btn-primary"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
               <!-- Validate Payment Modal -->
               <div
                 class="modal fade"
@@ -91,7 +186,7 @@
                 aria-labelledby="validatePaymentModalLabel"
                 aria-hidden="true"
               >
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h1
@@ -148,7 +243,7 @@
                 </div>
               </div>
 
-              <!-- Delete Meter Reading Confirmation Modal -->
+              <!-- Delete Payment Modal -->
               <div
                 class="modal fade"
                 id="deleteConfirmationModal_{{ payment.id }}"

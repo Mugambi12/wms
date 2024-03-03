@@ -146,30 +146,37 @@
                 <td>{{ expense.description }}</td>
                 <td>{{ expense.status }}</td>
                 <td>
-                  <button
-                    class="btn btn-sm btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editExpenseModal{{ expense.id }}"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    action="#deleteExpenseModal_{{ expense.id }}"
-                    class="btn btn-sm btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteExpenseModal_{{ expense.id }}"
-                  >
-                    Delete
-                  </button>
+                    <a
+                        id="#editExpenseModal_{{ expense.id }}"
+                        class="me-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editExpenseModal_{{ expense.id }}"
+                    >
+                        <ion-icon
+                        name="create-outline"
+                        class="text-primary"
+                    ></ion-icon>
+                    </a>
+
+                    <a
+                        id="#deleteExpenseModal_{{ expense.id }}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteExpenseModal_{{ expense.id }}"
+                    >
+                        <ion-icon
+                        name="trash-outline"
+                        class="text-danger"
+                    ></ion-icon>
+                    </a>
                 </td>
               </tr>
 
               <!-- Edit Expense Modal -->
               <div
                 class="modal fade"
-                id="editExpenseModal{{ expense.id }}"
+                id="editExpenseModal_{{ expense.id }}"
                 tabindex="-1"
-                aria-labelledby="editExpenseModalLabel{{ expense.id }}"
+                aria-labelledby="editExpenseModalLabel"
                 aria-hidden="true"
               >
                 <div
@@ -180,7 +187,7 @@
                     <div class="modal-header">
                       <h5
                         class="modal-title"
-                        id="editExpenseModalLabel{{ expense.id }}"
+                        id="editExpenseModalLabel"
                       >
                         Edit Expense
                       </h5>
@@ -191,6 +198,8 @@
                         aria-label="Close"
                       ></button>
                     </div>
+
+                    <!-- Edit Expense Form -->
                     <form
                       method="post"
                       action="{{ url_for('accounts.expenses.edit_expense', expense_id=expense.id) }}"
@@ -205,116 +214,67 @@
                       <!-- Modal Body -->
                       <div class="modal-body">
                         <div class="row">
-                          <div class="mb-3 col-md-6">
-                            <label for="expenseType" class="form-label"
-                              >Expense Type</label
-                            >
-                            <select
-                              class="form-select"
-                              id="expenseType"
-                              name="expense_type"
-                            >
-                              <option value="">Select expense type</option>
-                              {% for choice in
-                              edit_expense_form.expense_type.choices %}
-                              <option
-                                value="{{ choice[0] }}"
-                                {%
-                                if
-                                choice[0] == expense.expense_type
-                                %}
-                                selected
-                                {%
-                                endif
-                                %}
-                              >
-                                {{ choice[1] }}
-                              </option>
-                              {% endfor %}
-                            </select>
-                          </div>
+                            <!-- Expense Type -->
+                            <div class="col-md-6 mb-2">
+                                {{ edit_expense_form.expense_type.label(class="form-label") }}
+                                <select class="form-select " name="expense_type">
+                                {% for key, label in edit_expense_form.expense_type.choices %}
+                                <option value="{{ key }}" {% if key == expense.expense_type %} selected {% endif %}>{{ label }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="expenseStatus" class="form-label"
-                              >Status</label
-                            >
-                            <select
-                              class="form-select"
-                              id="expenseStatus"
-                              name="status"
-                            >
-                              <option value="">Select expense type</option>
-                              {% for choice in edit_expense_form.status.choices
-                              %}
-                              <option
-                                value="{{ choice[0] }}"
-                                {%
-                                if
-                                choice[0] == expense.status
-                                %}
-                                selected
-                                {%
-                                endif
-                                %}
-                              >
-                                {{ choice[1] }}
-                              </option>
-                              {% endfor %}
-                            </select>
-                          </div>
+                            <!-- Expense Status -->
+                            <div class="col-md-6 mb-2">
+                                {{ edit_expense_form.status.label(class="form-label") }}
+                                <select class="form-select " name="status">
+                                {% for key, label in edit_expense_form.status.choices %}
+                                <option value="{{ key }}" {% if key == expense.status %} selected {% endif %}>{{ label }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="expenseVendor" class="form-label"
-                              >Vendor</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="expenseVendor"
-                              name="vendor"
-                              value="{{ expense.vendor }}"
-                            />
-                          </div>
+                            <!-- Vendor -->
+                            <div class="col-md-6 mb-2">
+                                {{
+                                edit_expense_form.vendor.label(class="form-label")
+                                }} {{ edit_expense_form.vendor(class="form-control
+                                ", value=expense.vendor) }}
+                            </div>
 
-                          <div class="col-md-6 mb-3">
-                            <label for="expenseAmount" class="form-label"
-                              >Amount</label
-                            >
-                            <input
-                              type="number"
-                              class="form-control"
-                              id="expenseAmount"
-                              name="amount"
-                              value="{{ expense.amount }}"
-                            />
-                          </div>
+                            <!-- Amount -->
+                            <div class="col-md-6 mb-2">
+                                {{
+                                edit_expense_form.amount.label(class="form-label")
+                                }} {{ edit_expense_form.amount(class="form-control
+                                ", value=expense.amount) }}
+                            </div>
 
-                          <div class="col-md-6 mb-3">
-                            <label for="expenseDate" class="form-label"
-                              >Date</label
-                            >
-                            <input
-                              type="datetime-local"
-                              class="form-control"
-                              id="expenseDate"
-                              name="timestamp"
-                              value="{{ expense.timestamp.strftime('%Y-%m-%yT%H:%M') }}"
-                            />
-                          </div>
-                        </div>
+                            <!-- Timestamp -->
+                            <div class="col-md-6 mb-2">
+                                {{
+                                edit_expense_form.timestamp.label(class="form-label")
+                                }} {{
+                                edit_expense_form.timestamp(class="form-control
+                                ",
+                                value=expense.timestamp.strftime('%Y-%m-%d')) }}
+                            </div>
+                            </div>
 
-                        <div class="mb-3">
-                          <label for="expenseDescription" class="form-label"
-                            >Description</label
-                          >
-                          <textarea
-                            class="form-control"
-                            id="expenseDescription"
-                            name="description"
-                            rows="3"
-                          >
-{{ expense.description }}</textarea>
-                        </div>
+                            <!-- Description -->
+                            <div class="mb-3">
+                            <label for="expenseDescription" class="form-label"
+                                >Description</label
+                            >
+                            <textarea
+                                class="form-control"
+                                id="expenseDescription"
+                                name="description"
+                                rows="3"
+                            >
+    {{ expense.description }}</textarea
+                            >
+                            </div>
                       </div>
 
                       <!-- Modal Footer -->

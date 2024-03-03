@@ -49,6 +49,7 @@ def fetch_payment_data(current_user):
             db.session.query(
                 Payment.id,
                 Payment.user_id,
+                Payment.customer_name,
                 Payment.invoice_id,
                 Payment.invoice_amount,
                 Payment.amount,

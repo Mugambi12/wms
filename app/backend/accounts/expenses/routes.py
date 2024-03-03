@@ -50,7 +50,7 @@ def edit_expense(expense_id):
         flash('Expense updated successfully!', 'success')
         return redirect(url_for('accounts.expenses.expenses'))
 
-    return render_template('accounts/expenses.html', form=edit_expense_form, expense=edit_expense, hide_footer=True)
+    return render_template('accounts/expenses.html', edit_expense_form=edit_expense_form, expense=edit_expense, hide_footer=True)
 
 @expenses_bp.route('/delete_expense/<int:expense_id>', methods=['POST'])
 @login_required

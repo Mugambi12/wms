@@ -45,6 +45,23 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
         return {'success': False, 'message': f'An error occurred during payment processing: {str(e)}'}
 
 
+def validate_payment_logic(payment_id):
+    try:
+        payment = Payment.query.get(payment_id)
+
+        if payment:
+            # Toggle payment status
+            payment.status = not payment.status
+            db.session.commit()
+
+            return {'success': True, 'message': 'Payment status updated successfully.'}
+        else:
+            return {'success': False, 'message': 'Payment not found.'}
+
+    except Exception as e:
+        return {'success': False, 'message': f'Error updating payment status: {str(e)}'}
+
+
 def delete_payment_logic(payment_id):
     try:
         payments = Payment.query.get(payment_id)
