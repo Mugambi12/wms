@@ -5,7 +5,7 @@ from io import BytesIO
 from openpyxl import Workbook
 from xhtml2pdf import pisa
 from ...database.models import User, MeterReading
-from ..records.utils_billing import fetch_invoice_data
+from ..records.utils_data import fetch_invoice_data
 
 def download_users():
     """

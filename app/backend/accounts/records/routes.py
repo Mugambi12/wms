@@ -7,8 +7,11 @@ from app import db
 from .forms import *
 from ...database.models import *
 from .utils_meter_readings import handle_add_meter_reading, get_meter_readings, edit_meter_reading_logic, delete_meter_reading_logic
-from .utils_billing import fetch_billing_data, fetch_invoice_data, fetch_payment_data
 from .utils_payment_logic import make_payment_logic, delete_payment_logic, validate_payment_logic
+from .utils_data import fetch_billing_data, fetch_invoice_data, fetch_payment_data
+from ..components.payment_processor import process_payments_with_context
+from ..components.download_manager import download_meter_readings
+from ..components.download_manager import download_invoice
 
 
 records_bp = Blueprint('records', __name__, url_prefix='/records')
@@ -142,7 +145,6 @@ def validate_payment(payment_id):
 
     return redirect(url_for('accounts.records.payments'))
 
-from ..components.payment_processor import process_payments_with_context
 @records_bp.route('/edit_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
 def edit_payment(payment_id):
@@ -163,10 +165,6 @@ def edit_payment(payment_id):
 
     return render_template('accounts/edit_payment.html', form=form, payment=payment, hide_footer=True)
 
-
-
-
-
 @records_bp.route('/delete_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
 def delete_payment(payment_id):
@@ -183,15 +181,11 @@ def delete_payment(payment_id):
 
 
 
-from ..components.download_manager import download_meter_readings
 
 @records_bp.route('/download_meter_readings', methods=['GET'])
 @login_required
 def download_meter_readings_route():
     return download_meter_readings()
-
-
-from ..components.download_manager import download_invoice
 
 @records_bp.route('/download_invoice/<int:invoice_id>', methods=['GET'])
 @login_required
