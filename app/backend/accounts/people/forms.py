@@ -41,12 +41,14 @@ class EditUserForm(FlaskForm):
     def populate_house_sections(self):
         settings = Settings.query.first()
         if settings and settings.house_sections:
-            # Extract existing house section value
             current_house_section = self.house_section.data
-
-            # Set choices with existing value selected
             self.house_section.choices = [(section, section) for section in settings.house_sections.split(',')]
             self.house_section.data = current_house_section
+
+    def set_admin_edit(self, admin_edit):
+        if not admin_edit:
+            self.house_section.validators = [Optional()]
+            self.house_number.validators = [Optional()]
 
 
 class EditProfilePictureForm(FlaskForm):

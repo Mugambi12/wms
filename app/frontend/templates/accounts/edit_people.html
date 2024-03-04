@@ -233,13 +233,15 @@
                 <!-- House Section -->
                 <div class="mb-2">
                   {{ form.house_section.label(class="form-label") }} {{
-                  form.house_section(class="form-control form-control-sm") }}
+                  form.house_section(class="form-control form-control-sm",
+                  disabled=not current_user.is_admin) }}
                 </div>
 
                 <!-- House Number -->
                 <div class="mb-2">
                   {{ form.house_number.label(class="form-label") }} {{
-                  form.house_number(class="form-control form-control-sm") }}
+                  form.house_number(class="form-control form-control-sm",
+                  disabled=not current_user.is_admin) }}
                 </div>
               </div>
             </div>

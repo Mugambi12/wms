@@ -19,10 +19,15 @@
       </button>
 
       <!-- Sidebar Logo -->
-      <div class="sidebar-logo navbar-brand">
-        <a href="#" class="text-info"
-          >Apo<span class="text-danger">Gen</span></a
-        >
+      <div class="row">
+        <div class="sidebar-logo">
+          <a href="#" class="text-info"
+            >Apo<span class="text-danger">Gen</span></a
+          >
+        </div>
+        <p class="logo-tagline blockquote-footer" style="font-size: 10px">
+          Software Developers
+        </p>
       </div>
     </div>
 
@@ -41,23 +46,18 @@
 
       <!-- People Dropdown -->
       <li class="sidebar-item">
-        {% if current_user.is_admin %}
         <a
-          href="{{ url_for('accounts.people.people_list') }}"
+          href="{% if current_user.is_admin %} {{ url_for('accounts.people.people_list') }} {% else %} {{ url_for('accounts.people.edit_user', user_id=current_user.id) }} {% endif %}"
           class="sidebar-link"
         >
-          <ion-icon name="people-outline" class="text-success"></ion-icon>
-          <span>People List</span>
+          <ion-icon
+            name="{% if current_user.is_admin %}people{% else %}person{% endif %}-outline"
+            class="text-success"
+          ></ion-icon>
+          <span
+            >{{ 'People List' if current_user.is_admin else 'Profile' }}</span
+          >
         </a>
-        {% else %}
-        <a
-          href="{{ url_for('accounts.people.edit_user', user_id=current_user.id) }}"
-          class="sidebar-link"
-        >
-          <ion-icon name="person-outline" class="text-success"></ion-icon>
-          <span>Profile</span>
-        </a>
-        {% endif %}
       </li>
 
       <!-- Meter Readings -->
@@ -94,6 +94,7 @@
       </li>
 
       <!-- Expenses Options -->
+      {% if current_user.is_admin %}
       <li class="sidebar-item">
         <a
           href="{{ url_for('accounts.expenses.expenses') }}"
@@ -103,6 +104,7 @@
           <span>Expenses</span>
         </a>
       </li>
+      {% endif %}
 
       <!-- Messages -->
       <li class="sidebar-item">
@@ -129,9 +131,8 @@
           <span>Settings</span>
         </a>
       </li>
-      {% endif %}
 
-      <!-- Security Options -->
+      <!-- General Website -->
       <li class="sidebar-item">
         <a
           href="{{ url_for('accounts.website.website') }}"
@@ -141,6 +142,7 @@
           <span>General Website</span>
         </a>
       </li>
+      {% endif %}
     </ul>
 
     <!-- Sidebar Footer -->

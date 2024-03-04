@@ -230,6 +230,132 @@
           </button>
         </form>
       </div>
+
+      {% if current_user.is_admin %}
+      <div class="float-end ms-3">
+        <!-- Button to open modal for deactivated accounts -->
+        <a
+          type="button"
+          class="btn btn-sm btn-outline-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+        >
+          Deactivated Accounts
+        </a>
+
+        <!-- Modal for deactivated accounts -->
+        <div
+          class="modal fade"
+          id="staticBackdrop"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabindex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
+            <div class="modal-content" style="background-color: #f8f9fa">
+              <!-- Modal Header -->
+              <div class="modal-header" style="background-color: #e9ecef">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                  Inactive People Data Overview
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+
+              <!-- Modal Body -->
+              <div class="modal-body" style="background-color: #ffffff">
+                <div class="table-responsive">
+                  <table
+                    class="table table-borderless table-hover text-center data-table"
+                    style="width: 100%"
+                  >
+                    <!-- Table Header -->
+                    <thead style="background-color: #f0f0f0">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Section</th>
+                        <th scope="col">House#</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <!-- Table Body -->
+                    <tbody>
+                      {% for person in people_list %} {% if not person.is_active
+                      %}
+                      <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ person.id }}</td>
+                        <td class="text-start">
+                          {{ person.first_name.title() ~ " " ~
+                          person.last_name.title() }}
+                        </td>
+                        <td>{{ person.mobile_number }}</td>
+                        <td>{{ person.email }}</td>
+                        <td>{{ person.house_section }}</td>
+                        <td>{{ person.house_number }}</td>
+                        <td
+                          class="fw-bold text-center {% if person.balance > 0 %}text-success{% elif person.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
+                        >
+                          {{ person.balance | format_amount }}
+                        </td>
+                        <td>
+                          {% if person.is_active %}<span class="text-success"
+                            >Active</span
+                          >
+                          {% else %}<span class="text-danger">Inactive</span>{%
+                          endif %}
+                        </td>
+                        <td>
+                          {% if person.is_admin %}<span class="text-success"
+                            >Admin</span
+                          >
+                          {% else %}<span class="text-info">Regular</span>{%
+                          endif %}
+                        </td>
+                        <td class="text-center">
+                          {% if current_user.is_admin or current_user.id ==
+                          person.id %}
+                          <a
+                            href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
+                          >
+                            <ion-icon
+                              name="create-outline"
+                              class="me-1"
+                            ></ion-icon>
+                            <span class="text-muted">Edit</span>
+                          </a>
+                          {% else %}
+                          <ion-icon
+                            name="ban-outline"
+                            class="me-1 text-muted"
+                          ></ion-icon>
+                          <span class="text-muted">Restricted</span>
+                          {% endif %}
+                        </td>
+                      </tr>
+                      {% endif %} {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 
@@ -238,11 +364,11 @@
     <div class="card border-0 shadow-sm mt-3 mb-3">
       <div class="card-body">
         <h5 class="card-title border-bottom rounded mb-4 px-3">
-          Data Tables of People List
+          People Overview Data Table
         </h5>
         <div class="table-responsive">
           <table
-            class="table table-borderless text-center data-table"
+            class="table table-borderless table-hover text-center data-table"
             style="width: 100%"
           >
             <thead>
@@ -255,14 +381,13 @@
                 <th scope="col">Section</th>
                 <th scope="col">House#</th>
                 <th scope="col">Balance</th>
-                <th scope="col">Acc.</th>
                 <th scope="col">Status</th>
                 <th scope="col">Type</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
-              {% for person in people_list %}
+              {% for person in people_list %} {% if person.is_active %}
               <tr>
                 <th scope="row">{{ person.id }}</th>
                 <td>{{ person.unique_user_id }}</td>
@@ -280,11 +405,6 @@
                   {{ person.balance | format_amount }}
                 </td>
                 <td>
-                  {% if person.main_account %}<span class="text-success"
-                    >Main</span
-                  >{% else %}<span class="text-danger">Sec</span>{% endif %}
-                </td>
-                <td>
                   {% if person.is_active %}<span class="text-success"
                     >Active</span
                   >{% else %}<span class="text-danger">Inactive</span>{% endif
@@ -295,16 +415,23 @@
                   >{% else %}<span class="text-info">Regular</span>{% endif %}
                 </td>
                 <td class="text-center">
-                  {% if current_user.is_admin or current_user.id == person.id
-                  %}<a
+                  {% if current_user.is_admin or current_user.id == person.id %}
+                  <a
                     href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
-                    ><ion-icon name="create-outline" class="me-2"></ion-icon
-                    >Edit</a
-                  >{% else %}<span class="text-muted">No Edit Permission</span
-                  >{% endif %}
+                  >
+                    <ion-icon name="create-outline" class="me-1"></ion-icon>
+                    <span class="text-muted">Edit</span>
+                  </a>
+                  {% else %}
+                  <ion-icon
+                    name="ban-outline"
+                    class="me-1 text-muted"
+                  ></ion-icon>
+                  <span class="text-muted">Restricted</span>
+                  {% endif %}
                 </td>
               </tr>
-              {% endfor %}
+              {% endif %} {% endfor %}
             </tbody>
           </table>
         </div>

@@ -13,6 +13,7 @@ dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 
 @dashboard_bp.route('/dashboard', methods=['GET', 'POST'])
+@login_required
 def dashboard():
     if request.method == 'POST':
         current_month = int(request.form['current_month'])

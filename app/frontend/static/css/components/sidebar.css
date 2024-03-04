@@ -48,6 +48,7 @@
 }
 
 #sidebar:not(.expand) .sidebar-logo,
+#sidebar:not(.expand) .logo-tagline,
 #sidebar:not(.expand) a.sidebar-link span {
   visibility: collapse;
 }

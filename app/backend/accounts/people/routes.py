@@ -7,6 +7,7 @@ from app import db
 from ...database.models import User, Settings
 from .forms import AddUserForm, EditUserForm, EditProfilePictureForm
 from .utils import handle_add_new_users, change_password, validate_new_password, save_profile_picture, delete_user
+from ..components.download_manager import download_users
 
 
 people_bp = Blueprint('people', __name__, url_prefix='/people')
@@ -31,10 +32,12 @@ def people_list():
         if settings and settings.house_sections:
             house_sections = [(section, section) for section in settings.house_sections.split(',')]
 
-        return render_template('accounts/people_list.html', people_list=people_list, house_sections=house_sections, form=add_form, hide_footer=True)
+        if current_user.is_admin:
+            return render_template('accounts/people_list.html', people_list=people_list, house_sections=house_sections, form=add_form, hide_footer=True)
+        else:
+            return "", 204
     else:
         return redirect(url_for('auth.login'))
-
 
 @people_bp.route('/add_user', methods=['GET', 'POST'])
 @login_required
@@ -61,7 +64,6 @@ def add_user():
         return redirect(url_for('accounts.people.people_list', people_list=people_list, form=add_form, hide_footer=True))
     else:
         return redirect(url_for('auth.login'))
-
 
 @people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -92,16 +94,17 @@ def edit_user(user_id):
                     # Change password only if new password is provided
                     change_password(user, form)
 
-            # Check if there are other users in the same house section and house number with a main account
-            all_house_accounts = User.query.filter_by(house_section=user.house_section, house_number=user.house_number).all()
+            # Check if the user is being assigned to a house where another user resides
+            if user.house_section != form.house_section.data or user.house_number != form.house_number.data:
+                existing_user_in_house = User.query.filter_by(house_section=form.house_section.data, house_number=form.house_number.data, is_active=True).first()
+                if existing_user_in_house and existing_user_in_house.id != user.id:
+                    flash('Another user is already registered in the selected house.', 'danger')
+                    return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
 
-            # Check if there is a main account in the same house section and house number
-            if any(account.main_account for account in all_house_accounts):
-                # If there is a main account, set the current user as not the main account
-                user.main_account = False
-            else:
-                # If there are no main accounts, set the current user as the main account
-                user.main_account = True
+            # Check if the user is being activated and if the house has another active user
+            if not user.is_active and User.query.filter_by(house_section=user.house_section, house_number=user.house_number, is_active=True).count() > 0:
+                flash('Another active user is already registered in this household.', 'danger')
+                return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
 
             # Update user profile
             form.populate_obj(user)
@@ -113,6 +116,8 @@ def edit_user(user_id):
         return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
     else:
         return redirect(url_for('auth.login'))
+
+
 
 
 @people_bp.route('/edit_profile_picture', methods=['GET', 'POST'])
@@ -139,7 +144,6 @@ def edit_profile_picture_route():
         return render_template('accounts/edit_people.html', form=form)
     else:
         return redirect(url_for('auth.login'))
-
 
 @people_bp.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
@@ -169,7 +173,6 @@ def delete_user_route(user_id):
     else:
         return redirect(url_for('auth.login'))
 
-from ..components.download_manager import download_users
 
 @people_bp.route('/download_users', methods=['GET'])
 @login_required
