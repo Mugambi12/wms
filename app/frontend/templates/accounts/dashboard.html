@@ -159,9 +159,9 @@
           </h5>
           <div class="row">
             <!-- Performance Overview -->
-            {% if current_monthly_performance[0] or
-            current_monthly_performance[1] %}
             <div class="col-md-4 text-center p-3">
+              {% if current_monthly_performance[0] or
+              current_monthly_performance[1] %}
               <p class="text-muted mb-2" id="overviewMonth">
                 Overview Of {{ current_month }}/{{ current_year }}
               </p>
@@ -179,6 +179,7 @@
                 {% if current_user.is_admin %} Water Consumed {% else %} My
                 Water Usage {% endif %}
               </p>
+              {% endif %}
 
               <div
                 class="input-group input-group-sm mt-3 justify-content-between"
@@ -222,10 +223,8 @@
                 </form>
               </div>
             </div>
-            {% endif %}
 
             <!-- Bar Chart -->
-            {% if revenue_expense_data %}
             <div class="col-md-8">
               <canvas id="barChart" width="500" height="200"></canvas>
             </div>
@@ -237,7 +236,7 @@
                   return Object.values(data).map(month => month[key]);
                 }
 
-                const revenueExpenseData = {{ revenue_expense_data | tojson }};
+                const revenueExpenseData = {{ bar_chart_data | tojson }};
                 const usageData = extractData(revenueExpenseData, 'usage');
                 const revenueData = extractData(revenueExpenseData, 'revenue');
                 const isAdmin = {{ current_user.is_admin | tojson }};
@@ -316,7 +315,6 @@
                 });
               });
             </script>
-            {% endif %}
           </div>
         </div>
       </div>

@@ -40,7 +40,7 @@ def dashboard():
     next_year = current_year + 1 if current_month == 12 else current_year
 
     # Fetch actual revenue and expenses data from the database
-    revenue_expense_data = fetch_bar_chart_data(current_user)
+    bar_chart_data = fetch_bar_chart_data(current_user)
 
     # Fetch actual revenue and expenses data from the database
     doughnut_chart_data = fetch_doughnut_chart_data(current_user)
@@ -67,7 +67,7 @@ def dashboard():
                            previous_year=previous_year,
                            next_month=next_month,
                            next_year=next_year,
-                           revenue_expense_data=revenue_expense_data,
+                           bar_chart_data=bar_chart_data,
                            doughnut_chart_data=doughnut_chart_data,
                            recent_transactions=recent_transactions,
                            now=now,
