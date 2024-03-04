@@ -150,7 +150,6 @@
   <!-- Charts Data -->
   <div class="row">
     <!-- Bar Chart -->
-    {% if current_monthly_performance or revenue_expense_data %}
     <div class="col-md-9 mb-3">
       <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
@@ -160,6 +159,8 @@
           </h5>
           <div class="row">
             <!-- Performance Overview -->
+            {% if current_monthly_performance[0] or
+            current_monthly_performance[1] %}
             <div class="col-md-4 text-center p-3">
               <p class="text-muted mb-2" id="overviewMonth">
                 Overview Of {{ current_month }}/{{ current_year }}
@@ -221,12 +222,13 @@
                 </form>
               </div>
             </div>
+            {% endif %}
 
             <!-- Bar Chart -->
+            {% if revenue_expense_data %}
             <div class="col-md-8">
               <canvas id="barChart" width="500" height="200"></canvas>
             </div>
-            <!-- Bar Chart -->
             <script>
               document.addEventListener("DOMContentLoaded", function () {
                 const ctx = document.getElementById("barChart").getContext("2d");
@@ -314,56 +316,53 @@
                 });
               });
             </script>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
-    {% endif %}
 
     <!-- Doughnut Chart -->
-    {% if doughnut_chart_data %}
     <div class="col-md-3 mb-3">
       <div class="card h-100 border-0 shadow-sm">
+        <!-- Doughnut Chart -->
         <div class="card-body">
           <h5 class="card-title">Pending Activities</h5>
+          {% if doughnut_chart_data %}
           <canvas class="doughnutChart" width="500" height="200"></canvas>
         </div>
-        <!-- Doughnut Chart -->
         <script>
-          document.querySelectorAll(".doughnutChart").forEach(function (chart) {
+          function extractData(data) {
+            return Object.values(data);
+          }
+
+          document.querySelectorAll(".doughnutChart").forEach(chart => {
             const ctx = chart.getContext("2d");
-
-            function extractData(data) {
-              return Object.values(data);
-            }
-
             const chartData = {{ doughnut_chart_data | tojson }};
 
             const myDoughnutChart = new Chart(ctx, {
               type: "doughnut",
               data: {
                 labels: Object.keys(chartData),
-                datasets: [
-                  {
-                    label: "# of Votes",
-                    data: extractData(chartData),
-                    backgroundColor: [
-                      "rgba(255, 99, 132, 0.4)",
-                      "rgba(54, 162, 235, 0.4)",
-                    ],
-                    borderColor: [
-                      "rgba(255, 99, 132, 0.2)",
-                      "rgba(54, 162, 235, 0.2)",
-                    ],
-                    borderWidth: 1,
-                  },
-                ],
+                datasets: [{
+                  label: "# of Votes",
+                  data: extractData(chartData),
+                  backgroundColor: [
+                    "rgba(255, 99, 132, 0.4)",
+                    "rgba(54, 162, 235, 0.4)"
+                  ],
+                  borderColor: [
+                    "rgba(255, 99, 132, 0.2)",
+                    "rgba(54, 162, 235, 0.2)"
+                  ],
+                  borderWidth: 1
+                }]
               },
               options: {
                 layout: {
                   padding: {
-                    top: 20,
-                  },
+                    top: 20
+                  }
                 },
                 plugins: {
                   legend: {
@@ -371,22 +370,22 @@
                     position: "top",
                     labels: {
                       usePointStyle: true,
-                      pointStyle: "circle",
-                    },
-                  },
+                      pointStyle: "circle"
+                    }
+                  }
                 },
                 scales: {
                   grid: {
-                    display: false,
-                  },
-                },
-              },
+                    display: false
+                  }
+                }
+              }
             });
           });
         </script>
+        {% endif %}
       </div>
     </div>
-    {% endif %}
   </div>
 
   <!-- Calendar, Sticky Notes and List of Admins -->
