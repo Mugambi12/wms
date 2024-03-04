@@ -1,6 +1,7 @@
 import csv
 import io
 from flask import redirect, url_for, flash, render_template_string, send_file, request
+from flask_login import current_user
 from io import BytesIO
 from openpyxl import Workbook
 from xhtml2pdf import pisa
@@ -47,7 +48,14 @@ def generate_users_csv():
         str: CSV data as a string.
     """
     data = []
-    for person in User.query.all():
+    if current_user.is_authenticated and current_user.is_admin:
+        # Query all users if the user is an admin
+        users = User.query.all()
+    else:
+        # Query only the users belonging to the current user
+        users = User.query.filter_by(id=current_user.id).all()
+
+    for person in users:
         data.append([
             person.id,
             f"{person.first_name} {person.last_name}",
@@ -79,7 +87,14 @@ def generate_users_excel():
     ws = wb.active
     ws.append(['ID', 'Name', 'Email', 'Mobile Number', 'House Section', 'House Number', 'Status'])
 
-    for person in User.query.all():
+    if current_user.is_authenticated and current_user.is_admin:
+        # Query all users if the user is an admin
+        users = User.query.all()
+    else:
+        # Query only the users belonging to the current user
+        users = User.query.filter_by(id=current_user.id).all()
+
+    for person in users:
         ws.append([
             person.id,
             f"{person.first_name} {person.last_name}",
@@ -167,6 +182,7 @@ def generate_users_pdf(people_list):
     pisa.CreatePDF(BytesIO(html_data.encode()), pdf_data)
     return pdf_data.getvalue()
 
+
 def download_meter_readings():
     """
     Download meter readings in different formats (CSV, Excel, PDF).
@@ -181,7 +197,7 @@ def download_meter_readings():
         return send_file(
             BytesIO(csv_data.encode('utf-8')),
             as_attachment=True,
-            download_name='meter_readings.csv',
+            download_name='all_invoices.csv',
             mimetype='text/csv'
         )
     elif format_type == 'excel':
@@ -189,13 +205,13 @@ def download_meter_readings():
         return send_file(
             BytesIO(excel_data),
             as_attachment=True,
-            download_name='meter_readings.xlsx',
+            download_name='all_invoices.xlsx',
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
     elif format_type == 'pdf':
         readings_list = MeterReading.query.all()
         pdf_data = generate_meter_readings_pdf(readings_list)
-        return send_file(BytesIO(pdf_data), as_attachment=True, download_name='meter_readings.pdf')
+        return send_file(BytesIO(pdf_data), as_attachment=True, download_name='all_invoices.pdf')
     else:
         return "Unsupported format", 400
 
@@ -207,7 +223,14 @@ def generate_meter_readings_csv():
         str: CSV data as a string.
     """
     data = []
-    for reading in MeterReading.query.all():
+    if current_user.is_authenticated and current_user.is_admin:
+        # Query all meter readings if the user is an admin
+        readings = MeterReading.query.all()
+    else:
+        # Query only the meter readings belonging to the current user
+        readings = MeterReading.query.filter_by(user_id=current_user.id).all()
+
+    for reading in readings:
         data.append([
             reading.id,
             reading.timestamp,
@@ -244,7 +267,14 @@ def generate_meter_readings_excel():
     ws = wb.active
     ws.append(['ID', 'Timestamp', 'Customer Name', 'House Section', 'House Number', 'Reading Value', 'Consumed', 'Unit Price', 'Service Fee', 'Sub Total Price', 'Total Price', 'Status'])
 
-    for reading in MeterReading.query.all():
+    if current_user.is_authenticated and current_user.is_admin:
+        # Query all meter readings if the user is an admin
+        readings = MeterReading.query.all()
+    else:
+        # Query only the meter readings belonging to the current user
+        readings = MeterReading.query.filter_by(user_id=current_user.id).all()
+
+    for reading in readings:
         ws.append([
             reading.id,
             reading.timestamp,
@@ -336,6 +366,10 @@ def generate_meter_readings_pdf(readings_list):
     </html>
     """
 
+    if current_user.is_authenticated and not current_user.is_admin:
+        # Filter readings list to include only the current user's readings
+        readings_list = [reading for reading in readings_list if reading.user_id == current_user.id]
+
     html_data = render_template_string(html_template, readings_list=readings_list)
 
     pdf_data = BytesIO()
@@ -343,7 +377,7 @@ def generate_meter_readings_pdf(readings_list):
     return pdf_data.getvalue()
 
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 def download_invoice(invoice_id):
     """

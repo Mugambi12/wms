@@ -10,15 +10,19 @@
   scroll-behavior: smooth;
 }
 
+.chat-sidebar-content a {
+  width: 100%;
+}
 .chat-sidebar-content a img {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 20px;
   object-fit: cover;
 }
 .chat-sidebar-content div h6 {
   color: black;
+  font-size: 15px;
 }
 
 .chat-sidebar-content div p {

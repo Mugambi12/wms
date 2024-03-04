@@ -571,7 +571,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for transaction, transaction_type in recent_transactions [:30] %}
+            {% for transaction, transaction_type in recent_transactions %}
             <tr>
               <td>{{ loop.index }}</td>
               <td>#{{ transaction.id }}</td>

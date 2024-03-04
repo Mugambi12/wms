@@ -56,12 +56,12 @@
               <div class="mb-2">
                 {{ form.house_section.label(class="form-label") }}
                 <div class="input-group">
+                  {% if current_user.is_admin %}
                   <label
                     class="input-group-text input-group-text-sm"
                     for="house_section"
                     >Options</label
                   >
-                  {% if current_user.is_admin %}
                   <select
                     class="form-control form-control-sm"
                     name="house_section"
@@ -169,7 +169,9 @@
                 <th scope="col">Usage</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Status</th>
+                {% if current_user.is_admin %}
                 <th scope="col">Action</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -193,6 +195,7 @@
                   {{ 'Settled' if reading.payment_status else 'Pending' }}
                 </td>
                 <td>
+                  {% if current_user.is_admin %}
                   <!-- Edit Meter Reading Button -->
                   <a
                     action="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
@@ -207,7 +210,6 @@
                   </a>
 
                   <!-- Delete Meter Reading Button -->
-                  {% if current_user.is_admin %}
                   <a
                     action="#deleteConfirmationModal_{{ reading.id }}"
                     class=""

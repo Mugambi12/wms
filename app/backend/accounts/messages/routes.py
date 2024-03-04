@@ -46,11 +46,12 @@ def messages():
             else:
                 flash('Failed to send message.', 'error')
 
-        return redirect(url_for('accounts.messages.messages'))
-
 
     # Fetch all users and their unread message counts
-    all_users = User.query.all()
+    if current_user.is_admin:
+        all_users = User.query.all()
+    else:
+        all_users = User.query.filter(User.is_admin).all()
     unread_sent_message_counts = {user.id: get_received_unread_message_count(user.id) for user in all_users}
 
     selected_user_id = request.args.get('user_id')

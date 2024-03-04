@@ -25,7 +25,7 @@ def create_app():
     #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://apogen:Apogen2023@localhost/watermanagement'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1.5)
-    app.config['SESSION_COOKIE_SECURE'] = True
+    #app.config['SESSION_COOKIE_SECURE'] = True
     app.config['SECRET_KEY'] = 'qwertyurioupiuodsfghfdjgkjhd2345678jgfnxdz'
     uploads_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'profile')
     os.makedirs(uploads_folder, exist_ok=True)

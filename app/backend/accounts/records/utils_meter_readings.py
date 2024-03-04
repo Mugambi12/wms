@@ -31,6 +31,10 @@ def handle_add_meter_reading(form, current_user):
         ).order_by(MeterReading.reading_value.desc()).first()
 
         old_prev_reading = 0 if latest_reading is None else latest_reading.reading_value
+
+        if old_prev_reading > reading_value:
+            return {'success': False, 'message': 'Current reading cannot be less than previous reading.'}
+
         consumed = reading_value - old_prev_reading
 
         unit_price = db.session.query(Settings.unit_price).scalar() or 0
