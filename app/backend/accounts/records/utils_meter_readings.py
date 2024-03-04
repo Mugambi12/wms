@@ -10,15 +10,22 @@ from ..components.payment_processor import process_payments_with_context
 
 def handle_add_meter_reading(form, current_user):
     try:
+        # Get form data
         house_section = form.house_section.data
         house_number = form.house_number.data
         reading_value = form.reading_value.data
 
-        user = User.query.filter_by(house_section=house_section, house_number=house_number).first()
+        # If the user is not an admin, ensure they can only add readings for their own house
+        if not current_user.is_admin:
+            if current_user.house_section != house_section or current_user.house_number != house_number:
+                return {'success': False, 'message': 'You are not authorized to add readings for this house.'}
 
+        # Check if the user associated with the house exists
+        user = User.query.filter_by(house_section=house_section, house_number=house_number).first()
         if not user:
             return {'success': False, 'message': 'Invalid house section or house number.'}
 
+        # Calculate consumed units and total amount
         latest_reading = MeterReading.query.filter_by(
             house_section=house_section, house_number=house_number
         ).order_by(MeterReading.reading_value.desc()).first()
@@ -32,6 +39,7 @@ def handle_add_meter_reading(form, current_user):
         sub_total_amount = consumed * unit_price
         total_amount = sub_total_amount + service_fee
 
+        # Prepare data for the new meter reading
         customer = f"{user.first_name} {user.last_name}" if user else None
         unique_user_id = user.unique_user_id
 
@@ -49,9 +57,11 @@ def handle_add_meter_reading(form, current_user):
             unique_user_id=unique_user_id
         )
 
+        # Save the new meter reading
         db.session.add(new_meter_reading)
         db.session.commit()
 
+        # Process payments
         process_payments_with_context()
 
         return {'success': True, 'message': 'Meter reading added successfully!'}

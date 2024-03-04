@@ -15,8 +15,8 @@ class AddUserForm(FlaskForm):
     email = StringField('Email', validators=[Optional(), Length(max=50)])
     house_section = SelectField('House Section', validators=[DataRequired()], coerce=str)
     house_number = StringField('House Number', validators=[DataRequired(), Length(max=50)])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6), EqualTo('confirm_password', message='Passwords must match')])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
     def validate_mobile_number(self, field):

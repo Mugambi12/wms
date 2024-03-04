@@ -114,7 +114,7 @@
                 <td
                   class="fst-italic {% if entry.payment_status %}text-success{% else %}text-secondary{% endif %}"
                 >
-                  {{ "Reimbursed" if entry.payment_status else "Delinquent" }}
+                  {{ "Settled" if entry.payment_status else "Pending" }}
                 </td>
                 <!-- Action Buttons -->
                 <td>
@@ -129,6 +129,7 @@
                     ></ion-icon>
                   </a>
 
+                  {% if current_user.is_admin %}
                   <!-- Make Payment Button -->
                   <a
                     data-bs-toggle="modal"
@@ -139,8 +140,10 @@
                       class="text-success"
                     ></ion-icon>
                   </a>
+                  {% endif %}
                 </td>
 
+                {% if current_user.is_admin %}
                 <!-- Payment Modal -->
                 <div
                   class="modal fade"
@@ -215,14 +218,7 @@
                             </div>
 
                             <div class="col-md-6">
-                              <div class="mb-2">
-                                <h5
-                                  class="modal-title text-decoration-underline"
-                                >
-                                  Register a Payment
-                                </h5>
-                              </div>
-                              <div class="mb-2">
+                              <div class="mb-3">
                                 {{
                                 payment_form.payment_amount.label(class="form-label")
                                 }} {{
@@ -231,7 +227,7 @@
                                 placeholder="Enter amount", required="required")
                                 }}
                               </div>
-                              <div class="mb-2">
+                              <div class="mb-3">
                                 {{
                                 payment_form.payment_method.label(class="form-label")
                                 }} {{
@@ -239,7 +235,7 @@
                                 form-control-sm", id="payment_method",
                                 required="required") }}
                               </div>
-                              <div class="mb-2">
+                              <div class="mb-3">
                                 {{
                                 payment_form.reference_number.label(class="form-label")
                                 }} {{
@@ -272,6 +268,7 @@
                     </div>
                   </div>
                 </div>
+                {% endif %}
               </tr>
               {% endif %} {% endfor %}
             </tbody>

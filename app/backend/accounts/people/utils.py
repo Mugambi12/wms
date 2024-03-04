@@ -19,6 +19,7 @@ def handle_add_new_users(form, current_user):
     Returns:
         dict: A dictionary indicating the success status and a message.
     """
+    # Extract data from the form
     mobile_number = form.mobile_number.data[-9:]
     first_name = form.first_name.data
     last_name = form.last_name.data
@@ -26,12 +27,39 @@ def handle_add_new_users(form, current_user):
     house_section = form.house_section.data
     house_number = form.house_number.data
     password = form.password.data
+    confirm_password = form.confirm_password.data
+
+    # Check if all fields have been provided
+    if not all([mobile_number, first_name, last_name, email, house_section, house_number, password]):
+        # Create a custom flash message for each missing field
+        messages = []
+        if not mobile_number:
+            messages.append('Mobile number is required.')
+        if not first_name:
+            messages.append('First name is required.')
+        if not last_name:
+            messages.append('Last name is required.')
+        if not email:
+            messages.append('Email is required.')
+        if not house_section:
+            messages.append('House section is required.')
+        if not house_number:
+            messages.append('House number is required.')
+        if not password:
+            messages.append('Password is required.')
+        return {'success': False, 'message': ', '.join(messages)}
+
+    # Check if passwords match
+    if password != confirm_password:
+        return {'success': False, 'message': 'Passwords do not match. Please make sure your passwords match.'}
 
     try:
         # Check if the mobile number is already registered
         existing_user = User.query.filter_by(mobile_number=mobile_number).first()
         if existing_user:
             return {'success': False, 'message': 'Mobile number is already registered.'}
+
+        # Check if the house is already registered
         existing_house = User.query.filter_by(house_section=house_section, house_number=house_number).first()
         if existing_house:
             return {'success': False, 'message': 'Household is already registered.'}

@@ -9,7 +9,7 @@
         class="nav-link"
         data-bs-toggle="modal"
         data-bs-target="#addMeterReadingModal"
-        >New Reading</a
+        >Add New Reading</a
       >
     </li>
   </ul>
@@ -61,6 +61,7 @@
                     for="house_section"
                     >Options</label
                   >
+                  {% if current_user.is_admin %}
                   <select
                     class="form-control form-control-sm"
                     name="house_section"
@@ -74,21 +75,35 @@
                     <option value="{{ section[0] }}">{{ section[0] }}</option>
                     {% endfor %}
                   </select>
-                </div>
-                <div class="invalid-feedback">
-                  Please select a house section.
+                  {% else %}
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="house_section"
+                    name="house_section"
+                    value="{{ current_user.house_section }}"
+                    readonly
+                  />
+                  {% endif %}
                 </div>
               </div>
 
               <!-- House Number -->
               <div class="mb-2">
-                {{ form.house_number.label(class="form-label") }} {{
+                {{ form.house_number.label(class="form-label") }} {% if
+                current_user.is_admin %} {{
                 form.house_number(class="form-control form-control-sm",
                 id="house_number", placeholder="Enter House Number",
-                required="required") }}
-                <div class="invalid-feedback">
-                  Please provide a house number.
-                </div>
+                required="required") }} {% else %}
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="house_number"
+                  name="house_number"
+                  value="{{ current_user.house_number }}"
+                  readonly
+                />
+                {% endif %}
               </div>
 
               <!-- Reading Value -->
@@ -96,9 +111,6 @@
                 {{ form.reading_value.label(class="form-label") }} {{
                 form.reading_value(class="form-control form-control-sm",
                 required="required", placeholder="Enter Reading Value") }}
-                <div class="invalid-feedback">
-                  Please provide a valid reading value.
-                </div>
               </div>
             </div>
           </div>
@@ -178,7 +190,7 @@
                 <td
                   class="fst-italic {% if reading.payment_status %}text-success{% else %}text-secondary{% endif %}"
                 >
-                  {{ 'Reimbursed' if reading.payment_status else 'Delinquent' }}
+                  {{ 'Settled' if reading.payment_status else 'Pending' }}
                 </td>
                 <td>
                   <!-- Edit Meter Reading Button -->
@@ -195,6 +207,7 @@
                   </a>
 
                   <!-- Delete Meter Reading Button -->
+                  {% if current_user.is_admin %}
                   <a
                     action="#deleteConfirmationModal_{{ reading.id }}"
                     class=""
@@ -206,6 +219,7 @@
                       class="text-danger"
                     ></ion-icon>
                   </a>
+                  {% endif %}
                 </td>
               </tr>
 
@@ -265,12 +279,15 @@
                             value=reading.house_number, disabled="disabled") }}
                           </div>
 
+                          {% if current_user.is_admin %}
                           <div class="col-md-6 mb-2">
                             {{ edit_form.customer_name.label(class="form-label")
                             }} {{ edit_form.customer_name(class="form-control
                             form-control-sm", required="required",
-                            value=reading.customer_name) }}
+                            value=reading.customer_name, disabled=not
+                            current_user.is_admin) }}
                           </div>
+                          {% endif %}
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.reading_value.label(class="form-label")
@@ -286,12 +303,15 @@
                             value=reading.consumed) }}
                           </div>
 
+                          {% if current_user.is_admin %}
                           <div class="col-md-6 mb-2">
                             {{ edit_form.unit_price.label(class="form-label") }}
                             {{ edit_form.unit_price(class="form-control
                             form-control-sm", required="required",
-                            value=reading.unit_price) }}
+                            value=reading.unit_price, disabled=not
+                            current_user.is_admin) }}
                           </div>
+                          {% endif %}
 
                           <div class="col-md-6 mb-2">
                             {{ edit_form.total_amount.label(class="form-label")

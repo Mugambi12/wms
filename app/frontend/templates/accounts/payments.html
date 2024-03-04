@@ -34,7 +34,9 @@
                 <th scope="col">Inv. Amt.</th>
                 <th scope="col">Paid Amt.</th>
                 <th scope="col">Status</th>
+                {% if current_user.is_admin %}
                 <th scope="col">Action</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -54,6 +56,7 @@
                 >
                   {{ "Validated" if payment.status else "Pending" }}
                 </td>
+                {% if current_user.is_admin %}
                 <td>
                   <!-- Confirm Payment Received Button -->
                   <a
@@ -94,8 +97,10 @@
                     ></ion-icon>
                   </a>
                 </td>
+                {% endif %}
               </tr>
 
+              {% if current_user.is_admin %}
               <!-- Edit Payment Modal -->
               <div
                 class="modal fade"
@@ -305,6 +310,7 @@
                   </div>
                 </div>
               </div>
+              {% endif %}
               {% endfor %}
             </tbody>
           </table>

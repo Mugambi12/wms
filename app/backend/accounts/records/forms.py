@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, InputRequired, NumberRange, Optiona
 class AddMeterReadingForm(FlaskForm):
     house_section = StringField('House Section:', validators=[DataRequired()])
     house_number = StringField('House Number:', validators=[DataRequired()])
-    reading_value = FloatField('Reading Value:', validators=[DataRequired()])
+    reading_value = FloatField('Reading Value:', validators=[InputRequired()])
     submit = SubmitField('Submit')
 
 class EditMeterReadingForm(FlaskForm):
@@ -22,12 +22,12 @@ class EditMeterReadingForm(FlaskForm):
 
 class MakePaymentForm(FlaskForm):
     payment_amount = FloatField('Paid Amount', validators=[InputRequired(), NumberRange(min=0)])
-    payment_method = SelectField('Payment Method', choices=[('m_pesa', 'M-Pesa'), ('bank_transfer', 'Bank Transfer'), ('debit_card', 'Debit Card'), ('credit_card', 'Credit Card'), ('paypal', 'PayPal')], validators=[InputRequired()])
+    payment_method = SelectField('Payment Method', choices=[('m_pesa', 'M-Pesa'), ('bank_transfer', 'Bank Transfer'), ('paypal', 'PayPal')], validators=[InputRequired()])
     reference_number = StringField('Reference Number', validators=[Optional()])
     status = BooleanField('Payment Status', default=False)
 
 class EditPaymentForm(FlaskForm):
-    payment_method = SelectField('Payment Method', choices=[('m_pesa', 'M-Pesa'), ('bank_transfer', 'Bank Transfer'), ('debit_card', 'Debit Card'), ('credit_card', 'Credit Card'), ('paypal', 'PayPal')], validators=[InputRequired()])
+    payment_method = SelectField('Payment Method', choices=[('m_pesa', 'M-Pesa'), ('bank_transfer', 'Bank Transfer'), ('paypal', 'PayPal')], validators=[InputRequired()])
     amount = FloatField('Paid Amount', validators=[InputRequired(), NumberRange(min=0)])
     reference_number = StringField('Reference Number', validators=[Optional()])
     timestamp = DateField('Reading Date', validators=[DataRequired()])

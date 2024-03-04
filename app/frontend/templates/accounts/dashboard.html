@@ -106,11 +106,14 @@
             </div>
             <div>
               <div class="card-text fs-6">
-                KES {{ cards_data.total_expenses | format_amount }}
+                KES {% if current_user.is_admin %} {{ cards_data.total_expenses
+                | format_amount }} {% else %} {{ (current_user.balance) |
+                format_amount }} {% endif %}
               </div>
               <div class="card-title fw-bold fs-5">
-                {% if current_user.is_admin %}Expenses{% else %}Arrears{% endif
-                %}
+                {% if current_user.is_admin %}Expenses{% else %} {% if
+                current_user.balance > 0 %}Balance{% else %}Arrears{% endif %}
+                {% endif %}
               </div>
             </div>
           </div>
@@ -147,10 +150,14 @@
   <!-- Charts Data -->
   <div class="row">
     <!-- Bar Chart -->
+    {% if current_monthly_performance or revenue_expense_data %}
     <div class="col-md-9 mb-3">
       <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
-          <h5 class="card-title">Performance Overview</h5>
+          <h5 class="card-title">
+            {% if current_user.is_admin %} Company Performance Overview {% else
+            %} Personal Usage Overview {% endif %}
+          </h5>
           <div class="row">
             <!-- Performance Overview -->
             <div class="col-md-4 text-center p-3">
@@ -160,11 +167,17 @@
               <h5 class="fw-bold mb-3" id="currentMonthEarnings">
                 KES {{ current_monthly_performance[0] | format_amount }}
               </h5>
-              <p class="text-muted mb-2">Revenue Generated</p>
+              <p class="text-muted mb-2">
+                {% if current_user.is_admin %} Revenue Generated {% else %} My
+                Expenditure {% endif %}
+              </p>
               <h5 class="fw-bold mb-4" id="currentMonthWater">
                 {{ current_monthly_performance[1] | format_amount }} Units
               </h5>
-              <p class="text-muted mb-2">Water Consumed</p>
+              <p class="text-muted mb-2">
+                {% if current_user.is_admin %} Water Consumed {% else %} My
+                Water Usage {% endif %}
+              </p>
 
               <div
                 class="input-group input-group-sm mt-3 justify-content-between"
@@ -225,41 +238,48 @@
                 const revenueExpenseData = {{ revenue_expense_data | tojson }};
                 const usageData = extractData(revenueExpenseData, 'usage');
                 const revenueData = extractData(revenueExpenseData, 'revenue');
-                const expensesData = extractData(revenueExpenseData, 'expenses');
+                const isAdmin = {{ current_user.is_admin | tojson }};
+
+                let datasets = [
+                  {
+                    label: isAdmin ? "Water Usage (KES)" : "My Usage (KES)",
+                    data: usageData,
+                    backgroundColor: "rgba(54, 162, 235, 0.6)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 0,
+                    barThickness: 8,
+                    borderRadius: 15,
+                  },
+                  {
+                    label: isAdmin ? "Revenue (KES)" : "My Expenditure (KES)",
+                    data: revenueData,
+                    backgroundColor: "rgba(255, 159, 64, 0.6)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 0,
+                    barThickness: 8,
+                    borderRadius: 15,
+                  },
+                ];
+
+                // Add expenses dataset only for admin users
+                if (isAdmin) {
+                  const expensesData = extractData(revenueExpenseData, 'expenses');
+                  datasets.push({
+                    label: "Expenses (KES)",
+                    data: expensesData,
+                    backgroundColor: "rgba(255, 99, 132, 0.6)",
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 0,
+                    barThickness: 8,
+                    borderRadius: 15,
+                  });
+                }
 
                 const myBarChart = new Chart(ctx, {
                   type: "bar",
                   data: {
                     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    datasets: [
-                      {
-                        label: "Usage (KES)",
-                        data: usageData,
-                        backgroundColor: "rgba(255, 159, 64, 0.6)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 0,
-                        barThickness: 8,
-                        borderRadius: 15,
-                      },
-                      {
-                        label: "Revenue (KES)",
-                        data: revenueData,
-                        backgroundColor: "rgba(54, 162, 235, 0.6)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 0,
-                        barThickness: 8,
-                        borderRadius: 15,
-                      },
-                      {
-                        label: "Expenses (KES)",
-                        data: expensesData,
-                        backgroundColor: "rgba(255, 99, 132, 0.6)",
-                        borderColor: "rgba(255, 99, 132, 1)",
-                        borderWidth: 0,
-                        barThickness: 8,
-                        borderRadius: 15,
-                      },
-                    ],
+                    datasets: datasets,
                   },
                   options: {
                     scales: {
@@ -298,8 +318,10 @@
         </div>
       </div>
     </div>
+    {% endif %}
 
     <!-- Doughnut Chart -->
+    {% if doughnut_chart_data %}
     <div class="col-md-3 mb-3">
       <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
@@ -364,6 +386,7 @@
         </script>
       </div>
     </div>
+    {% endif %}
   </div>
 
   <!-- Calendar, Sticky Notes and List of Admins -->
@@ -484,6 +507,7 @@
   </div>
 
   <!-- Delinquent Bills Table -->
+  {% if household_invoices %}
   <div class="card border-0 shadow-sm mb-3">
     <div class="card-body">
       <h5 class="card-title mb-4">Delinquent Bills</h5>
@@ -528,8 +552,10 @@
       </div>
     </div>
   </div>
+  {% endif %}
 
   <!-- Recent Transactions -->
+  {% if recent_transactions %}
   <div class="card border-0 shadow-sm mb-3">
     <div class="card-body">
       <h5 class="card-title mb-3">Recent Transactions</h5>
@@ -613,6 +639,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
 </div>
 
 <!-- A Calendar -->
