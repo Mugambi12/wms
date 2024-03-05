@@ -46,10 +46,10 @@
 
     <!-- Navbar Links -->
     <div class="collapse navbar-collapse" id="navbarToggler">
-      <div class="d-flex align-items-center ms-auto">
+      <div class="d-flex flex-row align-items-end">
         {% if current_user.is_authenticated %}
         <!-- Authenticated User Navbar Links -->
-        <ul class="navbar-nav me-3">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <!-- Messages -->
           <li class="nav-item">
             <a
@@ -69,7 +69,7 @@
           </li>
 
           <!-- Notifications -->
-          <li class="nav-item dropdown me-3">
+          <li class="nav-item dropdown">
             <button
               class="nav-link text-dark position-relative"
               type="button"
@@ -84,7 +84,7 @@
               </span>
             </button>
             <ul
-              class="dropdown-menu dropdown-menu-start border-0 shadow mt-2"
+              class="dropdown-menu dropdown-menu-end border-0 shadow mt-2"
               aria-labelledby="notificationsDropdown"
             >
               <li class="dropdown-item small">
@@ -140,7 +140,7 @@
         </ul>
 
         <!-- User Image Dropdown -->
-        <div class="btn-group">
+        <div class="dropdown">
           <button
             type="button"
             class="btn navbar-brand rounded-circle border-0"
@@ -163,7 +163,6 @@
             />
             {% endif %}
           </button>
-
           <ul
             class="dropdown-menu dropdown-menu-end border-0 shadow bg-light"
             aria-labelledby="dropdownMenuButton"
@@ -173,7 +172,23 @@
                 class="dropdown-item"
                 href="{{ url_for('accounts.people.edit_user', user_id=current_user.id) }}"
               >
-                <ion-icon name="person-outline" class="me-2"></ion-icon> Profile
+                <ion-icon
+                  name="person-outline"
+                  class="text-primary me-2"
+                ></ion-icon>
+                Profile
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.records.meter_readings') }}"
+              >
+                <ion-icon
+                  name="speedometer-outline"
+                  class="text-info me-2"
+                ></ion-icon>
+                Meter Readings
               </a>
             </li>
             <li>
@@ -181,28 +196,27 @@
                 class="dropdown-item"
                 href="{{ url_for('accounts.records.billing') }}"
               >
-                <ion-icon name="wallet-outline" class="me-2"></ion-icon> Billing
-                Info
+                <ion-icon
+                  name="receipt-outline"
+                  class="text-secondary me-2"
+                ></ion-icon>
+                Billing Info
               </a>
             </li>
-            <li>
-              <a
-                class="dropdown-item"
-                href="{{ url_for('accounts.records.billing') }}"
-              >
-                <ion-icon name="stats-chart-outline" class="me-2"></ion-icon>
-                Usage Statistics
-              </a>
-            </li>
+            {% if current_user.is_admin %}
             <li>
               <a
                 class="dropdown-item"
                 href="{{ url_for('accounts.website.website') }}"
               >
-                <ion-icon name="globe-outline" class="me-2"></ion-icon>
+                <ion-icon
+                  name="globe-outline"
+                  class="text-dark me-2"
+                ></ion-icon>
                 General Website
               </a>
             </li>
+            {% endif %}
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a
@@ -210,14 +224,18 @@
                 onclick="localStorage.clear();"
                 href="{{ url_for('auth.logout') }}"
               >
-                <ion-icon name="log-out-outline" class="me-2"></ion-icon> Logout
+                <ion-icon
+                  name="log-out-outline"
+                  class="text-danger me-2"
+                ></ion-icon>
+                Logout
               </a>
             </li>
           </ul>
         </div>
         {% else %}
         <!-- Guest Navbar Links -->
-        <ul class="navbar-nav me-3">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item me-3">
             <a class="nav-link" href="#HOME">Home</a>
           </li>

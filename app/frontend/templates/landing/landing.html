@@ -1,5 +1,20 @@
 {% extends "base.html" %} {% block content %}
 
+<!-- Include Swiper CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+<style>
+  .swiper-container {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .swiper-slide img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+  }
+</style>
+
 <!-- #HOME SECTION -->
 <section
   id="home"
@@ -239,227 +254,246 @@
 <section id="news" class="container-fluid py-5 bg-light">
   <div class="container-fluid p-5">
     <h2 class="display-4 text-center mb-5 text-primary">Latest News</h2>
-    <swiper-container
-      slides-per-view="3"
-      speed="500"
-      loop="true"
-      css-mode="true"
-      autoplay="true"
-      delay="3000"
-      class="px-5"
-    >
-      <swiper-slide>
-        <div class="card m-1 border-0 shadow h-100">
-          <img
-            src="{{ url_for('static', filename='images/news-1.jpg') }}"
-            class="card-img-top rounded-top"
-            alt="News Image"
-          />
-          <div class="card-body">
-            <h5 class="card-title mb-3">New Water Treatment Plant</h5>
-            <p class="card-text mb-4">
-              Discover our new state-of-the-art water treatment plant, ensuring
-              cleaner water for our community.
-            </p>
-            <footer class="blockquote-footer">John Doe</footer>
-            <div class="text-center">
-              <a
-                href="#"
-                class="btn btn-sm btn-outline-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#newsModal"
-              >
-                Read More
-              </a>
-            </div>
-          </div>
-        </div>
-      </swiper-slide>
-
-      <swiper-slide>
-        <div class="card m-1 border-0 shadow h-100">
-          <img
-            src="{{ url_for('static', filename='images/news-2.jpg') }}"
-            class="card-img-top rounded-top"
-            alt="News Image"
-          />
-          <div class="card-body">
-            <h5 class="card-title mb-3">Water Conservation Campaign</h5>
-            <p class="card-text mb-4">
-              Join us in our mission to conserve water and protect our precious
-              natural resources.
-            </p>
-            <footer class="blockquote-footer">Jane Smith</footer>
-            <div class="text-center">
-              <a
-                href="#"
-                class="btn btn-sm btn-outline-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#newsModal"
-              >
-                Read More
-              </a>
-            </div>
-          </div>
-        </div>
-      </swiper-slide>
-
-      <swiper-slide>
-        <div class="card m-1 border-0 shadow h-100">
-          <img
-            src="{{ url_for('static', filename='images/news-3.jpg') }}"
-            class="card-img-top rounded-top"
-            alt="News Image"
-          />
-          <div class="card-body">
-            <h5 class="card-title mb-3">Community Outreach Program</h5>
-            <p class="card-text mb-4">
-              Explore our community engagement efforts aimed at raising
-              awareness about water-related issues.
-            </p>
-            <footer class="blockquote-footer">John Doe</footer>
-            <div class="text-center">
-              <a
-                href="#"
-                class="btn btn-sm btn-outline-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#newsModal"
-              >
-                Read More
-              </a>
-            </div>
-          </div>
-        </div>
-      </swiper-slide>
-
-      <swiper-slide>
-        <div class="card m-1 border-0 shadow h-100">
-          <img
-            src="{{ url_for('static', filename='images/news-4.jpg') }}"
-            class="card-img-top rounded-top"
-            alt="News Image"
-          />
-          <div class="card-body">
-            <h5 class="card-title mb-3">Water Conservation Initiatives</h5>
-            <p class="card-text mb-4">
-              Participate in our ongoing efforts to conserve water and safeguard
-              our environment.
-            </p>
-            <footer class="blockquote-footer">Jane Smith</footer>
-            <div class="text-center">
-              <a
-                href="#"
-                class="btn btn-sm btn-outline-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#newsModal"
-              >
-                Read More
-              </a>
-            </div>
-          </div>
-        </div>
-      </swiper-slide>
-
-      <!-- Add more slides as needed -->
-    </swiper-container>
-
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="newsModal"
-      tabindex="-1"
-      aria-labelledby="newsModalLabel"
-      aria-hidden="true"
-    >
-      <div
-        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-xxl-down"
-      >
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="newsModalLabel">
-              A Day in the Life of a Water Conservationist
-            </h4>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-
-          <div class="modal-body">
-            <div class="news-content">
-              <p id="newsContent" class="card-text mb-4">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-                corporis impedit ullam quos facilis at, vitae, repellendus
-                eveniet veritatis dolores assumenda commodi cupiditate quasi,
-                quas neque! Voluptas mollitia fugiat consequatur.
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <!-- Slide 1 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-1.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">New Water Treatment Plant</h5>
+              <p class="card-text mb-4">
+                Discover our new state-of-the-art water treatment plant,
+                ensuring cleaner water for our community.
               </p>
-              <img
-                src="https://via.placeholder.com/400x200"
-                alt="..."
-                class="img-fluid mb-3"
-              />
-              <p id="newsContent" class="card-text mb-4">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-                corporis impedit ullam quos facilis at, vitae, repellendus
-                eveniet veritatis dolores assumenda commodi cupiditate quasi,
-                quas neque! Voluptas mollitia fugiat consequatur.
-              </p>
-              <img
-                src="https://via.placeholder.com/300x150"
-                alt="News Image"
-                class="img-fluid rounded mb-3"
-              />
-              <p id="newsContent" class="card-text mb-4">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-                corporis impedit ullam quos facilis at, vitae, repellendus
-                eveniet veritatis dolores assumenda commodi cupiditate quasi,
-                quas neque! Voluptas mollitia fugiat consequatur.
-              </p>
-              <p id="newsContent" class="card-text mb-4">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-                corporis impedit ullam quos facilis at, vitae, repellendus
-                eveniet veritatis dolores assumenda commodi cupiditate quasi,
-                quas neque! Voluptas mollitia fugiat consequatur.
-              </p>
-              <p class="text-muted">Published on February 26, 2024</p>
-              <p class="text-muted">Written by: John Doe</p>
-            </div>
-
-            <div class="container-fluid">
-              <div class="d-flex">
-                <div>
-                  <button type="button" class="btn bg-light me-2">
-                    <ion-icon name="heart-outline"></ion-icon> 27
-                  </button>
-                  <button type="button" class="btn bg-light me-2">
-                    <ion-icon name="chatbubble-outline"></ion-icon> 8
-                  </button>
-                  <button type="button" class="btn bg-light me-2">
-                    <ion-icon name="arrow-redo-outline"></ion-icon> 2
-                  </button>
-                </div>
+              <footer class="blockquote-footer">John Doe</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="ms-5 m-3">
-              <p class="small">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Perferendis distinctio facere vel! Sed eum reiciendis dolorum,
-                corrupti velit ipsum quaerat facilis obcaecati error similique
-                fuga quam minima necessitatibus veritatis modi.
+        <!-- Slide 2 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-2.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">Water Conservation Campaign</h5>
+              <p class="card-text mb-4">
+                Join us in our mission to conserve water and protect our
+                precious natural resources.
               </p>
+              <footer class="blockquote-footer">Jane Smith</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
+              </div>
             </div>
           </div>
-
-          <!---->
         </div>
+
+        <!-- Slide 3 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-3.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">Community Outreach Program</h5>
+              <p class="card-text mb-4">
+                Explore our community engagement efforts aimed at raising
+                awareness about water-related issues.
+              </p>
+              <footer class="blockquote-footer">John Doe</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-4.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">Water Conservation Initiatives</h5>
+              <p class="card-text mb-4">
+                Participate in our ongoing efforts to conserve water and
+                safeguard our environment.
+              </p>
+              <footer class="blockquote-footer">Jane Smith</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add more slides as needed -->
       </div>
+
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
     </div>
   </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+<!-- Include Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+  var swiper = new Swiper(".swiper-container", {
+    slidesPerView: "auto",
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 2.3,
+      },
+    },
+  });
+</script>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="newsModal"
+  tabindex="-1"
+  aria-labelledby="newsModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-xxl-down"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="newsModalLabel">
+          A Day in the Life of a Water Conservationist
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="news-content">
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <img
+            src="https://via.placeholder.com/400x200"
+            alt="..."
+            class="img-fluid mb-3"
+          />
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <img
+            src="https://via.placeholder.com/300x150"
+            alt="News Image"
+            class="img-fluid rounded mb-3"
+          />
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <p class="text-muted">Published on February 26, 2024</p>
+          <p class="text-muted">Written by: John Doe</p>
+        </div>
+
+        <div class="container-fluid">
+          <div class="d-flex">
+            <div>
+              <button type="button" class="btn bg-light me-2">
+                <ion-icon name="heart-outline"></ion-icon> 27
+              </button>
+              <button type="button" class="btn bg-light me-2">
+                <ion-icon name="chatbubble-outline"></ion-icon> 8
+              </button>
+              <button type="button" class="btn bg-light me-2">
+                <ion-icon name="arrow-redo-outline"></ion-icon> 2
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ms-5 m-3">
+          <p class="small">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Perferendis distinctio facere vel! Sed eum reiciendis dolorum,
+            corrupti velit ipsum quaerat facilis obcaecati error similique fuga
+            quam minima necessitatibus veritatis modi.
+          </p>
+        </div>
+      </div>
+
+      <!---->
+    </div>
+  </div>
+</div>
 
 {% endblock %}
