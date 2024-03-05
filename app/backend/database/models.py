@@ -1,11 +1,16 @@
 # File: app/backend/database/models.py
 
 # Import necessary modules
-from werkzeug.security import generate_password_hash, check_password_hash
-from app import db
-from flask_login import UserMixin
 from datetime import datetime, timedelta, timezone
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 import uuid
+from app import db
+
+
+# Function to get the default datetime
+def default_datetime():
+    return datetime.now(timezone.utc) + timedelta(hours=3)
 
 
 # Define User model
@@ -23,7 +28,6 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
     balance = db.Column(db.Float, default=0)
     unique_user_id = db.Column(db.String(6), unique=True, nullable=True)
-    main_account = db.Column(db.Boolean, default=False)
 
     # New fields for tracking last login and logout
     last_login = db.Column(db.DateTime)
@@ -69,7 +73,7 @@ class Note(db.Model):
 # Define MeterReading model
 class MeterReading(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc) + timedelta(hours=3), nullable=False)
+    timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
     customer_name = db.Column(db.String(50))
     house_section = db.Column(db.String(50))
     house_number = db.Column(db.String(20))
@@ -108,7 +112,7 @@ class Payment(db.Model):
     invoice_amount = db.Column(db.Integer)
     customer_name = db.Column(db.String(50))
     amount = db.Column(db.Float, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)
     reference_number = db.Column(db.String(50))
     status = db.Column(db.Boolean, default=False)
@@ -135,7 +139,7 @@ class Payment(db.Model):
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
     expense_type = db.Column(db.String(255), nullable=False)
     vendor = db.Column(db.String(255), nullable=False)
     amount = db.Column(db.Float(), nullable=False)
@@ -161,7 +165,7 @@ class Message(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     receiver_id = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
     is_read = db.Column(db.Boolean, default=False)
 
     def __init__(self, sender_id, receiver_id, content):
@@ -196,7 +200,7 @@ class Settings(db.Model):
 # Define Contact model
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc) + timedelta(hours=3))
+    timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
     name = db.Column(db.String(50))
     email = db.Column(db.String(120))
     message = db.Column(db.Text)

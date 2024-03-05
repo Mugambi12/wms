@@ -1,12 +1,15 @@
-import csv
-import io
+# File: Download Manager
+
 from flask import redirect, url_for, flash, render_template_string, send_file, request
 from flask_login import current_user
+import csv
+import io
 from io import BytesIO
 from openpyxl import Workbook
 from xhtml2pdf import pisa
-from ...database.models import User, MeterReading
+from ...database.models import *
 from ..records.utils_data import fetch_invoice_data
+
 
 def download_users():
     """
@@ -377,7 +380,6 @@ def generate_meter_readings_pdf(readings_list):
     return pdf_data.getvalue()
 
 
-from datetime import datetime, timedelta, timezone
 
 def download_invoice(invoice_id):
     """
@@ -402,7 +404,7 @@ def download_invoice(invoice_id):
         invoice_id = invoice_data.get('invoice_id')
 
         # Format the date
-        date_str = (datetime.utcnow() + timedelta(hours=3)).strftime("%d-%b-%Y")
+        date_str = default_datetime().strftime("%d-%b-%Y")
 
         # Construct the file name
         file_name = f"Invoice_{invoice_id}_{date_str}_{owner_first_name}_{house_section}_house_{house_number}.pdf"

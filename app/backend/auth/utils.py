@@ -1,9 +1,9 @@
 # File: app/backend/auth/utils.py
 
-from datetime import datetime, timezone, timedelta
 from flask import render_template, redirect, url_for, flash, make_response, request
 from flask_login import login_user, logout_user, current_user
-from app.backend.database.models import User, db
+from app import db
+from ..database.models import *
 
 
 def _login_user(form):
@@ -24,7 +24,7 @@ def _login_user(form):
         if user and user.check_password(form.password.data):
             if user.is_active:
                 # Update last login time
-                user.last_login = datetime.now(timezone.utc) + timedelta(hours=3)
+                user.last_login = default_datetime()
                 db.session.commit()
 
                 login_user(user)
@@ -107,7 +107,7 @@ def perform_logout():
     user_name = current_user.first_name.title()
 
     # Update last logout time
-    current_user.last_logout = datetime.now(timezone.utc) + timedelta(hours=3)
+    current_user.last_logout = default_datetime()
     db.session.commit()
 
     # Perform logout

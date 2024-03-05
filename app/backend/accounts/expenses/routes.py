@@ -2,9 +2,9 @@
 
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
-from app.backend.accounts.expenses.forms import AddExpenseForm, EditExpenseForm
-from app.backend.database.models import Expense, db
-from datetime import datetime, timezone, timedelta
+from app import db
+from .forms import *
+from ...database.models import *
 
 
 expenses_bp = Blueprint('expenses', __name__, url_prefix='/expenses')
@@ -25,7 +25,7 @@ def add_expense():
     if form.validate_on_submit():
         expense = Expense(
             user_id=current_user.id,
-            timestamp=datetime.now(timezone.utc) + timedelta(hours=3),
+            timestamp=default_datetime(),
             expense_type=form.expense_type.data,
             vendor=form.vendor.data,
             amount=form.amount.data,

@@ -1,6 +1,5 @@
 # File: app/backend/accounts/records/payment_logic.py
 
-from datetime import datetime, timezone, timedelta
 from app import db
 from ...database.models import *
 from ..components.payment_processor import process_payments_with_context
@@ -20,7 +19,7 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
         # Create a new Payment object
         payment = Payment(
             amount=payment_amount,
-            timestamp=datetime.now(timezone.utc) + timedelta(hours=3),
+            timestamp=default_datetime(),
             payment_method=payment_method,
             reference_number=reference_number,
             status=status,
