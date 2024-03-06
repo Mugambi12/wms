@@ -1,6 +1,15 @@
 ## Water Management System
 
 <h3 align="center">Water Management System Screenshots Demo</h3>
+
+<p align="center">
+	<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/mugambi12/water_management_system?color=blueviolet" />
+	<img alt="Number of lines of code" src="https://img.shields.io/tokei/lines/github/mugambi12/water_management_system?color=blueviolet" />
+	<img alt="Code language count" src="https://img.shields.io/github/languages/count/mugambi12/water_management_system?color=blue" />
+	<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/mugambi12/water_management_system?color=blue" />
+	<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/mugambi12/water_management_system?color=brightgreen" />
+</p>
+
 <div align="center">
     <img src="./app/frontend/static/images/readme/dashboard.png" alt="LMS Demo" title="Desktop Demo" width="90%">
 </div>
