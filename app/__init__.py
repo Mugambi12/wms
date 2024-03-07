@@ -2,13 +2,13 @@
 
 # Import necessary modules
 import os
-from flask import Flask, current_app
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf.csrf import generate_csrf
 from flask_apscheduler import APScheduler
 from flask_mail import Mail
-from app.config import Config  # Import Config class from config.py
+from app.config import Config
 from .utils import format_amount
 
 db = SQLAlchemy()
