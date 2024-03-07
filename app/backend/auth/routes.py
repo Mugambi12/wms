@@ -93,23 +93,3 @@ def reset_password(token):
     reset_token = PasswordResetToken.query.filter_by(token=token).first_or_404()
     form = ResetPasswordForm()
     return _reset_password(form, reset_token, token)
-
-
-
-
-
-
-
-
-#@auth_bp.route('/send_mail_to_user', methods=['GET', 'POST'])
-#def send_mail_to_user():
-#    form = PasswordResetForm()
-#
-#    if form.validate_on_submit():
-#        msg = Message("Hey", sender='noreply@apogen.com', recipients=[form.email.data])
-#        msg.body = "Hey how are you doing today. This is Apogen Software Solutions"
-#
-#        mail.send(msg)
-#        return "Message sent successfully"
-#
-#    return render_template('auth/send_mail_to_user.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
