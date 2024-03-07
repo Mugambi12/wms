@@ -1,6 +1,6 @@
 # app/backend/auth/forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Email
 from app.backend.database.models import User
 
@@ -23,4 +23,12 @@ class RegistrationForm(FlaskForm):
         if User.query.filter_by(mobile_number=mobile_number).first():
             raise ValidationError('Mobile number is already registered.')
 
+class PasswordResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Reset Password')
 
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    token = HiddenField()  # Add a hidden field for the token
+    submit = SubmitField('Reset Password')
