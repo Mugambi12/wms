@@ -1,6 +1,7 @@
+from app import create_app, db
+
 # File: run.py
 
-from app import create_app, db
 
 # Create the Flask application
 app = create_app()
