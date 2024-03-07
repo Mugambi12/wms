@@ -187,6 +187,12 @@
                     if (xhr.status === 200) {
                       var response = JSON.parse(xhr.responseText);
                       var flashDiv = document.getElementById("flashMessages");
+
+                      // Remove existing messages
+                      while (flashDiv.firstChild) {
+                        flashDiv.removeChild(flashDiv.firstChild);
+                      }
+
                       var messageDiv = document.createElement("div");
                       messageDiv.className = "alert alert-success";
                       messageDiv.textContent = response.message;
@@ -200,6 +206,12 @@
                       errorDiv.textContent =
                         "An error occurred. Please try again.";
                       var flashDiv = document.getElementById("flashMessages");
+
+                      // Remove existing messages
+                      while (flashDiv.firstChild) {
+                        flashDiv.removeChild(flashDiv.firstChild);
+                      }
+
                       flashDiv.appendChild(errorDiv);
                     }
                   }
