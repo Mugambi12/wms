@@ -1,6 +1,7 @@
 # File: config.py
 
 # Import necessary modules
+import os
 from datetime import timedelta
 from app.utils import generate_random_string
 
@@ -17,9 +18,9 @@ class Config:
     SECRET_KEY = generate_random_string()
 
     # Mail settings
-    MAIL_SERVER = 'smtp.example.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = 'silasmungiria16@gmail.com'
-    MAIL_PASSWORD = '153O9101o24'
-    MAIL_DEFAULT_SENDER = 'silasmungiria16@gmail.com'
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USERNAME = 'silasmungiria.sm@gmail.com'
+    MAIL_PASSWORD = 'plrj pmhi wffz xwxu'
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True

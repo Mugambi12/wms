@@ -75,9 +75,6 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField('Reset Password')
 
 
-
-
-
 import secrets
 import string
 from flask_mail import Message
@@ -86,26 +83,17 @@ from flask import current_app, url_for
 from app import mail
 
 def generate_random_string(length=32):
-    """
-    Generate a random string of specified length using ASCII characters, digits, and punctuation.
-    """
     alphabet = string.ascii_letters + string.digits + string.punctuation
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
 def generate_token(email):
-    """
-    Generate a URL-safe token for the provided email using a secret key and a salt.
-    """
     serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     salt = current_app.config.get('SECURITY_PASSWORD_SALT', generate_random_string())
     return serializer.dumps(email, salt=salt)
 
 def send_password_reset_email(email, token):
-    """
-    Send a password reset email containing a reset link to the provided email address.
-    """
     reset_link = url_for('auth.reset_password', token=token, _external=True)
-    sender_email = current_app.config['MAIL_DEFAULT_SENDER']
+    sender_email = current_app.config['MAIL_USERNAME']
     msg = Message('Password Reset Request', recipients=[email], sender=sender_email)
     msg.body = f'To reset your password, click on the following link: {reset_link}'
     try:
@@ -116,12 +104,6 @@ def send_password_reset_email(email, token):
         return False
 
 
-
-
-
-
-
-
 # Update routes.py
 from flask import flash, redirect, url_for, render_template
 from ..database.models import User, PasswordResetToken, db
@@ -129,29 +111,62 @@ from ..database.models import User, PasswordResetToken, db
 @auth_bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     form = PasswordResetForm()
+
     if form.validate_on_submit():
-        email = form.email.data
-        # Generate token and save it
-        token = generate_token(email)
-        reset_token = PasswordResetToken(email=email, token=token)
-        db.session.add(reset_token)
-        db.session.commit()
-        # Send email with password reset instructions
-        if send_password_reset_email(email, token):
-            flash('An email with instructions to reset your password has been sent.', 'info')
-        else:
-            flash('Failed to send password reset email. Please try again later.', 'danger')
-        return redirect(url_for('auth.login'))
+        msg = Message("Hey", sender='noreply@apogen.com', recipients=[form.email.data])
+        msg.body = "Hey how are you doing today. This is Apogen Software Solutions"
+
+        mail.send(msg)
+        return "Message sent successfully"
+
     return render_template('auth/reset_password_request.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+
+
+#@auth_bp.route('/reset_password_request', methods=['GET', 'POST'])
+#def reset_password_request():
+#    form = PasswordResetForm()
+#
+#    if form.validate_on_submit():
+#        # Check if the user with the provided email exists
+#        user = User.query.filter_by(email=form.email.data).first()
+#
+#        if user:
+#            # Generate token and save it
+#            token = generate_token(form.email.data)
+#            reset_token = PasswordResetToken(email=form.email.data, token=token)
+#            db.session.add(reset_token)
+#            db.session.commit()
+#            # Send email with password reset instructions
+#            if send_password_reset_email(form.email.data, token):
+#                flash('An email with instructions to reset your password has been sent.', 'info')
+#            else:
+#                flash('Failed to send password reset email. Please try again later.', 'danger')
+#        else:
+#            flash('Email not found in our users.', 'info')
+#
+#        return redirect(url_for('auth.login'))
+#
+#    return render_template('auth/reset_password_request.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
 
 @auth_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     reset_token = PasswordResetToken.query.filter_by(token=token).first_or_404()
     form = ResetPasswordForm()
+
     if form.validate_on_submit():
-        # Update user password
-        # Here you should implement logic to find the user by email since we don't have user_id in the token
-        # After finding the user, update the password and delete the reset token
-        flash('Your password has been reset successfully.', 'success')
-        return redirect(url_for('auth.login'))
+        # Find the user by email
+        user = User.query.filter_by(email=reset_token.email).first()
+
+        if user:
+            # Update user password
+            user.password = form.password.data
+            # Delete the reset token
+            db.session.delete(reset_token)
+            db.session.commit()
+            flash('Your password has been reset successfully.', 'success')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('Invalid user or expired token.', 'danger')
+            return redirect(url_for('auth.reset_password_request'))
+
     return render_template('auth/reset_password.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
