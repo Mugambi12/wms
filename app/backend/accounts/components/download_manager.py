@@ -380,7 +380,6 @@ def generate_meter_readings_pdf(readings_list):
     return pdf_data.getvalue()
 
 
-
 def download_invoice(invoice_id):
     """
     Helper function to download an invoice PDF by its ID.
