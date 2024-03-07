@@ -157,7 +157,7 @@ def reset_password(token):
 
     # Pass the token to the template
     form.token.data = token
-    return render_template('auth/reset_password.html', form=form, token=token, hide_navbar=True, hide_sidebar=True, hide_footer=True), 204
+    return render_template('auth/reset_password.html', form=form, token=token, hide_navbar=True, hide_sidebar=True, hide_footer=True)
 
 
 
