@@ -107,7 +107,10 @@ def send_password_reset_email(email, token):
 
 # Update routes.py
 from flask import flash, redirect, url_for, render_template
+from werkzeug.security import generate_password_hash
 from ..database.models import User, PasswordResetToken, db
+
+from flask import jsonify
 
 @auth_bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
@@ -122,15 +125,14 @@ def reset_password_request():
             db.session.add(reset_token)
             db.session.commit()
             if send_password_reset_email(form.email.data, token):
-                flash('An email with instructions to reset your password has been sent.', 'info')
+                return jsonify({"message": "An email with instructions to reset your password has been sent.", "type": "success"})
             else:
-                flash('Failed to send password reset email. Please try again later.', 'danger')
+                return jsonify({"message": "Failed to send password reset email. Please try again later.", "type": "danger"})
         else:
-            flash('Email not found in our users.', 'warning')
-
-        return redirect(url_for('auth.login'))
+            return jsonify({"message": "Email not found in our users.", "type": "warning"})
 
     return render_template('auth/reset_password_request.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+
 
 @auth_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -143,7 +145,7 @@ def reset_password(token):
 
         if user:
             # Update user password
-            user.password = form.password.data
+            user.password_hash = generate_password_hash(form.password.data)
             # Delete the reset token
             db.session.delete(reset_token)
             db.session.commit()
