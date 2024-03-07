@@ -1,7 +1,7 @@
 # app/backend/auth/forms.py
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Email
 from app.backend.database.models import User
 
 class LoginForm(FlaskForm):
@@ -22,3 +22,5 @@ class RegistrationForm(FlaskForm):
         mobile_number = field.data.strip()[-9:]
         if User.query.filter_by(mobile_number=mobile_number).first():
             raise ValidationError('Mobile number is already registered.')
+
+

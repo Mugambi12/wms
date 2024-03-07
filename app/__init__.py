@@ -1,36 +1,33 @@
 # File: app/__init__.py
 
+# Import necessary modules
 import os
 from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf.csrf import generate_csrf
-from datetime import timedelta
 from flask_apscheduler import APScheduler
+from flask_mail import Mail
+from config import Config  # Import Config class from config.py
+from .utils import format_amount
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-
-# Define custom Jinja2 filter
-def format_amount(value):
-    return "{:,.0f}".format(value)
-
+mail = Mail()
 
 def create_app():
     app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
-    # Configure database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///watermanagement.db'
-    # Replace 'your_username', 'your_password', 'localhost', and 'your_database' with your MySQL credentials
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://apogen:Apogen2023@localhost/watermanagement'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1.5)
-    #app.config['SESSION_COOKIE_SECURE'] = True
-    app.config['SECRET_KEY'] = 'qwertyurioupiuodsfghfdjgkjhd2345678jgfnxdz'
+    # Load configuration from Config class
+    app.config.from_object(Config)
+
     uploads_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'profile')
     os.makedirs(uploads_folder, exist_ok=True)
     tmp_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'tmp')
     os.makedirs(tmp_folder, exist_ok=True)
+
+    # Initialize the mail
+    mail.init_app(app)
 
     # Initialize the database with the Flask app
     db.init_app(app)

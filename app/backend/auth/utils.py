@@ -123,3 +123,4 @@ def perform_logout():
     response.headers['Expires'] = '0'
 
     return response
+

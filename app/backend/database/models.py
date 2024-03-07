@@ -59,6 +59,18 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
+# Define Password Reset Tokens model
+class PasswordResetToken(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
+    token = db.Column(db.String(128), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=default_datetime)
+
+    def __init__(self, email, token):
+        self.email = email
+        self.token = token
+
+
 # Define Sticky Notes model
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)

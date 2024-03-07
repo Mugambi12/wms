@@ -1,4 +1,5 @@
 <!-- app/templates/auth/login.html -->
+
 {% extends 'base.html' %} {% block content %}
 
 <div
@@ -56,6 +57,15 @@
     <div class="text-center">
       <span class="mb-1">Don't have an account?</span>
       <a href="{{ url_for('auth.register') }}" class="btn btn-link">Register</a>
+    </div>
+
+    <div class="text-center">
+      <span class="mb-1">Forgot Password</span>
+      <a
+        href="{{ url_for('auth.reset_password_request') }}"
+        class="btn btn-link"
+        >Reset Password</a
+      >
     </div>
   </div>
 </div>
