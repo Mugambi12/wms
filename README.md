@@ -6,6 +6,8 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/mugambi12/water_management_system?color=blue)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mugambi12/water_management_system?color=brightgreen)
 
+![Water Management System Demo](./app/frontend/static/images/readme/dashboard.png)
+
 ## Overview
 
 The Water Management System is a Flask-based web application designed to streamline and optimize water management processes. It empowers users with various functionalities, including:
