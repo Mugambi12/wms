@@ -6,9 +6,10 @@
   style="height: 100vh"
 >
   <div class="card col-md-5 p-5 bg-light shadow-sm rounded border-0">
-    <h2 class="mb-4 text-center">Register</h2>
+    <h2 class="card-title text-primary text-center mb-4">Register</h2>
     <form
-      method="POST"
+      id="registrationForm"
+      method="post"
       action="{{ url_for('auth.register_apogen_admin') if 'apogen_admin' in request.path else url_for('auth.register') }}"
     >
       <!-- CSRF Token -->
@@ -31,19 +32,25 @@
         <div class="mb-3">
           {{ form.email.label(class="form-label") }} {{
           form.email(class="form-control") }}
+          <div id="emailError" class="text-danger" style="display: none"></div>
         </div>
 
         <div class="mb-3">
           {{ form.mobile_number.label(class="form-label") }} {{
           form.mobile_number(class="form-control") }}
+          <div
+            id="mobileNumberError"
+            class="text-danger"
+            style="display: none"
+          ></div>
         </div>
 
         <!-- Next Button -->
         <div class="text-center mt-3">
           <button
             type="button"
+            id="nextButton"
             class="btn btn-primary btn-block rounded-pill"
-            onclick="nextSection()"
           >
             Next
           </button>
@@ -70,6 +77,11 @@
               ></ion-icon>
             </button>
           </div>
+          <div
+            id="passwordError"
+            class="text-danger"
+            style="display: none"
+          ></div>
         </div>
 
         <!-- Confirm Password -->
@@ -91,14 +103,19 @@
               ></ion-icon>
             </button>
           </div>
+          <div
+            id="confirmPasswordError"
+            class="text-danger"
+            style="display: none"
+          ></div>
         </div>
 
         <!-- Previous and Register Buttons -->
         <div class="d-flex justify-content-between">
           <button
             type="button"
+            id="previousButton"
             class="btn btn-secondary btn-block rounded-pill"
-            onclick="previousSection()"
           >
             Previous
           </button>
@@ -123,16 +140,108 @@
 </div>
 
 <script>
-  function nextSection() {
-    document.getElementById("firstSection").style.display = "none";
-    document.getElementById("secondSection").style.display = "block";
-  }
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("registrationForm");
+    const emailInput = document.getElementById("{{ form.email.id }}");
+    const mobileNumberInput = document.getElementById(
+      "{{ form.mobile_number.id }}"
+    );
+    const passwordInput = document.getElementById("{{ form.password.id }}");
+    const confirmPasswordInput = document.getElementById(
+      "{{ form.confirm_password.id }}"
+    );
 
-  function previousSection() {
-    document.getElementById("firstSection").style.display = "block";
-    document.getElementById("secondSection").style.display = "none";
-  }
+    // Function to validate email format
+    function validateEmail(email) {
+      const re = /\S+@\S+\.\S+/;
+      return re.test(email);
+    }
 
+    // Function to validate mobile number format
+    function validateMobileNumber(mobileNumber) {
+      return mobileNumber.length >= 9; // Change this condition based on your requirements
+    }
+
+    // Function to validate password format
+    function validatePassword(password) {
+      return password.length >= 6; // Minimum length of 6 characters
+    }
+
+    // Function to validate confirm password
+    function validateConfirmPassword(password, confirmPassword) {
+      return password === confirmPassword;
+    }
+
+    // Add event listeners for input fields
+    emailInput.addEventListener("blur", function () {
+      if (!validateEmail(emailInput.value)) {
+        document.getElementById("emailError").textContent =
+          "Invalid email address.";
+        document.getElementById("emailError").style.display = "block";
+      } else {
+        document.getElementById("emailError").style.display = "none";
+      }
+    });
+
+    mobileNumberInput.addEventListener("blur", function () {
+      if (!validateMobileNumber(mobileNumberInput.value)) {
+        document.getElementById("mobileNumberError").textContent =
+          "Invalid mobile number.";
+        document.getElementById("mobileNumberError").style.display = "block";
+      } else {
+        document.getElementById("mobileNumberError").style.display = "none";
+      }
+    });
+
+    passwordInput.addEventListener("blur", function () {
+      if (!validatePassword(passwordInput.value)) {
+        document.getElementById("passwordError").textContent =
+          "Password must be at least 6 characters long.";
+        document.getElementById("passwordError").style.display = "block";
+      } else {
+        document.getElementById("passwordError").style.display = "none";
+      }
+    });
+
+    confirmPasswordInput.addEventListener("blur", function () {
+      if (
+        !validateConfirmPassword(
+          passwordInput.value,
+          confirmPasswordInput.value
+        )
+      ) {
+        document.getElementById("confirmPasswordError").textContent =
+          "Passwords do not match.";
+        document.getElementById("confirmPasswordError").style.display = "block";
+      } else {
+        document.getElementById("confirmPasswordError").style.display = "none";
+      }
+    });
+
+    // Function to navigate to the next section
+    function nextSection() {
+      document.getElementById("firstSection").style.display = "none";
+      document.getElementById("secondSection").style.display = "block";
+    }
+
+    // Function to navigate to the previous section
+    function previousSection() {
+      document.getElementById("secondSection").style.display = "none";
+      document.getElementById("firstSection").style.display = "block";
+    }
+
+    // Event listener for next button
+    document
+      .getElementById("nextButton")
+      .addEventListener("click", nextSection);
+
+    // Event listener for previous button
+    document
+      .getElementById("previousButton")
+      .addEventListener("click", previousSection);
+  });
+
+  // Function to toggle password visibility
   function togglePassword(passwordFieldId, iconId) {
     const passwordField = document.getElementById(passwordFieldId);
     const icon = document.getElementById(iconId);

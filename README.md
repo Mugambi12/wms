@@ -98,3 +98,43 @@ I extend my sincere gratitude to the following:
 - My family and friends for their continuous encouragement and steadfast support throughout the entire journey of this project.
 
 ---
+
+# Doc Structure
+
+project_root/
+│
+├── app/
+│ ├── backend/
+│ │ ├── landing/
+│ │ │ └── routes.py
+│ │ │
+│ │ ├── auth/
+│ │ │ └── routes.py
+│ │ │
+│ │ └── accounts/
+│ │ │ ├── **init**.py
+│ │ │ └── dashboard/
+│ │ │ └── routes.py
+│ │ │ └── people(users)/
+│ │ │ └── routes.py
+│ │
+│ ├── frontend/
+│ │ ├── static/
+│ │ │ ├── css/
+│ │ │ ├── js/
+│ │ │ └── images/
+│ │ │
+│ │ └── templates/
+│ │ ├── landing/
+│ │ │ └── landing.html
+│ │ │
+│ │ ├── auth/
+│ │ │ └── login.html
+│ │ │
+│ │ └── accounts/
+│ │ └── account_info.html
+│ │
+│ └── **init**.py
+│
+├── run.py
+└── README.md
