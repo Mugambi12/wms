@@ -20,24 +20,25 @@
         <div class="d-flex">
           <div class="mb-3 me-2">
             {{ form.first_name.label(class="form-label") }} {{
-            form.first_name(class="form-control") }}
+            form.first_name(class="form-control", placeholder="First Name") }}
           </div>
 
           <div class="mb-3 ms-2">
             {{ form.last_name.label(class="form-label") }} {{
-            form.last_name(class="form-control") }}
+            form.last_name(class="form-control", placeholder="Last Name") }}
           </div>
         </div>
 
         <div class="mb-3">
           {{ form.email.label(class="form-label") }} {{
-          form.email(class="form-control") }}
+          form.email(class="form-control", placeholder="Email Address") }}
           <div id="emailError" class="text-danger" style="display: none"></div>
         </div>
 
         <div class="mb-3">
           {{ form.mobile_number.label(class="form-label") }} {{
-          form.mobile_number(class="form-control") }}
+          form.mobile_number(class="form-control", placeholder="Mobile Number")
+          }}
           <div
             id="mobileNumberError"
             class="text-danger"
@@ -63,7 +64,8 @@
         <div class="mb-3">
           {{ form.password.label(class="form-label") }}
           <div class="input-group border rounded-3">
-            {{ form.password(class="form-control border-0", id="password") }}
+            {{ form.password(class="form-control border-0", id="password",
+            placeholder="Password") }}
             <button
               class="btn btn-light"
               type="button"
@@ -89,7 +91,7 @@
           {{ form.confirm_password.label(class="form-label") }}
           <div class="input-group border rounded-3">
             {{ form.confirm_password(class="form-control border-0",
-            id="confirm_password") }}
+            id="confirm_password", placeholder="Confirm Password") }}
             <button
               class="btn btn-light"
               type="button"
