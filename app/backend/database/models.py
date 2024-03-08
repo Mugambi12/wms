@@ -221,3 +221,85 @@ class Contact(db.Model):
         self.name = name
         self.email = email
         self.message = message
+
+
+# Define CompanyInformation model
+class CompanyInformation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    company_logo = db.Column(db.String(255))
+    company_name = db.Column(db.String(255))
+    company_address = db.Column(db.String(255))
+    company_email = db.Column(db.String(255))
+    contact_number = db.Column(db.String(20))
+    company_website_url = db.Column(db.String(255))
+    company_description = db.Column(db.String(512))
+
+    def __init__(self, company_logo=None, company_name=None, company_address=None, company_email=None, contact_number=None, company_website_url=None, company_description=None):
+        self.company_logo = company_logo
+        self.company_name = company_name
+        self.company_address = company_address
+        self.company_email = company_email
+        self.contact_number = contact_number
+        self.company_website_url = company_website_url
+        self.company_description = company_description
+
+
+# Define ServicesSetting model
+class ServicesSetting(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    house_sections = db.Column(db.String(255))
+    unit_price = db.Column(db.Float)
+    service_fee = db.Column(db.Float)
+
+    def __init__(self, unit_price=None, service_fee=None, house_sections=None):
+        self.unit_price = unit_price
+        self.service_fee = service_fee
+        self.house_sections = house_sections
+
+
+# Define PaymentMethods model
+class PaymentMethods(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bank_name = db.Column(db.String(255))
+    paybill = db.Column(db.Integer)
+    account_number = db.Column(db.Integer)
+
+    def __init__(self, bank_name=None, paybill=None, account_number=None):
+        self.bank_name = bank_name
+        self.paybill = paybill
+        self.account_number = account_number
+
+
+# Define MailSettings model
+class MailSettings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    company_email = db.Column(db.String(120))
+    sending_email = db.Column(db.String(120))
+    password = db.Column(db.String(128))
+
+    def __init__(self, company_email=None, sending_email=None, password=None):
+        self.company_email = company_email
+        self.sending_email = sending_email
+        self.password = password
+
+
+# Define SocialAccounts model
+class SocialAccounts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    whatsapp = db.Column(db.String(255))
+    twitter = db.Column(db.String(255))
+    facebook = db.Column(db.String(255))
+    tiktok = db.Column(db.String(255))
+    instagram = db.Column(db.String(255))
+    linkedin = db.Column(db.String(255))
+    youtube = db.Column(db.String(255))
+
+    def __init__(self, whatsapp=None, twitter=None, facebook=None, tiktok=None, instagram=None, linkedin=None, youtube=None):
+        self.whatsapp = whatsapp
+        self.twitter = twitter
+        self.facebook = facebook
+        self.tiktok = tiktok
+        self.instagram = instagram
+        self.linkedin = linkedin
+        self.youtube = youtube
+# File: app/backend/database/models.py

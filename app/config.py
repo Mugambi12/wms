@@ -17,6 +17,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_COOKIE_SECURE = True
     PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
+    DEBUG = True
 
     # Mail settings
     MAIL_SERVER = 'smtp.gmail.com'
