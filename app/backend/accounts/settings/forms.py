@@ -2,7 +2,7 @@
 
 # Importing Required Libraries
 from flask_wtf import FlaskForm
-from wtforms import FloatField, StringField, SubmitField, SelectField, IntegerField, TextAreaField
+from wtforms import FloatField, StringField, SubmitField, SelectField, IntegerField, TextAreaField, PasswordField
 from wtforms.validators import Length, Email, URL
 
 class CompanyInformationForm(FlaskForm):
@@ -15,6 +15,33 @@ class CompanyInformationForm(FlaskForm):
     company_description = TextAreaField('Company Description')
     submit = SubmitField('Submit')
 
+
+class ServicesSettingForm(FlaskForm):
+    unit_price = FloatField('Unit Price')
+    service_fee = FloatField('Service Fee')
+    house_sections = StringField('House Sections')
+    submit = SubmitField('Update')
+
+
+class PaymentMethodsForm(FlaskForm):
+    bank_name = StringField('Bank Name')
+    paybill = StringField('Pay Bill Number')
+    account_number = StringField('Account Number')
+    submit = SubmitField('Update')
+
+class MailSettingsForm(FlaskForm):
+    company_email = StringField('Company Email', validators=[Email()])
+    sending_email = StringField('Sending Email', validators=[Email()])
+    password = PasswordField('Email Password')
+    submit = SubmitField('Update')
+
+class SocialAccountsForm(FlaskForm):
+    whatsapp = StringField('WhatsApp', validators=[URL()])
+    twitter = StringField('Twitter', validators=[URL()])
+    facebook = StringField('Facebook', validators=[URL()])
+    tiktok = StringField('TikTok', validators=[URL()])
+    instagram = StringField('Instagram', validators=[URL()])
+    linkedin = StringField('LinkedIn', validators=[URL()])
 
 
 

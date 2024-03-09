@@ -149,17 +149,429 @@
                 company_information_form.company_description.label(class="form-label")
                 }} {{
                 company_information_form.company_description(class="form-control
-                form-control-sm") }}
+                form-control-sm", rows=3) }}
               </div>
 
+              <div class="text-center">
+                <button
+                  type="submit"
+                  form="company_information_form"
+                  class="btn btn-outline-primary rounded-pill"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Services Settings -->
+        <div class="tab-pane fade" id="content2">
+          <div class="text-center">
+            <h3 class="fw-bold mt-3 mb-2 text-success">Services Settings</h3>
+            <p class="text-muted fst-italic">Content for Services Settings.</p>
+          </div>
+
+          <form
+            method="post"
+            action="{{ url_for('accounts.settings.service_settings') }}"
+            id="service_settings_form"
+          >
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <!-- Unit Price -->
+            <div class="row mb-3">
+              <label for="unit_price" class="form-label col-sm-3">
+                Unit Price
+              </label>
+              <div class="col-sm-9">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="unit_price"
+                  name="unit_price"
+                  placeholder="Enter Unit Price"
+                  value="{{ service_settings.unit_price if service_settings else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- Service Fee -->
+            <div class="row mb-3">
+              <label for="service_fee" class="form-label col-sm-3">
+                Service Fee
+              </label>
+              <div class="col-sm-9">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="service_fee"
+                  name="service_fee"
+                  placeholder="Enter Service Fee"
+                  value="{{ service_settings.service_fee if service_settings else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- House Sections -->
+            <div class="row mb-3">
+              <label for="house_sections" class="form-label col-sm-3">
+                House Sections
+              </label>
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="house_sections"
+                  name="house_sections"
+                  placeholder="Enter House Sections"
+                  value="{{ service_settings.house_sections if service_settings else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
               <button
                 type="submit"
-                name="company_information_submit"
-                form="company_information_form"
-                class="btn btn-primary rounded-pill"
+                form="service_settings_form"
+                class="btn btn-outline-primary rounded-pill"
               >
                 Update
               </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="tab-pane fade" id="content3">
+          <div class="text-center">
+            <h3 class="fw-bold mt-3 mb-2 text-success">Payment Methods</h3>
+            <p class="text-muted fst-italic">Content for Payment Methods.</p>
+          </div>
+
+          <form
+            method="post"
+            action="{{ url_for('accounts.settings.payment_methods') }}"
+            id="payment_methods_form"
+          >
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <!-- Bank Name -->
+            <div class="row mb-3">
+              <label for="bank_name" class="form-label col-sm-3"
+                >Bank Name</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="bank_name"
+                  name="bank_name"
+                  placeholder="Enter Bank Name"
+                  value="{{ payment_methods.bank_name if payment_methods else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- Pay Bill Number -->
+            <div class="row mb-3">
+              <label for="paybill" class="form-label col-sm-3"
+                >Pay Bill Number</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="paybill"
+                  name="paybill"
+                  placeholder="Enter Pay Bill Number"
+                  value="{{ payment_methods.paybill if payment_methods else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- Account Number -->
+            <div class="row mb-3">
+              <label for="account_number" class="form-label col-sm-3"
+                >Account Number</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="account_number"
+                  name="account_number"
+                  placeholder="Enter Account Number"
+                  value="{{ payment_methods.account_number if payment_methods else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+              <button
+                type="submit"
+                form="payment_methods_form"
+                class="btn btn-outline-primary rounded-pill"
+              >
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Mail Settings -->
+        <div class="tab-pane fade" id="content4">
+          <div class="text-center">
+            <h3 class="fw-bold mt-3 mb-2 text-success">Mail Settings</h3>
+            <p class="text-muted fst-italic">Content for Mail Settings.</p>
+          </div>
+
+          <form
+            method="post"
+            action="{{ url_for('accounts.settings.mail_settings') }}"
+            id="mail_settings_form"
+          >
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <!-- Company Email -->
+            <div class="row mb-3">
+              <label for="companyEmail" class="form-label col-sm-3"
+                >Company Email</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="companyEmail"
+                  name="company_email"
+                  placeholder="Enter company email"
+                  value="{{ mail_settings.company_email if mail_settings else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- Company Sending Email -->
+            <div class="row mb-3">
+              <label for="companySendingEmail" class="form-label col-sm-3"
+                >Company Sending Email</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="companySendingEmail"
+                  name="sending_email"
+                  placeholder="Enter company sending email"
+                  value="{{ mail_settings.sending_email if mail_settings else '' }}"
+                />
+              </div>
+            </div>
+
+            <!-- Company Email Password -->
+            <div class="row mb-3">
+              <label for="company_email_password" class="form-label col-sm-3">
+                Company Email Password
+              </label>
+              <div class="col-sm-9">
+                <div class="input-group border rounded-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="company_email_password"
+                    name="password"
+                    placeholder="Enter company email password"
+                    value="{{ mail_settings.password if mail_settings else '' }}"
+                  />
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('company_email_password', 'company_email_password_icon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="company_email_password_icon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+              <button
+                type="submit"
+                form="mail_settings_form"
+                class="btn btn-outline-primary rounded-pill"
+              >
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Social Accounts -->
+        <div class="tab-pane fade" id="content5">
+          <div class="text-center">
+            <h3 class="fw-bold mt-3 mb-2 text-success">Social Accounts</h3>
+            <p class="text-muted fst-italic">
+              Optimize your system configuration with ease.
+            </p>
+          </div>
+
+          <div class="text-center">
+            <div class="social-icons mb-4">
+              <a href="#" class="social-icon btn btn-sm btn-success">
+                <ion-icon name="logo-whatsapp"></ion-icon> WhatsApp
+              </a>
+              <a href="#" class="social-icon btn btn-sm btn-primary">
+                <ion-icon name="logo-facebook"></ion-icon> Facebook
+              </a>
+              <a href="#" class="social-icon btn btn-sm btn-dark">
+                <ion-icon name="logo-twitter"></ion-icon> Twitter
+              </a>
+              <a href="#" class="social-icon btn btn-sm btn-danger">
+                <ion-icon name="logo-instagram"></ion-icon> Instagram
+              </a>
+              <a href="#" class="social-icon btn btn-sm btn-dark">
+                <ion-icon name="logo-tiktok"></ion-icon> TikTok
+              </a>
+              <a href="#" class="social-icon btn btn-sm btn-info">
+                <ion-icon name="logo-linkedin"></ion-icon> Linkedin
+              </a>
+            </div>
+          </div>
+
+          <div class="container">
+            <form
+              method="post"
+              action="{{ url_for('accounts.settings.social_accounts') }}"
+              id="social_accounts_form"
+              enctype="multipart/form-data"
+            >
+              <!-- CSRF Token -->
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
+              <div class="row p-3">
+                <!-- WhatsApp URL -->
+                <div class="mb-3 row">
+                  <label for="whatsapp" class="form-label col-sm-2"
+                    >WhatsApp</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="whatsapp"
+                      name="whatsapp"
+                      placeholder="Enter WhatsApp URL"
+                      value="{{ social_accounts.whatsapp if social_accounts else '' }}"
+                    />
+                  </div>
+                </div>
+
+                <!-- Facebook URL -->
+                <div class="mb-3 row">
+                  <label for="facebook" class="form-label col-sm-2"
+                    >Facebook</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="facebook"
+                      name="facebook"
+                      placeholder="Enter Facebook URL"
+                      value="{{ social_accounts.facebook if social_accounts else '' }}"
+                    />
+                  </div>
+                </div>
+
+                <!-- Twitter URL -->
+                <div class="mb-3 row">
+                  <label for="twitter" class="form-label col-sm-2"
+                    >Twitter</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="twitter"
+                      name="twitter"
+                      placeholder="Enter Twitter URL"
+                      value="{{ social_accounts.twitter if social_accounts else '' }}"
+                    />
+                  </div>
+                </div>
+
+                <!-- Instagram URL -->
+                <div class="mb-3 row">
+                  <label for="instagram" class="form-label col-sm-2"
+                    >Instagram</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="instagram"
+                      name="instagram"
+                      placeholder="Enter Instagram URL"
+                      value="{{ social_accounts.instagram if social_accounts else '' }}"
+                    />
+                  </div>
+                </div>
+
+                <!-- TikTok URL -->
+                <div class="mb-3 row">
+                  <label for="tiktok" class="form-label col-sm-2">TikTok</label>
+                  <div class="col-sm-10">
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="tiktok"
+                      name="tiktok"
+                      placeholder="Enter TikTok URL"
+                      value="{{ social_accounts.tiktok if social_accounts else '' }}"
+                    />
+                  </div>
+                </div>
+
+                <!-- Linkedin URL -->
+                <div class="mb-3 row">
+                  <label for="linkedin" class="form-label col-sm-2"
+                    >Linkedin</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="linkedin"
+                      name="linkedin"
+                      placeholder="Enter Linkedin URL"
+                      value="{{ social_accounts.linkedin if social_accounts else '' }}"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <button
+                  type="submit"
+                  form="social_accounts_form"
+                  class="btn btn-outline-primary rounded-pill"
+                >
+                  Update
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -167,10 +579,11 @@
     </div>
   </div>
 
+  <div class="mt-5 mb-5">...</div>
+
   <table class="table">
     <thead>
       <tr>
-        <th>Company Logo</th>
         <th>Company Name</th>
         <th>Company Address</th>
         <th>Company Email</th>
@@ -181,13 +594,86 @@
     </thead>
     <tbody>
       <tr>
-        <td>{{ company_information.company_logo }}</td>
         <td>{{ company_information.company_name }}</td>
         <td>{{ company_information.company_address }}</td>
         <td>{{ company_information.company_email }}</td>
         <td>{{ company_information.contact_number }}</td>
         <td>{{ company_information.company_website_url }}</td>
         <td>{{ company_information.company_description }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Unit Price</th>
+        <th>Service Fee</th>
+        <th>House Sections</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ service_settings.unit_price }}</td>
+        <td>{{ service_settings.service_fee }}</td>
+        <td>{{ service_settings.house_sections }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Bank Name</th>
+        <th>Pay Bill Number</th>
+        <th>Account Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ payment_methods.bank_name }}</td>
+        <td>{{ payment_methods.paybill }}</td>
+        <td>{{ payment_methods.account_number }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Mail main</th>
+        <th>Mail Sec</th>
+        <th>Mail password</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ mail_settings.company_email }}</td>
+        <td>{{ mail_settings.sending_email }}</td>
+        <td>{{ mail_settings.password }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>WhatsApp</th>
+        <th>Facebook</th>
+        <th>Twitter</th>
+        <th>Instagram</th>
+        <th>TikTok</th>
+        <th>Linkedin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ social_accounts.whatsapp }}</td>
+        <td>{{ social_accounts.facebook }}</td>
+        <td>{{ social_accounts.twitter }}</td>
+        <td>{{ social_accounts.instagram }}</td>
+        <td>{{ social_accounts.tiktok }}</td>
+        <td>{{ social_accounts.linkedin }}</td>
       </tr>
     </tbody>
   </table>
