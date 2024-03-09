@@ -215,6 +215,7 @@
             </div>
 
             <!-- House Sections -->
+            <!--
             <div class="row mb-3">
               <label for="house_sections" class="form-label col-sm-3">
                 House Sections
@@ -230,9 +231,10 @@
                 />
               </div>
             </div>
+            -->
 
             <!-- Submit Button -->
-            <div class="text-center">
+            <div class="text-center mb-3">
               <button
                 type="submit"
                 form="service_settings_form"
@@ -242,6 +244,128 @@
               </button>
             </div>
           </form>
+
+          <div class="container-fluid">
+            <!-- Adding House Section -->
+            <div class="mb-3">
+              <form
+                method="post"
+                action="{{ url_for('accounts.settings.add_section') }}"
+                id="add_section_form"
+              >
+                <!-- CSRF Token -->
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
+
+                <div class="row mb-3">
+                  <label for="house_sections" class="form-label col-sm-3"
+                    >Add House Section</label
+                  >
+                  <div class="col-sm-7">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="house_sections"
+                      name="house_sections"
+                      placeholder="Enter House Section"
+                    />
+                  </div>
+
+                  <div class="text-center col-sm-2">
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-outline-success rounded-pill"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- Editing House Section -->
+            <div class="mb-3">
+              <form
+                method="post"
+                action="{{ url_for('accounts.settings.edit_section') }}"
+                id="edit_section_form"
+              >
+                <!-- CSRF Token -->
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
+
+                <div class="row g-2">
+                  <div class="col">
+                    <select
+                      class="form-select"
+                      id="selected_section"
+                      name="selected_section"
+                    >
+                      {% for section in house_sections %}
+                      <option value="{{ section }}">{{ section }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="new_house_section"
+                      name="new_house_section"
+                      placeholder="New Section Name"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-outline-primary rounded-pill"
+                >
+                  Save
+                </button>
+              </form>
+            </div>
+
+            <!-- Delete House Section -->
+            <div class="mb-3">
+              <form
+                method="post"
+                action="{{ url_for('accounts.settings.delete_section') }}"
+                id="delete_section_form"
+              >
+                <!-- CSRF Token -->
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="{{ csrf_token() }}"
+                />
+                <select
+                  class="form-select"
+                  id="house_sections"
+                  name="house_sections"
+                >
+                  {% for section in house_sections %}
+                  <option value="{{ section }}">{{ section }}</option>
+                  {% endfor %}
+                </select>
+
+                <div class="text-center col-sm-2">
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-outline-success rounded-pill"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
 
         <!-- Payment Methods -->

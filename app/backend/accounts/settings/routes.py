@@ -66,6 +66,7 @@ def settings():
         return redirect(url_for('accounts.settings.settings'))
 
     service_settings = get_service_settings()
+    house_sections = service_settings.house_sections.split(',') if service_settings.house_sections else []
     payment_methods = get_payment_methods()
     mail_settings = get_mail_settings()
     social_accounts = get_social_accounts()
@@ -74,10 +75,109 @@ def settings():
                            company_information=company_information,
                            company_information_form=company_information_form,
                            service_settings=service_settings,
+                           house_sections=house_sections,
                            payment_methods=payment_methods,
                            mail_settings=mail_settings,
                            social_accounts=social_accounts,
                            hide_footer=True)
+
+from .forms import AddHouseSectionForm, EditHouseSectionForm, DeleteHouseSectionForm
+
+def add_house_section(house_sections, house_section):
+    if house_section:
+        if house_sections:
+            existing_sections = house_sections.house_sections.split(',') if house_sections.house_sections else []
+            if house_section not in existing_sections:
+                existing_sections.append(house_section)
+                house_sections.house_sections = ','.join(existing_sections)
+                db.session.commit()
+                flash(f'House section "{house_section.title()}" added successfully!', 'success')
+            else:
+                flash(f'Failed to add house section. The section "{house_section.title()}" already exists.', 'danger')
+        else:
+            flash('Failed to add house section. System settings not found.', 'danger')
+    else:
+        flash('Failed to add house section. The provided house section is empty.', 'danger')
+
+    return redirect(url_for('accounts.settings.settings'))
+
+def edit_house_section(house_sections, selected_section, new_house_section):
+    if new_house_section:
+        if house_sections:
+            house_sections_list = house_sections.house_sections.split(',') if house_sections.house_sections else []
+            if selected_section in house_sections_list:
+                house_sections_list.remove(selected_section)
+                house_sections_list.append(new_house_section)
+                house_sections.house_sections = ','.join(house_sections_list)
+                db.session.commit()
+                flash(f'House section "{selected_section.title()}" updated to "{new_house_section.title()}" successfully!', 'success')
+            else:
+                flash(f'Failed to update house section. The selected section "{selected_section.title()}" does not exist.', 'danger')
+        else:
+            flash('Failed to update house section. System settings not found.', 'danger')
+    else:
+        flash('Failed to update house section. The new house section is empty.', 'danger')
+
+    return redirect(url_for('accounts.settings.settings'))
+
+def delete_house_section(house_sections, selected_section):
+    if house_sections:
+        house_sections_list = house_sections.house_sections.split(',') if house_sections.house_sections else []
+        if selected_section in house_sections_list:
+            house_sections_list.remove(selected_section)
+            house_sections.house_sections = ','.join(house_sections_list)
+            db.session.commit()
+            flash(f'House section "{selected_section.title()}" deleted successfully!', 'success')
+
+    return redirect(url_for('accounts.settings.settings'))
+
+
+@settings_bp.route('/add_section', methods=['POST'])
+@login_required
+def add_section():
+    add_section_form = AddHouseSectionForm()
+
+    if add_section_form.validate_on_submit():
+        house_section = add_section_form.house_sections.data
+        service_settings = get_service_settings()
+        return add_house_section(service_settings, house_section)
+
+    flash('Failed to add house section. Please check your input.', 'danger')
+    return redirect(url_for('accounts.settings.settings'))
+
+@settings_bp.route('/edit_section', methods=['POST'])
+@login_required
+def edit_section():
+    edit_section_form = EditHouseSectionForm()
+
+    if edit_section_form.validate_on_submit():
+        selected_section = request.form['selected_section']
+        new_house_section = request.form['new_house_section']
+        service_settings = get_service_settings()
+        return edit_house_section(service_settings, selected_section, new_house_section)
+
+    flash('Failed to edit house section. Please check your input.', 'danger')
+    return redirect(url_for('accounts.settings.settings'))
+
+@settings_bp.route('/delete_section', methods=['POST'])
+@login_required
+def delete_section():
+    delete_section_form = DeleteHouseSectionForm()
+
+    if delete_section_form.validate_on_submit():
+        selected_section = delete_section_form.house_sections.data
+        service_settings = get_service_settings()
+        return delete_house_section(service_settings, selected_section)
+
+    flash('Failed to delete house section. Please check your input.', 'danger')
+    return redirect(url_for('accounts.settings.settings'))
+
+
+
+
+
+
+
 
 
 def get_service_settings():
