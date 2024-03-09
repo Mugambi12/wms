@@ -275,7 +275,6 @@
 
             <!-- Editing House Section -->
             <div class="mb-3">
-              <h4>Edit House Section</h4>
               <form
                 method="post"
                 action="{{ url_for('accounts.settings.edit_section') }}"
@@ -293,15 +292,29 @@
                     >Select Section</label
                   >
                   <div class="col-sm-7">
-                    <select
-                      class="form-select"
-                      id="edit_house_section"
-                      name="edit_house_section"
-                    >
-                      {% for section in all_house_sections %}
-                      <option value="{{ section }}">{{ section }}</option>
-                      {% endfor %}
-                    </select>
+                    <div class="row g-2">
+                      <div class="col">
+                        <select
+                          class="form-select"
+                          id="edit_house_section"
+                          name="edit_house_section"
+                        >
+                          {% for section in all_house_sections %}
+                          <option value="{{ section }}">{{ section }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+
+                      <div class="col">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="new_section_name"
+                          name="new_section_name"
+                          placeholder="New Section Name"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div class="text-center col-sm-2">
@@ -318,7 +331,6 @@
 
             <!-- Delete House Section -->
             <div class="mb-3">
-              <h4>Delete House Section</h4>
               <form
                 method="post"
                 action="{{ url_for('accounts.settings.delete_section') }}"

@@ -169,6 +169,7 @@ from wtforms.validators import DataRequired
 
 class EditSectionForm(FlaskForm):
     edit_house_section = StringField('Edit House Section', validators=[DataRequired()])
+    new_section_name = StringField('New Section Name', validators=[DataRequired()])
     submit = SubmitField('Edit')
 
 
@@ -176,15 +177,39 @@ class EditSectionForm(FlaskForm):
 @login_required
 def edit_section():
     edited_section = request.form.get('edit_house_section')
+    new_section_name = request.form.get('new_section_name')
+
     if not edited_section:
         flash('Please select a section to edit.', 'danger')
         return redirect(url_for('accounts.settings.settings'))
 
+    if not new_section_name:
+        flash('Please provide a new name for the section.', 'danger')
+        return redirect(url_for('accounts.settings.settings'))
+
     # Here you can perform any necessary validation or processing of the edited section
-    # For example, you might want to render a form for editing the selected section
-    # Or you might directly update the section in your database
-    flash(f'Successfully edited section: {edited_section}', 'success')
+    # For example, you might directly update the section in your database
+
+    try:
+        # Update the section name in the database
+        services_setting = ServicesSetting.query.first()
+        if services_setting:
+            house_sections = services_setting.house_sections.split(',')
+            if edited_section in house_sections:
+                house_sections[house_sections.index(edited_section)] = new_section_name
+                services_setting.house_sections = ','.join(house_sections)
+                db.session.commit()
+                flash(f'Successfully edited section: {edited_section} to {new_section_name}', 'success')
+            else:
+                flash(f'Section "{edited_section}" not found.', 'danger')
+        else:
+            flash('No service settings found.', 'danger')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Failed to edit section: {str(e)}', 'danger')
+
     return redirect(url_for('accounts.settings.settings'))
+
 
 
 
