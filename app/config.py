@@ -18,6 +18,8 @@ class Config:
     SESSION_COOKIE_SECURE = True
     PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
     DEBUG = True
+    PORT = 5000
+    HOST = '0.0.0.0'
 
     # Mail settings
     MAIL_SERVER = 'smtp.gmail.com'
