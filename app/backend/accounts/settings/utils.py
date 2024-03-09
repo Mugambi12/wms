@@ -1,10 +1,11 @@
 # app/backend/accounts/settings/routes.py
 from flask import flash, redirect, url_for
 from app import db
-from ...database.models import Settings
+from ...database.models import Settings, CompanyInformation
 
 def get_system_settings():
-    return Settings.query.first()
+    general = Settings.query.first()
+    return general
 
 def update_company_name(system_settings, new_company_name):
     try:

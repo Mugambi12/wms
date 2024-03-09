@@ -1,10 +1,16 @@
 # app/backend/accounts/settings/forms.py
 from flask_wtf import FlaskForm
-from wtforms import FloatField, StringField, SubmitField, SelectField, IntegerField
-from wtforms.validators import DataRequired, Length
+from wtforms import FloatField, StringField, SubmitField, SelectField, IntegerField, TextAreaField
+from wtforms.validators import Length, Email, URL
 
 class CompanyNameForm(FlaskForm):
+    company_logo = StringField('Company Logo')
     company_name = StringField('Company Name')
+    company_address = StringField('Company Address')
+    company_email = StringField('Company Email', validators=[Email()])
+    contact_number = StringField('Contact Number')
+    company_website_url = StringField('Company Website URL', validators=[URL()])
+    company_description = TextAreaField('Company Description')
     submit = SubmitField('Submit')
 
 class UnitPriceForm(FlaskForm):

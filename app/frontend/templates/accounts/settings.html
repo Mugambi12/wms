@@ -666,6 +666,29 @@
       </div>
     </div>
   </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Company Name</th>
+        <th>Company Address</th>
+        <th>Company Email</th>
+        <th>Contact Number</th>
+        <th>Company Website URL</th>
+        <th>Company Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ company_name_form.company_name.data }}</td>
+        <td>{{ company_name_form.company_address.data }}</td>
+        <td>{{ company_name_form.company_email.data }}</td>
+        <td>{{ company_name_form.contact_number.data }}</td>
+        <td>{{ company_name_form.company_website_url.data }}</td>
+        <td>{{ company_name_form.company_description.data }}</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <!-- JavaScript to store active tab in localStorage -->
