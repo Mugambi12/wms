@@ -247,9 +247,9 @@ class CompanyInformation(db.Model):
 # Define ServicesSetting model
 class ServicesSetting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    house_sections = db.Column(db.String(255))
     unit_price = db.Column(db.Float)
     service_fee = db.Column(db.Float)
+    house_sections = db.Column(db.String(1050))
 
     def __init__(self, unit_price=None, service_fee=None, house_sections=None):
         self.unit_price = unit_price

@@ -3,7 +3,7 @@
 # Importing Required Libraries
 from flask_wtf import FlaskForm
 from wtforms import FloatField, StringField, SubmitField, SelectField, TextAreaField, PasswordField
-from wtforms.validators import Email, URL
+from wtforms.validators import Email, URL, DataRequired
 
 class CompanyInformationForm(FlaskForm):
     company_logo = StringField('Company Logo')
@@ -24,16 +24,6 @@ class ServicesSettingForm(FlaskForm):
 class AddHouseSectionForm(FlaskForm):
     house_sections = StringField('New House Section')
     submit = SubmitField()
-
-class EditHouseSectionForm(FlaskForm):
-    house_sections = SelectField('Select House Section', choices=[], coerce=str)
-    new_house_section = StringField('New House Section Name')
-    submit = SubmitField()
-
-class DeleteHouseSectionForm(FlaskForm):
-    house_sections = SelectField('Select House Section to Delete', choices=[], coerce=str)
-    submit = SubmitField()
-
 
 class PaymentMethodsForm(FlaskForm):
     bank_name = StringField('Bank Name')

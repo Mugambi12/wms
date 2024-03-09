@@ -232,7 +232,7 @@
             </form>
           </div>
 
-          <div class="container-fluid">
+          <div class="container">
             <!-- Adding House Section -->
             <div class="mb-3">
               <form
@@ -275,6 +275,7 @@
 
             <!-- Editing House Section -->
             <div class="mb-3">
+              <h4>Edit House Section</h4>
               <form
                 method="post"
                 action="{{ url_for('accounts.settings.edit_section') }}"
@@ -287,34 +288,20 @@
                   value="{{ csrf_token() }}"
                 />
 
-                <div class="row g-2">
-                  <label for="house_sections" class="form-label col-sm-3"
-                    >Edit House Section</label
+                <div class="row mb-3">
+                  <label for="edit_house_section" class="form-label col-sm-3"
+                    >Select Section</label
                   >
-
                   <div class="col-sm-7">
-                    <div class="row">
-                      <div class="col">
-                        <select
-                          class="form-select"
-                          id="selected_section"
-                          name="selected_section"
-                        >
-                          {% for section in all_house_sections %}
-                          <option value="{{ section }}">{{ section }}</option>
-                          {% endfor %}
-                        </select>
-                      </div>
-                      <div class="col">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="new_house_section"
-                          name="new_house_section"
-                          placeholder="New Section Name"
-                        />
-                      </div>
-                    </div>
+                    <select
+                      class="form-select"
+                      id="edit_house_section"
+                      name="edit_house_section"
+                    >
+                      {% for section in all_house_sections %}
+                      <option value="{{ section }}">{{ section }}</option>
+                      {% endfor %}
+                    </select>
                   </div>
 
                   <div class="text-center col-sm-2">
@@ -322,7 +309,7 @@
                       type="submit"
                       class="btn btn-sm btn-outline-primary rounded-pill"
                     >
-                      Save
+                      Edit
                     </button>
                   </div>
                 </div>
@@ -331,6 +318,7 @@
 
             <!-- Delete House Section -->
             <div class="mb-3">
+              <h4>Delete House Section</h4>
               <form
                 method="post"
                 action="{{ url_for('accounts.settings.delete_section') }}"
@@ -343,16 +331,15 @@
                   value="{{ csrf_token() }}"
                 />
 
-                <div class="row g-2">
-                  <label for="house_sections" class="form-label col-sm-3"
-                    >Delete House Section</label
+                <div class="row mb-3">
+                  <label for="delete_house_section" class="form-label col-sm-3"
+                    >Select Section</label
                   >
-
                   <div class="col-sm-7">
                     <select
                       class="form-select"
-                      id="house_sections"
-                      name="house_sections"
+                      id="delete_house_section"
+                      name="delete_house_section"
                     >
                       {% for section in all_house_sections %}
                       <option value="{{ section }}">{{ section }}</option>
@@ -363,7 +350,7 @@
                   <div class="text-center col-sm-2">
                     <button
                       type="submit"
-                      class="btn btn-sm btn-outline-success rounded-pill"
+                      class="btn btn-sm btn-outline-danger rounded-pill"
                     >
                       Delete
                     </button>
@@ -714,29 +701,6 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Company Name</th>
-        <th>Company Address</th>
-        <th>Company Email</th>
-        <th>Contact Number</th>
-        <th>Company Website URL</th>
-        <th>Company Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ company_information.company_name }}</td>
-        <td>{{ company_information.company_address }}</td>
-        <td>{{ company_information.company_email }}</td>
-        <td>{{ company_information.contact_number }}</td>
-        <td>{{ company_information.company_website_url }}</td>
-        <td>{{ company_information.company_description }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table class="table">
-    <thead>
-      <tr>
         <th>Unit Price</th>
         <th>Service Fee</th>
         <th>House Sections</th>
@@ -751,60 +715,24 @@
     </tbody>
   </table>
 
-  <table class="table">
+  <table class="table data-table mb-5">
     <thead>
       <tr>
-        <th>Bank Name</th>
-        <th>Pay Bill Number</th>
-        <th>Account Number</th>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Token</th>
+        <th>created_at</th>
       </tr>
     </thead>
     <tbody>
+      {% for password_reset_token in password_reset_token %}
       <tr>
-        <td>{{ payment_methods.bank_name }}</td>
-        <td>{{ payment_methods.paybill }}</td>
-        <td>{{ payment_methods.account_number }}</td>
+        <td>{{ password_reset_token.id }}</td>
+        <td>{{ password_reset_token.email }}</td>
+        <td>{{ password_reset_token.token }}</td>
+        <td>{{ password_reset_token.created_at }}</td>
       </tr>
-    </tbody>
-  </table>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Mail main</th>
-        <th>Mail Sec</th>
-        <th>Mail password</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ mail_settings.company_email }}</td>
-        <td>{{ mail_settings.sending_email }}</td>
-        <td>{{ mail_settings.password }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th>WhatsApp</th>
-        <th>Facebook</th>
-        <th>Twitter</th>
-        <th>Instagram</th>
-        <th>TikTok</th>
-        <th>Linkedin</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ social_accounts.whatsapp }}</td>
-        <td>{{ social_accounts.facebook }}</td>
-        <td>{{ social_accounts.twitter }}</td>
-        <td>{{ social_accounts.instagram }}</td>
-        <td>{{ social_accounts.tiktok }}</td>
-        <td>{{ social_accounts.linkedin }}</td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
 </section>
