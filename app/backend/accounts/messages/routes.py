@@ -34,6 +34,7 @@ def messages():
             # Broadcast message to all users
             if send_broadcast_message(current_user.id, form.content.data):
                 flash('Broadcast message sent successfully!', 'success')
+                return redirect(url_for('accounts.messages.messages'))
             else:
                 flash('Failed to send broadcast message.', 'error')
         else:
@@ -43,6 +44,7 @@ def messages():
 
             if send_message(current_user.id, receiver_id, content):
                 flash('Message sent successfully!', 'success')
+                return redirect(url_for('accounts.messages.messages'))
             else:
                 flash('Failed to send message.', 'error')
 
