@@ -172,78 +172,65 @@
             <p class="text-muted fst-italic">Content for Services Settings.</p>
           </div>
 
-          <form
-            method="post"
-            action="{{ url_for('accounts.settings.service_settings') }}"
-            id="service_settings_form"
-          >
-            <!-- CSRF Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <div class="container">
+            <form
+              method="post"
+              action="{{ url_for('accounts.settings.service_settings') }}"
+              id="service_settings_form"
+            >
+              <!-- CSRF Token -->
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
 
-            <!-- Unit Price -->
-            <div class="row mb-3">
-              <label for="unit_price" class="form-label col-sm-3">
-                Unit Price
-              </label>
-              <div class="col-sm-9">
-                <input
-                  type="number"
-                  class="form-control"
-                  id="unit_price"
-                  name="unit_price"
-                  placeholder="Enter Unit Price"
-                  value="{{ service_settings.unit_price if service_settings else '' }}"
-                />
+              <!-- Unit Price -->
+              <div class="row mb-3">
+                <label for="unit_price" class="form-label col-sm-3">
+                  Unit Price
+                </label>
+                <div class="col-sm-9">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="unit_price"
+                    name="unit_price"
+                    placeholder="Enter Unit Price"
+                    value="{{ service_settings.unit_price if service_settings else '' }}"
+                  />
+                </div>
               </div>
-            </div>
 
-            <!-- Service Fee -->
-            <div class="row mb-3">
-              <label for="service_fee" class="form-label col-sm-3">
-                Service Fee
-              </label>
-              <div class="col-sm-9">
-                <input
-                  type="number"
-                  class="form-control"
-                  id="service_fee"
-                  name="service_fee"
-                  placeholder="Enter Service Fee"
-                  value="{{ service_settings.service_fee if service_settings else '' }}"
-                />
+              <!-- Service Fee -->
+              <div class="row mb-3">
+                <label for="service_fee" class="form-label col-sm-3">
+                  Service Fee
+                </label>
+                <div class="col-sm-9">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="service_fee"
+                    name="service_fee"
+                    placeholder="Enter Service Fee"
+                    value="{{ service_settings.service_fee if service_settings else '' }}"
+                  />
+                </div>
               </div>
-            </div>
 
-            <!-- House Sections -->
-            <!--
-            <div class="row mb-3">
-              <label for="house_sections" class="form-label col-sm-3">
-                House Sections
-              </label>
-              <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="house_sections"
-                  name="house_sections"
-                  placeholder="Enter House Sections"
-                  value="{{ service_settings.house_sections if service_settings else '' }}"
-                />
+              <!-- Submit Button -->
+              <div class="text-center mt-5 mb-5">
+                <button
+                  type="submit"
+                  form="service_settings_form"
+                  class="btn btn-outline-primary rounded-pill"
+                >
+                  Update
+                </button>
               </div>
-            </div>
-            -->
-
-            <!-- Submit Button -->
-            <div class="text-center mb-3">
-              <button
-                type="submit"
-                form="service_settings_form"
-                class="btn btn-outline-primary rounded-pill"
-              >
-                Update
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
 
           <div class="container-fluid">
             <!-- Adding House Section -->
@@ -301,34 +288,44 @@
                 />
 
                 <div class="row g-2">
-                  <div class="col">
-                    <select
-                      class="form-select"
-                      id="selected_section"
-                      name="selected_section"
-                    >
-                      {% for section in house_sections %}
-                      <option value="{{ section }}">{{ section }}</option>
-                      {% endfor %}
-                    </select>
+                  <label for="house_sections" class="form-label col-sm-3"
+                    >Edit House Section</label
+                  >
+
+                  <div class="col-sm-7">
+                    <div class="row">
+                      <div class="col">
+                        <select
+                          class="form-select"
+                          id="selected_section"
+                          name="selected_section"
+                        >
+                          {% for section in all_house_sections %}
+                          <option value="{{ section }}">{{ section }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="new_house_section"
+                          name="new_house_section"
+                          placeholder="New Section Name"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div class="col">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="new_house_section"
-                      name="new_house_section"
-                      placeholder="New Section Name"
-                    />
+
+                  <div class="text-center col-sm-2">
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-outline-primary rounded-pill"
+                    >
+                      Save
+                    </button>
                   </div>
                 </div>
-
-                <button
-                  type="submit"
-                  class="btn btn-sm btn-outline-primary rounded-pill"
-                >
-                  Save
-                </button>
               </form>
             </div>
 
@@ -345,23 +342,32 @@
                   name="csrf_token"
                   value="{{ csrf_token() }}"
                 />
-                <select
-                  class="form-select"
-                  id="house_sections"
-                  name="house_sections"
-                >
-                  {% for section in house_sections %}
-                  <option value="{{ section }}">{{ section }}</option>
-                  {% endfor %}
-                </select>
 
-                <div class="text-center col-sm-2">
-                  <button
-                    type="submit"
-                    class="btn btn-sm btn-outline-success rounded-pill"
+                <div class="row g-2">
+                  <label for="house_sections" class="form-label col-sm-3"
+                    >Delete House Section</label
                   >
-                    Delete
-                  </button>
+
+                  <div class="col-sm-7">
+                    <select
+                      class="form-select"
+                      id="house_sections"
+                      name="house_sections"
+                    >
+                      {% for section in all_house_sections %}
+                      <option value="{{ section }}">{{ section }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="text-center col-sm-2">
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-outline-success rounded-pill"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
