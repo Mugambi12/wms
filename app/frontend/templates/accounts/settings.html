@@ -16,13 +16,16 @@
         <!-- Company Logo -->
         <div class="mb-auto text-center">
           <img
-            src="https://via.placeholder.com/150x150.png"
-            class="rounded-circle profile-image mb-3 border border-4 border-white"
-            alt="Profile Image"
-            width="150"
-            height="150"
+            src="{% if company_information.company_logo %} {{ company_information.company_logo }} {% else %} {{ url_for('static', filename='images/user.png') }} {% endif %}"
+            alt="{% if company_information.company_name %} {{ company_information.company_name }}'s {% endif %} Profile Image"
+            class="rounded-circle img-fluid profile-image mb-3"
+            style="width: 120px; height: 120px; object-fit: cover"
           />
-          <h4 class="company-name mb-4">Company Name</h4>
+          <h4 class="company-name mb-4">
+            {% if company_information.company_name %} {{
+            company_information.company_name | title }} {% else %} ApoGen SS {%
+            endif %}
+          </h4>
         </div>
 
         <!-- Navigation Links -->
@@ -167,6 +170,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Company Logo</th>
         <th>Company Name</th>
         <th>Company Address</th>
         <th>Company Email</th>
@@ -177,6 +181,7 @@
     </thead>
     <tbody>
       <tr>
+        <td>{{ company_information.company_logo }}</td>
         <td>{{ company_information.company_name }}</td>
         <td>{{ company_information.company_address }}</td>
         <td>{{ company_information.company_email }}</td>

@@ -21,7 +21,7 @@ def save_uploaded_logo(company_logo):
         return None
 
     try:
-        filename = secure_filename(company_logo.filename)
+        filename = secure_filename("company_logo.png")
         uploads_folder = os.path.join(current_app.root_path, 'frontend', 'static', 'uploads', 'tmp')
         save_path = os.path.join(uploads_folder, filename)
         company_logo.save(save_path)
