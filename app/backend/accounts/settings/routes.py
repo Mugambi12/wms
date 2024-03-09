@@ -101,6 +101,22 @@ def add_house_section(house_sections, house_section):
 
     return redirect(url_for('accounts.settings.settings'))
 
+@settings_bp.route('/add_section', methods=['POST'])
+@login_required
+def add_section():
+    add_section_form = AddHouseSectionForm()
+
+    if add_section_form.validate_on_submit():
+        house_section = add_section_form.house_sections.data
+        service_settings = get_service_settings()
+        return add_house_section(service_settings, house_section)
+
+    flash('Failed to add house section. Please check your input.', 'danger')
+    return redirect(url_for('accounts.settings.settings'))
+
+
+
+
 def edit_house_section(house_sections, selected_section, new_house_section):
     if new_house_section:
         if house_sections:
@@ -120,6 +136,33 @@ def edit_house_section(house_sections, selected_section, new_house_section):
 
     return redirect(url_for('accounts.settings.settings'))
 
+@settings_bp.route('/edit_section', methods=['POST'])
+@login_required
+def edit_section():
+    edit_section_form = EditHouseSectionForm()
+
+    if edit_section_form.validate_on_submit():
+        selected_section = request.form.get('selected_section')
+        new_house_section = request.form.get('new_house_section')
+        service_settings = get_service_settings()
+
+        if selected_section and new_house_section:
+            try:
+                edit_house_section(service_settings, selected_section, new_house_section)
+                flash('House section updated successfully!', 'success')
+                return redirect(url_for('settings.settings'))
+            except Exception as e:
+                flash(f'Failed to edit house section: {str(e)}', 'danger')
+        else:
+            flash('Failed to edit house section. Please provide both the selected section and the new section.', 'danger')
+    else:
+        flash('Failed to edit house section. Form validation failed.', 'danger')
+
+    return redirect(url_for('settings.settings'))
+
+
+
+
 def delete_house_section(house_sections, selected_section):
     if house_sections:
         house_sections_list = house_sections.house_sections.split(',') if house_sections.house_sections else []
@@ -129,34 +172,6 @@ def delete_house_section(house_sections, selected_section):
             db.session.commit()
             flash(f'House section "{selected_section.title()}" deleted successfully!', 'success')
 
-    return redirect(url_for('accounts.settings.settings'))
-
-
-@settings_bp.route('/add_section', methods=['POST'])
-@login_required
-def add_section():
-    add_section_form = AddHouseSectionForm()
-
-    if add_section_form.validate_on_submit():
-        house_section = add_section_form.house_sections.data
-        service_settings = get_service_settings()
-        return add_house_section(service_settings, house_section)
-
-    flash('Failed to add house section. Please check your input.', 'danger')
-    return redirect(url_for('accounts.settings.settings'))
-
-@settings_bp.route('/edit_section', methods=['POST'])
-@login_required
-def edit_section():
-    edit_section_form = EditHouseSectionForm()
-
-    if edit_section_form.validate_on_submit():
-        selected_section = request.form['selected_section']
-        new_house_section = request.form['new_house_section']
-        service_settings = get_service_settings()
-        return edit_house_section(service_settings, selected_section, new_house_section)
-
-    flash('Failed to edit house section. Please check your input.', 'danger')
     return redirect(url_for('accounts.settings.settings'))
 
 @settings_bp.route('/delete_section', methods=['POST'])
