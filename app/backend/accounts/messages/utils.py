@@ -5,7 +5,6 @@ from app import db
 from ...database.models import Message, User
 
 
-# Getting unread message for a specific user's navbar alarts
 def get_unread_message_count_for_navbar(user_id):
     """
     Retrieve the count of unread messages for a given user.
@@ -24,7 +23,6 @@ def get_unread_message_count_for_navbar(user_id):
         return None
 
 
-# Private messaging for a specific user
 def send_message(sender_id, receiver_id, content):
     """
     Send a message to a specific user.
@@ -38,18 +36,15 @@ def send_message(sender_id, receiver_id, content):
         bool: True if the message was sent successfully, False otherwise.
     """
     try:
-        # Create a new message
         new_message = Message(sender_id=sender_id, receiver_id=receiver_id, content=content)
-
-        # Add the message to the session and commit changes
         db.session.add(new_message)
         db.session.commit()
-
         return True
     except Exception as e:
         print(f"Error sending message: {e}")
         db.session.rollback()
         return False
+
 
 def get_user_messages(user_id):
     """
@@ -73,9 +68,10 @@ def get_user_messages(user_id):
     unread_messages = [msg for msg in messages if not msg.is_read and msg.receiver_id == current_user.id]
     for msg in unread_messages:
         msg.is_read = True
-        db.session.commit()
+    db.session.commit()
 
     return messages, chatting_user.first_name
+
 
 def get_received_unread_message_count(user_id):
     """
@@ -97,7 +93,6 @@ def get_received_unread_message_count(user_id):
         return None
 
 
-# Broadcast messaging for all users
 def send_broadcast_message(sender_id, content):
     """
     Send a broadcast message to all users.
@@ -110,20 +105,17 @@ def send_broadcast_message(sender_id, content):
         bool: True if the broadcast message was sent successfully, False otherwise.
     """
     try:
-        # Fetch all users
         all_users = User.query.all()
-
-        # Iterate over all users and send the message to each user individually
         for user in all_users:
             new_message = Message(sender_id=sender_id, receiver_id=user.id, content=content)
             db.session.add(new_message)
-            db.session.commit()
-
+        db.session.commit()
         return True
     except Exception as e:
         print(f"Error sending broadcast message: {e}")
         db.session.rollback()
         return False
+
 
 def get_broadcast_messages():
     """
@@ -133,13 +125,12 @@ def get_broadcast_messages():
         list: A list of broadcast messages.
     """
     try:
-        # Query for broadcast messages
         broadcast_messages = Message.query.filter(Message.receiver_id == '0').order_by(Message.timestamp.asc()).all()
-
         return broadcast_messages
     except Exception as e:
         print(f"Error retrieving broadcast messages: {e}")
         return []
+
 
 def get_sender_name(sender_id):
     """
@@ -152,7 +143,4 @@ def get_sender_name(sender_id):
         str: The first name of the sender.
     """
     sender = User.query.get(sender_id)
-    if sender:
-        return sender.first_name.title()
-    else:
-        return "Unknown"
+    return sender.first_name.title() if sender else "Unknown"

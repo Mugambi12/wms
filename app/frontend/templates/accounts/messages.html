@@ -125,7 +125,6 @@
       chatting_user_first_name == current_user.first_name %} Chatting with
       Yourself {% else %} Chatting with {{ chatting_user_first_name|title }} {%
       endif %} {% else %} No Open Conversation {% endif %} {% endset %}
-
       <h5 class="fw-bold mb-2 ms-3 text-center">{{ header_text }}</h5>
 
       <!-- Chat Messages List -->
@@ -157,16 +156,16 @@
         >
           <div>{{ message.content }}</div>
           <div class="text-muted text-secondary text-end small mb-0">
-            <span class="ms-2">
-              from {{ get_sender_name(message.sender_id) }}
-            </span>
-            <span>
-              {{ message.timestamp.strftime('%d %b %Y') if (now -
+            <span class="ms-2"
+              >from {{ get_sender_name(message.sender_id) }}</span
+            >
+            <span
+              >{{ message.timestamp.strftime('%d %b %Y') if (now -
               message.timestamp).total_seconds() > 365*24*3600 else
               message.timestamp.strftime('%d %b %H:%M') if (now -
               message.timestamp).total_seconds() > 24*3600 else
-              message.timestamp.strftime('%H:%M') }}
-            </span>
+              message.timestamp.strftime('%H:%M') }}</span
+            >
           </div>
         </li>
         {% endif %}
@@ -191,7 +190,6 @@
           </div>
         </li>
         {% endif %} {% endfor %}
-
         <script>
           var messageList = document.querySelector(".chat-area");
           messageList.style.scrollBehavior = "auto";
@@ -233,35 +231,6 @@
       </form>
     </div>
   </div>
-
-  <!--
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">id</th>
-        <th scope="col">Sender</th>
-        <th scope="col">Receiver</th>
-        <th scope="col">Message</th>
-        <th scope="col">Time</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for message in all_messages %}
-      <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ message.id }}</td>
-        <td>{{ message.sender_id }}</td>
-        <td>{{ message.receiver_id }}</td>
-        <td>{{ message.content }}</td>
-        <td>{{ message.timestamp }}</td>
-        <td>{{ message.is_read }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  -->
 </div>
 
 {% endblock %}
