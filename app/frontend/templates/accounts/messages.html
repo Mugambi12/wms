@@ -233,4 +233,18 @@
   </div>
 </div>
 
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js"
+  integrity="sha384-..."
+  crossorigin="anonymous"
+></script>
+<script>
+  var socket = io.connect("http://" + document.domain + ":" + location.port);
+
+  socket.on("notification", function (data) {
+    alert(data.message);
+    // Or update the UI to show the notification
+  });
+</script>
+
 {% endblock %}

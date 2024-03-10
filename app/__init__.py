@@ -3,6 +3,7 @@
 # Import necessary modules
 import os
 from flask import Flask
+from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf.csrf import generate_csrf
@@ -14,6 +15,8 @@ from .utils import format_amount
 db = SQLAlchemy()
 login_manager = LoginManager()
 mail = Mail()
+
+socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
@@ -28,6 +31,9 @@ def create_app():
 
     # Initialize the mail
     mail.init_app(app)
+
+    # Initialize the socketio
+    socketio.init_app(app)
 
     # Initialize the database with the Flask app
     db.init_app(app)

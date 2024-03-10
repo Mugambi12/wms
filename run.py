@@ -1,7 +1,7 @@
-from app import create_app, db
-
 # File: run.py
 
+
+from app import create_app, db, socketio
 
 # Create the Flask application
 app = create_app()
@@ -12,4 +12,4 @@ with app.app_context():
 
 # Run the application
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, debug=True)

@@ -5,14 +5,8 @@ from flask_login import login_required, current_user
 from app import db
 from ...database.models import Message, User
 from .forms import MessageForm
-from .utils import (
-    get_received_unread_message_count,
-    send_message,
-    get_user_messages,
-    send_broadcast_message,
-    get_broadcast_messages,
-    get_sender_name
-)
+from .utils import *
+
 
 messages_bp = Blueprint('messages', __name__, url_prefix='/accounts')
 
