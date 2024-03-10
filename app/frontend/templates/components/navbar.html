@@ -27,8 +27,7 @@
       class="navbar-brand nav-link ms-3 {% if current_user.is_authenticated %}gradient-text{% else %}text-dark{% endif %}"
       href="{% if current_user.is_authenticated %}{{ url_for('accounts.dashboard.dashboard') }}{% else %}#{% endif %}"
     >
-      {% if company_name %} {{ company_name.title() }} {% else %} ApoGen {%
-      endif %}
+      {{ company_name.title() }}
     </a>
 
     <!-- Navbar Toggler -->

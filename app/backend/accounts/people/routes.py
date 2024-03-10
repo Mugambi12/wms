@@ -4,7 +4,7 @@
 from flask import Blueprint, flash, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 from app import db
-from ...database.models import User, Settings
+from ...database.models import User, ServicesSetting
 from .forms import AddUserForm, EditUserForm, EditProfilePictureForm
 from .utils import handle_add_new_users, change_password, validate_new_password, save_profile_picture, delete_user
 from ..components.download_manager import download_users
@@ -28,7 +28,7 @@ def people_list():
 
         # Retrieve house sections and populate the choices
         house_sections = []
-        settings = Settings.query.first()
+        settings = ServicesSetting.query.first()
         if settings and settings.house_sections:
             house_sections = [(section, section) for section in settings.house_sections.split(',')]
 

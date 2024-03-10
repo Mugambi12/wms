@@ -4,8 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField, SubmitField, SelectField
 from wtforms.validators import EqualTo, DataRequired, Email, Length, Optional, ValidationError
 from flask_wtf.file import FileField, FileAllowed
-from app.backend.database.models import User
-from app.backend.database.models import Settings
+from app.backend.database.models import User, ServicesSetting
 
 
 class AddUserForm(FlaskForm):
@@ -39,7 +38,7 @@ class EditUserForm(FlaskForm):
     confirm_new_password = PasswordField('Confirm New Password', validators=[Optional()])
 
     def populate_house_sections(self):
-        settings = Settings.query.first()
+        settings = ServicesSetting.query.first()
         if settings and settings.house_sections:
             current_house_section = self.house_section.data
             self.house_section.choices = [(section, section) for section in settings.house_sections.split(',')]

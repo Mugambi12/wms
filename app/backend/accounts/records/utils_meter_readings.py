@@ -3,7 +3,7 @@
 from flask import request, flash
 from sqlalchemy.exc import SQLAlchemyError
 from app import db
-from ...database.models import MeterReading, User, Settings
+from ...database.models import MeterReading, User, Settings, ServicesSetting
 from .forms import EditMeterReadingForm
 from ..components.payment_processor import process_payments_with_context
 
@@ -37,8 +37,8 @@ def handle_add_meter_reading(form, current_user):
 
         consumed = reading_value - old_prev_reading
 
-        unit_price = db.session.query(Settings.unit_price).scalar() or 0
-        service_fee = db.session.query(Settings.service_fee).scalar() or 0
+        unit_price = db.session.query(ServicesSetting.unit_price).scalar() or 0
+        service_fee = db.session.query(ServicesSetting.service_fee).scalar() or 0
 
         sub_total_amount = consumed * unit_price
         total_amount = sub_total_amount + service_fee
