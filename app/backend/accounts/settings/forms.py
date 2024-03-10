@@ -2,7 +2,7 @@
 
 # Importing Required Libraries
 from flask_wtf import FlaskForm
-from wtforms import FloatField, StringField, SubmitField, SelectField, TextAreaField, PasswordField
+from wtforms import FloatField, StringField, SubmitField, TextAreaField, PasswordField
 from wtforms.validators import Email, URL, DataRequired
 
 class CompanyInformationForm(FlaskForm):
@@ -15,7 +15,6 @@ class CompanyInformationForm(FlaskForm):
     company_description = TextAreaField('Company Description')
     submit = SubmitField('Submit')
 
-
 class ServicesSettingForm(FlaskForm):
     unit_price = FloatField('Unit Price')
     service_fee = FloatField('Service Fee')
@@ -25,6 +24,11 @@ class AddHouseSectionForm(FlaskForm):
     house_sections = StringField('New House Section')
     submit = SubmitField()
 
+class EditSectionForm(FlaskForm):
+    edit_house_section = StringField('Edit House Section', validators=[DataRequired()])
+    new_section_name = StringField('New Section Name', validators=[DataRequired()])
+    submit = SubmitField('Edit')
+
 class PaymentMethodsForm(FlaskForm):
     bank_name = StringField('Bank Name')
     paybill = StringField('Pay Bill Number')
@@ -32,8 +36,8 @@ class PaymentMethodsForm(FlaskForm):
     submit = SubmitField('Update')
 
 class MailSettingsForm(FlaskForm):
+    mail_server = StringField('Sending Email')
     company_email = StringField('Company Email', validators=[Email()])
-    sending_email = StringField('Sending Email', validators=[Email()])
     password = PasswordField('Email Password')
     submit = SubmitField('Update')
 

@@ -273,13 +273,13 @@ class PaymentMethods(db.Model):
 # Define MailSettings model
 class MailSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    mail_server = db.Column(db.String(120))
     company_email = db.Column(db.String(120))
-    sending_email = db.Column(db.String(120))
     password = db.Column(db.String(128))
 
-    def __init__(self, company_email=None, sending_email=None, password=None):
+    def __init__(self, company_email=None, mail_server=None, password=None):
         self.company_email = company_email
-        self.sending_email = sending_email
+        self.mail_server = mail_server
         self.password = password
 
 

@@ -163,14 +163,6 @@ def add_section():
 
 
 
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
-
-class EditSectionForm(FlaskForm):
-    edit_house_section = StringField('Edit House Section', validators=[DataRequired()])
-    new_section_name = StringField('New Section Name', validators=[DataRequired()])
-    submit = SubmitField('Edit')
 
 
 @settings_bp.route('/edit_section', methods=['POST'])
@@ -186,9 +178,6 @@ def edit_section():
     if not new_section_name:
         flash('Please provide a new name for the section.', 'danger')
         return redirect(url_for('accounts.settings.settings'))
-
-    # Here you can perform any necessary validation or processing of the edited section
-    # For example, you might directly update the section in your database
 
     try:
         # Update the section name in the database
@@ -209,8 +198,6 @@ def edit_section():
         flash(f'Failed to edit section: {str(e)}', 'danger')
 
     return redirect(url_for('accounts.settings.settings'))
-
-
 
 
 @settings_bp.route('/delete_section', methods=['POST'])
@@ -339,7 +326,7 @@ def mail_settings():
     if mail_settings_form.validate_on_submit():
         form_data = {
             'company_email': mail_settings_form.company_email.data,
-            'sending_email': mail_settings_form.sending_email.data,
+            'mail_server': mail_settings_form.mail_server.data,
             'password': mail_settings_form.password.data
         }
 

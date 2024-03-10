@@ -467,6 +467,23 @@
             <!-- CSRF Token -->
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
+            <!-- Company Mail Server -->
+            <div class="row mb-3">
+              <label for="mail_server" class="form-label col-sm-3"
+                >Company Mail Server</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mail_server"
+                  name="mail_server"
+                  placeholder="Enter Mail Server"
+                  value="{{ mail_settings.mail_server if mail_settings else '' }}"
+                />
+              </div>
+            </div>
+
             <!-- Company Email -->
             <div class="row mb-3">
               <label for="companyEmail" class="form-label col-sm-3"
@@ -480,23 +497,6 @@
                   name="company_email"
                   placeholder="Enter company email"
                   value="{{ mail_settings.company_email if mail_settings else '' }}"
-                />
-              </div>
-            </div>
-
-            <!-- Company Sending Email -->
-            <div class="row mb-3">
-              <label for="companySendingEmail" class="form-label col-sm-3"
-                >Company Sending Email</label
-              >
-              <div class="col-sm-9">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="companySendingEmail"
-                  name="sending_email"
-                  placeholder="Enter company sending email"
-                  value="{{ mail_settings.sending_email if mail_settings else '' }}"
                 />
               </div>
             </div>
@@ -707,46 +707,6 @@
       </div>
     </div>
   </div>
-
-  <div class="mt-5 mb-5">...</div>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Unit Price</th>
-        <th>Service Fee</th>
-        <th>House Sections</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ service_settings.unit_price }}</td>
-        <td>{{ service_settings.service_fee }}</td>
-        <td>{{ service_settings.house_sections }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table class="table data-table mb-5">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Email</th>
-        <th>Token</th>
-        <th>created_at</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for password_reset_token in password_reset_token %}
-      <tr>
-        <td>{{ password_reset_token.id }}</td>
-        <td>{{ password_reset_token.email }}</td>
-        <td>{{ password_reset_token.token }}</td>
-        <td>{{ password_reset_token.created_at }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
 </section>
 
 <!-- JavaScript to store active tab in localStorage -->
