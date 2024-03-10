@@ -21,9 +21,10 @@ class Config:
     # Mail settings
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
-    MAIL_USERNAME = 'silasmungiria.sm@gmail.com'
-    MAIL_PASSWORD = 'dcjr nask mhqs xoyj'
-    #MAIL_USERNAME = 'apogen.ss@gmail.com'
+    #MAIL_USERNAME = 'silasmungiria.sm@gmail.com'
+    #MAIL_PASSWORD = 'dcjr nask mhqs xoyj'
+    MAIL_USERNAME = 'apogen.ss@gmail.com'
+    MAIL_PASSWORD = 'zowv rzzn kzsb dtgs'
     #MAIL_PASSWORD = 'cldn ewhn hfse ccyu'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True

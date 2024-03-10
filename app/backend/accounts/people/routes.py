@@ -35,7 +35,7 @@ def people_list():
         if current_user.is_admin:
             return render_template('accounts/people_list.html', people_list=people_list, house_sections=house_sections, form=add_form, hide_footer=True)
         else:
-            return "", 204
+            return redirect(url_for('accounts.people.edit_user', user_id=current_user.id))
     else:
         return redirect(url_for('auth.login'))
 

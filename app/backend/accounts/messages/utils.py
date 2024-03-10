@@ -56,21 +56,29 @@ def get_user_messages(user_id):
     Returns:
         tuple: A tuple containing a list of messages and the first name of the other user.
     """
+    # Check if user_id is None or not
+    if user_id is None:
+        return [], None
+
+    # Retrieve chatting user if user_id is not None
     chatting_user = User.query.get(user_id)
     if not chatting_user:
         return [], None
 
+    # Retrieve messages between current user and the other user
     messages = Message.query.filter(
         ((Message.sender_id == current_user.id) & (Message.receiver_id == user_id)) |
         ((Message.sender_id == user_id) & (Message.receiver_id == current_user.id))
     ).order_by(Message.timestamp.asc()).all()
 
+    # Mark unread messages as read
     unread_messages = [msg for msg in messages if not msg.is_read and msg.receiver_id == current_user.id]
     for msg in unread_messages:
         msg.is_read = True
     db.session.commit()
 
     return messages, chatting_user.first_name
+
 
 
 def get_received_unread_message_count(user_id):
