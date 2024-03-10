@@ -3,7 +3,7 @@
 from flask import request, flash
 from sqlalchemy.exc import SQLAlchemyError
 from app import db
-from ...database.models import MeterReading, User, Settings, ServicesSetting
+from ...database.models import MeterReading, User, ServicesSetting
 from .forms import EditMeterReadingForm
 from ..components.payment_processor import process_payments_with_context
 

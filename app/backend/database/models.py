@@ -186,29 +186,6 @@ class Message(db.Model):
         self.content = content
 
 
-# Define Settings model
-class Settings(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    company_name = db.Column(db.String(255))
-    unit_price = db.Column(db.Float)
-    service_fee = db.Column(db.Float)
-    house_sections = db.Column(db.String(255))
-    bank_name = db.Column(db.String(255))
-    paybill = db.Column(db.Integer)
-    account_number = db.Column(db.Integer)
-    contact_number = db.Column(db.String(20))
-
-    def __init__(self, company_name=None, unit_price=None, service_fee=None, house_sections=None, bank_name=None, paybill=None, account_number=None, contact_number=None):
-        self.company_name = company_name
-        self.unit_price = unit_price
-        self.service_fee = service_fee
-        self.house_sections = house_sections
-        self.bank_name = bank_name
-        self.paybill = paybill
-        self.account_number = account_number
-        self.contact_number = contact_number
-
-
 # Define Contact model
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
