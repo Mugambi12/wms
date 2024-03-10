@@ -1,260 +1,146 @@
 # app/backend/accounts/settings/routes.py
 
 # Importing Required Libraries
-from flask import flash, redirect, url_for
+import os
+from werkzeug.utils import secure_filename
+from flask import redirect, url_for, flash, current_app
 from app import db
-from ...database.models import Settings, CompanyInformation
+from ...database.models import CompanyInformation, ServicesSetting, PaymentMethods, MailSettings, SocialAccounts
 
-def get_system_settings():
-    general = Settings.query.first()
-    return general
 
-def update_company_name(system_settings, new_company_name):
+def get_company_information():
+    return CompanyInformation.query.first()
+
+def save_uploaded_logo(company_logo):
+    if not company_logo:
+        return None
+
     try:
-        if system_settings is not None:
-            if new_company_name is None:
-                if system_settings.company_name is not None:
-                    system_settings.company_name = None
-                    db.session.commit()
-                    flash('Company name removed successfully!', 'success')
-                else:
-                    flash('Company name is already empty.', 'info')
-            else:
-                system_settings.company_name = new_company_name
-                db.session.commit()
-                flash(f'Company name updated to "{new_company_name}" successfully!', 'success')
-        else:
-            if new_company_name is not None:
-                new_settings = Settings(company_name=new_company_name)
-                db.session.add(new_settings)
-                db.session.commit()
-                flash(f'Company name set to "{new_company_name}" successfully!', 'success')
-            else:
-                flash('Failed to update company name. No system settings found.', 'danger')
+        filename = secure_filename("company_logo.png")
+        uploads_folder = os.path.join(current_app.root_path, 'frontend', 'static', 'uploads', 'tmp')
+        save_path = os.path.join(uploads_folder, filename)
+        company_logo.save(save_path)
+        return url_for('static', filename=f'uploads/tmp/{filename}')
+    except Exception as e:
+        print(f'Error saving company logo: {str(e)}')
+        return None
 
-    except ValueError:
-        flash('Invalid input for company name. Please enter a valid name.', 'danger')
-
-def update_unit_price(system_settings, new_unit_price):
+def update_or_create_company_information(company_information, form_data):
     try:
-        if system_settings:
-            if new_unit_price is None:
-                if system_settings.unit_price is not None:
-                    system_settings.unit_price = None
-                    db.session.commit()
-                    flash('Service fee removed successfully!', 'success')
-            else:
-                new_unit_price = float(new_unit_price)
-                if system_settings.unit_price is not None:
-                    system_settings.unit_price = new_unit_price
-                    flash(f'Service fee updated to {new_unit_price} successfully!', 'success')
-                else:
-                    system_settings.unit_price = new_unit_price
-                    flash(f'Service fee added as {new_unit_price} successfully!', 'success')
-                db.session.commit()
+        if company_information:
+            for field, value in form_data.items():
+                if hasattr(company_information, field):
+                    setattr(company_information, field, value)
         else:
-            if new_unit_price is not None:
-                new_unit_price = float(new_unit_price)
-                new_settings = Settings(unit_price=new_unit_price)
-                db.session.add(new_settings)
-                db.session.commit()
-                flash(f'Service fee added as {new_unit_price} successfully!', 'success')
-            else:
-                flash('Failed to add service fee. No system settings found.', 'danger')
+            company_information = CompanyInformation(**form_data)
+            db.session.add(company_information)
 
-    except ValueError:
-        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
+        db.session.commit()
+        flash('Company information updated successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Failed to update company information: {str(e)}', 'danger')
 
-def update_service_fee(system_settings, new_service_fee):
+
+
+def get_service_settings():
+    return ServicesSetting.query.first()
+
+def update_or_create_service_settings(service_settings, form_data):
     try:
-        if system_settings:
-            if new_service_fee is None:
-                if system_settings.service_fee is not None:
-                    system_settings.service_fee = None
-                    db.session.commit()
-                    flash('Service fee removed successfully!', 'success')
-            else:
-                new_service_fee = float(new_service_fee)
-                if system_settings.service_fee is not None:
-                    system_settings.service_fee = new_service_fee
-                    flash(f'Service fee updated to {new_service_fee} successfully!', 'success')
-                else:
-                    system_settings.service_fee = new_service_fee
-                    flash(f'Service fee added as {new_service_fee} successfully!', 'success')
-                db.session.commit()
-        else:
-            if new_service_fee is not None:
-                new_service_fee = float(new_service_fee)
-                new_settings = Settings(service_fee=new_service_fee)
-                db.session.add(new_settings)
-                db.session.commit()
-                flash(f'Service fee added as {new_service_fee} successfully!', 'success')
-            else:
-                flash('Failed to add service fee. No system settings found.', 'danger')
-
-    except ValueError:
-        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
-
-def add_house_section(system_settings, house_section):
-    if house_section:
-        if system_settings:
-            existing_sections = system_settings.house_sections.split(',') if system_settings.house_sections else []
-            if house_section not in existing_sections:
-                existing_sections.append(house_section)
-                system_settings.house_sections = ','.join(existing_sections)
-                db.session.commit()
-                flash(f'House section "{house_section.title()}" added successfully!', 'success')
-            else:
-                flash(f'Failed to add house section. The section "{house_section.title()}" already exists.', 'danger')
-        else:
-            flash('Failed to add house section. System settings not found.', 'danger')
-    else:
-        flash('Failed to add house section. The provided house section is empty.', 'danger')
-
-    return redirect(url_for('accounts.settings.settings'))
-
-def edit_house_section(system_settings, selected_section, new_house_section):
-    if new_house_section:
-        if system_settings:
-            house_sections = system_settings.house_sections.split(',') if system_settings.house_sections else []
-            if selected_section in house_sections:
-                house_sections.remove(selected_section)
-                house_sections.append(new_house_section)
-                system_settings.house_sections = ','.join(house_sections)
-                db.session.commit()
-                flash(f'House section "{selected_section.title()}" updated to "{new_house_section.title()}" successfully!', 'success')
-            else:
-                flash(f'Failed to update house section. The selected section "{selected_section.title()}" does not exist.', 'danger')
-        else:
-            flash('Failed to update house section. System settings not found.', 'danger')
-    else:
-        flash('Failed to update house section. The new house section is empty.', 'danger')
-
-    return redirect(url_for('accounts.settings.settings'))
-
-def delete_house_section(system_settings, selected_section):
-    if system_settings:
-        house_sections = system_settings.house_sections.split(',') if system_settings.house_sections else []
-        if selected_section in house_sections:
-            house_sections.remove(selected_section)
-            system_settings.house_sections = ','.join(house_sections)
+        if service_settings:
+            for field, value in form_data.items():
+                setattr(service_settings, field, value)
             db.session.commit()
-            flash(f'House section "{selected_section.title()}" deleted successfully!', 'success')
+            flash('Service settings updated successfully!', 'success')
+        else:
+            new_service_settings = ServicesSetting(**form_data)
+            db.session.add(new_service_settings)
+            db.session.commit()
+            flash('Service settings set successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Failed to update service settings: {str(e)}', 'danger')
 
+
+
+def get_section_settings():
+    return ServicesSetting.query.first()
+
+def add_house_section(all_house_sections, house_section):
+    if not house_section:
+        flash('Failed to add house section. The provided house section is empty.', 'danger')
+        return redirect(url_for('accounts.settings.settings'))
+
+    existing_sections = all_house_sections.house_sections.split(',') if all_house_sections.house_sections else []
+    if house_section in existing_sections:
+        flash(f'Failed to add house section. The section "{house_section.title()}" already exists.', 'danger')
+        return redirect(url_for('accounts.settings.settings'))
+
+    existing_sections.append(house_section)
+    all_house_sections.house_sections = ','.join(existing_sections)
+    db.session.commit()
+    flash(f'House section "{house_section.title()}" added successfully!', 'success')
     return redirect(url_for('accounts.settings.settings'))
 
-def update_bank_name(system_settings, new_bank_name):
+
+
+def get_payment_methods():
+    return PaymentMethods.query.first()
+
+def update_or_create_payment_methods(payment_methods, form_data):
     try:
-        if system_settings:
-            if new_bank_name is None:
-                if system_settings.bank_name is not None:
-                    system_settings.bank_name = None
-                    db.session.commit()
-                    flash('Company name removed successfully!', 'success')
-                else:
-                    flash('Company name is already empty.', 'info')
-            else:
-                system_settings.bank_name = new_bank_name
-                db.session.commit()
-                flash(f'Company name updated to "{new_bank_name}" successfully!', 'success')
+        if payment_methods:
+            for field, value in form_data.items():
+                setattr(payment_methods, field, value)
+            db.session.commit()
+            flash('Payment methods updated successfully!', 'success')
         else:
-            if new_bank_name is not None:
-                new_settings = Settings(bank_name=new_bank_name)
-                db.session.add(new_settings)
-                db.session.commit()
-                flash(f'Company name set to "{new_bank_name}" successfully!', 'success')
-            else:
-                flash('Failed to update company name. No system settings found.', 'danger')
+            new_payment_methods = PaymentMethods(**form_data)
+            db.session.add(new_payment_methods)
+            db.session.commit()
+            flash('Payment methods set successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Failed to update payment methods: {str(e)}', 'danger')
 
-    except ValueError:
-        flash('Invalid input for company name. Please enter a valid name.', 'danger')
 
-def update_paybill(system_settings, new_paybill):
+
+def get_mail_settings():
+    return MailSettings.query.first()
+
+def update_or_create_mail_settings(mail_settings, form_data):
     try:
-        if system_settings:
-            if new_paybill is None:
-                if system_settings.paybill is not None:
-                    system_settings.paybill = None
-                    db.session.commit()
-                    flash('Service fee removed successfully!', 'success')
-            else:
-                new_paybill = int(new_paybill)
-                if system_settings.paybill is not None:
-                    system_settings.paybill = new_paybill
-                    flash(f'Service fee updated to {new_paybill} successfully!', 'success')
-                else:
-                    system_settings.paybill = new_paybill
-                    flash(f'Service fee added as {new_paybill} successfully!', 'success')
-                db.session.commit()
+        if mail_settings:
+            for field, value in form_data.items():
+                setattr(mail_settings, field, value)
+            db.session.commit()
+            flash('Mail settings updated successfully!', 'success')
         else:
-            if new_paybill is not None:
-                new_paybill = int(new_paybill)
-                new_settings = Settings(paybill=new_paybill)
-                db.session.add(new_settings)
-                db.session.commit()
-                flash(f'Service fee added as {new_paybill} successfully!', 'success')
-            else:
-                flash('Failed to add service fee. No system settings found.', 'danger')
+            new_mail_settings = MailSettings(**form_data)
+            db.session.add(new_mail_settings)
+            db.session.commit()
+            flash('Mail settings set successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Failed to update mail settings: {str(e)}', 'danger')
 
-    except ValueError:
-        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
 
-def update_account_number(system_settings, new_account_number):
+def get_social_accounts():
+    return SocialAccounts.query.first()
+
+def update_or_create_social_accounts(social_accounts, form_data):
     try:
-        if system_settings:
-            if new_account_number is None:
-                if system_settings.account_number is not None:
-                    system_settings.account_number = None
-                    db.session.commit()
-                    flash('Service fee removed successfully!', 'success')
-            else:
-                new_account_number = int(new_account_number)
-                if system_settings.account_number is not None:
-                    system_settings.account_number = new_account_number
-                    flash(f'Service fee updated to {new_account_number} successfully!', 'success')
-                else:
-                    system_settings.account_number = new_account_number
-                    flash(f'Service fee added as {new_account_number} successfully!', 'success')
-                db.session.commit()
+        if social_accounts:
+            for field, value in form_data.items():
+                setattr(social_accounts, field, value)
+            db.session.commit()
+            flash('Social accounts updated successfully!', 'success')
         else:
-            if new_account_number is not None:
-                new_account_number = int(new_account_number)
-                new_settings = Settings(account_number=new_account_number)
-                db.session.add(new_settings)
-                db.session.commit()
-                flash(f'Service fee added as {new_account_number} successfully!', 'success')
-            else:
-                flash('Failed to add service fee. No system settings found.', 'danger')
-
-    except ValueError:
-        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
-
-def update_contact_number(system_settings, new_contact_number):
-    try:
-        if system_settings:
-            if new_contact_number is None:
-                if system_settings.contact_number is not None:
-                    system_settings.contact_number = None
-                    db.session.commit()
-                    flash('Service fee removed successfully!', 'success')
-            else:
-                new_contact_number = int(new_contact_number)
-                if system_settings.contact_number is not None:
-                    system_settings.contact_number = new_contact_number
-                    flash(f'Service fee updated to {new_contact_number} successfully!', 'success')
-                else:
-                    system_settings.contact_number = new_contact_number
-                    flash(f'Service fee added as {new_contact_number} successfully!', 'success')
-                db.session.commit()
-        else:
-            if new_contact_number is not None:
-                new_contact_number = int(new_contact_number)
-                new_settings = Settings(contact_number=new_contact_number)
-                db.session.add(new_settings)
-                db.session.commit()
-                flash(f'Service fee added as {new_contact_number} successfully!', 'success')
-            else:
-                flash('Failed to add service fee. No system settings found.', 'danger')
-
-    except ValueError:
-        flash('Invalid input for service fee. Please enter a valid number.', 'danger')
+            new_social_accounts = SocialAccounts(**form_data)
+            db.session.add(new_social_accounts)
+            db.session.commit()
+            flash('Social accounts set successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Failed to update social accounts: {str(e)}', 'danger')
