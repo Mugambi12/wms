@@ -1,5 +1,3 @@
-# File: app/__init__.py
-
 # Import necessary modules
 import os
 from flask import Flask
@@ -9,7 +7,7 @@ from flask_login import LoginManager
 from flask_wtf.csrf import generate_csrf
 from flask_apscheduler import APScheduler
 from flask_mail import Mail
-from app.config import Config
+from app.config import Config  # Import the Config class from config.py
 from .utils import format_amount
 
 db = SQLAlchemy()

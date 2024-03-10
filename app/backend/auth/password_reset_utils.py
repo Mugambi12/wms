@@ -16,7 +16,15 @@ def generate_token(email):
         salt = current_app.config.get('SECURITY_PASSWORD_SALT', generate_random_string())
         return serializer.dumps(email, salt=salt)
 
-async def send_async_email(msg):
+#async def send_async_email(msg):
+#    try:
+#        mail.send(msg)
+#        return True
+#    except Exception as e:
+#        print(f"Failed to send email: {e}")
+#        return False
+
+def send_async_email(msg):
     try:
         mail.send(msg)
         return True
@@ -26,9 +34,25 @@ async def send_async_email(msg):
 
 def send_password_reset_email(email, token):
     reset_link = url_for('auth.reset_password', token=token, _external=True)
+
     sender_email = current_app.config['MAIL_USERNAME']
+
     msg = Message('Password Reset Request', recipients=[email], sender=sender_email)
-    msg.body = f'To reset your password, click on the following link: {reset_link}'
+
+    email_body = (
+        "Dear user,\n\n"
+        "We received a request to reset your password. If you didn't make this request, you can ignore this email.\n\n"
+        "To reset your password, please click on the following link:\n"
+        f"{reset_link}\n\n"
+        "If you're unable to click on the link, you can copy and paste it into your browser's address bar.\n\n"
+        "This link will expire after a certain period of time for security reasons.\n\n"
+        "If you have any questions or need further assistance, please don't hesitate to contact us.\n\n"
+        "Best regards,\n"
+        "Your Application Team"
+    )
+
+    msg.body = email_body
+
     return send_async_email(msg)
 
 def _reset_password_request(form):
