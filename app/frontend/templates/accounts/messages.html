@@ -24,7 +24,7 @@
       <ul class="list-group border-0 chat-sidebar-content">
         <!-- Broadcast Message -->
         <li
-          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == 'Broadcast Message' %}bg-primary bg-opacity-10{% endif %}"
+          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_id == 'Broadcast Message' %}bg-primary bg-opacity-10{% endif %}"
         >
           <a
             href="{{ url_for('accounts.messages.messages', user_id=0) }}"
@@ -44,7 +44,7 @@
 
         <!-- Chat Self -->
         <li
-          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == current_user.first_name %}bg-primary bg-opacity-10{% endif %}"
+          class="list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_id == current_user.first_name %}bg-primary bg-opacity-10{% endif %}"
         >
           <a
             href="{{ url_for('accounts.messages.messages', user_id=current_user.id) }}"
@@ -69,7 +69,7 @@
         {% set sorted_users = all_users | sort(attribute='id') %} {% for user in
         sorted_users %} {% if user.id != current_user.id %}
         <li
-          class="mobile list-group-item border-0 rounded p-2 mb-1 {% if chatting_user_first_name == user.first_name %}bg-primary bg-opacity-10{% endif %} d-flex align-items-center"
+          class="mobile list-group-item border-0 rounded p-2 mb-1 {% if user.id == chatting_user_id %}bg-primary bg-opacity-10{% endif %} d-flex align-items-center"
         >
           <a
             href="{{ url_for('accounts.messages.messages', user_id=user.id) }}"
@@ -121,10 +121,10 @@
         </p>
       </div>
 
-      {% set header_text %} {% if chatting_user_first_name %} {% if
-      chatting_user_first_name == current_user.first_name %} Chatting with
-      Yourself {% else %} Chatting with {{ chatting_user_first_name|title }} {%
-      endif %} {% else %} No Open Conversation {% endif %} {% endset %}
+      {% set header_text %} {% if chatting_user_id %} {% if chatting_user_id ==
+      current_user.first_name %} Chatting with Yourself {% else %} Chatting with
+      {{ chatting_user_id|title }} {% endif %} {% else %} No Open Conversation
+      {% endif %} {% endset %}
       <h5 class="fw-bold mb-2 ms-3 text-center">{{ header_text }}</h5>
 
       <!-- Chat Messages List -->

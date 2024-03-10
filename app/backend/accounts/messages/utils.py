@@ -46,6 +46,7 @@ def send_message(sender_id, receiver_id, content):
         return False
 
 
+
 def get_user_messages(user_id):
     """
     Retrieve messages exchanged between the current user and another user.
@@ -77,7 +78,7 @@ def get_user_messages(user_id):
         msg.is_read = True
     db.session.commit()
 
-    return messages, chatting_user.first_name
+    return messages, chatting_user.id
 
 
 

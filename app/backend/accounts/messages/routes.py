@@ -33,8 +33,7 @@ def messages():
             else:
                 flash('Failed to send message.', 'error')
 
-        # Redirect to the messages route after form submission
-        return redirect(url_for('accounts.messages.messages'))
+        return redirect(url_for('accounts.messages.messages', user_id=receiver_id))
 
     # Fetch all users and their unread message counts
     all_users = User.query.all() if current_user.is_admin else User.query.filter(User.is_admin).all()
@@ -42,14 +41,14 @@ def messages():
 
     selected_user_id = request.args.get('user_id')
     messages = []
-    chatting_user_first_name = None
+    chatting_user_id = None
     if selected_user_id == '0':
         # Retrieve broadcast messages
-        chatting_user_first_name = "Broadcast Message"
+        chatting_user_id = "Broadcast Message"
         messages = get_broadcast_messages()
     else:
         # Retrieve messages for a specific user
-        messages, chatting_user_first_name = get_user_messages(selected_user_id)
+        messages, chatting_user_id = get_user_messages(selected_user_id)
 
     all_messages = Message.query.all()
 
@@ -59,6 +58,6 @@ def messages():
                             all_users=all_users,
                             unread_sent_message_counts=unread_sent_message_counts,
                             hide_footer=True,
-                            chatting_user_first_name=chatting_user_first_name,
+                            chatting_user_id=chatting_user_id,
                             all_messages=all_messages,
                             get_sender_name=get_sender_name)
