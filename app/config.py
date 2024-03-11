@@ -4,8 +4,12 @@ from secrets import token_hex
 
 class Config:
     # Database settings
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///watermanagementsystem.db')
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://foo:foo123@localhost/watermanagement'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Database settings
+    #SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///watermanagementsystem.db')
+    #SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Session settings
     SESSION_COOKIE_SECURE = True
@@ -15,14 +19,12 @@ class Config:
     DEBUG = True
 
     # Server settings
-    PORT = 5000
+    PORT = 2023
     HOST = '0.0.0.0'
 
     # Mail settings
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
-    #MAIL_USERNAME = 'silasmungiria.sm@gmail.com'
-    #MAIL_PASSWORD = 'dcjr nask mhqs xoyj'
     MAIL_USERNAME = 'apogen.ss@gmail.com'
     MAIL_PASSWORD = 'zowv rzzn kzsb dtgs'
     #MAIL_PASSWORD = 'cldn ewhn hfse ccyu'

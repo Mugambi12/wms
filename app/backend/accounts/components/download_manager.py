@@ -129,11 +129,6 @@ def generate_users_pdf(people_list):
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>People List</title>
-        <!-- Bootstrap CSS -->
-        <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        />
     </head>
 
     <body class="container mt-5">
@@ -172,9 +167,6 @@ def generate_users_pdf(people_list):
             {% endfor %}
         </tbody>
         </table>
-
-        <!-- Bootstrap JS and Popper.js -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
     </html>
     """
@@ -314,11 +306,6 @@ def generate_meter_readings_pdf(readings_list):
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Meter Readings List</title>
-        <!-- Bootstrap CSS -->
-        <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        />
     </head>
 
     <body class="container mt-5">
@@ -362,9 +349,6 @@ def generate_meter_readings_pdf(readings_list):
             {% endfor %}
         </tbody>
         </table>
-
-        <!-- Bootstrap JS and Popper.js -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
     </html>
     """

@@ -17,7 +17,7 @@ def default_datetime():
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     mobile_number = db.Column(db.String(20), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     email = db.Column(db.String(120))
