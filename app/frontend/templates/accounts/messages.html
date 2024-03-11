@@ -59,7 +59,9 @@
               class="rounded-circle img-fluid profile-image me-3"
             />
             <div>
-              <h6 class="mb-0">@{{ current_user.first_name }}</h6>
+              <h6 class="mb-0">
+                @{{ current_user.first_name }}{{ current_user.last_name }}
+              </h6>
               <p class="mb-0 text-success fst-italic">Online</p>
             </div>
           </a>
@@ -122,11 +124,12 @@
       </div>
 
       {% set header_text %} {% if chatting_user_id %} {% if chatting_user_id ==
-      current_user.id %} Chatting with Yourself {% else %} Chatting with {% for
-      user in all_users %} {{ user.first_name|title if chatting_user_id ==
-      user.id }} {{ user.last_name|title if chatting_user_id == user.id }} {%
-      endfor %} {% endif %} {% else %} No Open Conversation {% endif %} {%
-      endset %}
+      current_user.id %} Chatting with Yourself {% else %} {% set
+      broadcast_message = chatting_user_id == '0' %} {% for user in all_users %}
+      {% if not broadcast_message and chatting_user_id == user.id %} Chatting
+      with {{ user.first_name|title }} {{ user.last_name|title }} {% endif %} {%
+      endfor %} {% if broadcast_message %} This is a broadcast message {% endif
+      %} {% endif %} {% else %} No Open Conversation {% endif %} {% endset %}
 
       <h5 class="fw-bold mb-2 ms-3 text-center">{{ header_text }}</h5>
 

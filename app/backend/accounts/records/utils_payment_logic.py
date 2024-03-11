@@ -4,7 +4,7 @@ from app import db
 from ...database.models import *
 from ..components.payment_processor import process_payments_with_context
 
-def make_payment_logic(meter_reading, payment_amount, payment_method, reference_number, status, user_id, invoice_id, invoice_amount, unique_user_id):
+def make_payment_logic(meter_reading, payment_amount, payment_method, reference_number, status, user_id, invoice_id, invoice_amount):
     try:
         # Check if the payment amount is greater than 0
         if payment_amount <= 0:
@@ -14,7 +14,6 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
         invoice_id = meter_reading.id
         customer_name = meter_reading.customer_name
         invoice_amount = meter_reading.total_amount
-        unique_user_id = meter_reading.unique_user_id
 
         # Create a new Payment object
         payment = Payment(
@@ -26,8 +25,7 @@ def make_payment_logic(meter_reading, payment_amount, payment_method, reference_
             user_id=user_id,
             invoice_id=invoice_id,
             invoice_amount=invoice_amount,
-            customer_name=customer_name,
-            unique_user_id=unique_user_id
+            customer_name=customer_name
         )
 
         # Save the payment to the database

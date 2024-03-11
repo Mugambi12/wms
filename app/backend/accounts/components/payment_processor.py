@@ -13,20 +13,20 @@ def process_payments():
     try:
         # Get total payment amount and total meter reading total price for each user
         payment_data = db.session.query(
-            Payment.unique_user_id,
+            Payment.user_id,
             func.sum(Payment.amount).label('total_payment_amount')
-        ).group_by(Payment.unique_user_id).all()
+        ).group_by(Payment.user_id).all()
 
         meter_reading_data = db.session.query(
-            MeterReading.unique_user_id,
+            MeterReading.user_id,
             func.sum(MeterReading.total_amount).label('total_meter_reading_total_amount')
-        ).group_by(MeterReading.unique_user_id).all()
+        ).group_by(MeterReading.user_id).all()
 
         # Bulk fetch users to update their balances
-        user_ids = set([payment.unique_user_id for payment in payment_data])
-        user_ids.update([meter_reading.unique_user_id for meter_reading in meter_reading_data])
-        users = User.query.filter(User.unique_user_id.in_(user_ids)).all()
-        user_mapping = {user.unique_user_id: user for user in users}
+        user_ids = set([payment.user_id for payment in payment_data])
+        user_ids.update([meter_reading.user_id for meter_reading in meter_reading_data])
+        users = User.query.filter(User.id.in_(user_ids)).all()
+        user_mapping = {user.id: user for user in users}
 
         # Update user balances
         update_user_balances(payment_data, meter_reading_data, user_mapping)
@@ -41,7 +41,6 @@ def process_payments():
         print(f"An error occurred while processing payments: {e}")
         db.session.rollback()
 
-
 def update_user_balances(payment_data, meter_reading_data, user_mapping):
     # Create a dictionary to group users by house section and house number
     grouped_users = defaultdict(list)
@@ -55,8 +54,8 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
 
         # Calculate total payment amount and total meter reading total price for the group
         for user in users_group:
-            payment = next((payment for payment in payment_data if payment.unique_user_id == user.unique_user_id), None)
-            meter_reading = next((reading for reading in meter_reading_data if reading.unique_user_id == user.unique_user_id), None)
+            payment = next((payment for payment in payment_data if payment.user_id == user.id), None)
+            meter_reading = next((reading for reading in meter_reading_data if reading.user_id == user.id), None)
             if payment:
                 total_payment_amount += payment.total_payment_amount or 0
             if meter_reading:
@@ -70,25 +69,24 @@ def update_user_balances(payment_data, meter_reading_data, user_mapping):
             user.balance = balance_difference
 
             # If the user is not in the user_mapping, add it to the session
-            if user.unique_user_id not in user_mapping:
+            if user.id not in user_mapping:
                 db.session.add(user)
-
 
 def update_meter_payment_statuses(meter_reading_data, payment_data):
     # Iterate over each meter reading data
     for meter_reading in meter_reading_data:
         # Extract the unique user ID and total meter reading total price
-        user_id = meter_reading.unique_user_id
+        user_id = meter_reading.user_id
         total_meter_reading_total_amount = meter_reading.total_meter_reading_total_amount or 0
 
         # Fetch all payments made by the user
-        all_payments_by_a_user = [payment for payment in payment_data if payment.unique_user_id == user_id]
+        all_payments_by_a_user = [payment for payment in payment_data if payment.user_id == user_id]
 
         # Calculate the total payments made by the user
         total_payments_so_far = sum(payment.total_payment_amount for payment in all_payments_by_a_user)
 
         # Fetch meter readings for the user and order them by ID
-        meter_readings = MeterReading.query.filter_by(unique_user_id=user_id).order_by(MeterReading.id).all()
+        meter_readings = MeterReading.query.filter_by(user_id=user_id).order_by(MeterReading.id).all()
 
         # Initialize a variable to track the total price of meter readings
         total_amount_so_far = 0

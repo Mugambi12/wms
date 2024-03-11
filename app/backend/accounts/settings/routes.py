@@ -87,8 +87,13 @@ def add_section():
     add_section_form = AddHouseSectionForm()
     if add_section_form.validate_on_submit():
         house_section = add_section_form.house_sections.data.strip()
-        service_settings = get_section_settings()
-        return add_house_section(service_settings, house_section)
+        section_settings = get_section_settings()
+
+        if section_settings:
+            return add_house_section(section_settings, house_section)
+        else:
+            flash('No section settings found. Please set up prices section above first.', 'danger')
+            return redirect(url_for('accounts.settings.settings'))
 
     flash('Failed to add house section. Please check your input.', 'danger')
     return redirect(url_for('accounts.settings.settings'))

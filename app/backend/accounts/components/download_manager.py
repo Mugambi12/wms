@@ -150,8 +150,8 @@ def generate_users_pdf(people_list):
         <tbody>
             {% for person in people_list %}
             <tr>
-                <th scope="row">{{ person.id }}</th>
-                <td>{{ person.unique_user_id }}</td>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ person.id }}</td>
                 <td class="text-start">
                   {{ person.first_name.title() ~ " " ~ person.last_name.title() }}
                 </td>

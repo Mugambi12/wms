@@ -27,7 +27,6 @@ class User(db.Model, UserMixin):
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
     balance = db.Column(db.Float, default=0)
-    unique_user_id = db.Column(db.String(6), unique=True, nullable=True)
 
     # New fields for tracking last login and logout
     last_login = db.Column(db.DateTime)
@@ -36,13 +35,6 @@ class User(db.Model, UserMixin):
     # Establishing a one-to-many relationship with meter readings and payments
     meter_readings = db.relationship('MeterReading', backref='user', lazy=True)
     payments = db.relationship('Payment', backref='user', lazy=True)
-
-    def generate_unique_user_id(self):
-        while True:
-            address = str(uuid.uuid4().int)[:6]
-            existing_user = User.query.filter_by(unique_user_id=address).first()
-            if not existing_user:
-                return address
 
     def __init__(self, mobile_number, password, first_name=None, last_name=None,
                  email=None, house_section=None, house_number=None, profile_image=None):
@@ -96,7 +88,6 @@ class MeterReading(db.Model):
     sub_total_amount = db.Column(db.Float)
     total_amount = db.Column(db.Float)
     payment_status = db.Column(db.Boolean, default=False)
-    unique_user_id = db.Column(db.String(6))
 
     # Specify foreign keys explicitly
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -104,7 +95,7 @@ class MeterReading(db.Model):
     # Establishing a one-to-many relationship with payments
     payments = db.relationship('Payment', backref='meter_reading', lazy=True)
 
-    def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_amount, total_amount, unique_user_id=None):
+    def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_amount, total_amount):
         self.house_section = house_section
         self.house_number = house_number
         self.reading_value = reading_value
@@ -115,7 +106,6 @@ class MeterReading(db.Model):
         self.service_fee = service_fee
         self.sub_total_amount = sub_total_amount
         self.total_amount = total_amount
-        self.unique_user_id = unique_user_id
 
 
 # Define Payment model
@@ -128,13 +118,12 @@ class Payment(db.Model):
     payment_method = db.Column(db.String(50), nullable=False)
     reference_number = db.Column(db.String(50))
     status = db.Column(db.Boolean, default=False)
-    unique_user_id = db.Column(db.String(6))
 
     # Specify foreign keys explicitly
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     invoice_id = db.Column(db.Integer, db.ForeignKey('meter_reading.id'), nullable=True)
 
-    def __init__(self, customer_name, amount, timestamp, payment_method, user_id, reference_number=None, status=False, invoice_id=None, invoice_amount=None, unique_user_id=None):
+    def __init__(self, customer_name, amount, timestamp, payment_method, user_id, reference_number=None, status=False, invoice_id=None, invoice_amount=None):
         self.invoice_amount = invoice_amount
         self.customer_name = customer_name
         self.amount = amount
@@ -144,7 +133,6 @@ class Payment(db.Model):
         self.status = status
         self.user_id = user_id
         self.invoice_id = invoice_id
-        self.unique_user_id = unique_user_id
 
 
 # Define Expense model

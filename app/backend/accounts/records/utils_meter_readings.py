@@ -45,7 +45,6 @@ def handle_add_meter_reading(form, current_user):
 
         # Prepare data for the new meter reading
         customer = f"{user.first_name} {user.last_name}" if user else None
-        unique_user_id = user.unique_user_id
 
         new_meter_reading = MeterReading(
             reading_value=reading_value,
@@ -57,8 +56,7 @@ def handle_add_meter_reading(form, current_user):
             unit_price=unit_price,
             service_fee=service_fee,
             sub_total_amount=sub_total_amount,
-            total_amount=total_amount,
-            unique_user_id=unique_user_id
+            total_amount=total_amount
         )
 
         # Save the new meter reading

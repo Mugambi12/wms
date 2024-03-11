@@ -23,8 +23,7 @@ def fetch_billing_data(current_user):
             MeterReading.unit_price,
             MeterReading.sub_total_amount,
             MeterReading.service_fee,
-            MeterReading.total_amount,
-            MeterReading.unique_user_id
+            MeterReading.total_amount
         )
         .join(User)
         .order_by(MeterReading.id.desc())
@@ -56,8 +55,7 @@ def fetch_payment_data(current_user):
                 Payment.timestamp,
                 Payment.payment_method,
                 Payment.reference_number,
-                Payment.status,
-                Payment.unique_user_id
+                Payment.status
             )
             .join(User)  # Join Payment table with User table
             .order_by(Payment.timestamp.desc())  # Order by payment date in descending order
@@ -123,8 +121,7 @@ def fetch_invoice_data(current_user, invoice_id):
                 'sub_total_amount': invoice.sub_total_amount,
                 'total_amount': invoice.total_amount,
                 'payment_status': invoice.payment_status,
-                'vat': '0',
-                'unique_user_id': invoice.unique_user_id
+                'vat': '0'
             }
             return invoice_data
         else:
