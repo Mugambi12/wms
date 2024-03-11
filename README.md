@@ -40,3 +40,5 @@ The Water Management System is built using the following technologies:
 ### Installation
 
 1. Clone the repository:
+
+2. cd into repo:
