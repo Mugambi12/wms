@@ -1,0 +1,270 @@
+{% if not hide_navbar %}
+
+<!-- Navbar -->
+<head>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/components/navbar.css') }}"
+  />
+</head>
+
+<header
+  id="navbar"
+  class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-info{% endif %}"
+>
+  <div class="container-fluid">
+    <!-- Toggle Button -->
+    {% if current_user.is_authenticated %}
+    <span>
+      <button class="toggle-btn-mobile" type="button">
+        <ion-icon name="apps-outline" class="text-dark"></ion-icon>
+      </button>
+    </span>
+    {% endif %}
+
+    <!-- Brand -->
+    <a
+      class="navbar-brand nav-link ms-3 {% if current_user.is_authenticated %}gradient-text{% else %}text-dark{% endif %}"
+      href="{% if current_user.is_authenticated %}{{ url_for('accounts.dashboard.dashboard') }}{% else %}#{% endif %}"
+    >
+      {{ company_name.title() }}
+    </a>
+
+    <!-- Navbar Toggler -->
+    <button
+      class="navbar-toggler text-light"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarToggler"
+      aria-controls="navbarToggler"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <div class="d-flex flex-row align-items-end">
+        {% if current_user.is_authenticated %}
+        <!-- Authenticated User Navbar Links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!-- Messages -->
+          <li class="nav-item">
+            <a
+              class="nav-link text-dark position-relative"
+              href="{{ url_for('accounts.messages.messages') }}"
+            >
+              <ion-icon name="mail-unread-outline"></ion-icon>
+              {% if unread_message_counts[current_user.id] > 0 %}
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              >
+                {{ unread_message_counts[current_user.id] or 0 }}
+                <span class="visually-hidden">unread messages</span>
+              </span>
+              {% endif %}
+            </a>
+          </li>
+
+          <!-- Notifications -->
+          <li class="nav-item dropdown">
+            <button
+              class="nav-link text-dark position-relative"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <ion-icon name="notifications-outline" class="me-1"></ion-icon>
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              >
+                99+ <span class="visually-hidden">unread messages</span>
+              </span>
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-end border-0 shadow mt-2"
+              aria-labelledby="notificationsDropdown"
+            >
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Notification 1</a
+                >
+              </li>
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Notification 2</a
+                >
+              </li>
+              <li class="dropdown-item small">
+                <a href="#" class="text-decoration-none text-dark"
+                  >Notification 3</a
+                >
+              </li>
+            </ul>
+          </li>
+
+          <!-- User Name, Greetings -->
+          <li class="nav-item">
+            <a class="nav-link text-dark">
+              Hello
+              <span class="text-info fw-bold"
+                >{{ current_user.first_name.title() }}</span
+              >
+            </a>
+          </li>
+
+          <!-- User Balance -->
+          <li class="nav-item">
+            <a class="nav-link text-dark">
+              Balance
+              <span
+                class="fw-bold {% if current_user.balance > 0 %}text-success{% elif current_user.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
+              >
+                KES {{ current_user.balance | format_amount }}
+              </span>
+            </a>
+          </li>
+
+          <!-- Account -->
+          <li class="nav-item">
+            <a class="nav-link text-dark position-relative">
+              <span
+                class="badge ms-2 {% if current_user.is_admin %}bg-danger{% else %}bg-info{% endif %}"
+              >
+                {% if current_user.is_admin %}Admin{% else %}Standard{% endif %}
+              </span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- User Image Dropdown -->
+        <div class="dropdown">
+          <button
+            type="button"
+            class="btn navbar-brand rounded-circle border-0"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {% if current_user.profile_image is not none %}
+            <img
+              src="{{ current_user.profile_image }}"
+              alt="{{ current_user.first_name.title() }}'s Profile Image"
+              class="rounded-circle img-fluid profile-image"
+              style="width: 40px; height: 40px; object-fit: cover"
+            />
+            {% else %}
+            <img
+              src="{{ url_for('static', filename='images/user.png') }}"
+              alt="logo image"
+              height="40px"
+              width="40px"
+            />
+            {% endif %}
+          </button>
+          <ul
+            class="dropdown-menu dropdown-menu-end border-0 shadow bg-light"
+            aria-labelledby="dropdownMenuButton"
+          >
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.people.edit_user', user_id=current_user.id) }}"
+              >
+                <ion-icon
+                  name="person-outline"
+                  class="text-primary me-2"
+                ></ion-icon>
+                Profile
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.records.meter_readings') }}"
+              >
+                <ion-icon
+                  name="speedometer-outline"
+                  class="text-info me-2"
+                ></ion-icon>
+                Meter Readings
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.records.billing') }}"
+              >
+                <ion-icon
+                  name="receipt-outline"
+                  class="text-secondary me-2"
+                ></ion-icon>
+                Billing Info
+              </a>
+            </li>
+            {% if current_user.is_admin %}
+            <li>
+              <a
+                class="dropdown-item"
+                href="{{ url_for('accounts.website.website') }}"
+              >
+                <ion-icon
+                  name="globe-outline"
+                  class="text-dark me-2"
+                ></ion-icon>
+                General Website
+              </a>
+            </li>
+            {% endif %}
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a
+                class="dropdown-item"
+                onclick="localStorage.clear();"
+                href="{{ url_for('auth.logout') }}"
+              >
+                <ion-icon
+                  name="log-out-outline"
+                  class="text-danger me-2"
+                ></ion-icon>
+                Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+        {% else %}
+        <!-- Guest Navbar Links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#HOME">Home</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#about">About Us</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#services">Services</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#testimonials">Testimonials</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#news">News</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link text-primary border rounded px-3 border-primary"
+              href="{{ url_for('auth.login') }}"
+              >Login</a
+            >
+          </li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+
+{% endif %}

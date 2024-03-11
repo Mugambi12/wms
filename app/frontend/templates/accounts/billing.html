@@ -1,0 +1,282 @@
+{% extends "base.html" %} {% block content %}
+<!-- #MAIN BODY SECTION -->
+<section class="container-fluid">
+  <!-- Page Title Details -->
+  <div class="text-center">
+    <h2 class="fw-bold text-success mt-3 mb-2">Invoice Control</h2>
+    <p class="text-muted fst-italic">
+      Simplify invoicing procedures and track payments effortlessly.
+    </p>
+  </div>
+
+  <!-- Download Buttons -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="float-end mb-2 ms-3">
+        <!-- Download CSV -->
+        <form
+          action="{{ url_for('accounts.records.download_meter_readings_route') }}"
+          method="get"
+          class="d-inline"
+        >
+          <button
+            type="submit"
+            class="btn btn-sm me-2 btn-primary"
+            name="format"
+            value="csv"
+          >
+            <ion-icon name="download-outline"></ion-icon> CSV
+          </button>
+        </form>
+
+        <!-- Download Excel -->
+        <form
+          action="{{ url_for('accounts.records.download_meter_readings_route') }}"
+          method="get"
+          class="d-inline"
+        >
+          <button
+            type="submit"
+            class="btn btn-sm me-2 btn-success"
+            name="format"
+            value="excel"
+          >
+            <ion-icon name="download-outline"></ion-icon> Excel
+          </button>
+        </form>
+
+        <!-- Download PDF -->
+        <form
+          action="{{ url_for('accounts.records.download_meter_readings_route') }}"
+          method="get"
+          class="d-inline"
+        >
+          <button
+            type="submit"
+            class="btn btn-sm me-2 btn-danger"
+            name="format"
+            value="pdf"
+          >
+            <ion-icon name="download-outline"></ion-icon> PDF
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delinquent Invoices Table -->
+  <div class="col-md-12">
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body">
+        <h5 class="card-title border-bottom rounded mb-4 px-3">
+          Delinquent Invoices
+        </h5>
+        <div class="table-responsive">
+          <table
+            class="table table-borderless text-center data-table"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Section</th>
+                <th scope="col">House#</th>
+                <th scope="col">Prev. Read.</th>
+                <th scope="col">Curr. Read.</th>
+                <th scope="col">Usage</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col">Service</th>
+                <th scope="col">Total</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in billing_data | sort(attribute='id', reverse=true)
+              %} {% if not entry.payment_status %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td class="text-start">{{ entry.customer_name.title() }}</td>
+                <td>{{ entry.house_section.title() }}</td>
+                <td>{{ entry.house_number }}</td>
+                <td>
+                  {{ entry.prev_reading | format_amount if entry.prev_reading is
+                  not none else "None" }}
+                </td>
+                <td>{{ entry.curr_reading | format_amount }}</td>
+                <td>{{ entry.consumed | format_amount }}</td>
+                <td>{{ entry.unit_price | format_amount }}</td>
+                <td>{{ entry.sub_total_amount | format_amount }}</td>
+                <td>{{ entry.service_fee | format_amount }}</td>
+                <td>{{ entry.total_amount | format_amount }}</td>
+                <td
+                  class="fst-italic {% if entry.payment_status %}text-success{% else %}text-secondary{% endif %}"
+                >
+                  {{ "Settled" if entry.payment_status else "Pending" }}
+                </td>
+                <!-- Action Buttons -->
+                <td>
+                  <!-- Invoicing Button -->
+                  <a
+                    class="me-2"
+                    href="{{ url_for('accounts.records.invoice', invoice_id=entry.id) }}"
+                  >
+                    <ion-icon
+                      name="print-outline"
+                      class="text-primary"
+                    ></ion-icon>
+                  </a>
+
+                  {% if current_user.is_admin %}
+                  <!-- Make Payment Button -->
+                  <a
+                    data-bs-toggle="modal"
+                    data-bs-target="#paymentModal{{ entry.id }}"
+                  >
+                    <ion-icon
+                      name="cash-outline"
+                      class="text-success"
+                    ></ion-icon>
+                  </a>
+                  {% endif %}
+                </td>
+
+                {% if current_user.is_admin %}
+                <!-- Payment Modal -->
+                <div
+                  class="modal fade"
+                  id="paymentModal{{ entry.id }}"
+                  tabindex="-1"
+                  aria-labelledby="paymentModalLabel{{ entry.id }}"
+                  aria-hidden="true"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                >
+                  <div
+                    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+                  >
+                    <div class="modal-content">
+                      <!-- Payment Form -->
+                      <form
+                        method="post"
+                        action="{{ url_for('accounts.records.make_payment', payment_id=entry.id) }}"
+                        class="row justify-content-center mt-3"
+                        id="paymentForm{{ entry.id }}"
+                      >
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                          <h5
+                            class="modal-title text-primary fw-bold"
+                            id="paymentModalLabel{{ entry.id }}"
+                          >
+                            Make Payment
+                          </h5>
+                          <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                          ></button>
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                          <!-- CSRF Token -->
+                          <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                          />
+                          <!-- Payment Details -->
+                          <div class="row">
+                            <div class="col-md-6 mt-3">
+                              <p>
+                                <strong>Invoice Number:</strong> {{ entry.id }}
+                              </p>
+                              <p>
+                                <strong>Customer Name:</strong> {{
+                                entry.customer_name.title() }}
+                              </p>
+                              <p>
+                                <strong>House Section:</strong> {{
+                                entry.house_section.title() }}
+                              </p>
+                              <p>
+                                <strong>House Number:</strong> {{
+                                entry.house_number }}
+                              </p>
+                              <p>
+                                <strong>Amount:</strong> KES {{
+                                entry.total_amount | format_amount }}
+                              </p>
+                              <p>
+                                <strong>Consumed Units:</strong> {{
+                                entry.consumed }}
+                              </p>
+                            </div>
+
+                            <div class="col-md-6">
+                              <div class="mb-3">
+                                {{
+                                payment_form.payment_amount.label(class="form-label")
+                                }} {{
+                                payment_form.payment_amount(class="form-control
+                                form-control-sm", id="payment_amount",
+                                placeholder="Enter amount", required="required")
+                                }}
+                              </div>
+                              <div class="mb-3">
+                                {{
+                                payment_form.payment_method.label(class="form-label")
+                                }} {{
+                                payment_form.payment_method(class="form-control
+                                form-control-sm", id="payment_method",
+                                required="required") }}
+                              </div>
+                              <div class="mb-3">
+                                {{
+                                payment_form.reference_number.label(class="form-label")
+                                }} {{
+                                payment_form.reference_number(class="form-control
+                                form-control-sm", id="reference_number",
+                                placeholder="Enter reference number") }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer justify-content-between">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-secondary rounded-pill"
+                            data-bs-dismiss="modal"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            class="btn btn-sm btn-primary rounded-pill"
+                            form="paymentForm{{ entry.id }}"
+                          >
+                            Confirm Payment
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+              </tr>
+              {% endif %} {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

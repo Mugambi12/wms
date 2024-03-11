@@ -1,0 +1,420 @@
+<!-- app/templates/accounts/meter_readings.html -->
+{% extends 'base.html' %} {% block content %}
+
+<section class="container-fluid">
+  <!-- Button trigger add reading modal -->
+  <ul class="nav nav-pills justify-content-end border-0">
+    <li type="button" class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="modal"
+        data-bs-target="#addMeterReadingModal"
+        >Add New Reading</a
+      >
+    </li>
+  </ul>
+
+  <!-- Add Reading Modal -->
+  <div
+    class="modal fade"
+    id="addMeterReadingModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="addMeterReadingModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addMeterReadingModalLabel">
+            Add Meter Reading
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-danger"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <!-- Add Meter Reading Form -->
+        <form
+          method="post"
+          action="{{ url_for('accounts.records.meter_readings') }}"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="modal-body">
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <!-- Form Type -->
+            <input type="hidden" name="form_type" value="add" />
+
+            <div class="row mb-3">
+              <!-- House Section -->
+              <div class="mb-2">
+                {{ form.house_section.label(class="form-label") }}
+                <div class="input-group">
+                  {% if current_user.is_admin %}
+                  <label
+                    class="input-group-text input-group-text-sm"
+                    for="house_section"
+                    >Options</label
+                  >
+                  <select
+                    class="form-control form-control-sm"
+                    name="house_section"
+                    id="house_section"
+                    required
+                  >
+                    <option value="" selected disabled>
+                      Select House Section
+                    </option>
+                    {% for section in house_sections %}
+                    <option value="{{ section[0] }}">{{ section[0] }}</option>
+                    {% endfor %}
+                  </select>
+                  {% else %}
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="house_section"
+                    name="house_section"
+                    value="{{ current_user.house_section }}"
+                    readonly
+                  />
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- House Number -->
+              <div class="mb-2">
+                {{ form.house_number.label(class="form-label") }} {% if
+                current_user.is_admin %} {{
+                form.house_number(class="form-control form-control-sm",
+                id="house_number", placeholder="Enter House Number",
+                required="required") }} {% else %}
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="house_number"
+                  name="house_number"
+                  value="{{ current_user.house_number }}"
+                  readonly
+                />
+                {% endif %}
+              </div>
+
+              <!-- Reading Value -->
+              <div class="mb-2">
+                {{ form.reading_value.label(class="form-label") }} {{
+                form.reading_value(class="form-control form-control-sm",
+                required="required", placeholder="Enter Reading Value") }}
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer justify-content-between">
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary rounded-pill"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <!-- Submit Button -->
+            <button
+              name="add"
+              type="submit"
+              class="btn btn-sm btn-primary rounded-pill"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Title Details -->
+  <div class="text-center">
+    <h2 class="fw-bold text-success mb-2">Smart Water Monitoring</h2>
+    <p class="text-muted fst-italic">
+      Empowering Conservation Through Intelligent Tracking.
+    </p>
+  </div>
+
+  <!-- Improved Meter Readings Table -->
+  <div class="col-md-12">
+    <div class="card border-0 shadow-sm mt-3 mb-3">
+      <div class="card-body">
+        <h5 class="card-title border-bottom rounded mb-4 px-3">
+          Meter Readings
+        </h5>
+        <div class="table-responsive">
+          <table
+            class="table table-borderless text-center data-table"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Section</th>
+                <th scope="col">House#</th>
+                <th scope="col">Reading</th>
+                <th scope="col">Usage</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+                {% if current_user.is_admin %}
+                <th scope="col">Action</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for reading in meter_readings | reverse %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td class="text-start">{{ reading.customer_name.title() }}</td>
+                <td>{{ reading.timestamp.strftime('%d %b %Y') }}</td>
+                <td>
+                  {{ reading.timestamp.strftime('%H:%M:%S') if reading.timestamp
+                  else '' }}
+                </td>
+                <td>{{ reading.house_section.title() }}</td>
+                <td>{{ reading.house_number }}</td>
+                <td>{{ reading.reading_value | format_amount }}</td>
+                <td>{{ reading.consumed | format_amount }}</td>
+                <td>{{ reading.total_amount | format_amount }}</td>
+                <td
+                  class="fst-italic {% if reading.payment_status %}text-success{% else %}text-secondary{% endif %}"
+                >
+                  {{ 'Settled' if reading.payment_status else 'Pending' }}
+                </td>
+                <td>
+                  {% if current_user.is_admin %}
+                  <!-- Edit Meter Reading Button -->
+                  <a
+                    action="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
+                    class="me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editConfirmationModal{{ reading.id }}"
+                  >
+                    <ion-icon
+                      name="create-outline"
+                      class="text-primary"
+                    ></ion-icon>
+                  </a>
+
+                  <!-- Delete Meter Reading Button -->
+                  <a
+                    action="#deleteConfirmationModal_{{ reading.id }}"
+                    class=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteConfirmationModal_{{ reading.id }}"
+                  >
+                    <ion-icon
+                      name="trash-outline"
+                      class="text-danger"
+                    ></ion-icon>
+                  </a>
+                  {% endif %}
+                </td>
+              </tr>
+
+              <!-- Edit Meter Reading Modal -->
+              <div
+                class="modal fade"
+                id="editConfirmationModal{{ reading.id }}"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="editConfirmationModalLabel{{ reading.id }}"
+                aria-hidden="true"
+              >
+                <div
+                  class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+                >
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editConfirmationModalLabel">
+                        Edit Meter Reading
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <!-- Edit Meter Reading Form -->
+                    <form
+                      method="post"
+                      action="{{ url_for('accounts.records.edit_meter_reading', meter_reading_id=reading.id) }}"
+                      class="row justify-content-center mt-4"
+                    >
+                      <div class="modal-body">
+                        <!-- CSRF Token -->
+                        <input
+                          type="hidden"
+                          name="csrf_token"
+                          value="{{ csrf_token() }}"
+                        />
+                        <!-- Form Type -->
+                        <input type="hidden" name="form_type" value="edit" />
+
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.house_section.label(class="form-label")
+                            }} {{ edit_form.house_section(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.house_section, disabled="disabled") }}
+                          </div>
+
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.house_number.label(class="form-label")
+                            }} {{ edit_form.house_number(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.house_number, disabled="disabled") }}
+                          </div>
+
+                          {% if current_user.is_admin %}
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.customer_name.label(class="form-label")
+                            }} {{ edit_form.customer_name(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.customer_name, disabled=not
+                            current_user.is_admin) }}
+                          </div>
+                          {% endif %}
+
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.reading_value.label(class="form-label")
+                            }} {{ edit_form.reading_value(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.reading_value) }}
+                          </div>
+
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.consumed.label(class="form-label") }}
+                            {{ edit_form.consumed(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.consumed) }}
+                          </div>
+
+                          {% if current_user.is_admin %}
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.unit_price.label(class="form-label") }}
+                            {{ edit_form.unit_price(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.unit_price, disabled=not
+                            current_user.is_admin) }}
+                          </div>
+                          {% endif %}
+
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.total_amount.label(class="form-label")
+                            }} {{ edit_form.total_amount(class="form-control
+                            form-control-sm", required="required",
+                            value=reading.total_amount) }}
+                          </div>
+
+                          <div class="col-md-6 mb-2">
+                            {{ edit_form.timestamp.label(class="form-label") }}
+                            {{ edit_form.timestamp(class="form-control
+                            form-control-sm",
+                            value=reading.timestamp.strftime('%Y-%m-%d')) }}
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Submit Button -->
+                      <div class="modal-footer">
+                        <button
+                          name=""
+                          type="submit"
+                          class="btn btn-sm btn-primary btn-block rounded-pill"
+                        >
+                          Save Changes
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Delete Meter Reading Confirmation Modal -->
+              <div
+                class="modal fade"
+                id="deleteConfirmationModal_{{ reading.id }}"
+                tabindex="-1"
+                aria-labelledby="deleteConfirmationModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteConfirmationModalLabel">
+                        Confirm Deletion
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <!-- Delete Meter Reading Form -->
+                    <form
+                      method="post"
+                      action="{{ url_for('accounts.records.delete_meter_reading', meter_reading_id=reading.id) }}"
+                    >
+                      <div class="modal-body">
+                        <!-- CSRF Token -->
+                        <input
+                          type="hidden"
+                          name="csrf_token"
+                          value="{{ csrf_token() }}"
+                        />
+                        <!-- Form Type -->
+                        <input type="hidden" name="form_type" value="delete" />
+
+                        <p>
+                          Delete meter reading for
+                          <b>House {{ reading.house_number }}</b> in
+                          <b>{{ reading.house_section.title() }}</b>? 🚨
+                        </p>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-secondary rounded-pill"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          name=""
+                          type="submit"
+                          class="btn btn-sm btn-danger rounded-pill"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

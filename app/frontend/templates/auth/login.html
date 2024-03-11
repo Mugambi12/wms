@@ -1,0 +1,74 @@
+<!-- app/templates/auth/login.html -->
+
+{% extends 'base.html' %} {% block content %}
+
+<div
+  class="container d-flex justify-content-center align-items-center"
+  style="height: 100vh"
+>
+  <div class="card col-md-5 p-5 bg-light shadow-sm rounded border-0">
+    <h2 class="card-title text-center mb-3">Login</h2>
+    <a class="text-center" href="{{ url_for('landing.landing') }}">Home</a>
+    <form method="POST" action="{{ url_for('auth.login') }}">
+      <!-- CSRF Token -->
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+      <!-- Mobile Number -->
+      <div class="mb-3">
+        {{ form.mobile_number.label(class="form-label") }} {{
+        form.mobile_number(placeholder="Enter your mobile number",
+        class="form-control") }}
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        {{ form.password.label(class="form-label") }}
+        <div class="input-group border rounded-3">
+          {{ form.password(class="form-control border-0", id="current_password",
+          placeholder="Enter your password") }}
+          <button
+            class="btn btn-light"
+            type="button"
+            onclick="togglePassword('current_password', 'current_password_icon')"
+            title="Toggle Password Visibility"
+          >
+            <ion-icon
+              id="current_password_icon"
+              name="eye"
+              class="text-primary"
+            ></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Login Button -->
+      <div class="text-center mt-4">
+        <button class="btn btn-primary rounded-pill" type="submit">
+          Login
+        </button>
+      </div>
+    </form>
+
+    <hr class="my-4" />
+
+    <!-- Additional Links -->
+    <div class="text-center">
+      <span class="mb-2"
+        >Don't have an account?
+        <a href="{{ url_for('auth.register') }}" class="btn btn-link"
+          >Register</a
+        ></span
+      >
+      <span class="mb-2"
+        >Forgot Password?
+        <a
+          href="{{ url_for('auth.reset_password_request') }}"
+          class="btn btn-link"
+          >Reset Password</a
+        ></span
+      >
+    </div>
+  </div>
+</div>
+
+{% endblock %}

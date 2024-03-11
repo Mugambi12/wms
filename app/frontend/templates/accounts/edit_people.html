@@ -1,0 +1,391 @@
+<!-- app/templates/accounts/edit_people.html -->
+{% extends "base.html" %} {% block content %}
+
+<div class="container-fluid">
+  <div class="text-center mt-3">
+    <h3 class="mb-2 fw-bold text-primary">
+      {% if current_user.is_admin %} Edit User Information {% else %} My Profile
+      Information {% endif %}
+    </h3>
+    <p class="mb-4 text-muted fst-italic">
+      Enhance your profile and connect with our vibrant community.
+    </p>
+  </div>
+
+  <div class="row">
+    <!-- Profile Picture -->
+    <div class="col-md-3 mt-5 px-3">
+      <div class="text-center mt-5 position-relative">
+        <h4 class="mb-4">Profile Picture</h4>
+
+        <!-- Display User Profile Image -->
+        <div class="mb-4">
+          <img
+            src="{{ user.profile_image or url_for('static', filename='images/user.png') }}"
+            alt="{{ user.first_name.title() }}'s Profile Image"
+            class="rounded-circle img-fluid profile-image"
+            style="width: 100px; height: 100px; object-fit: cover"
+          />
+        </div>
+
+        <!-- Profile Picture Form -->
+        <form
+          class="mb-5"
+          method="POST"
+          action="{{ url_for('accounts.people.edit_profile_picture_route') }}"
+          enctype="multipart/form-data"
+        >
+          <!-- CSRF Token -->
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+          <!-- Profile Image Upload Input -->
+          <div class="mb-3">
+            <label for="profileImage" class="form-label"
+              >Choose a new profile image</label
+            >
+            <input
+              type="file"
+              class="form-control form-control-sm"
+              id="profileImage"
+              name="profile_image"
+              accept=".jpg, .jpeg, .png"
+              required
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="btn btn-sm btn-secondary btn-block rounded-pill"
+          >
+            Upload Picture
+          </button>
+        </form>
+
+        <!-- Delete User Button -->
+        {% if current_user.is_admin %}
+        <ul class="nav nav-pills justify-content-center border-0">
+          <li class="nav-item">
+            <button
+              class="nav-link rounded-pill text-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteUserModal"
+            >
+              <ion-icon name="trash-outline"></ion-icon>
+              Delete User
+            </button>
+          </li>
+        </ul>
+
+        <!-- Delete User Modal -->
+        <div
+          class="modal fade"
+          id="deleteUserModal"
+          tabindex="-1"
+          aria-labelledby="deleteUserModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">
+                  Confirm Deletion
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                Delete the account for
+                <strong
+                  >{{ user.first_name.title() }} {{ user.last_name.title()
+                  }}</strong
+                >? This can't be undone.
+              </div>
+
+              <div class="modal-footer justify-content-between">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-secondary rounded-pill"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <form
+                  method="post"
+                  action="{{ url_for('accounts.people.delete_user_route', user_id=user.id) }}"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-danger rounded-pill"
+                  >
+                    Confirm Deletion
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Edit User Information -->
+    <div class="col-md-9 mt-3">
+      <form
+        method="POST"
+        action="{{ url_for('accounts.people.edit_user', user_id=user.id) }}"
+      >
+        <!-- CSRF Token -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <!-- Bootstrap Tabs -->
+        <ul
+          class="nav nav-pills justify-content-around border-0 bg-light rounded-pill mb-5"
+          id="editUserTabs"
+          role="tablist"
+        >
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link rounded-pill active"
+              id="basicInfo-tab"
+              data-bs-toggle="tab"
+              href="#basicInfo"
+              role="tab"
+              aria-controls="basicInfo"
+              aria-selected="true"
+            >
+              Basic Info
+            </a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link rounded-pill"
+              id="password-tab"
+              data-bs-toggle="tab"
+              href="#password"
+              role="tab"
+              aria-controls="password"
+              aria-selected="false"
+            >
+              Password
+            </a>
+          </li>
+          {% if current_user.is_admin %}
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link rounded-pill"
+              id="status-tab"
+              data-bs-toggle="tab"
+              href="#status"
+              role="tab"
+              aria-controls="status"
+              aria-selected="false"
+            >
+              Status
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="editUserTabsContent">
+          <!-- Basic Info Section -->
+          <div
+            class="px-3 tab-pane fade show active"
+            id="basicInfo"
+            role="tabpanel"
+            aria-labelledby="basicInfo-tab"
+          >
+            <h3>Basic Info Section</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <!-- Mobile Number -->
+                <div class="mb-2">
+                  {{ form.mobile_number.label(class="form-label") }} {{
+                  form.mobile_number(class="form-control form-control-sm",
+                  required=true) }}
+                </div>
+
+                <!-- First Name -->
+                <div class="mb-2">
+                  {{ form.first_name.label(class="form-label") }} {{
+                  form.first_name(class="form-control form-control-sm") }}
+                </div>
+
+                <!-- Last Name -->
+                <div class="mb-2">
+                  {{ form.last_name.label(class="form-label") }} {{
+                  form.last_name(class="form-control form-control-sm") }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <!-- Email -->
+                <div class="mb-2">
+                  {{ form.email.label(class="form-label") }} {{
+                  form.email(class="form-control form-control-sm") }}
+                </div>
+
+                <!-- House Section -->
+                <div class="mb-2">
+                  {{ form.house_section.label(class="form-label") }} {{
+                  form.house_section(class="form-control form-control-sm",
+                  disabled=not current_user.is_admin) }}
+                </div>
+
+                <!-- House Number -->
+                <div class="mb-2">
+                  {{ form.house_number.label(class="form-label") }} {{
+                  form.house_number(class="form-control form-control-sm",
+                  disabled=not current_user.is_admin) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Password Section -->
+          <div
+            class="tab-pane fade"
+            id="password"
+            role="tabpanel"
+            aria-labelledby="password-tab"
+          >
+            <div class="col-md-9 mx-auto">
+              <h3>Password Section</h3>
+
+              <!-- Current Password -->
+              <div class="mb-3">
+                {{ form.current_password.label(class="form-label
+                visually-hidden") }}
+                <div class="input-group rounded-3">
+                  {{ form.current_password(class="form-control form-control-sm",
+                  id="currentPassword", placeholder="Current Password") }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('currentPassword', 'currentPasswordIcon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="currentPasswordIcon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
+              </div>
+
+              <!-- New Password -->
+              <div class="mb-3">
+                {{ form.new_password.label(class="form-label visually-hidden")
+                }}
+                <div class="input-group rounded-3">
+                  {{ form.new_password(class="form-control form-control-sm",
+                  id="newPassword", placeholder="New Password") }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('newPassword', 'newPasswordIcon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="newPasswordIcon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Confirm New Password -->
+              <div class="mb-3">
+                {{ form.confirm_new_password.label(class="form-label
+                visually-hidden") }}
+                <div class="input-group rounded-3">
+                  {{ form.confirm_new_password(class="form-control
+                  form-control-sm", id="confirmNewPassword",
+                  placeholder="Confirm New Password") }}
+                  <button
+                    class="btn btn-light"
+                    type="button"
+                    onclick="togglePassword('confirmNewPassword', 'confirmNewPasswordIcon')"
+                    title="Toggle Password Visibility"
+                  >
+                    <ion-icon
+                      id="confirmNewPasswordIcon"
+                      name="eye"
+                      class="text-primary"
+                    ></ion-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Section -->
+          <div
+            class="tab-pane fade"
+            id="status"
+            role="tabpanel"
+            aria-labelledby="status-tab"
+          >
+            <h3>Status Section</h3>
+            <!-- Active Status -->
+            <div class="form-check mb-3">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="isActive"
+                name="is_active"
+                {%
+                if
+                user.is_active
+                %}checked{%
+                endif
+                %}
+              />
+              <label class="form-check-label font-weight-bold" for="isActive"
+                >Active</label
+              >
+            </div>
+
+            <!-- Admin Status -->
+            <div class="form-check mb-3">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="isAdmin"
+                name="is_admin"
+                {%
+                if
+                user.is_admin
+                %}checked{%
+                endif
+                %}
+              />
+              <label class="form-check-label font-weight-bold" for="isAdmin"
+                >Admin</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-3">
+          <button
+            type="submit"
+            class="btn btn-sm btn-success btn-block rounded-pill"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% endblock %}
+</div>

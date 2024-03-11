@@ -1,0 +1,209 @@
+{% if not hide_sidebar %}
+
+<!-- Sidebar -->
+<head>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/components/sidebar.css') }}"
+  />
+</head>
+
+<aside id="sidebar">
+  <!-- Sidebar Content -->
+  <div class="sidebar-content">
+    <!-- Sidebar Header -->
+    <div class="d-flex mt-2">
+      <!-- Toggle Button -->
+      <button class="toggle-btn-desktop" type="button">
+        <ion-icon name="apps-outline" class="text-dark"></ion-icon>
+      </button>
+
+      <!-- Sidebar Logo -->
+      <div class="row">
+        <div class="sidebar-logo">
+          <a href="#" class="text-info"
+            >Apo<span class="text-danger">Gen</span></a
+          >
+        </div>
+        <p class="logo-tagline blockquote-footer" style="font-size: 10px">
+          Software Solutions
+        </p>
+      </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <ul class="sidebar-nav">
+      <!-- Dashboard -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.dashboard.dashboard') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="bar-chart" class="text-primary me-2"></ion-icon>
+          <span>Dashboard</span>
+        </a>
+      </li>
+
+      <!-- People Dropdown -->
+      <li class="sidebar-item">
+        <a
+          href="{% if current_user.is_admin %} {{ url_for('accounts.people.people_list') }} {% else %} {{ url_for('accounts.people.edit_user', user_id=current_user.id) }} {% endif %}"
+          class="sidebar-link"
+        >
+          <ion-icon
+            name="{% if current_user.is_admin %}people{% else %}person{% endif %}-outline"
+            class="text-success"
+          ></ion-icon>
+          <span
+            >{{ 'People List' if current_user.is_admin else 'Profile' }}</span
+          >
+        </a>
+      </li>
+
+      <!-- Meter Readings -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.records.meter_readings') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="speedometer-outline" class="text-info"></ion-icon>
+          <span>Meter Readings</span>
+        </a>
+      </li>
+
+      <!-- Invoices -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.records.billing') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="receipt-outline" class="text-secondary"></ion-icon>
+          <span>Invoices & Payment</span>
+        </a>
+      </li>
+
+      <!-- Payment -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.records.payments') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="wallet-outline" class="text-primary"></ion-icon>
+          <span>Payment History</span>
+        </a>
+      </li>
+
+      <!-- Expenses Options -->
+      {% if current_user.is_admin %}
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.expenses.expenses') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="card-outline" class="text-danger"></ion-icon>
+          <span>Expenses</span>
+        </a>
+      </li>
+      {% endif %}
+
+      <!-- Messages -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.messages.messages') }}"
+          class="sidebar-link"
+        >
+          <ion-icon
+            name="chatbubble-ellipses-outline"
+            class="text-success"
+          ></ion-icon>
+          <span>Messages</span>
+        </a>
+      </li>
+
+      <!-- Settings -->
+      {% if current_user.is_admin %}
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.settings.settings') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="settings-outline" class="text-info"></ion-icon>
+          <span>Settings</span>
+        </a>
+      </li>
+
+      <!-- General Website -->
+      <li class="sidebar-item">
+        <a
+          href="{{ url_for('accounts.website.website') }}"
+          class="sidebar-link"
+        >
+          <ion-icon name="globe-outline" class="text-warning"></ion-icon>
+          <span>General Website</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <!-- Logout Button -->
+      <a
+        class="sidebar-link"
+        href="{{ url_for('auth.logout') }}"
+        onclick="localStorage.clear();"
+      >
+        <ion-icon name="log-out-outline" class="text-danger"></ion-icon>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- Records and Water Supply Dropdown -->
+<!--
+    <li class="sidebar-item">
+      <a
+        href="#records_water_supply"
+        class="sidebar-link collapsed has-dropdown"
+        data-bs-toggle="collapse"
+        data-bs-target="#records_water"
+        aria-expanded="false"
+        aria-controls="records_water"
+      >
+        <ion-icon name="water-outline" class="text-primary"></ion-icon>
+        <span>Hydro Services</span>
+      </a>
+      <ul
+        id="records_water"
+        class="sidebar-dropdown list-unstyled collapse"
+        data-bs-parent="#sidebar"
+      >
+        <li class="sidebar-item">
+          <a
+            href="{{ url_for('accounts.records.meter_readings') }}"
+            class="sidebar-link"
+            >Meter Readings</a
+          >
+        </li>
+        <li class="sidebar-item">
+          <a
+            href="{{ url_for('accounts.records.billing') }}"
+            class="sidebar-link"
+          >
+            Invoice Manager
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a
+            href="{{ url_for('accounts.records.payments') }}"
+            class="sidebar-link"
+          >
+            Payment History
+          </a>
+        </li>
+      </ul>
+    </li>
+    -->
+
+{% endif %}

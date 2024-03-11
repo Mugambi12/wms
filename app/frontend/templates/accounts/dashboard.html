@@ -1,0 +1,745 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- #MAIN BODY SECTION -->
+<div class="container-fluid">
+  <div
+    class="d-flex justify-content-between align-items-center border-bottom p-2 mb-2"
+  >
+    <div class="d-flex align-items-center">
+      <ion-icon name="bar-chart" class="me-3 fs-4"></ion-icon>
+      <h1 class="fw-bold mb-0">Dashboard</h1>
+    </div>
+    <p class="fs-6 mb-0">Welcome to your dashboard.</p>
+  </div>
+
+  <!-- Four Bootstrap Cards -->
+  <div class="row text-dark">
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm bg-primary h-100 bg-opacity-25">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="text-center me-3">
+              <ion-icon
+                name="people-outline"
+                style="font-size: 2rem"
+                aria-label="People Icon"
+              ></ion-icon>
+            </div>
+            <div>
+              <div class="card-text fs-6">
+                {{ cards_data.total_houses | format_amount }} {% if
+                current_user.is_admin %}Houses{% else %}Account{% endif %}
+              </div>
+              <div class="card-title fw-bold fs-5">
+                {% if current_user.is_admin %}Connections{% else %}Household{%
+                endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="{% if current_user.is_admin %} col-md-2 {% else %} col-md-3 {% endif %} mb-3"
+    >
+      <div class="card border-0 shadow-sm bg-warning h-100 bg-opacity-25">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="text-center me-3">
+              <ion-icon
+                name="{% if current_user.is_admin %}cash-outline{% else %}wallet-outline{% endif %}"
+                style="font-size: 2rem"
+                aria-label="{% if current_user.is_admin %}Cash{% else %}Wallet{% endif %} Icon"
+              ></ion-icon>
+            </div>
+            <div>
+              <div class="card-text fs-6">
+                KES {{ cards_data.total_revenue | format_amount }}
+              </div>
+              <div class="card-title fw-bold fs-5">
+                {% if current_user.is_admin %}Revenue{% else %}Expenditure{%
+                endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="{% if current_user.is_admin %} col-md-3 {% else %} col-md-3 {% endif %} mb-3"
+    >
+      <div class="card border-0 shadow-sm bg-info h-100 bg-opacity-25">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="text-center me-3">
+              <ion-icon
+                name="water-outline"
+                style="font-size: 2rem"
+                aria-label="Water Icon"
+              ></ion-icon>
+            </div>
+            <div>
+              <div class="card-text fs-6">
+                {{ cards_data.total_consumption | format_amount }} Units
+              </div>
+              <div class="card-title fw-bold fs-5">Consumption</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="{% if current_user.is_admin %} col-md-2 {% else %} col-md-3 {% endif %} mb-3"
+    >
+      <div class="card border-0 shadow-sm bg-danger h-100 bg-opacity-25">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="text-center me-3">
+              <ion-icon
+                name="{% if current_user.is_admin %}wallet-outline{% else %}cash-outline{% endif %}"
+                style="font-size: 2rem"
+                aria-label="{% if current_user.is_admin %}Wallet{% else %}Cash{% endif %} Icon"
+              ></ion-icon>
+            </div>
+            <div>
+              <div class="card-text fs-6">
+                KES {% if current_user.is_admin %} {{ cards_data.total_expenses
+                | format_amount }} {% else %} {{ (current_user.balance) |
+                format_amount }} {% endif %}
+              </div>
+              <div class="card-title fw-bold fs-5">
+                {% if current_user.is_admin %}Expenses{% else %} {% if
+                current_user.balance > 0 %}Balance{% else %}Arrears{% endif %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="{% if current_user.is_admin %} col-md-2 {% else %} d-none {% endif %} mb-3"
+    >
+      <div class="card border-0 shadow-sm bg-success h-100 bg-opacity-25">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="text-center me-3">
+              <ion-icon
+                name="wallet-outline"
+                style="font-size: 2rem"
+                aria-label="Wallet Icon"
+              ></ion-icon>
+            </div>
+            <div>
+              <div class="card-text fs-6">
+                KES {{ (cards_data.total_revenue - cards_data.total_expenses) |
+                format_amount }}
+              </div>
+              <div class="card-title fw-bold fs-5">Profit</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Data -->
+  <div class="row">
+    <!-- Bar Chart -->
+    <div class="col-md-9 mb-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            {% if current_user.is_admin %} Company Performance Overview {% else
+            %} Personal Usage Overview {% endif %}
+          </h5>
+          <div class="row">
+            <!-- Performance Overview -->
+            <div class="col-md-4 text-center p-3">
+              <p class="text-muted mb-2" id="overviewMonth">
+                Overview Of {{ current_month }}/{{ current_year }}
+              </p>
+              <h5 class="fw-bold mb-3" id="currentMonthEarnings">
+                KES {{ current_monthly_performance[0] | format_amount }}
+              </h5>
+              <p class="text-muted mb-2">
+                {% if current_user.is_admin %} Revenue Generated {% else %} My
+                Expenditure {% endif %}
+              </p>
+              <h5 class="fw-bold mb-4" id="currentMonthWater">
+                {{ current_monthly_performance[1] | format_amount }} Units
+              </h5>
+              <p class="text-muted mb-2">
+                {% if current_user.is_admin %} Water Consumed {% else %} My
+                Water Usage {% endif %}
+              </p>
+
+              <div
+                class="input-group input-group-sm mt-3 justify-content-between"
+              >
+                <form
+                  action="{{ url_for('accounts.dashboard.dashboard') }}"
+                  method="POST"
+                >
+                  <input
+                    type="hidden"
+                    name="current_month"
+                    value="{{ previous_month }}"
+                  />
+                  <input
+                    type="hidden"
+                    name="current_year"
+                    value="{{ previous_year }}"
+                  />
+                  <button class="btn btn-outline-info me-1" type="submit">
+                    Previous
+                  </button>
+                </form>
+
+                <form
+                  action="{{ url_for('accounts.dashboard.dashboard') }}"
+                  method="POST"
+                >
+                  <input
+                    type="hidden"
+                    name="current_month"
+                    value="{{ next_month }}"
+                  />
+                  <input
+                    type="hidden"
+                    name="current_year"
+                    value="{{ next_year }}"
+                  />
+                  <button class="btn btn-outline-success" type="submit">
+                    Next Month
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="col-md-8">
+              <canvas id="barChart" width="500" height="200"></canvas>
+            </div>
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                const ctx = document.getElementById("barChart").getContext("2d");
+
+                function extractData(data, key) {
+                  return Object.values(data).map(month => month[key]);
+                }
+
+                const revenueExpenseData = {{ bar_chart_data | tojson }};
+                const usageData = extractData(revenueExpenseData, 'usage');
+                const revenueData = extractData(revenueExpenseData, 'revenue');
+                const isAdmin = {{ current_user.is_admin | tojson }};
+
+                let datasets = [
+                  {
+                    label: isAdmin ? "Water Usage (KES)" : "My Usage (KES)",
+                    data: usageData,
+                    backgroundColor: "rgba(54, 162, 235, 0.6)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 0,
+                    barThickness: 8,
+                    borderRadius: 15,
+                  },
+                  {
+                    label: isAdmin ? "Revenue (KES)" : "My Expenditure (KES)",
+                    data: revenueData,
+                    backgroundColor: "rgba(255, 159, 64, 0.6)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 0,
+                    barThickness: 8,
+                    borderRadius: 15,
+                  },
+                ];
+
+                // Add expenses dataset only for admin users
+                if (isAdmin) {
+                  const expensesData = extractData(revenueExpenseData, 'expenses');
+                  datasets.push({
+                    label: "Expenses (KES)",
+                    data: expensesData,
+                    backgroundColor: "rgba(255, 99, 132, 0.6)",
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 0,
+                    barThickness: 8,
+                    borderRadius: 15,
+                  });
+                }
+
+                const myBarChart = new Chart(ctx, {
+                  type: "bar",
+                  data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: datasets,
+                  },
+                  options: {
+                    scales: {
+                      y: {
+                        beginAtZero: false,
+                        ticks: {
+                          callback: function (value, index, values) {
+                            return value.toLocaleString();
+                          },
+                        },
+                        grid: {
+                          display: false,
+                        },
+                      },
+                      x: {
+                        grid: {
+                          display: false,
+                        },
+                      },
+                    },
+                    plugins: {
+                      legend: {
+                        display: true,
+                        position: "top",
+                      },
+                      tooltip: {
+                        mode: "nearest",
+                        intersect: false,
+                      },
+                    },
+                  },
+                });
+              });
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Doughnut Chart -->
+    <div class="col-md-3 mb-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <!-- Doughnut Chart -->
+        <div class="card-body">
+          <h5 class="card-title">Pending Activities</h5>
+          {% if doughnut_chart_data %}
+          <canvas class="doughnutChart" width="500" height="200"></canvas>
+        </div>
+        <script>
+          function extractData(data) {
+            return Object.values(data);
+          }
+
+          document.querySelectorAll(".doughnutChart").forEach(chart => {
+            const ctx = chart.getContext("2d");
+            const chartData = {{ doughnut_chart_data | tojson }};
+
+            const myDoughnutChart = new Chart(ctx, {
+              type: "doughnut",
+              data: {
+                labels: Object.keys(chartData),
+                datasets: [{
+                  label: "# of Votes",
+                  data: extractData(chartData),
+                  backgroundColor: [
+                    "rgba(255, 99, 132, 0.4)",
+                    "rgba(54, 162, 235, 0.4)"
+                  ],
+                  borderColor: [
+                    "rgba(255, 99, 132, 0.2)",
+                    "rgba(54, 162, 235, 0.2)"
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                layout: {
+                  padding: {
+                    top: 20
+                  }
+                },
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: "top",
+                    labels: {
+                      usePointStyle: true,
+                      pointStyle: "circle"
+                    }
+                  }
+                },
+                scales: {
+                  grid: {
+                    display: false
+                  }
+                }
+              }
+            });
+          });
+        </script>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar, Sticky Notes and List of Admins -->
+  <div class="row">
+    <!-- List of Admins -->
+    <div class="col-md-4 mb-3">
+      <div
+        class="card border-0 rounded shadow-sm h-100"
+        style="padding-bottom: 5px"
+      >
+        <h5 class="card-title px-3 mt-3">
+          {% if current_user.is_admin %}All Admins{% else %}My House{% endif %}
+        </h5>
+
+        <div class="card-body" style="max-height: 200px; overflow-y: auto">
+          {% for user in users_to_display %}
+          <div class="row align-items-center mb-3">
+            <div class="col-md-3 col-4">
+              {% set profile_image = user.profile_image if user.profile_image is
+              not none else url_for('static', filename='images/user.png') %}
+              <img
+                src="{{ profile_image }}"
+                alt="{{ user.first_name|title }}'s Profile Image"
+                class="rounded-circle img-fluid profile-image"
+                style="width: 40px; height: 40px; object-fit: cover"
+              />
+            </div>
+            <div class="col-md-7 col-6">
+              <div>
+                <h6 class="mb-0">
+                  {{ user.first_name|title }} {{ user.last_name|title }}
+                </h6>
+                {% if user.last_login is not none and user.last_logout is not
+                none %} {% if user.last_login > user.last_logout %}
+                <p class="text-success small mb-0 fst-italic">Active now</p>
+                {% elif user.last_logout > user.last_login %} {% set
+                time_difference = now - user.last_logout %} {% if
+                time_difference.days > 0 %} {% set time_unit = 'days' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.days }} {{ time_unit }} ago
+                </p>
+                {% elif time_difference.seconds // 3600 > 0 %} {% set time_unit
+                = 'hours' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.seconds // 3600 }} {{ time_unit }}
+                  ago
+                </p>
+                {% else %} {% set time_unit = 'minutes' %}
+                <p class="text-muted small mb-0 fst-italic">
+                  Active {{ time_difference.seconds // 60 }} {{ time_unit }} ago
+                </p>
+                {% endif %} {% endif %} {% endif %}
+              </div>
+            </div>
+            <div class="col-md-2 col-2 text-end">
+              <a
+                href="{{ url_for('accounts.people.edit_user', user_id=user.id) }}"
+                class="{% if user.last_login is not none and user.last_logout is not none %}{% if user.last_login > user.last_logout %}text-success{% elif user.last_logout > user.last_login %}text-secondary{% endif %}{% endif %}"
+              >
+                <ion-icon name="ellipse"></ion-icon>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="col-md-4 mb-3">
+      <div class="card border-0 rounded shadow-sm h-100">
+        <div class="card-body p-0">
+          <div class="bg-info text-white text-center py-3">
+            <span id="currentMonth" class="fw-bold fs-5"></span>
+          </div>
+          <div class="d-flex text-center bg-warning bg-opacity-50">
+            <div class="col">Sun</div>
+            <div class="col">Mon</div>
+            <div class="col">Tue</div>
+            <div class="col">Wed</div>
+            <div class="col">Thu</div>
+            <div class="col">Fri</div>
+            <div class="col">Sat</div>
+          </div>
+          <div id="calendarDays" class="p-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Notes -->
+    <div class="col-md-4 mb-3">
+      <div
+        class="card border-0 bg-warning bg-opacity-25 rounded shadow-sm h-100"
+      >
+        <div class="card-body">
+          <h5 class="card-title border-bottom border-dark rounded">
+            Sticky Note
+          </h5>
+          <form
+            method="post"
+            action="{{ url_for('accounts.dashboard.save_sticky_note') }}"
+            id="sticky-note-form"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <textarea
+              id="sticky-note-input"
+              name="content"
+              class="form-control border-0 text-start sticky-note"
+              style="resize: none; height: 200px; background-color: transparent"
+              placeholder="Type your notes here..."
+            >
+{% for note in sticky_note_content %}{% if note.user_id == current_user.id %}{{ note.content }}{% endif %}{% endfor %}</textarea
+            >
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delinquent Bills Table -->
+  {% if household_invoices %}
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-4">Delinquent Bills</h5>
+      <div class="table-responsive">
+        <table
+          class="table table-borderless table-hover text-center data-table"
+        >
+          <thead class="thead-light">
+            <tr>
+              <th class="fw-normal" scope="col">#</th>
+              <th class="fw-normal" scope="col">Name</th>
+              <th class="fw-normal" scope="col">Section</th>
+              <th class="fw-normal" scope="col">House#</th>
+              <th class="fw-normal" scope="col">Usage</th>
+              <th class="fw-normal" scope="col">Subtotal</th>
+              <th class="fw-normal" scope="col">Service</th>
+              <th class="fw-normal" scope="col">Total</th>
+              <th class="fw-normal" scope="col">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for household_invoice in household_invoices %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td class="text-start">
+                {% set names = household_invoice[0].split() %} {{ names[0]|title
+                }} {{ names[1]|title }}
+              </td>
+              <td>{{ household_invoice[1].title() }}</td>
+              <td>{{ household_invoice[2] }}</td>
+              <td>{{ household_invoice[3] | format_amount }}</td>
+              <td>KES {{ household_invoice[4] | format_amount }}</td>
+              <td>KES {{ household_invoice[5] | format_amount }}</td>
+              <td>KES {{ household_invoice[6] | format_amount }}</td>
+              <td class="text-danger">
+                KES {{ household_invoice[7] | format_amount }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Recent Transactions -->
+  {% if recent_transactions %}
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Recent Transactions</h5>
+
+      <div class="table-responsive">
+        <table class="table table-borderless table-hover data-table">
+          <thead>
+            <tr>
+              <th class="fw-normal" scope="col">#</th>
+              <th class="fw-normal" scope="col">ID</th>
+              <th class="fw-normal" scope="col">Type</th>
+              <th class="fw-normal" scope="col">Vendor / Customer</th>
+              <th class="fw-normal" scope="col">Amount</th>
+              <th class="fw-normal" scope="col">Time</th>
+              <th class="fw-normal" scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction, transaction_type in recent_transactions %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>#{{ transaction.id }}</td>
+              <td>
+                {% if transaction_type == 'MeterReading' %}
+                <span class="badge bg-info">Meter Reading</span>
+                {% elif transaction_type == 'Payment' %}
+                <span class="badge bg-primary">Payment</span>
+                {% elif transaction_type == 'Expense' %}
+                <span class="badge bg-danger">Expense</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if transaction_type == 'MeterReading' %} {{
+                transaction.customer_name }} {% elif transaction_type ==
+                'Payment' %} {{ transaction.customer_name }} {% elif
+                transaction_type == 'Expense' %} {{ transaction.vendor }} {%
+                endif %}
+              </td>
+              <td>
+                {% if transaction_type == 'MeterReading' %} KES {{
+                transaction.total_amount | format_amount }} {% elif
+                transaction_type == 'Payment' %} KES {{ transaction.amount |
+                format_amount }} {% elif transaction_type == 'Expense' %} KES {{
+                transaction.amount | format_amount }} {% endif %}
+              </td>
+              <td>
+                {% set transaction_time_difference = now - transaction.timestamp
+                %} {% if transaction_time_difference.days > 0 %} {{
+                transaction_time_difference.days }} days ago {% elif
+                transaction_time_difference.seconds // 3600 > 0 %} {{
+                transaction_time_difference.seconds // 3600 }} hrs ago {% else
+                %} {{ transaction_time_difference.seconds // 60 }} min ago {%
+                endif %}
+              </td>
+              <td>
+                {% if transaction_type == 'Payment' %}
+                <span
+                  class="badge {% if transaction.status %}bg-success{% else %}bg-primary{% endif %}"
+                >
+                  {% if transaction.status %} Verified {% else %} Pending {%
+                  endif %}
+                </span>
+                {% elif transaction_type == 'MeterReading' %}
+                <span
+                  class="badge {% if transaction.payment_status %}bg-success{% else %}bg-info{% endif %}"
+                >
+                  {% if transaction.payment_status %} Paid {% else %} Invoiced
+                  {% endif %}
+                </span>
+                {% elif transaction_type == 'Expense' %}
+                <span class="badge bg-danger">
+                  {% if transaction.status %} {{ transaction.status }} {% else
+                  %} Pending {% endif %}
+                </span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- A Calendar -->
+<script>
+  // Function to generate and update the calendar
+  function generateCalendar() {
+    // Get current date
+    const currentDate = new Date();
+
+    // Get month and year
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    // Update month header
+    document.getElementById("currentMonth").textContent = `${getMonthName(
+      currentMonth
+    )} ${currentYear}`;
+
+    // Get the first day of the month
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+
+    // Get the day of the week for the first day of the month (0 = Sunday, 1 = Monday, ...)
+    const firstDayOfWeek = firstDayOfMonth.getDay();
+
+    // Clear the previous calendar days
+    const calendarDays = document.getElementById("calendarDays");
+    calendarDays.innerHTML = "";
+
+    // Get the number of days in the previous month
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+    // Create calendar days
+    let day = 1 - firstDayOfWeek; // Start from the first day of the week in the current month
+    for (let i = 0; i < 6; i++) {
+      // Create row
+      const row = document.createElement("div");
+      row.classList.add("row", "text-center");
+
+      // Create columns for each day of the week
+      for (let j = 0; j < 7; j++) {
+        const col = document.createElement("div");
+        col.classList.add("col");
+
+        // If the current day is in the previous month or the next month, display the corresponding day
+        if (day <= 0 || day > getDaysInMonth(currentMonth, currentYear)) {
+          col.textContent =
+            day <= 0
+              ? daysInPrevMonth + day
+              : day - getDaysInMonth(currentMonth, currentYear);
+          col.classList.add("text-muted");
+        } else {
+          col.textContent = day;
+          if (day === currentDate.getDate()) {
+            col.classList.add("bg-info", "rounded", "bg-opacity-50");
+          }
+        }
+
+        row.appendChild(col);
+        day++;
+      }
+
+      calendarDays.appendChild(row);
+    }
+  }
+
+  // Function to get the number of days in a month
+  function getDaysInMonth(month, year) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  // Function to get the name of the month
+  function getMonthName(month) {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return months[month];
+  }
+
+  // Call the generateCalendar function to initially generate the calendar
+  generateCalendar();
+</script>
+
+<!-- Sticky Notes -->
+<script>
+  let timeoutId;
+
+  document.querySelectorAll(".sticky-note").forEach((textarea) => {
+    textarea.addEventListener("input", function () {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        document.getElementById("sticky-note-form").submit();
+      }, 2500);
+    });
+  });
+</script>
+
+{% endblock %}

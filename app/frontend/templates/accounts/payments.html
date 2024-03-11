@@ -1,0 +1,323 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- #MAIN BODY SECTION -->
+<div class="container-fluid">
+  <!-- Page Title Details -->
+  <div class="text-center">
+    <h2 class="fw-bold text-success mt-3 mb-2">Transaction History</h2>
+    <p class="text-muted fst-italic">
+      A comprehensive record of all transactions.
+    </p>
+  </div>
+
+  <!-- Payment History Details Table -->
+  <div class="col-md-12">
+    <div class="card border-0 mb-3 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title border-bottom rounded mb-4 px-3">
+          Payment History
+        </h5>
+        <div class="table-responsive">
+          <!-- Payment Details Table -->
+          <table
+            class="table table-borderless text-center data-table"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">InvoiceID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Pay Date</th>
+                <th scope="col">Method</th>
+                <th scope="col">Reference ID</th>
+                <th scope="col">Inv. Amt.</th>
+                <th scope="col">Paid Amt.</th>
+                <th scope="col">Status</th>
+                {% if current_user.is_admin %}
+                <th scope="col">Action</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for payment in payment_data | sort(attribute='id',
+              reverse=true) %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ payment.invoice_id }}</td>
+                <td>{{ payment.customer_name | title }}</td>
+                <td>{{ payment.timestamp.strftime('%d %b %Y') }}</td>
+                <td>{{ payment.payment_method }}</td>
+                <td>{{ payment.reference_number }}</td>
+                <td>KES {{ payment.invoice_amount | format_amount }}</td>
+                <td>KES {{ payment.amount | format_amount }}</td>
+                <td
+                  class="fst-italic {% if payment.status %}text-success{% else %}text-secondary{% endif %}"
+                >
+                  {{ "Validated" if payment.status else "Pending" }}
+                </td>
+                {% if current_user.is_admin %}
+                <td>
+                  <!-- Confirm Payment Received Button -->
+                  <a
+                    action="#validatePaymentModal_{{ payment.id }}"
+                    class="me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#validatePaymentModal_{{ payment.id }}"
+                  >
+                    <ion-icon
+                      name="checkmark-done-outline"
+                      class="text-success"
+                    ></ion-icon>
+                  </a>
+
+                  <!-- Edit Payment Button -->
+                  <a
+                    action="editPaymentModal_{{ payment.id }}"
+                    class="me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editPaymentModal_{{ payment.id }}"
+                  >
+                    <ion-icon
+                      name="create-outline"
+                      class="text-primary"
+                    ></ion-icon>
+                  </a>
+
+                  <!-- Delete Payment Button -->
+                  <a
+                    action="#deleteConfirmationModal_{{ payment.id }}"
+                    class=""
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteConfirmationModal_{{ payment.id }}"
+                  >
+                    <ion-icon
+                      name="trash-outline"
+                      class="text-danger"
+                    ></ion-icon>
+                  </a>
+                </td>
+                {% endif %}
+              </tr>
+
+              {% if current_user.is_admin %}
+              <!-- Edit Payment Modal -->
+              <div
+                class="modal fade"
+                id="editPaymentModal_{{ payment.id }}"
+                tabindex="-1"
+                aria-labelledby="editPaymentModalLabel"
+                aria-hidden="true"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+              >
+                <div
+                  class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                >
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editPaymentModalLabel">
+                        Modal title
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+
+                    <form
+                      method="post"
+                      action="{{ url_for('accounts.records.edit_payment', payment_id=payment.id) }}"
+                    >
+                      <!-- CSRF Token -->
+                      <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                      />
+                      <div class="modal-body">
+                        <div class="form-group mb-2">
+                          <label for="payment_method">Payment Method:</label>
+                          <select id="payment_method" name="payment_method" class="form-select" required>
+                            {% for key, label in form.payment_method.choices %}
+                            <option value="{{ key }}" {% if key == payment.payment_method %} selected {% endif %}>{{ label }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                          {{ form.amount.label(class="form-label") }}
+                          {{ form.amount(class="form-control", required="required", value=payment.amount) }}
+                        </div>
+
+                        <div class="form-group mb-2">
+                          {{ form.reference_number.label(class="form-label") }}
+                          {{ form.reference_number(class="form-control", value=payment.reference_number) }}
+                        </div>
+
+                        <div class="form-group mb-2">
+                          {{ form.timestamp.label(class="form-label") }}
+                          {{ form.timestamp(class="form-control", value=payment.timestamp.strftime('%Y-%m-%d')) }}
+                        </div>
+                      </div>
+
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm rounded-pill btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-sm rounded-pill btn-primary"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Validate Payment Modal -->
+              <div
+                class="modal fade"
+                id="validatePaymentModal_{{ payment.id }}"
+                tabindex="-1"
+                aria-labelledby="validatePaymentModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1
+                        class="modal-title fs-5"
+                        id="validatePaymentModalLabel"
+                      >
+                        Confirm Payment Validation
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      {% if payment.status %}
+                      <p>This payment is currently marked as validated.</p>
+                      {% else %}
+                      <p>This payment is currently not validated.</p>
+                      {% endif %}
+                      <p class="ms-3"><b>Payment ID:</b> #{{ payment.id }}</p>
+                      <p class="ms-3">
+                        <b>Amount:</b> KES {{ payment.amount | format_amount }}
+                      </p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button
+                        type="button"
+                        class="btn btn-sm rounded-pill btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+                      <form
+                        action="{{ url_for('accounts.records.validate_payment', payment_id=payment.id) }}"
+                        method="post"
+                      >
+                        <input
+                          type="hidden"
+                          name="csrf_token"
+                          value="{{ csrf_token() }}"
+                        />
+                        <button
+                          type="submit"
+                          class="btn btn-sm rounded-pill btn-primary"
+                        >
+                          {% if payment.status %} Revoke Validation {% else %}
+                          Confirm Validation {% endif %}
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Delete Payment Modal -->
+              <div
+                class="modal fade"
+                id="deleteConfirmationModal_{{ payment.id }}"
+                tabindex="-1"
+                aria-labelledby="deleteConfirmationModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteConfirmationModalLabel">
+                        Confirm Deletion
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <!-- Delete Meter Reading Form -->
+                    <form
+                      method="post"
+                      action="{{ url_for('accounts.records.delete_payment', payment_id=payment.id) }}"
+                    >
+                      <div class="modal-body">
+                        <!-- CSRF Token -->
+                        <input
+                          type="hidden"
+                          name="csrf_token"
+                          value="{{ csrf_token() }}"
+                        />
+                        <!-- Form Type -->
+                        <input type="hidden" name="form_type" value="delete" />
+                        <p>
+                          Delete payment <b>ID {{ payment.id }}</b> of
+                          <b>KES {{ payment.amount | format_amount }}</b> for
+                          invoice <b>{{ payment.invoice_id }}</b> (KES {{
+                          payment.invoice_amount | format_amount }})?
+                        </p>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-secondary rounded-pill"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          name=""
+                          type="submit"
+                          class="btn btn-sm btn-danger rounded-pill"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

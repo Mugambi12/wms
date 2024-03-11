@@ -1,0 +1,508 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- Include Swiper CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+<style>
+  .swiper-container {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .swiper-slide img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+  }
+</style>
+
+<!-- #HOME SECTION -->
+<section
+  id="home"
+  class="container-fluid text-center py-5 bg-primary text-light"
+  style="
+    height: 95vh;
+    background-image: url('https://wallpaperbat.com/img/238587-bright-hd-desktop-wallpaper-top-free-bright-hd-desktop.jpg');
+    background-size: cover;
+    background-position: center;
+  "
+>
+  <div class="row align-items-center">
+    <div class="col-md-8 offset-md-2">
+      <div class="text-center">
+        <h1 class="display-3 mb-5 text-primary font-weight-bold">
+          Welcome to {{ company_name | title }} Water Services
+        </h1>
+        <p class="lead mb-4">
+          Dive into a world of clean, refreshing water solutions designed to
+          quench your thirst for sustainability.
+        </p>
+        <a
+          href="#services"
+          class="btn btn-lg btn-outline-info mt-5 animated bounceInDown slower delay-2s"
+        >
+          <span class="text-dark">Explore Our Services</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #ABOUT SECTION -->
+<section id="about" class="container-fluid py-5">
+  <div class="container text-center p-5">
+    <h2 class="display-4 mb-4 text-primary">
+      About {{ company_name | title }}
+    </h2>
+    <div class="row align-items-center">
+      <div class="col-lg-5 order-lg-2">
+        <img
+          src="{{ url_for('static', filename='images/about.jpg') }}"
+          alt="About section image"
+          class="img-fluid rounded shadow"
+          style="max-width: 100%; height: auto"
+        />
+      </div>
+
+      <div class="col-lg-7 order-lg-1">
+        <div class="text-center p-5">
+          <p class="lead">
+            {{ company_name | title }} is dedicated to delivering clean and
+            accessible water to every household. Learn more about our mission,
+            values, and commitment to sustainability.
+          </p>
+          <a href="#services" class="btn btn-outline-primary mt-3"
+            >Learn More</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #SERVICES SECTION -->
+<section id="services" class="container-fluid py-5 bg-success bg-opacity-10">
+  <div class="container p-5">
+    <h2 class="display-4 text-center mb-5 text-primary">Our Services</h2>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card border-0 shadow mb-4 bg-danger bg-opacity-75">
+          <div class="card-body text-center">
+            <h5 class="card-title">Water Supply</h5>
+            <p class="card-text">
+              Reliable and continuous water supply to meet your daily personal
+              and household needs.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card border-0 shadow mb-4 bg-warning bg-opacity-75">
+          <div class="card-body text-center">
+            <h5 class="card-title">Water Quality Testing</h5>
+            <p class="card-text">
+              Ensuring the purity and safety of the water we provide through
+              regular testing.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card border-0 shadow mb-4 bg-info bg-opacity-75">
+          <div class="card-body text-center">
+            <h5 class="card-title">Community Outreach</h5>
+            <p class="card-text">
+              Engaging with the community to promote water conservation and
+              education.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #CONTACT SECTION -->
+<section id="contact" class="container-fluid py-5 bg-light">
+  <div class="container p-5">
+    <h2 class="display-4 text-center text-primary mb-5">Get in Touch</h2>
+    <div class="row">
+      <div class="col-lg-5 mb-4 mb-lg-0">
+        <div class="contact-details p-4 p-lg-5 rounded">
+          <h2 class="mb-4">Contact Information</h2>
+          <div class="contact-info">
+            <p class="lead">Visit us at:</p>
+            <address class="fst-italics text-muted mb-4">
+              {{ company_name | title }}<br />
+              {{ company_address }}
+            </address>
+            <p class="mb-3 text-muted">Contact: +{{ contact_number }}</p>
+            <p class="mb-0 text-muted">Email: {{ company_email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="contact-form p-4 p-lg-5 rounded">
+          <form id="contactForm">
+            <div id="flashMessages"></div>
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="mb-3">
+              {{ form.name.label }} {{ form.name(class="form-control",
+              placeholder="Write your full name") }}
+            </div>
+            <div class="mb-3">
+              {{ form.email.label }} {{ form.email(class="form-control",
+              placeholder="Write your email address") }}
+            </div>
+            <div class="mb-3">
+              {{ form.message.label }} {{ form.message(class="form-control",
+              placeholder="Write your message here", rows=5) }}
+            </div>
+            <a
+              type="button"
+              id="sendMessageBtn"
+              class="btn btn-outline-primary"
+            >
+              Send Message
+            </a>
+          </form>
+
+          <script>
+            document
+              .getElementById("sendMessageBtn")
+              .addEventListener("click", function () {
+                var form = document.getElementById("contactForm");
+                var formData = new FormData(form);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{{ url_for('landing.submit_message') }}");
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}");
+                xhr.onreadystatechange = function () {
+                  if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                      var response = JSON.parse(xhr.responseText);
+                      var flashDiv = document.getElementById("flashMessages");
+
+                      // Remove existing messages
+                      while (flashDiv.firstChild) {
+                        flashDiv.removeChild(flashDiv.firstChild);
+                      }
+
+                      var messageDiv = document.createElement("div");
+                      messageDiv.className = "alert alert-success";
+                      messageDiv.textContent = response.message;
+                      flashDiv.appendChild(messageDiv);
+
+                      // Clear form fields
+                      form.reset();
+                    } else {
+                      var errorDiv = document.createElement("div");
+                      errorDiv.className = "alert alert-danger";
+                      errorDiv.textContent =
+                        "An error occurred. Please try again.";
+                      var flashDiv = document.getElementById("flashMessages");
+
+                      // Remove existing messages
+                      while (flashDiv.firstChild) {
+                        flashDiv.removeChild(flashDiv.firstChild);
+                      }
+
+                      flashDiv.appendChild(errorDiv);
+                    }
+                  }
+                };
+                xhr.send(formData);
+              });
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #TESTIMONIALS SECTION -->
+<section id="testimonials" class="container-fluid py-5 bg-info bg-opacity-25">
+  <div class="container p-5 text-dark">
+    <h2 class="display-4 text-center text-primary mb-5">Testimonials</h2>
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="testimonial text-center mb-4">
+              <blockquote class="blockquote">
+                <p class="mb-0">
+                  "{{ company_name | title }}'s water solutions have made a
+                  significant impact in our community. We now enjoy clean water
+                  every day!"
+                </p>
+                <footer class="blockquote-footer mt-4">John Doe</footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="testimonial text-center mb-4">
+              <blockquote class="blockquote">
+                <p class="mb-0">
+                  "Thanks to {{ company_name | title }}, we no longer worry
+                  about water scarcity. Their solutions have been a lifesaver
+                  for our community."
+                </p>
+                <footer class="blockquote-footer mt-4">Jane Smith</footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #NEWS SECTION -->
+<section id="news" class="container-fluid py-5 bg-light">
+  <div class="container-fluid p-5">
+    <h2 class="display-4 text-center mb-5 text-primary">Latest News</h2>
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <!-- Slide 1 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-1.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">New Water Treatment Plant</h5>
+              <p class="card-text mb-4">
+                Discover our new state-of-the-art water treatment plant,
+                ensuring cleaner water for our community.
+              </p>
+              <footer class="blockquote-footer">John Doe</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-2.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">Water Conservation Campaign</h5>
+              <p class="card-text mb-4">
+                Join us in our mission to conserve water and protect our
+                precious natural resources.
+              </p>
+              <footer class="blockquote-footer">Jane Smith</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-3.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">Community Outreach Program</h5>
+              <p class="card-text mb-4">
+                Explore our community engagement efforts aimed at raising
+                awareness about water-related issues.
+              </p>
+              <footer class="blockquote-footer">John Doe</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="swiper-slide">
+          <div class="card m-1 border-0 shadow h-100">
+            <img
+              src="{{ url_for('static', filename='images/news-4.jpg') }}"
+              class="card-img-top rounded-top"
+              alt="News Image"
+            />
+            <div class="card-body">
+              <h5 class="card-title mb-3">Water Conservation Initiatives</h5>
+              <p class="card-text mb-4">
+                Participate in our ongoing efforts to conserve water and
+                safeguard our environment.
+              </p>
+              <footer class="blockquote-footer">Jane Smith</footer>
+              <div class="text-end">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newsModal"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add more slides as needed -->
+      </div>
+
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Include Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+  var swiper = new Swiper(".swiper-container", {
+    slidesPerView: "auto",
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 2.3,
+      },
+    },
+  });
+</script>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="newsModal"
+  tabindex="-1"
+  aria-labelledby="newsModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-xxl-down"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="newsModalLabel">
+          A Day in the Life of a Water Conservationist
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="news-content">
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <img
+            src="https://via.placeholder.com/400x200"
+            alt="..."
+            class="img-fluid mb-3"
+          />
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <img
+            src="https://via.placeholder.com/300x150"
+            alt="News Image"
+            class="img-fluid rounded mb-3"
+          />
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <p id="newsContent" class="card-text mb-4">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
+            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
+            Voluptas mollitia fugiat consequatur.
+          </p>
+          <p class="text-muted">Published on February 26, 2024</p>
+          <p class="text-muted">Written by: John Doe</p>
+        </div>
+
+        <div class="container-fluid">
+          <div class="d-flex">
+            <div>
+              <button type="button" class="btn bg-light me-2">
+                <ion-icon name="heart-outline"></ion-icon> 27
+              </button>
+              <button type="button" class="btn bg-light me-2">
+                <ion-icon name="chatbubble-outline"></ion-icon> 8
+              </button>
+              <button type="button" class="btn bg-light me-2">
+                <ion-icon name="arrow-redo-outline"></ion-icon> 2
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ms-5 m-3">
+          <p class="small">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Perferendis distinctio facere vel! Sed eum reiciendis dolorum,
+            corrupti velit ipsum quaerat facilis obcaecati error similique fuga
+            quam minima necessitatibus veritatis modi.
+          </p>
+        </div>
+      </div>
+
+      <!---->
+    </div>
+  </div>
+</div>
+
+{% endblock %}
