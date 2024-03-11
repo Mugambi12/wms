@@ -28,7 +28,7 @@
             <div>
               <div class="card-text fs-6">
                 {{ cards_data.total_houses | format_amount }} {% if
-                current_user.is_admin %}Houses{% else %}People{% endif %}
+                current_user.is_admin %}Houses{% else %}Account{% endif %}
               </div>
               <div class="card-title fw-bold fs-5">
                 {% if current_user.is_admin %}Connections{% else %}Household{%
@@ -160,8 +160,6 @@
           <div class="row">
             <!-- Performance Overview -->
             <div class="col-md-4 text-center p-3">
-              {% if current_monthly_performance[0] or
-              current_monthly_performance[1] %}
               <p class="text-muted mb-2" id="overviewMonth">
                 Overview Of {{ current_month }}/{{ current_year }}
               </p>
@@ -179,7 +177,6 @@
                 {% if current_user.is_admin %} Water Consumed {% else %} My
                 Water Usage {% endif %}
               </p>
-              {% endif %}
 
               <div
                 class="input-group input-group-sm mt-3 justify-content-between"
