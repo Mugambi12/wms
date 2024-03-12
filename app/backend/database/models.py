@@ -50,30 +50,6 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
-# Define Password Reset Tokens model
-class PasswordResetToken(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), nullable=False)
-    token = db.Column(db.String(128), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=default_datetime)
-
-    def __init__(self, email, token):
-        self.email = email
-        self.token = token
-
-
-# Define Sticky Notes model
-class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-
-    def __init__(self, user_id, content):
-        self.user_id = user_id
-        self.content = content
-
-
 # Define MeterReading model
 class MeterReading(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -107,7 +83,6 @@ class MeterReading(db.Model):
         self.sub_total_amount = sub_total_amount
         self.total_amount = total_amount
 
-
 # Define Payment model
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -134,7 +109,6 @@ class Payment(db.Model):
         self.user_id = user_id
         self.invoice_id = invoice_id
 
-
 # Define Expense model
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -158,6 +132,26 @@ class Expense(db.Model):
     def __repr__(self):
         return f'<Expense {self.id}>'
 
+# Define Password Reset Tokens model
+class PasswordResetToken(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
+    token = db.Column(db.String(128), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=default_datetime)
+
+    def __init__(self, email, token):
+        self.email = email
+        self.token = token
+
+# Define Sticky Notes model
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def __init__(self, user_id, content):
+        self.user_id = user_id
+        self.content = content
 
 # Define Message model
 class Message(db.Model):
@@ -173,7 +167,6 @@ class Message(db.Model):
         self.receiver_id = receiver_id
         self.content = content
 
-
 # Define Contact model
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -186,7 +179,6 @@ class Contact(db.Model):
         self.name = name
         self.email = email
         self.message = message
-
 
 # Define CompanyInformation model
 class CompanyInformation(db.Model):
@@ -208,7 +200,6 @@ class CompanyInformation(db.Model):
         self.company_website_url = company_website_url
         self.company_description = company_description
 
-
 # Define ServicesSetting model
 class ServicesSetting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -220,7 +211,6 @@ class ServicesSetting(db.Model):
         self.unit_price = unit_price
         self.service_fee = service_fee
         self.house_sections = house_sections
-
 
 # Define PaymentMethods model
 class PaymentMethods(db.Model):
@@ -234,7 +224,6 @@ class PaymentMethods(db.Model):
         self.paybill = paybill
         self.account_number = account_number
 
-
 # Define MailSettings model
 class MailSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -246,7 +235,6 @@ class MailSettings(db.Model):
         self.company_email = company_email
         self.mail_server = mail_server
         self.password = password
-
 
 # Define SocialAccounts model
 class SocialAccounts(db.Model):
@@ -267,4 +255,3 @@ class SocialAccounts(db.Model):
         self.instagram = instagram
         self.linkedin = linkedin
         self.youtube = youtube
-# File: app/backend/database/models.py

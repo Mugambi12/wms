@@ -9,7 +9,6 @@ from .forms import StickyNoteForm
 from .utils import *
 
 
-
 dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 

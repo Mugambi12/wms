@@ -32,7 +32,6 @@ def dashboard_cards_data(current_user):
 
     return cards_data
 
-
 def fetch_monthly_performance_data(current_user, month, year):
     if current_user.is_admin:
         revenue_generated = db.session.query(func.sum(Payment.amount)) \
@@ -60,7 +59,6 @@ def fetch_monthly_performance_data(current_user, month, year):
                                     .scalar() or 0
 
     return revenue_generated, water_consumed
-
 
 def fetch_bar_chart_data(current_user):
     if current_user.is_admin:
@@ -108,7 +106,6 @@ def fetch_bar_chart_data(current_user):
 
     return combined_data
 
-
 def fetch_doughnut_chart_data(current_user):
     if current_user.is_admin:
         total_unpaid_invoices = sum(invoice.total_amount for invoice in MeterReading.query.filter_by(payment_status=False).all())
@@ -124,7 +121,6 @@ def fetch_doughnut_chart_data(current_user):
 
     return combined_data
 
-
 def get_user_list(current_user):
     now = datetime.utcnow() + timedelta(hours=3)
 
@@ -134,7 +130,6 @@ def get_user_list(current_user):
         users_to_display = User.query.filter_by(house_section=current_user.house_section, house_number=current_user.house_number).all()
 
     return now, users_to_display
-
 
 def delinquent_household_invoices(current_user):
     if current_user.is_admin:
@@ -148,7 +143,12 @@ def delinquent_household_invoices(current_user):
                                               User.balance) \
                                       .join(User) \
                                       .filter(MeterReading.payment_status == False) \
-                                      .group_by(MeterReading.house_section, MeterReading.house_number, User.balance) \
+                                      .group_by(MeterReading.customer_name,
+                                                MeterReading.house_section,
+                                                MeterReading.house_number,
+                                                MeterReading.consumed,
+                                                MeterReading.service_fee,
+                                                User.balance) \
                                       .all()
     else:
         user_id = current_user.id
@@ -164,11 +164,15 @@ def delinquent_household_invoices(current_user):
                                       .join(User) \
                                       .filter(MeterReading.payment_status == False,
                                               User.id == user_id) \
-                                      .group_by(MeterReading.house_section, MeterReading.house_number, User.balance) \
+                                      .group_by(MeterReading.customer_name,
+                                                MeterReading.house_section,
+                                                MeterReading.house_number,
+                                                MeterReading.consumed,
+                                                MeterReading.service_fee,
+                                                User.balance) \
                                       .all()
 
     return household_invoices
-
 
 def recent_transactions_data(current_user):
     if current_user.is_admin:
@@ -201,7 +205,6 @@ def recent_transactions_data(current_user):
 
 def get_sticky_note_content():
     return Note.query.filter_by(user_id=current_user.id).first()
-
 
 def update_sticky_note_content(new_content):
     new_content = ' '.join(new_content.split())
