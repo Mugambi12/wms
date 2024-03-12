@@ -37,6 +37,72 @@ The Water Management System is built using the following technologies:
 
 ## Getting Started
 
+### Prerequisites
+
+Before you start using the Water Management System, ensure you have the following prerequisites installed and configured on your system:
+
+- **Python:** The system is built using Python, so ensure you have Python installed. You can download and install Python from the [official Python website](https://www.python.org/).
+
+- **Virtual Environment (optional but recommended):** It's recommended to use a virtual environment to manage dependencies and isolate the project environment. You can create a virtual environment using `virtualenv` or `venv` module, which comes built-in with Python.
+
+  ### Using virtualenv
+
+  ```cmd
+  > pip install virtualenv
+  > virtualenv venv
+  > venv\Scripts\activate
+  ```
+
+  ### Using venv (Python 3)
+
+  ```cmd
+  > python -m venv venv
+  > venv\Scripts\activate
+  ```
+
 ### Installation
 
-1. Clone the repository:
+Follow these steps to set up the Water Management System on your local machine:
+
+1. **Clone the repository:**
+
+   ```cmd
+   > git clone https://github.com/mugambi12/water_management_system.git
+   > cd water_management_system
+   ```
+
+2. **Install dependencies:**
+
+   Navigate to the project directory and install the required dependencies using pip:
+
+   ```cmd
+   > pip install -r requirements.txt
+   ```
+
+### Usage
+
+Once you have completed the installation, follow these steps to run the Water Management System:
+
+1. **Run the application:**
+
+   Start the Flask server by executing the following command from the project directory:
+
+   ```cmd
+   > flask run
+   ```
+
+   By default, the application will be accessible at `http://localhost:5000`.
+
+2. **Access the application:**
+
+   Open your web browser and navigate to `http://localhost:5000` to access the Water Management System.
+
+3. **Explore the features:**
+
+   Once the application is running, you can explore its various features, including user management, dashboards, water consumption tracking, real-time chat, and more.
+
+4. **Contribute (optional):**
+
+   If you would like to contribute to the project, feel free to fork the repository, make your changes, and submit a pull request. Your contributions are highly appreciated!
+
+---
