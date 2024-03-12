@@ -12,7 +12,7 @@
 
 The Water Management System is a Flask-based web application designed to streamline and optimize water management processes. It empowers users with various functionalities, including:
 
-- **Secure user management:** Facilitates secure user registration, login, and logout.
+- **Secure user management:** Facilitates secure user registration, login, and logout. Additionally, provides a password reset feature to allow users to securely reset their passwords in case they forget them.
 - **Role-based access control:** Enhances security by assigning different access levels (e.g., standard user, administrator).
 - **Dynamic dashboards:** Provides users with personalized insights into their water usage patterns through interactive charts and graphs.
 - **Water consumption and expense tracking:** Enables users to monitor their water consumption and associated expenses, promoting accountability and responsible water use.
@@ -24,16 +24,14 @@ This technology-driven approach aims to address water sustainability challenges 
 
 ## Tech Stack
 
-The Water Management System is built using the following technologies:
+The Water Management System utilizes the following technologies:
 
-- Python
-- Flask
-- Blueprints
-- WebSockets
-- Bootstrap
-- JavaScript
-- CSS
-- HTML
+- Python for backend development
+- Flask for web framework
+- Blueprints for modular structure
+- WebSockets(Flask-SocketIO) for real-time communication
+- Bootstrap, CSS, and HTML for frontend design
+- JavaScript for interactive elements
 
 ## Getting Started
 
