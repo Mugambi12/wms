@@ -3,11 +3,11 @@ from datetime import timedelta
 from secrets import token_hex
 
 class Config:
-    # Database settings
+    # MySQL Database settings
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://foo:foo123@localhost/watermanagement'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Database settings
+    # SQLAlchemy Database settings
     #SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///watermanagementsystem.db')
     #SQLALCHEMY_TRACK_MODIFICATIONS = False
 
