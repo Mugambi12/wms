@@ -10,7 +10,7 @@
 
 <header
   id="navbar"
-  class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-info{% endif %}"
+  class="navbar navbar-expand-lg sticky-sm-top {% if not current_user.is_authenticated %}bg-info text-light{% endif %}"
 >
   <div class="container-fluid">
     <!-- Toggle Button -->
@@ -22,13 +22,22 @@
     </span>
     {% endif %}
 
-    <!-- Brand -->
+    <!-- Brand  -->
     <a
       class="navbar-brand nav-link ms-3 {% if current_user.is_authenticated %}gradient-text{% else %}text-dark{% endif %}"
       href="{% if current_user.is_authenticated %}{{ url_for('accounts.dashboard.dashboard') }}{% else %}#{% endif %}"
     >
       {{ company_name.title() }}
     </a>
+
+    <!-- Company Logo
+    <img
+      style="height: 8vh; background-size: cover; background-position: center"
+      src="{{ company_logo }}"
+      alt="Home section image"
+      class="navbar-brand img-fluid"
+      style="max-width: 90vh; height: auto"
+    />-->
 
     <!-- Navbar Toggler -->
     <button
@@ -236,22 +245,22 @@
         <!-- Guest Navbar Links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item me-3">
-            <a class="nav-link" href="#HOME">Home</a>
+            <a class="nav-link text-light" href="#HOME">Home</a>
           </li>
           <li class="nav-item me-3">
-            <a class="nav-link" href="#about">About Us</a>
+            <a class="nav-link text-light" href="#about">About Us</a>
           </li>
           <li class="nav-item me-3">
-            <a class="nav-link" href="#services">Services</a>
+            <a class="nav-link text-light" href="#services">Services</a>
           </li>
           <li class="nav-item me-3">
-            <a class="nav-link" href="#contact">Contact</a>
+            <a class="nav-link text-light" href="#contact">Contact</a>
           </li>
           <li class="nav-item me-3">
-            <a class="nav-link" href="#testimonials">Testimonials</a>
+            <a class="nav-link text-light" href="#testimonials">Testimonials</a>
           </li>
           <li class="nav-item me-3">
-            <a class="nav-link" href="#news">News</a>
+            <a class="nav-link text-light" href="#news">News</a>
           </li>
           <li class="nav-item">
             <a

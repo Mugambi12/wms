@@ -5,9 +5,9 @@ from flask import flash, redirect, url_for, render_template, current_app, url_fo
 from werkzeug.security import generate_password_hash
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
-from app import mail
+from app import mail, db
 from app.utils import generate_random_string
-from ..database.models import User, PasswordResetToken, db
+from ..database.models import User, PasswordResetToken, MailSettings
 
 
 def generate_token(email):
@@ -35,6 +35,8 @@ def send_async_email(msg):
 def send_password_reset_email(email, token):
     reset_link = url_for('auth.reset_password', token=token, _external=True)
 
+    #mail_settings = MailSettings.query.first()
+    #sender_email = mail_settings.company_email if mail_settings else current_app.config['MAIL_USERNAME']
     sender_email = current_app.config['MAIL_USERNAME']
 
     msg = Message('Password Reset Request', recipients=[email], sender=sender_email)
@@ -48,7 +50,7 @@ def send_password_reset_email(email, token):
         "This link will expire after a certain period of time for security reasons.\n\n"
         "If you have any questions or need further assistance, please don't hesitate to contact us.\n\n"
         "Best regards,\n"
-        "Your Application Team"
+        "ApoGen Solutions Team"
     )
 
     msg.body = email_body

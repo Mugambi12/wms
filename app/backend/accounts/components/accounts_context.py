@@ -15,6 +15,8 @@ def accounts_context():
     unread_message_counts = {user.id: get_unread_message_count_for_navbar(user.id) for user in all_users}
 
     company_information = CompanyInformation.query.first()
+    company_logo = company_information.company_logo if company_information and company_information.company_logo is not None else 'ApoGen io'
+
     company_name = company_information.company_name if company_information and company_information.company_name is not None else 'ApoGen io'
     company_address = company_information.company_address if company_information and company_information.company_address is not None else 'Nairobi'
     contact_number = company_information.contact_number if company_information and company_information.contact_number is not None else '254723396403'
@@ -38,6 +40,7 @@ def accounts_context():
 
     return {
         'unread_message_counts': unread_message_counts,
+        'company_logo': company_logo,
         'company_name': company_name,
         'company_address': company_address,
         'contact_number': contact_number,

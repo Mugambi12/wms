@@ -22,15 +22,6 @@ class Config:
     PORT = 2023
     HOST = '0.0.0.0'
 
-    # Mail settings
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 465
-    MAIL_USERNAME = 'apogen.ss@gmail.com'
-    MAIL_PASSWORD = 'zowv rzzn kzsb dtgs'
-    #MAIL_PASSWORD = 'cldn ewhn hfse ccyu'
-    MAIL_USE_TLS = False
-    MAIL_USE_SSL = True
-
     # Generate a secure secret key
     SECRET_KEY = os.getenv('SECRET_KEY', token_hex(16))
 
@@ -47,3 +38,21 @@ class Config:
     WTF_CSRF_TIME_LIMIT = None
     WTF_CSRF_ENABLED = True
     CORS_HEADERS = 'Content-Type'
+
+# Mail settings
+server = 'smtp.gmail.com'
+email = 'apogen.ss@gmail.com'
+passcode = 'zowv rzzn kzsb dtgs'
+
+class MailConfig:
+    # Mail settings
+    MAIL_SERVER = server
+    MAIL_PORT = 465
+    MAIL_USERNAME = email
+    MAIL_PASSWORD = passcode
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+
+    MAIL_SUPPRESS_SEND = False
+    MAIL_DEBUG = False
+    MAIL_FAIL_SILENTLY = False

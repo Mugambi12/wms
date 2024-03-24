@@ -18,59 +18,75 @@
 <!-- #HOME SECTION -->
 <section
   id="home"
-  class="container-fluid text-center py-5 bg-primary text-light"
+  class="container-fluid text-center py-3 text-dark bg-success bg-opacity-10"
   style="
-    height: 95vh;
-    background-image: url('https://wallpaperbat.com/img/238587-bright-hd-desktop-wallpaper-top-free-bright-hd-desktop.jpg');
+    height: 80vh;
+    background-image: url('#');
     background-size: cover;
     background-position: center;
   "
 >
   <div class="row align-items-center">
-    <div class="col-md-8 offset-md-2">
-      <div class="text-center">
-        <h1 class="display-3 mb-5 text-primary font-weight-bold">
-          Welcome to {{ company_name | title }} Water Services
+    <div class="col-md-6 p-3 offset-lg-1">
+      <div class="text-start">
+        <p class="lead mb-2">Welcome to,</p>
+        <h1 class="display-6 fw-bold mb-3 text-info">
+          {{ company_name | title }} Water Services
         </h1>
-        <p class="lead mb-4">
+        <p class="lead mb-2">
           Dive into a world of clean, refreshing water solutions designed to
           quench your thirst for sustainability.
         </p>
         <a
           href="#services"
-          class="btn btn-lg btn-outline-info mt-5 animated bounceInDown slower delay-2s"
+          class="btn btn-lg btn-info mt-5 p-3 animated bounceInDown slower delay-2s text-light"
         >
-          <span class="text-dark">Explore Our Services</span>
+          <span>Explore Our Services</span>
         </a>
       </div>
+    </div>
+
+    <div class="col-lg-5">
+      <img
+        style="
+          height: 70vh;
+          background-size: cover;
+          background-position: center;
+        "
+        src="{{ url_for('static', filename='images/landing/image_2.png') }}"
+        alt="Home section image"
+        class="img-fluid"
+        style="max-width: 90vh; height: auto"
+      />
     </div>
   </div>
 </section>
 
 <!-- #ABOUT SECTION -->
-<section id="about" class="container-fluid py-5">
-  <div class="container text-center p-5">
-    <h2 class="display-4 mb-4 text-primary">
-      About {{ company_name | title }}
-    </h2>
+<section id="about" class="container-fluid p-5">
+  <div class="container text-center">
     <div class="row align-items-center">
-      <div class="col-lg-5 order-lg-2">
+      <div class="col-lg-5 order-md-1">
         <img
-          src="{{ url_for('static', filename='images/about.jpg') }}"
+          src="{{ url_for('static', filename='images/landing/about-2.png') }}"
           alt="About section image"
-          class="img-fluid rounded shadow"
-          style="max-width: 100%; height: auto"
+          class="img-fluid"
+          style="max-width: 100%; height: 60vh"
         />
       </div>
 
-      <div class="col-lg-7 order-lg-1">
-        <div class="text-center p-5">
-          <p class="lead">
-            {{ company_name | title }} is dedicated to delivering clean and
-            accessible water to every household. Learn more about our mission,
-            values, and commitment to sustainability.
+      <div class="col-lg-7 order-lg-2">
+        <div class="text-end p-3">
+          <h2 class="h1 mb-5 text-primary">About {{ company_name | title }}</h2>
+          <p class="lead mt-2">
+            {{ company_name | title }} is committed to ensuring clean and
+            accessible water for all. Our mission encompasses delivering
+            sustainable water solutions while upholding values of integrity and
+            community empowerment. Explore our journey toward a brighter,
+            water-secure future.
           </p>
-          <a href="#services" class="btn btn-outline-primary mt-3"
+
+          <a href="#services" class="btn btn-outline-primary mt-4"
             >Learn More</a
           >
         </div>
@@ -81,12 +97,12 @@
 
 <!-- #SERVICES SECTION -->
 <section id="services" class="container-fluid py-5 bg-success bg-opacity-10">
-  <div class="container p-5">
-    <h2 class="display-4 text-center mb-5 text-primary">Our Services</h2>
+  <div class="container p-5 text-center">
+    <h2 class="h1 mb-5 text-primary">Our Services</h2>
     <div class="row">
       <div class="col-lg-4">
         <div class="card border-0 shadow mb-4 bg-danger bg-opacity-75">
-          <div class="card-body text-center">
+          <div class="card-body">
             <h5 class="card-title">Water Supply</h5>
             <p class="card-text">
               Reliable and continuous water supply to meet your daily personal
@@ -123,10 +139,10 @@
 
 <!-- #CONTACT SECTION -->
 <section id="contact" class="container-fluid py-5 bg-light">
-  <div class="container p-5">
-    <h2 class="display-4 text-center text-primary mb-5">Get in Touch</h2>
+  <div class="container p-3">
+    <h2 class="text-center h1 text-primary mb-5">Get in Touch</h2>
     <div class="row">
-      <div class="col-lg-5 mb-4 mb-lg-0">
+      <div class="col-lg-4 mb-4 mb-lg-0">
         <div class="contact-details p-4 p-lg-5 rounded">
           <h2 class="mb-4">Contact Information</h2>
           <div class="contact-info">
@@ -141,7 +157,7 @@
         </div>
       </div>
 
-      <div class="col-lg-7">
+      <div class="col-lg-8">
         <div class="contact-form p-4 p-lg-5 rounded">
           <form id="contactForm">
             <div id="flashMessages"></div>
@@ -223,33 +239,77 @@
 </section>
 
 <!-- #TESTIMONIALS SECTION -->
-<section id="testimonials" class="container-fluid py-5 bg-info bg-opacity-25">
-  <div class="container p-5 text-dark">
-    <h2 class="display-4 text-center text-primary mb-5">Testimonials</h2>
+<section id="testimonials" class="container-fluid py-5 bg-info bg-opacity-10">
+  <div class="p-3 text-dark">
+    <h2 class="h1 text-center text-primary mb-5">Testimonials</h2>
     <div class="row">
-      <div class="col-lg-8 offset-lg-2">
+      <div class="col-lg-10 offset-lg-1">
         <div class="row">
-          <div class="col-md-6">
-            <div class="testimonial text-center mb-4">
+          <div class="col-md-4 shadow-sm text-center mb-4">
+            <div class="testimonial p-3 mb-2">
               <blockquote class="blockquote">
                 <p class="mb-0">
-                  "{{ company_name | title }}'s water solutions have made a
-                  significant impact in our community. We now enjoy clean water
-                  every day!"
+                  "Thanks to {{ company_name | title }}, our community now has
+                  access to clean water every day. Their innovative solutions
+                  have transformed our lives."
                 </p>
-                <footer class="blockquote-footer mt-4">John Doe</footer>
+                <footer class="mt-4 col">
+                  <div>
+                    <img
+                      src="{{ url_for('static', filename='images/user.png') }}"
+                      alt="profile image"
+                      class="rounded-circle"
+                      style="width: 40px; height: 40px"
+                    />
+                  </div>
+                  <div class="text-muted mb-2">John Doe</div>
+                </footer>
               </blockquote>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="testimonial text-center mb-4">
+
+          <div class="col-md-4 shadow-sm text-center mb-4">
+            <div class="testimonial p-3 mb-2">
               <blockquote class="blockquote">
                 <p class="mb-0">
-                  "Thanks to {{ company_name | title }}, we no longer worry
-                  about water scarcity. Their solutions have been a lifesaver
-                  for our community."
+                  "The impact of {{ company_name | title }}'s water solutions on
+                  our community cannot be overstated. We no longer face water
+                  scarcity, thanks to their exceptional efforts."
                 </p>
-                <footer class="blockquote-footer mt-4">Jane Smith</footer>
+                <footer class="mt-4 col">
+                  <div>
+                    <img
+                      src="{{ url_for('static', filename='images/user.png') }}"
+                      alt="profile image"
+                      class="rounded-circle"
+                      style="width: 40px; height: 40px"
+                    />
+                  </div>
+                  <div class="text-muted mb-2">Jane Smith</div>
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="col-md-4 shadow-sm text-center mb-4">
+            <div class="testimonial p-3 mb-2">
+              <blockquote class="blockquote">
+                <p class="mb-0">
+                  "With {{ company_name | title }}, our community now enjoys
+                  clean water every day. Their dedication to excellence has
+                  truly made a difference."
+                </p>
+                <footer class="mt-4 col">
+                  <div>
+                    <img
+                      src="{{ url_for('static', filename='images/user.png') }}"
+                      alt="profile image"
+                      class="rounded-circle"
+                      style="width: 40px; height: 40px"
+                    />
+                  </div>
+                  <div class="text-muted mb-2">Alex Johnson</div>
+                </footer>
               </blockquote>
             </div>
           </div>
@@ -262,7 +322,7 @@
 <!-- #NEWS SECTION -->
 <section id="news" class="container-fluid py-5 bg-light">
   <div class="container-fluid p-5">
-    <h2 class="display-4 text-center mb-5 text-primary">Latest News</h2>
+    <h2 class="h1 text-center mb-5 text-primary">Latest News</h2>
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <!-- Slide 1 -->
@@ -376,12 +436,7 @@
             </div>
           </div>
         </div>
-
-        <!-- Add more slides as needed -->
       </div>
-
-      <!-- Add Pagination -->
-      <div class="swiper-pagination"></div>
     </div>
   </div>
 </section>

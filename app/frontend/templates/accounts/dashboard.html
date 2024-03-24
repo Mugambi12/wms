@@ -574,19 +574,19 @@
               <td>#{{ transaction.id }}</td>
               <td>
                 {% if transaction_type == 'MeterReading' %}
-                <span class="badge bg-info">Meter Reading</span>
+                <span class="text-info">Meter Reading</span>
                 {% elif transaction_type == 'Payment' %}
-                <span class="badge bg-primary">Payment</span>
+                <span class="text-primary">Payment</span>
                 {% elif transaction_type == 'Expense' %}
-                <span class="badge bg-danger">Expense</span>
+                <span class="text-danger">Expense</span>
                 {% endif %}
               </td>
               <td>
                 {% if transaction_type == 'MeterReading' %} {{
-                transaction.customer_name }} {% elif transaction_type ==
-                'Payment' %} {{ transaction.customer_name }} {% elif
-                transaction_type == 'Expense' %} {{ transaction.vendor }} {%
-                endif %}
+                transaction.customer_name | title }} {% elif transaction_type ==
+                'Payment' %} {{ transaction.customer_name | title }} {% elif
+                transaction_type == 'Expense' %} {{ transaction.vendor | title
+                }} {% endif %}
               </td>
               <td>
                 {% if transaction_type == 'MeterReading' %} KES {{
