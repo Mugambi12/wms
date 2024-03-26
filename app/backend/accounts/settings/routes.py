@@ -55,7 +55,8 @@ def settings():
                            payment_methods=payment_methods,
                            mail_settings=mail_settings,
                            social_accounts=social_accounts,
-                           hide_footer=True)
+                           hide_footer=True,
+                           title="Settings")
 
 @settings_bp.route('/service_settings', methods=['GET', 'POST'])
 @login_required

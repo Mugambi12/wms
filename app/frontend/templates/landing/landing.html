@@ -1,121 +1,87 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- Include Swiper CSS -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-
-<style>
-  .swiper-container {
-    width: 100%;
-    overflow-x: hidden;
-  }
-  .swiper-slide img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-  }
-
-  .chat-bubble {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #007bff;
-    color: #fff;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999999;
-  }
-
-  .chat-icon {
-    font-size: 24px;
-  }
-</style>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API = Tawk_API || {},
+    Tawk_LoadStart = new Date();
+  (function () {
+    var s1 = document.createElement("script"),
+      s0 = document.getElementsByTagName("script")[0];
+    s1.async = true;
+    s1.src = "https://embed.tawk.to/6601d893a0c6737bd12482c7/1hprjc0lb";
+    s1.charset = "UTF-8";
+    s1.setAttribute("crossorigin", "*");
+    s0.parentNode.insertBefore(s1, s0);
+  })();
+</script>
+<!--End of Tawk.to Script-->
 
 <!-- #HOME SECTION -->
 <section
   id="home"
-  class="container-fluid text-center py-3 text-dark bg-success bg-opacity-10"
-  style="
-    height: 80vh;
-    background-image: url('#');
-    background-size: cover;
-    background-position: center;
-  "
+  class="container-fluid text-center py-5 bg-success bg-opacity-10"
 >
   <div class="row align-items-center">
-    <div class="col-md-6 p-3 offset-lg-1">
-      <div class="text-start">
+    <div class="col-lg-6 offset-lg-1">
+      <div class="text-lg-start p-3">
         <p class="lead mb-2">Welcome to,</p>
         <h1 class="display-6 fw-bold mb-3 text-info">
           {{ company_name | title }} Water Services
         </h1>
-        <p class="lead mb-2">
+        <p class="lead mb-4">
           Dive into a world of clean, refreshing water solutions designed to
           quench your thirst for sustainability.
         </p>
-        <a
-          href="#services"
-          class="btn btn-lg btn-info mt-5 p-3 animated bounceInDown slower delay-2s text-light"
+        <a href="#services" class="btn btn-lg btn-info mt-4"
+          >Explore Our Services</a
         >
-          <span>Explore Our Services</span>
-        </a>
       </div>
     </div>
 
     <div class="col-lg-5">
       <img
-        style="
-          height: 70vh;
-          background-size: cover;
-          background-position: center;
-        "
         src="{{ url_for('static', filename='images/landing/image_2.png') }}"
         alt="Home section image"
         class="img-fluid"
-        style="max-width: 90vh; height: auto"
+        style="max-width: 100%; height: 400px"
       />
     </div>
   </div>
 </section>
 
-<div class="chat-bubble">
-  <div class="chat-icon">
-    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-  </div>
-</div>
-
 <!-- #ABOUT SECTION -->
-<section id="about" class="container-fluid p-5">
-  <div class="container text-center">
+<section id="about" class="container-fluid py-5 bg-light">
+  <div class="container">
     <div class="row align-items-center">
-      <div class="col-lg-5 order-md-1">
+      <div class="col-lg-5 text-center">
         <img
-          src="{{ url_for('static', filename='images/landing/about-2.png') }}"
+          src="{{ url_for('static', filename='images/landing/about-1.png') }}"
           alt="About section image"
-          class="img-fluid"
-          style="max-width: 100%; height: 60vh"
+          class="img-fluid rounded"
+          style="max-width: 100%; height: auto"
         />
       </div>
 
-      <div class="col-lg-7 order-lg-2">
-        <div class="text-end p-3">
-          <h2 class="h1 mb-5 text-primary">About {{ company_name | title }}</h2>
-          <p class="lead mt-2">
-            {{ company_name | title }} is committed to ensuring clean and
-            accessible water for all. Our mission encompasses delivering
-            sustainable water solutions while upholding values of integrity and
-            community empowerment. Explore our journey toward a brighter,
-            water-secure future.
+      <div class="col-lg-7">
+        <div class="text-center text-lg-start p-3">
+          <h2 class="h1 mt-5 mb-4 text-primary">
+            About {{ company_name | title }}
+          </h2>
+          <p class="lead">
+            {{ company_name | title }} is dedicated to providing clean and
+            accessible water solutions for everyone, ensuring a healthier and
+            more sustainable future.
           </p>
-
-          <a href="#services" class="btn btn-outline-primary mt-4"
-            >Learn More</a
-          >
+          <p>
+            Our mission is to deliver innovative and eco-friendly water
+            management systems while upholding principles of integrity and
+            community engagement.
+          </p>
+          <p>
+            Join us in our journey toward a brighter, water-secure future for
+            generations to come.
+          </p>
+          <a href="#services" class="btn btn-outline-primary">Learn More</a>
         </div>
       </div>
     </div>
@@ -124,12 +90,12 @@
 
 <!-- #SERVICES SECTION -->
 <section id="services" class="container-fluid py-5 bg-success bg-opacity-10">
-  <div class="container p-5 text-center">
-    <h2 class="h1 mb-5 text-primary">Our Services</h2>
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="card border-0 shadow mb-4 bg-danger bg-opacity-75">
-          <div class="card-body">
+  <div class="container mb-5">
+    <h2 class="h1 mt-2 mb-5 text-center text-primary">Our Services</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col">
+        <div class="card border-0 shadow bg-danger bg-opacity-50">
+          <div class="card-body text-center">
             <h5 class="card-title">Water Supply</h5>
             <p class="card-text">
               Reliable and continuous water supply to meet your daily personal
@@ -138,8 +104,8 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="card border-0 shadow mb-4 bg-warning bg-opacity-75">
+      <div class="col">
+        <div class="card border-0 shadow bg-warning bg-opacity-50">
           <div class="card-body text-center">
             <h5 class="card-title">Water Quality Testing</h5>
             <p class="card-text">
@@ -149,8 +115,8 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="card border-0 shadow mb-4 bg-info bg-opacity-75">
+      <div class="col">
+        <div class="card border-0 shadow bg-info bg-opacity-50">
           <div class="card-body text-center">
             <h5 class="card-title">Community Outreach</h5>
             <p class="card-text">
@@ -159,6 +125,95 @@
             </p>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- #HOW IT WORKS SECTION -->
+<section id="how-it-works" class="container-fluid py-5">
+  <h2 class="h1 text-center mt-2 mb-5 text-primary">How It Works</h2>
+  <div class="container">
+    <!-- Water Piping -->
+    <div
+      class="row mt-3 mb-3 p-3 align-items-center"
+      style="max-width: 100%; height: 400px"
+    >
+      <div class="col-lg-5 order-lg-2">
+        <img
+          src="{{ url_for('static', filename='images/landing/how-it-works/img-1.png') }}"
+          class="card-img-top"
+          alt="Water Piping"
+        />
+      </div>
+      <div class="col-lg-7 p-3 order-lg-1">
+        <h3 class="card-title mb-3">Water Piping to Homes</h3>
+        <p class="card-text">
+          Our water piping system ensures a reliable and continuous supply of
+          clean water directly to your home's taps. Here's how it works:
+        </p>
+        <ul class="list-unstyled">
+          <li>
+            Installation of high-quality pipes from the water source to your
+            home
+          </li>
+          <li>Regular maintenance to ensure optimal performance</li>
+          <li>24/7 monitoring to detect and address any issues promptly</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottled Water -->
+    <div
+      class="row mt-3 mb-3 p-3 align-items-center"
+      style="max-width: 100%; height: 400px"
+    >
+      <div class="col-lg-5 order-lg-1">
+        <img
+          src="{{ url_for('static', filename='images/landing/how-it-works/img-2.png') }}"
+          class="card-img-top"
+          alt="Bottled Water"
+        />
+      </div>
+      <div class="col-lg-7 p-3 order-lg-2">
+        <h3 class="card-title mb-3">Bottled (Packed) Water</h3>
+        <p class="card-text">
+          Our bottled water service provides convenient access to clean and safe
+          drinking water. Here's how it works:
+        </p>
+        <ul class="list-unstyled">
+          <li>Purification of water to meet strict quality standards</li>
+          <li>Bottling and packaging in eco-friendly materials</li>
+          <li>Delivery to your doorstep at your preferred schedule</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Water Can Refilling -->
+    <div
+      class="row mt-3 mb-3 p-3 align-items-center"
+      style="max-width: 100%; height: 400px"
+    >
+      <div class="col-lg-5 order-lg-2">
+        <img
+          src="{{ url_for('static', filename='images/landing/how-it-works/img-3.png') }}"
+          class="card-img-top"
+          alt="Water Can Refilling"
+        />
+      </div>
+      <div class="col-lg-7 p-3 order-lg-1">
+        <h3 class="card-title mb-3">Water Can Refilling</h3>
+        <p class="card-text">
+          Refilling your home consumption water cans is easy and hassle-free
+          with our service. Here's how it works:
+        </p>
+        <ul class="list-unstyled">
+          <li>Bring your empty water cans to our designated refill station</li>
+          <li>
+            Our staff will sanitize the cans and refill them with purified water
+          </li>
+          <li>Secure packaging to prevent spillage during transportation</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -267,324 +322,85 @@
 
 <!-- #TESTIMONIALS SECTION -->
 <section id="testimonials" class="container-fluid py-5 bg-info bg-opacity-10">
-  <div class="p-3 text-dark">
+  <div class="container">
     <h2 class="h1 text-center text-primary mb-5">Testimonials</h2>
-    <div class="row">
-      <div class="col-lg-10 offset-lg-1">
-        <div class="row">
-          <div class="col-md-4 shadow-sm text-center mb-4">
-            <div class="testimonial p-3 mb-2">
-              <blockquote class="blockquote">
-                <p class="mb-0">
-                  "Thanks to {{ company_name | title }}, our community now has
-                  access to clean water every day. Their innovative solutions
-                  have transformed our lives."
-                </p>
-                <footer class="mt-4 col">
-                  <div>
-                    <img
-                      src="{{ url_for('static', filename='images/user.png') }}"
-                      alt="profile image"
-                      class="rounded-circle"
-                      style="width: 40px; height: 40px"
-                    />
-                  </div>
-                  <div class="text-muted mb-2">John Doe</div>
-                </footer>
-              </blockquote>
-            </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col mb-3">
+        <div class="card bg-transparent border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="card-text">
+              "Thanks to {{ company_name | title }}, our community now has
+              access to clean water every day. Their innovative solutions have
+              transformed our lives."
+            </p>
           </div>
-
-          <div class="col-md-4 shadow-sm text-center mb-4">
-            <div class="testimonial p-3 mb-2">
-              <blockquote class="blockquote">
-                <p class="mb-0">
-                  "The impact of {{ company_name | title }}'s water solutions on
-                  our community cannot be overstated. We no longer face water
-                  scarcity, thanks to their exceptional efforts."
-                </p>
-                <footer class="mt-4 col">
-                  <div>
-                    <img
-                      src="{{ url_for('static', filename='images/user.png') }}"
-                      alt="profile image"
-                      class="rounded-circle"
-                      style="width: 40px; height: 40px"
-                    />
-                  </div>
-                  <div class="text-muted mb-2">Jane Smith</div>
-                </footer>
-              </blockquote>
+          <div
+            class="card-footer border-0 d-flex align-items-center justify-content-between"
+          >
+            <div class="profile-image">
+              <img
+                src="{{ url_for('static', filename='images/user.png') }}"
+                alt="profile image"
+                class="rounded-circle"
+                style="width: 40px; height: 40px"
+              />
             </div>
+            <div class="text-muted mb-0 ms-2">John Doe</div>
           </div>
+        </div>
+      </div>
 
-          <div class="col-md-4 shadow-sm text-center mb-4">
-            <div class="testimonial p-3 mb-2">
-              <blockquote class="blockquote">
-                <p class="mb-0">
-                  "With {{ company_name | title }}, our community now enjoys
-                  clean water every day. Their dedication to excellence has
-                  truly made a difference."
-                </p>
-                <footer class="mt-4 col">
-                  <div>
-                    <img
-                      src="{{ url_for('static', filename='images/user.png') }}"
-                      alt="profile image"
-                      class="rounded-circle"
-                      style="width: 40px; height: 40px"
-                    />
-                  </div>
-                  <div class="text-muted mb-2">Alex Johnson</div>
-                </footer>
-              </blockquote>
+      <div class="col mb-3">
+        <div class="card bg-transparent border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="card-text">
+              "The impact of {{ company_name | title }}'s water solutions on our
+              community cannot be overstated. We no longer face water scarcity,
+              thanks to their exceptional efforts."
+            </p>
+          </div>
+          <div
+            class="card-footer border-0 d-flex align-items-center justify-content-between"
+          >
+            <div class="profile-image">
+              <img
+                src="{{ url_for('static', filename='images/user.png') }}"
+                alt="profile image"
+                class="rounded-circle"
+                style="width: 40px; height: 40px"
+              />
             </div>
+            <div class="text-muted mb-0 ms-2">Jane Smith</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col mb-3">
+        <div class="card bg-transparent border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="card-text">
+              "With {{ company_name | title }}, our community now enjoys clean
+              water every day. Their dedication to excellence has truly made a
+              difference."
+            </p>
+          </div>
+          <div
+            class="card-footer border-0 d-flex align-items-center justify-content-between"
+          >
+            <div class="profile-image">
+              <img
+                src="{{ url_for('static', filename='images/user.png') }}"
+                alt="profile image"
+                class="rounded-circle"
+                style="width: 40px; height: 40px"
+              />
+            </div>
+            <div class="text-muted mb-0 ms-2">Alex Johnson</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<!-- #NEWS SECTION -->
-<section id="news" class="container-fluid py-5 bg-light">
-  <div class="container-fluid p-5">
-    <h2 class="h1 text-center mb-5 text-primary">Latest News</h2>
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <!-- Slide 1 -->
-        <div class="swiper-slide">
-          <div class="card m-1 border-0 shadow h-100">
-            <img
-              src="{{ url_for('static', filename='images/news-1.jpg') }}"
-              class="card-img-top rounded-top"
-              alt="News Image"
-            />
-            <div class="card-body">
-              <h5 class="card-title mb-3">New Water Treatment Plant</h5>
-              <p class="card-text mb-4">
-                Discover our new state-of-the-art water treatment plant,
-                ensuring cleaner water for our community.
-              </p>
-              <footer class="blockquote-footer">John Doe</footer>
-              <div class="text-end">
-                <a
-                  href="#"
-                  class="btn btn-sm btn-outline-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#newsModal"
-                  >Read More</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="swiper-slide">
-          <div class="card m-1 border-0 shadow h-100">
-            <img
-              src="{{ url_for('static', filename='images/news-2.jpg') }}"
-              class="card-img-top rounded-top"
-              alt="News Image"
-            />
-            <div class="card-body">
-              <h5 class="card-title mb-3">Water Conservation Campaign</h5>
-              <p class="card-text mb-4">
-                Join us in our mission to conserve water and protect our
-                precious natural resources.
-              </p>
-              <footer class="blockquote-footer">Jane Smith</footer>
-              <div class="text-end">
-                <a
-                  href="#"
-                  class="btn btn-sm btn-outline-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#newsModal"
-                  >Read More</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="swiper-slide">
-          <div class="card m-1 border-0 shadow h-100">
-            <img
-              src="{{ url_for('static', filename='images/news-3.jpg') }}"
-              class="card-img-top rounded-top"
-              alt="News Image"
-            />
-            <div class="card-body">
-              <h5 class="card-title mb-3">Community Outreach Program</h5>
-              <p class="card-text mb-4">
-                Explore our community engagement efforts aimed at raising
-                awareness about water-related issues.
-              </p>
-              <footer class="blockquote-footer">John Doe</footer>
-              <div class="text-end">
-                <a
-                  href="#"
-                  class="btn btn-sm btn-outline-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#newsModal"
-                  >Read More</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 4 -->
-        <div class="swiper-slide">
-          <div class="card m-1 border-0 shadow h-100">
-            <img
-              src="{{ url_for('static', filename='images/news-4.jpg') }}"
-              class="card-img-top rounded-top"
-              alt="News Image"
-            />
-            <div class="card-body">
-              <h5 class="card-title mb-3">Water Conservation Initiatives</h5>
-              <p class="card-text mb-4">
-                Participate in our ongoing efforts to conserve water and
-                safeguard our environment.
-              </p>
-              <footer class="blockquote-footer">Jane Smith</footer>
-              <div class="text-end">
-                <a
-                  href="#"
-                  class="btn btn-sm btn-outline-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#newsModal"
-                  >Read More</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Include Swiper JS -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-<script>
-  var swiper = new Swiper(".swiper-container", {
-    slidesPerView: "auto",
-    spaceBetween: 20,
-    loop: true,
-    autoplay: {
-      delay: 4000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    breakpoints: {
-      768: {
-        slidesPerView: 2.3,
-      },
-    },
-  });
-</script>
-
-<!-- Modal -->
-<div
-  class="modal fade"
-  id="newsModal"
-  tabindex="-1"
-  aria-labelledby="newsModalLabel"
-  aria-hidden="true"
->
-  <div
-    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-xxl-down"
-  >
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="newsModalLabel">
-          A Day in the Life of a Water Conservationist
-        </h4>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-
-      <div class="modal-body">
-        <div class="news-content">
-          <p id="newsContent" class="card-text mb-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
-            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
-            Voluptas mollitia fugiat consequatur.
-          </p>
-          <img
-            src="https://via.placeholder.com/400x200"
-            alt="..."
-            class="img-fluid mb-3"
-          />
-          <p id="newsContent" class="card-text mb-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
-            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
-            Voluptas mollitia fugiat consequatur.
-          </p>
-          <img
-            src="https://via.placeholder.com/300x150"
-            alt="News Image"
-            class="img-fluid rounded mb-3"
-          />
-          <p id="newsContent" class="card-text mb-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
-            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
-            Voluptas mollitia fugiat consequatur.
-          </p>
-          <p id="newsContent" class="card-text mb-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-            corporis impedit ullam quos facilis at, vitae, repellendus eveniet
-            veritatis dolores assumenda commodi cupiditate quasi, quas neque!
-            Voluptas mollitia fugiat consequatur.
-          </p>
-          <p class="text-muted">Published on February 26, 2024</p>
-          <p class="text-muted">Written by: John Doe</p>
-        </div>
-
-        <div class="container-fluid">
-          <div class="d-flex">
-            <div>
-              <button type="button" class="btn bg-light me-2">
-                <ion-icon name="heart-outline"></ion-icon> 27
-              </button>
-              <button type="button" class="btn bg-light me-2">
-                <ion-icon name="chatbubble-outline"></ion-icon> 8
-              </button>
-              <button type="button" class="btn bg-light me-2">
-                <ion-icon name="arrow-redo-outline"></ion-icon> 2
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="ms-5 m-3">
-          <p class="small">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Perferendis distinctio facere vel! Sed eum reiciendis dolorum,
-            corrupti velit ipsum quaerat facilis obcaecati error similique fuga
-            quam minima necessitatibus veritatis modi.
-          </p>
-        </div>
-      </div>
-
-      <!---->
-    </div>
-  </div>
-</div>
 
 {% endblock %}

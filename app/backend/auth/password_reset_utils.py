@@ -73,7 +73,12 @@ def _reset_password_request(form):
         else:
             return jsonify({"message": "Email not found in our users.", "type": "warning"})
 
-    return render_template('auth/reset_password_request.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+    return render_template('auth/reset_password_request.html',
+                           form=form,
+                           title="Reset Password",
+                           hide_navbar=True,
+                           hide_sidebar=True,
+                           hide_footer=True)
 
 def _reset_password(token, form, reset_token):
     if form.validate_on_submit():

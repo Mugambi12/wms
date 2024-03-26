@@ -74,7 +74,8 @@ def dashboard():
                            content_form=content_form,
                            sticky_note_content=sticky_note_content,
                            household_invoices=household_invoices,
-                           hide_footer=True)
+                           hide_footer=True,
+                           title="Dashboard")
 
 
 @dashboard_bp.route('/save_sticky_note', methods=['POST'])

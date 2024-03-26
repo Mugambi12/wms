@@ -10,6 +10,7 @@ def _landing():
     form = ContactForm()
     return render_template('landing/landing.html',
                            form=form,
+                           title="Home",
                            hide_sidebar=True)
 
 def _submit_message():

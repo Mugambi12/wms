@@ -12,7 +12,8 @@ def website():
     inquiries = Contact.query.all()
     return render_template('accounts/website.html',
                            inquiries=inquiries,
-                           hide_footer=True)
+                           hide_footer=True,
+                           title="Inquiries")
 
 
 @website_bp.route('/delete_inquiry/<int:inquiry_id>', methods=['POST'])

@@ -53,4 +53,5 @@ def messages():
                             unread_sent_message_counts=unread_sent_message_counts,
                             hide_footer=True,
                             chatting_user_id=chatting_user_id,
-                            get_sender_name=get_sender_name)
+                            get_sender_name=get_sender_name,
+                           title="Messaging")

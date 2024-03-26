@@ -40,7 +40,12 @@ def _login_user(form):
         else:
             flash('Invalid mobile number or password. Please check and try again.', 'danger')
 
-    return render_template('auth/login.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+    return render_template('auth/login.html',
+                           form=form,
+                           title="Login",
+                           hide_navbar=True,
+                           hide_sidebar=True,
+                           hide_footer=True)
 
 
 def _register_user(form, is_admin=False):
@@ -92,7 +97,12 @@ def _register_user(form, is_admin=False):
                 flash(message, 'danger')
 
     # Render registration form
-    return render_template('auth/register.html', form=form, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+    return render_template('auth/register.html',
+                           form=form,
+                           title="Register",
+                           hide_navbar=True,
+                           hide_sidebar=True,
+                           hide_footer=True)
 
 
 def perform_logout():

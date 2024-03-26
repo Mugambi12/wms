@@ -33,7 +33,12 @@ def people_list():
             house_sections = [(section, section) for section in settings.house_sections.split(',')]
 
         if current_user.is_admin:
-            return render_template('accounts/people_list.html', people_list=people_list, house_sections=house_sections, form=add_form, hide_footer=True)
+            return render_template('accounts/people_list.html',
+                                   people_list=people_list,
+                                   house_sections=house_sections,
+                                   form=add_form,
+                                   hide_footer=True,
+                                   title="People List")
         else:
             return redirect(url_for('accounts.people.edit_user', user_id=current_user.id))
     else:
@@ -113,7 +118,11 @@ def edit_user(user_id):
             flash(f'Successfully updated profile for {user.first_name.title()}.', 'success')
             return redirect(url_for('accounts.people.people_list'))
 
-        return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
+        return render_template('accounts/edit_people.html',
+                               user=user,
+                               form=form,
+                               hide_footer=True,
+                               title="Edit User")
     else:
         return redirect(url_for('auth.login'))
 

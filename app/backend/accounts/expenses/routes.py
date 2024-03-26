@@ -16,7 +16,12 @@ def expenses():
     expenses = Expense.query.all()
     add_expense_form = AddExpenseForm()
     edit_expense_form = EditExpenseForm()
-    return render_template('accounts/expenses.html', expenses=expenses, add_expense_form=add_expense_form, edit_expense_form=edit_expense_form, hide_footer=True)
+    return render_template('accounts/expenses.html',
+                           expenses=expenses,
+                           add_expense_form=add_expense_form,
+                           edit_expense_form=edit_expense_form,
+                           hide_footer=True,
+                           title="Expenses")
 
 @expenses_bp.route('/add_expense', methods=['POST'])
 @login_required
@@ -50,7 +55,10 @@ def edit_expense(expense_id):
         flash('Expense updated successfully!', 'success')
         return redirect(url_for('accounts.expenses.expenses'))
 
-    return render_template('accounts/expenses.html', edit_expense_form=edit_expense_form, expense=edit_expense, hide_footer=True)
+    return render_template('accounts/expenses.html',
+                           edit_expense_form=edit_expense_form,
+                           expense=edit_expense,
+                           hide_footer=True)
 
 @expenses_bp.route('/delete_expense/<int:expense_id>', methods=['POST'])
 @login_required

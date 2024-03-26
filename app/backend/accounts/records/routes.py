@@ -36,7 +36,13 @@ def meter_readings():
     house_sections = db.session.query(User.house_section.distinct()).all()
     meter_readings = get_meter_readings(current_user)
 
-    return render_template('accounts/meter_readings.html', house_sections=house_sections, meter_readings=meter_readings, form=add_meter_reading_form, edit_form=edit_meter_reading_form, hide_footer=True)
+    return render_template('accounts/meter_readings.html',
+                           house_sections=house_sections,
+                           meter_readings=meter_readings,
+                           form=add_meter_reading_form,
+                           edit_form=edit_meter_reading_form,
+                           hide_footer=True,
+                           title="Readings")
 
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
@@ -50,7 +56,11 @@ def edit_meter_reading(meter_reading_id):
         return redirect(url_for('accounts.records.meter_readings'))
     else:
         flash(result['message'], 'danger')
-        return render_template('accounts/meter_readings.html', form=result['form'], meter_reading=edited_reading, hide_footer=True)
+        return render_template('accounts/meter_readings.html',
+                               form=result['form'],
+                               meter_reading=edited_reading,
+                               hide_footer=True,
+                           title="Edit Reading")
 
 @records_bp.route('/delete_meter_reading/<int:meter_reading_id>', methods=['POST'])
 @login_required
@@ -74,7 +84,12 @@ def billing():
     billing_data = fetch_billing_data(current_user)
     make_payment_form = MakePaymentForm()
 
-    return render_template('accounts/billing.html', make_payment=make_payment_form, billing_data=billing_data, payment_form=make_payment_form, hide_footer=True)
+    return render_template('accounts/billing.html',
+                           make_payment=make_payment_form,
+                           billing_data=billing_data,
+                           payment_form=make_payment_form,
+                           hide_footer=True,
+                           title="Billing")
 
 @records_bp.route('/make_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
@@ -107,14 +122,21 @@ def make_payment(payment_id):
         else:
             flash(result['message'], 'danger')
 
-    return render_template('accounts/billing.html', form=form, meter_reading=meter_reading)
+    return render_template('accounts/billing.html',
+                           form=form,
+                           meter_reading=meter_reading)
 
 @records_bp.route('/invoice/<int:invoice_id>')
 @login_required
 def invoice(invoice_id):
     invoice_data = fetch_invoice_data(current_user, invoice_id)
     if invoice_data:
-        return render_template('accounts/invoice.html', invoice_data=invoice_data, hide_sidebar=True, hide_navbar=True, hide_footer=True)
+        return render_template('accounts/invoice.html',
+                               invoice_data=invoice_data,
+                               hide_sidebar=True,
+                               hide_navbar=True,
+                               hide_footer=True,
+                               title="Invoicing")
     else:
         flash("Invoice not found", "error")
         return redirect(url_for('accounts.records.billing'))
@@ -129,7 +151,11 @@ def payments():
     payment_data = fetch_payment_data(current_user)
     form = EditPaymentForm()
 
-    return render_template('accounts/payments.html', payment_data=payment_data, form=form, hide_footer=True)
+    return render_template('accounts/payments.html',
+                           payment_data=payment_data,
+                           form=form,
+                           hide_footer=True,
+                           title="Payments")
 
 @records_bp.route('/validate_payment/<int:payment_id>', methods=['POST'])
 @login_required
@@ -161,7 +187,10 @@ def edit_payment(payment_id):
     else:
         flash('Invalid form submission for editing payment.', 'danger')
 
-    return render_template('accounts/edit_payment.html', form=form, payment=payment, hide_footer=True)
+    return render_template('accounts/edit_payment.html',
+                           form=form,
+                           payment=payment,
+                           hide_footer=True)
 
 @records_bp.route('/delete_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
