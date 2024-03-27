@@ -3,43 +3,44 @@
 <footer class="bg-dark text-light mt-3 py-5">
   <div class="container p-3">
     <div class="row">
-      <div class="col-lg-4 col-md-6 mb-4">
+      <div class="col-lg-4 col-md-6 mb-4 text-lg-start text-center">
         <h3 class="mb-4">Contact Information</h3>
         <p>
           <ion-icon
             name="location-outline"
-            class="text-primary me-3"
+            class="text-primary me-2"
           ></ion-icon>
           {{ company_address }}
         </p>
         <p>
-          <ion-icon name="mail-outline" class="text-info me-3"></ion-icon>
+          <ion-icon name="mail-outline" class="text-info me-2"></ion-icon>
           {{ company_email }}
         </p>
         <p>
-          <ion-icon name="call-outline" class="text-success me-3"></ion-icon>
+          <ion-icon name="call-outline" class="text-success me-2"></ion-icon>
           +{{ contact_number }}
         </p>
       </div>
 
-      <div class="col-lg-4 col-md-6 mb-4 text-center">
+      <div class="col-lg-4 col-md-6 mb-4 text-lg-center text-center">
         <h3 class="mb-4">Quick Links</h3>
         <ul class="list-unstyled">
-          <li class="mb-1"><a href="#HOME">Home</a></li>
-          <li class="mb-1"><a href="#about">About Us</a></li>
-          <li class="mb-1"><a href="#services">Services</a></li>
-          <li class="mb-1"><a href="#contant">Contact</a></li>
-          <li class="mb-1"><a href="#testimonials">Testimonials</a></li>
-          <li class="mb-1"><a href="#news">News</a></li>
+          <li class="mb-2"><a href="#HOME">Home</a></li>
+          <li class="mb-2"><a href="#about">About Us</a></li>
+          <li class="mb-2"><a href="#services">Services</a></li>
+          <li class="mb-2"><a href="#contant">Contact</a></li>
+          <li class="mb-2"><a href="#testimonials">Testimonials</a></li>
+          <li class="mb-2"><a href="#news">News</a></li>
         </ul>
       </div>
 
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="social-media text-center">
-          <h3 class="mb-4">Follow Us</h3>
-          <p class="mb-5">Stay connected on social media:</p>
-          <ul class="list-inline">
-            <li class="list-inline-item ms-2">
+      <div class="col-lg-4 col-md-12 mb-4 text-lg-end text-center">
+        <h3 class="mb-4">Follow Us</h3>
+        <div class="social-media">
+          <p class="mb-4">Stay connected on social media:</p>
+          <ul class="list-inline mb-0">
+            {% if whatsapp %}
+            <li class="list-inline-item me-2">
               <a
                 href="{{ whatsapp }}"
                 class="social-icon text-success"
@@ -49,7 +50,8 @@
                 <ion-icon name="logo-whatsapp"></ion-icon>
               </a>
             </li>
-            <li class="list-inline-item ms-2">
+            {% endif %} {% if facebook %}
+            <li class="list-inline-item me-2">
               <a
                 href="{{ facebook }}"
                 class="social-icon text-primary"
@@ -59,9 +61,10 @@
                 <ion-icon name="logo-facebook"></ion-icon>
               </a>
             </li>
-            <li class="list-inline-item ms-2">
+            {% endif %} {% if youtube %}
+            <li class="list-inline-item me-2">
               <a
-                href="{{ twitter }}"
+                href="{{ youtube }}"
                 class="social-icon text-danger"
                 title="YouTube"
                 target="_blank"
@@ -69,7 +72,8 @@
                 <ion-icon name="logo-youtube"></ion-icon>
               </a>
             </li>
-            <li class="list-inline-item ms-2">
+            {% endif %} {% if instagram %}
+            <li class="list-inline-item me-2">
               <a
                 href="{{ instagram }}"
                 class="social-icon text-danger"
@@ -79,7 +83,8 @@
                 <ion-icon name="logo-instagram"></ion-icon>
               </a>
             </li>
-            <li class="list-inline-item ms-2">
+            {% endif %} {% if twitter %}
+            <li class="list-inline-item me-2">
               <a
                 href="{{ twitter }}"
                 class="social-icon text-primary"
@@ -89,7 +94,8 @@
                 <ion-icon name="logo-twitter"></ion-icon>
               </a>
             </li>
-            <li class="list-inline-item ms-2">
+            {% endif %} {% if linkedin %}
+            <li class="list-inline-item me-2">
               <a
                 href="{{ linkedin }}"
                 class="social-icon text-info"
@@ -99,7 +105,8 @@
                 <ion-icon name="logo-linkedin"></ion-icon>
               </a>
             </li>
-            <li class="list-inline-item ms-2">
+            {% endif %} {% if tiktok %}
+            <li class="list-inline-item me-2">
               <a
                 href="{{ tiktok }}"
                 class="social-icon text-secondary"
@@ -109,6 +116,7 @@
                 <ion-icon name="logo-tiktok"></ion-icon>
               </a>
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -116,7 +124,7 @@
   </div>
 
   <div class="text-center">
-    <p>
+    <p class="mb-0">
       &copy;
       <script>
         document.write(new Date().getFullYear());

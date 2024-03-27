@@ -31,14 +31,15 @@
 
         <div class="mb-3">
           {{ form.email.label(class="form-label") }} {{
-          form.email(class="form-control", placeholder="Email Address") }}
+          form.email(class="form-control", placeholder="Email Address",
+          type="email") }}
           <div id="emailError" class="text-danger" style="display: none"></div>
         </div>
 
         <div class="mb-3">
           {{ form.mobile_number.label(class="form-label") }} {{
-          form.mobile_number(class="form-control", placeholder="Mobile Number")
-          }}
+          form.mobile_number(class="form-control", placeholder="Mobile Number",
+          type="number") }}
           <div
             id="mobileNumberError"
             class="text-danger"

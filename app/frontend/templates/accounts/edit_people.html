@@ -58,78 +58,9 @@
             type="submit"
             class="btn btn-sm btn-secondary btn-block rounded-pill"
           >
-            Upload Picture
+            Update Picture
           </button>
         </form>
-
-        <!-- Delete User Button -->
-        {% if current_user.is_admin %}
-        <ul class="nav nav-pills justify-content-center border-0">
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-danger"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteUserModal"
-            >
-              <ion-icon name="trash-outline"></ion-icon>
-              Delete User
-            </button>
-          </li>
-        </ul>
-
-        <!-- Delete User Modal -->
-        <div
-          class="modal fade"
-          id="deleteUserModal"
-          tabindex="-1"
-          aria-labelledby="deleteUserModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="deleteUserModalLabel">
-                  Confirm Deletion
-                </h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                Delete the account for
-                <strong
-                  >{{ user.first_name.title() }} {{ user.last_name.title()
-                  }}</strong
-                >? This can't be undone.
-              </div>
-
-              <div class="modal-footer justify-content-between">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-secondary rounded-pill"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <form
-                  method="post"
-                  action="{{ url_for('accounts.people.delete_user_route', user_id=user.id) }}"
-                >
-                  <button
-                    type="submit"
-                    class="btn btn-sm btn-danger rounded-pill"
-                  >
-                    Confirm Deletion
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endif %}
       </div>
     </div>
 
@@ -387,5 +318,68 @@
     </div>
   </div>
 
-  {% endblock %}
+  <!-- Delete User Button -->
+  {% if current_user.is_admin %}
+  <ul class="nav nav-pills d-flex justify-content-end mt-3 mb-2 border-0">
+    <li class="nav-item">
+      <button
+        class="btn btn-sm btn-transparent text-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteUserModal"
+      >
+        <ion-icon name="trash-outline"></ion-icon>
+        Delete User
+      </button>
+    </li>
+  </ul>
+
+  <!-- Delete User Modal -->
+  <div
+    class="modal fade"
+    id="deleteUserModal"
+    tabindex="-1"
+    aria-labelledby="deleteUserModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteUserModalLabel">
+            Confirm Deletion
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Delete the account for
+          <strong
+            >{{ user.first_name.title() }} {{ user.last_name.title() }}</strong
+          >? This can't be undone.
+        </div>
+
+        <div class="modal-footer justify-content-between">
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary rounded-pill"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <form
+            method="post"
+            action="{{ url_for('accounts.people.delete_user_route', user_id=user.id) }}"
+          >
+            <button type="submit" class="btn btn-sm btn-danger rounded-pill">
+              Confirm Deletion
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %} {% endblock %}
 </div>

@@ -35,27 +35,31 @@ def send_async_email(msg):
 def send_password_reset_email(email, token):
     reset_link = url_for('auth.reset_password', token=token, _external=True)
 
-    #mail_settings = MailSettings.query.first()
-    #sender_email = mail_settings.company_email if mail_settings else current_app.config['MAIL_USERNAME']
     sender_email = current_app.config['MAIL_USERNAME']
 
     msg = Message('Password Reset Request', recipients=[email], sender=sender_email)
 
     email_body = (
-        "Dear user,\n\n"
-        "We received a request to reset your password. If you didn't make this request, you can ignore this email.\n\n"
-        "To reset your password, please click on the following link:\n"
-        f"{reset_link}\n\n"
-        "If you're unable to click on the link, you can copy and paste it into your browser's address bar.\n\n"
-        "This link will expire after a certain period of time for security reasons.\n\n"
-        "If you have any questions or need further assistance, please don't hesitate to contact us.\n\n"
-        "Best regards,\n"
-        "ApoGen Solutions Team"
+        "<html>"
+        "<body>"
+        "<p>Dear user,</p>"
+        "<p>We received a request to reset your password. If you didn't make this request, you can ignore this email.</p>"
+        "<p>To reset your password, please click on the following button:</p>"
+        f"<p><a href=\"{reset_link}\" style=\"background-color: #007bff; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;\">Reset Password</a></p>"
+        "<p>If you're unable to click on the button, you can copy and paste the following link into your browser's address bar:</p>"
+        f"<p>{reset_link}</p>"
+        "<p>This link will expire after a certain period of time for security reasons.</p>"
+        "<p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>"
+        "<p>Best regards,<br>ApoGen Solutions Team</p>"
+        "</body>"
+        "</html>"
     )
 
     msg.body = email_body
+    msg.html = email_body
 
     return send_async_email(msg)
+
 
 def _reset_password_request(form):
     if form.validate_on_submit():

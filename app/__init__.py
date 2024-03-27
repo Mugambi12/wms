@@ -58,23 +58,19 @@ def create_app():
         app.register_blueprint(auth_bp)
         app.register_blueprint(accounts_bp)
 
-        ## Query mail settings from the database
-        #from .backend.database.models import MailSettings
+        # Query mail settings from the database
+        from .backend.database.models import MailSettings
 
-        #mail_settings = MailSettings.query.first()
-        #if mail_settings:
-        #    app.config['MAIL_SERVER'] = f'smtp.{mail_settings.mail_server}.com'
-        #    app.config['MAIL_PORT'] = 465
-        #    app.config['MAIL_USERNAME'] = mail_settings.company_email
-        #    app.config['MAIL_PASSWORD'] = mail_settings.password
-        #    app.config['MAIL_USE_TLS'] = False
-        #    app.config['MAIL_USE_SSL'] = True
-        #else:
-        #    # Use default settings
-        #    app.config.from_object(MailConfig)
-
-        # Use default settings
-        app.config.from_object(MailConfig)
+        mail_settings = MailSettings.query.first()
+        if mail_settings:
+            app.config['MAIL_SERVER'] = f'smtp.{mail_settings.mail_server}.com'
+            app.config['MAIL_PORT'] = 465
+            app.config['MAIL_USERNAME'] = mail_settings.company_email
+            app.config['MAIL_PASSWORD'] = mail_settings.password
+            app.config['MAIL_USE_TLS'] = False
+            app.config['MAIL_USE_SSL'] = True
+        else:
+            app.config.from_object(MailConfig)
 
         # Initialize the mail
         mail.init_app(app)

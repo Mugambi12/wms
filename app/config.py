@@ -12,7 +12,7 @@ class Config:
     #SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Session settings
-    SESSION_COOKIE_SECURE = True
+    #SESSION_COOKIE_SECURE = True
     PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
 
     # Debug mode

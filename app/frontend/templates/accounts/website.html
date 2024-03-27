@@ -22,7 +22,6 @@
           <thead>
             <tr>
               <th class="col">#</th>
-              <th class="col">ID</th>
               <th class="col">Date</th>
               <th class="col">Full Name</th>
               <th class="col">Email</th>
@@ -34,7 +33,6 @@
             {% for inquiry in inquiries | reverse %}
             <tr>
               <td class="text-center">{{ loop.index }}</td>
-              <td class="text-center">{{ inquiry.id }}</td>
               <td>{{ inquiry.timestamp.strftime('%d %b %Y') }}</td>
               <td>{{ inquiry.name }}</td>
               <td>{{ inquiry.email }}</td>

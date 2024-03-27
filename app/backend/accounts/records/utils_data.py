@@ -97,7 +97,21 @@ def fetch_invoice_data(current_user, invoice_id):
                 MeterReading.house_number == invoice.house_number,
                 MeterReading.payment_status == False
             )
-            .group_by(MeterReading.house_section, MeterReading.house_number)
+            .group_by(
+                MeterReading.id,  # Include primary key in the GROUP BY clause
+                MeterReading.timestamp,
+                MeterReading.customer_name,
+                MeterReading.house_section,
+                MeterReading.house_number,
+                MeterReading.reading_value,
+                MeterReading.consumed,
+                MeterReading.unit_price,
+                MeterReading.service_fee,
+                MeterReading.sub_total_amount,
+                MeterReading.total_amount,
+                MeterReading.payment_status,
+                MeterReading.user_id
+            )
             .count()
         )
 
@@ -128,3 +142,4 @@ def fetch_invoice_data(current_user, invoice_id):
             return None
     else:
         return None
+

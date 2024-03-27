@@ -79,6 +79,7 @@
           <!-- Notifications -->
           <li class="nav-item dropdown">
             <button
+              id="notificationButton"
               class="nav-link text-dark position-relative"
               type="button"
               data-bs-toggle="dropdown"
@@ -87,6 +88,7 @@
               <ion-icon name="notifications-outline" class="me-1"></ion-icon>
               <span
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                id="badgeCounter"
               >
                 99+ <span class="visually-hidden">unread messages</span>
               </span>
@@ -96,22 +98,81 @@
               aria-labelledby="notificationsDropdown"
             >
               <li class="dropdown-item small">
-                <a href="#" class="text-decoration-none text-dark"
-                  >Notification 1</a
-                >
-              </li>
-              <li class="dropdown-item small">
-                <a href="#" class="text-decoration-none text-dark"
-                  >Notification 2</a
-                >
-              </li>
-              <li class="dropdown-item small">
-                <a href="#" class="text-decoration-none text-dark"
-                  >Notification 3</a
-                >
+                <a href="#" class="text-decoration-none text-dark">
+                  <span id="readingNotification"></span>
+                </a>
               </li>
             </ul>
           </li>
+
+          <script>
+            // Function to get the next Saturday and Monday dates
+            function getNextSaturdayAndMonday() {
+              const today = new Date();
+              let nextSaturday = new Date(today);
+              let nextMonday = new Date(today);
+
+              nextSaturday.setDate(
+                today.getDate() + ((6 - today.getDay() + 7) % 7)
+              );
+              nextMonday.setDate(
+                today.getDate() + ((1 - today.getDay() + 7) % 7)
+              );
+
+              return {
+                saturday: nextSaturday.toDateString(),
+                monday: nextMonday.toDateString(),
+              };
+            }
+
+            // Function to update reading notification
+            function updateReadingNotification() {
+              const notificationSpan = document.getElementById(
+                "readingNotification"
+              );
+              const { saturday, monday } = getNextSaturdayAndMonday();
+              notificationSpan.innerHTML = `Meter readings will be taken on ${saturday} (Saturday) and ${monday} (Monday).`;
+            }
+
+            // Update reading notification on page load
+            updateReadingNotification();
+
+            // Function to update badge counter
+            function updateBadgeCounter() {
+              const dropdownItems = document.querySelectorAll(".dropdown-item");
+              const badgeCounter = document.getElementById("badgeCounter");
+              badgeCounter.textContent = dropdownItems.length;
+            }
+
+            // Update badge counter on page load
+            updateBadgeCounter();
+
+            // Function to check if the current date is within the last five days of the month
+            function checkNotificationDate() {
+              const today = new Date();
+              const lastDayOfMonth = new Date(
+                today.getFullYear(),
+                today.getMonth() + 1,
+                0
+              );
+              const differenceInDays =
+                lastDayOfMonth.getDate() - today.getDate();
+              return differenceInDays <= 5 && differenceInDays >= 0;
+            }
+
+            // Function to update notification badge
+            function updateNotificationBadge() {
+              const badge = document.getElementById("notificationBadge");
+              const shouldShowNotification = checkNotificationDate();
+              badge.style.display = shouldShowNotification ? "block" : "none";
+            }
+
+            // Update notification badge on page load
+            updateNotificationBadge();
+
+            // Update notification badge every day
+            setInterval(updateNotificationBadge, 24 * 60 * 60 * 1000);
+          </script>
 
           <!-- User Name, Greetings -->
           <li class="nav-item">

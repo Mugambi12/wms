@@ -81,7 +81,7 @@
             Join us in our journey toward a brighter, water-secure future for
             generations to come.
           </p>
-          <a href="#services" class="btn btn-outline-primary">Learn More</a>
+          <a href="#how-it-works" class="btn btn-outline-primary">Learn More</a>
         </div>
       </div>
     </div>
@@ -91,7 +91,7 @@
 <!-- #SERVICES SECTION -->
 <section id="services" class="container-fluid py-5 bg-success bg-opacity-10">
   <div class="container mb-5">
-    <h2 class="h1 mt-2 mb-5 text-center text-primary">Our Services</h2>
+    <h2 class="h1 mt-4 mb-5 text-center text-primary">Our Services</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col">
         <div class="card border-0 shadow bg-danger bg-opacity-50">
@@ -132,21 +132,18 @@
 
 <!-- #HOW IT WORKS SECTION -->
 <section id="how-it-works" class="container-fluid py-5">
-  <h2 class="h1 text-center mt-2 mb-5 text-primary">How It Works</h2>
+  <h2 class="h1 text-center mt-4 mb-5 text-primary">How It Works</h2>
   <div class="container">
     <!-- Water Piping -->
-    <div
-      class="row mt-3 mb-3 p-3 align-items-center"
-      style="max-width: 100%; height: 400px"
-    >
-      <div class="col-lg-5 order-lg-2">
+    <div class="row mt-3 mb-3 align-items-center">
+      <div class="col-lg-5 col-md-6 order-md-2">
         <img
           src="{{ url_for('static', filename='images/landing/how-it-works/img-1.png') }}"
-          class="card-img-top"
+          class="card-img-top img-fluid"
           alt="Water Piping"
         />
       </div>
-      <div class="col-lg-7 p-3 order-lg-1">
+      <div class="col-lg-7 col-md-6 order-md-1 mt-md-0 mt-3">
         <h3 class="card-title mb-3">Water Piping to Homes</h3>
         <p class="card-text">
           Our water piping system ensures a reliable and continuous supply of
@@ -164,18 +161,15 @@
     </div>
 
     <!-- Bottled Water -->
-    <div
-      class="row mt-3 mb-3 p-3 align-items-center"
-      style="max-width: 100%; height: 400px"
-    >
-      <div class="col-lg-5 order-lg-1">
+    <div class="row mt-3 mb-3 align-items-center">
+      <div class="col-lg-5 col-md-6">
         <img
           src="{{ url_for('static', filename='images/landing/how-it-works/img-2.png') }}"
-          class="card-img-top"
+          class="card-img-top img-fluid"
           alt="Bottled Water"
         />
       </div>
-      <div class="col-lg-7 p-3 order-lg-2">
+      <div class="col-lg-7 col-md-6 mt-md-0 mt-3">
         <h3 class="card-title mb-3">Bottled (Packed) Water</h3>
         <p class="card-text">
           Our bottled water service provides convenient access to clean and safe
@@ -190,18 +184,15 @@
     </div>
 
     <!-- Water Can Refilling -->
-    <div
-      class="row mt-3 mb-3 p-3 align-items-center"
-      style="max-width: 100%; height: 400px"
-    >
-      <div class="col-lg-5 order-lg-2">
+    <div class="row mt-3 mb-3 align-items-center">
+      <div class="col-lg-5 col-md-6 order-md-2">
         <img
           src="{{ url_for('static', filename='images/landing/how-it-works/img-3.png') }}"
-          class="card-img-top"
+          class="card-img-top img-fluid"
           alt="Water Can Refilling"
         />
       </div>
-      <div class="col-lg-7 p-3 order-lg-1">
+      <div class="col-lg-7 col-md-6 order-md-1 mt-md-0 mt-3">
         <h3 class="card-title mb-3">Water Can Refilling</h3>
         <p class="card-text">
           Refilling your home consumption water cans is easy and hassle-free
@@ -222,19 +213,19 @@
 <!-- #CONTACT SECTION -->
 <section id="contact" class="container-fluid py-5 bg-light">
   <div class="container p-3">
-    <h2 class="text-center h1 text-primary mb-5">Get in Touch</h2>
+    <h2 class="text-center h1 text-primary mt-2 mb-5">Get in Touch</h2>
     <div class="row">
       <div class="col-lg-4 mb-4 mb-lg-0">
         <div class="contact-details p-4 p-lg-5 rounded">
-          <h2 class="mb-4">Contact Information</h2>
+          <h4 class="fw-bold text-info mb-4">Contact Information</h4>
           <div class="contact-info">
             <p class="lead">Visit us at:</p>
             <address class="fst-italics text-muted mb-4">
               {{ company_name | title }}<br />
               {{ company_address }}
             </address>
-            <p class="mb-3 text-muted">Contact: +{{ contact_number }}</p>
-            <p class="mb-0 text-muted">Email: {{ company_email }}</p>
+            <p class="mb-3 text-muted">+{{ contact_number }}</p>
+            <p class="mb-0 text-muted">{{ company_email }}</p>
           </div>
         </div>
       </div>
@@ -323,8 +314,9 @@
 <!-- #TESTIMONIALS SECTION -->
 <section id="testimonials" class="container-fluid py-5 bg-info bg-opacity-10">
   <div class="container">
-    <h2 class="h1 text-center text-primary mb-5">Testimonials</h2>
+    <h2 class="h1 text-center text-primary mt-4 mb-5">Testimonials</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
+      <!-- Testimonial 1 -->
       <div class="col mb-3">
         <div class="card bg-transparent border-0 shadow-sm h-100">
           <div class="card-body">
@@ -339,7 +331,7 @@
           >
             <div class="profile-image">
               <img
-                src="{{ url_for('static', filename='images/user.png') }}"
+                src="{{ url_for('static', filename='images/landing/testimonials/img-1.png') }}"
                 alt="profile image"
                 class="rounded-circle"
                 style="width: 40px; height: 40px"
@@ -350,6 +342,7 @@
         </div>
       </div>
 
+      <!-- Testimonial 2 -->
       <div class="col mb-3">
         <div class="card bg-transparent border-0 shadow-sm h-100">
           <div class="card-body">
@@ -364,7 +357,7 @@
           >
             <div class="profile-image">
               <img
-                src="{{ url_for('static', filename='images/user.png') }}"
+                src="{{ url_for('static', filename='images/landing/testimonials/img-2.png') }}"
                 alt="profile image"
                 class="rounded-circle"
                 style="width: 40px; height: 40px"
@@ -375,6 +368,7 @@
         </div>
       </div>
 
+      <!-- Testimonial 3 -->
       <div class="col mb-3">
         <div class="card bg-transparent border-0 shadow-sm h-100">
           <div class="card-body">
@@ -389,7 +383,7 @@
           >
             <div class="profile-image">
               <img
-                src="{{ url_for('static', filename='images/user.png') }}"
+                src="{{ url_for('static', filename='images/landing/testimonials/img-3.png') }}"
                 alt="profile image"
                 class="rounded-circle"
                 style="width: 40px; height: 40px"

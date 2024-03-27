@@ -32,6 +32,7 @@ def accounts_context():
     social_links = SocialAccounts.query.first()
     whatsapp = social_links.whatsapp if social_links and social_links.whatsapp is not None else 'https://www.whatsapp.com/'
     facebook = social_links.facebook if social_links and social_links.facebook is not None else 'https://www.facebook.com/'
+    youtube = social_links.youtube if social_links and social_links.youtube is not None else 'https://www.youtube.com/'
     twitter = social_links.twitter if social_links and social_links.twitter is not None else 'https://twitter.com/'
     instagram = social_links.instagram if social_links and social_links.instagram is not None else 'https://www.instagram.com/'
     linkedin = social_links.linkedin if social_links and social_links.linkedin is not None else 'https://www.linkedin.com/'
@@ -54,6 +55,7 @@ def accounts_context():
 
         'whatsapp': whatsapp,
         'facebook': facebook,
+        'youtube': youtube,
         'twitter': twitter,
         'instagram': instagram,
         'linkedin': linkedin,

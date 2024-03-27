@@ -3,7 +3,7 @@
 # Importing Required Libraries
 from flask_wtf import FlaskForm
 from wtforms import FloatField, StringField, SubmitField, TextAreaField, PasswordField
-from wtforms.validators import Email, URL, DataRequired
+from wtforms.validators import Email, URL, DataRequired, Optional
 
 class CompanyInformationForm(FlaskForm):
     company_logo = StringField('Company Logo')
@@ -36,8 +36,8 @@ class PaymentMethodsForm(FlaskForm):
     submit = SubmitField('Update')
 
 class MailSettingsForm(FlaskForm):
-    mail_server = StringField('Sending Email')
-    company_email = StringField('Company Email', validators=[Email()])
+    mail_server = StringField('Mail Sever')
+    company_email = StringField('Email Address', validators=[Email(), Optional()])
     password = PasswordField('Email Password')
     submit = SubmitField('Update')
 
