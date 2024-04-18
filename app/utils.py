@@ -1,10 +1,8 @@
 # File: app/utils.py
 
-# Import necessary modules
 import secrets
 import string
 
-# Generate Random String
 def generate_random_string(length=32):
     """
     Generate a random string of specified length using ASCII characters, digits, and punctuation.

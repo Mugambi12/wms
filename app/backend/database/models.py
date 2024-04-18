@@ -4,16 +4,13 @@
 from datetime import datetime, timedelta, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-import uuid
 from app import db
 
 
-# Function to get the default datetime
 def default_datetime():
     return datetime.now(timezone.utc) + timedelta(hours=3)
 
 
-# Define User model
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     mobile_number = db.Column(db.String(20), unique=True, nullable=False)
@@ -27,12 +24,9 @@ class User(db.Model, UserMixin):
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
     balance = db.Column(db.Float, default=0)
-
-    # New fields for tracking last login and logout
     last_login = db.Column(db.DateTime)
     last_logout = db.Column(db.DateTime)
 
-    # Establishing a one-to-many relationship with meter readings and payments
     meter_readings = db.relationship('MeterReading', backref='user', lazy=True)
     payments = db.relationship('Payment', backref='user', lazy=True)
 
@@ -50,7 +44,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# Define MeterReading model
+
 class MeterReading(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
@@ -65,10 +59,7 @@ class MeterReading(db.Model):
     total_amount = db.Column(db.Float)
     payment_status = db.Column(db.Boolean, default=False)
 
-    # Specify foreign keys explicitly
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    # Establishing a one-to-many relationship with payments
     payments = db.relationship('Payment', backref='meter_reading', lazy=True)
 
     def __init__(self, reading_value, house_section, house_number, user_id, unit_price, service_fee, customer_name, consumed, sub_total_amount, total_amount):
@@ -83,7 +74,7 @@ class MeterReading(db.Model):
         self.sub_total_amount = sub_total_amount
         self.total_amount = total_amount
 
-# Define Payment model
+
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     invoice_amount = db.Column(db.Integer)
@@ -94,7 +85,6 @@ class Payment(db.Model):
     reference_number = db.Column(db.String(50))
     status = db.Column(db.Boolean, default=False)
 
-    # Specify foreign keys explicitly
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     invoice_id = db.Column(db.Integer, db.ForeignKey('meter_reading.id'), nullable=True)
 
@@ -109,7 +99,7 @@ class Payment(db.Model):
         self.user_id = user_id
         self.invoice_id = invoice_id
 
-# Define Expense model
+
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -132,7 +122,7 @@ class Expense(db.Model):
     def __repr__(self):
         return f'<Expense {self.id}>'
 
-# Define Password Reset Tokens model
+
 class PasswordResetToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
@@ -143,7 +133,7 @@ class PasswordResetToken(db.Model):
         self.email = email
         self.token = token
 
-# Define Sticky Notes model
+
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -153,7 +143,7 @@ class Note(db.Model):
         self.user_id = user_id
         self.content = content
 
-# Define Message model
+
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -167,7 +157,7 @@ class Message(db.Model):
         self.receiver_id = receiver_id
         self.content = content
 
-# Define Contact model
+
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
@@ -180,7 +170,7 @@ class Contact(db.Model):
         self.email = email
         self.message = message
 
-# Define CompanyInformation model
+
 class CompanyInformation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_logo = db.Column(db.String(255))
@@ -200,7 +190,7 @@ class CompanyInformation(db.Model):
         self.company_website_url = company_website_url
         self.company_description = company_description
 
-# Define ServicesSetting model
+
 class ServicesSetting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     unit_price = db.Column(db.Float)
@@ -212,7 +202,7 @@ class ServicesSetting(db.Model):
         self.service_fee = service_fee
         self.house_sections = house_sections
 
-# Define PaymentMethods model
+
 class PaymentMethods(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     bank_name = db.Column(db.String(255))
@@ -224,7 +214,7 @@ class PaymentMethods(db.Model):
         self.paybill = paybill
         self.account_number = account_number
 
-# Define MailSettings model
+
 class MailSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mail_server = db.Column(db.String(120))
@@ -236,7 +226,7 @@ class MailSettings(db.Model):
         self.mail_server = mail_server
         self.password = password
 
-# Define SocialAccounts model
+
 class SocialAccounts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     whatsapp = db.Column(db.String(255))

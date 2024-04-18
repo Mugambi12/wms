@@ -1,3 +1,9 @@
+-- Purpose: This script is used to setup the database and user for the application.
+-- It creates the database, user, and grants the user all privileges on the database.
+
+-- Author: Silas Mugambi
+-- Date: February 2024
+
 -- Create the database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS watermanagement;
 

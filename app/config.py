@@ -1,58 +1,51 @@
-import os
+# app/config.py
+
 from datetime import timedelta
-from secrets import token_hex
-
-class Config:
-    # MySQL Database settings
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://foo:foo123@localhost/watermanagement'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    # SQLAlchemy Database settings
-    #SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///watermanagementsystem.db')
-    #SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    # Session settings
-    SESSION_COOKIE_SECURE = True
-    PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
-
-    # Debug mode
-    DEBUG = True
-
-    # Server settings
-    PORT = 2023
-    HOST = '0.0.0.0'
-
-    # Generate a secure secret key
-    SECRET_KEY = os.getenv('SECRET_KEY', token_hex(16))
-
-    # Logging configuration
-    LOG_FILE = 'app.log'
-    LOG_LEVEL = 'DEBUG'
-
-    # Error handling configuration
-    ERROR_404_HELP = False
-
-    # Security settings
-    CSRF_ENABLED = True
-    CSRF_SESSION_KEY = os.getenv('CSRF_SESSION_KEY', token_hex(16))
-    WTF_CSRF_TIME_LIMIT = None
-    WTF_CSRF_ENABLED = True
-    CORS_HEADERS = 'Content-Type'
-
-# Mail settings
-server = 'smtp.gmail.com'
-email = 'apogen.ss@gmail.com'
-passcode = 'zowv rzzn kzsb dtgs'
+from decouple import config
 
 class MailConfig:
-    # Mail settings
-    MAIL_SERVER = server
-    MAIL_PORT = 465
-    MAIL_USERNAME = email
-    MAIL_PASSWORD = passcode
+    MAIL_SERVER = config('MAIL_SERVER', default='smtp.gmail.com')
+    MAIL_PORT = config('MAIL_PORT', default=465, cast=int)
+    MAIL_USERNAME = config('MAIL_USERNAME')
+    MAIL_PASSWORD = config('MAIL_PASSWORD')
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
 
     MAIL_SUPPRESS_SEND = False
     MAIL_DEBUG = False
     MAIL_FAIL_SILENTLY = False
+
+
+class Config:
+    SECRET_KEY = config('SECRET_KEY')
+    SQLALCHEMY_TRACK_MODIFICATIONS = config('SQLALCHEMY_TRACK_MODIFICATIONS', cast=bool)
+    PORT = config('PORT')
+    HOST = config('HOST')
+
+    CSRF_ENABLED = config('CSRF_ENABLED', cast=bool)
+    CSRF_SESSION_KEY = config('CSRF_SESSION_KEY')
+    WTF_CSRF_TIME_LIMIT = None
+    WTF_CSRF_ENABLED = True
+    CORS_HEADERS = 'Content-Type'
+
+
+class DevelopmentConfig(Config):
+    SQLALCHEMY_DATABASE_URI = config('DEVELOPMENT_DATABASE_URI')
+    DEBUG = True
+    SQLALCHEMY_ECHO = True
+    SESSION_COOKIE_SECURE = True
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
+
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = config('PRODUCTION_DATABASE_URI')
+    DEBUG = config('DEBUG', cast=bool)
+    SQLALCHEMY_ECHO = config('SQLALCHEMY_ECHO', cast=bool)
+    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', cast=bool)
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
+
+
+class TestConfig(Config):
+    SQLALCHEMY_DATABASE_URI = config('TEST_DATABASE_URI')
+    SQLALCHEMY_ECHO = False
+    TESTING = True

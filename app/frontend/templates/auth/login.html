@@ -53,20 +53,21 @@
 
     <!-- Additional Links -->
     <div class="text-center">
-      <span class="mb-2"
-        >Don't have an account?
-        <a href="{{ url_for('auth.register') }}" class="btn btn-link"
-          >Register</a
-        ></span
-      >
-      <span class="mb-2"
-        >Forgot Password?
+      <p class="mb-2">
+        Don't have an account?
+        <a href="{{ url_for('auth.register') }}" class="btn btn-link">
+          Register
+        </a>
+      </p>
+      <p class="mb-2">
+        Forgot Password?
         <a
           href="{{ url_for('auth.reset_password_request') }}"
           class="btn btn-link"
-          >Reset Password</a
-        ></span
-      >
+        >
+          Reset Password
+        </a>
+      </p>
     </div>
   </div>
 </div>

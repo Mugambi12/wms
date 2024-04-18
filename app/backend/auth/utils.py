@@ -1,6 +1,5 @@
 # File: app/backend/auth/utils.py
 
-# Import necessary modules
 from flask import render_template, redirect, url_for, flash, make_response, request
 from flask_login import login_user, logout_user, current_user
 from app import db
@@ -24,7 +23,6 @@ def _login_user(form):
 
         if user and user.check_password(form.password.data):
             if user.is_active:
-                # Update last login time
                 user.last_login = default_datetime()
                 db.session.commit()
 
@@ -86,7 +84,6 @@ def _register_user(form, is_admin=False):
         return redirect(url_for('auth.login'))
 
     elif request.method == 'POST':
-        # Flash error messages for invalid form submissions
         error_messages = {
             'mobile_number': 'Invalid mobile number. Please enter a valid mobile number.',
             'email': 'Invalid email address. Please enter a valid email.',
@@ -96,7 +93,6 @@ def _register_user(form, is_admin=False):
             if field in form.errors:
                 flash(message, 'danger')
 
-    # Render registration form
     return render_template('auth/register.html',
                            form=form,
                            title="Register",
@@ -112,20 +108,12 @@ def perform_logout():
     Returns:
         redirect: Redirects to the landing page after successful logout.
     """
-    # Get user's first name for the flash message
     user_name = current_user.first_name.title()
-
-    # Update last logout time
     current_user.last_logout = default_datetime()
     db.session.commit()
-
-    # Perform logout
     logout_user()
-
-    # Flash logout message
     flash(f'Goodbye, {user_name}! You have been successfully logged out.', 'info')
 
-    # Create response and set cache control headers to prevent caching
     response = make_response(redirect(url_for('landing.landing')))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
