@@ -6,9 +6,11 @@
   class="container d-flex justify-content-center align-items-center"
   style="height: 100vh"
 >
-  <div class="card col-md-5 p-5 bg-light shadow-sm rounded border-0">
+  <div class="card col-lg-5 p-3 p-md-5 bg-light shadow-sm rounded border-0">
     <h2 class="card-title text-center mb-3">Login</h2>
-    <a class="text-center" href="{{ url_for('landing.landing') }}">Home</a>
+    <p class="text-center mb-4">
+      <a href="{{ url_for('landing.landing') }}">Go Back Home</a>
+    </p>
     <form method="POST" action="{{ url_for('auth.login') }}">
       <!-- CSRF Token -->
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />

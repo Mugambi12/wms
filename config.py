@@ -26,14 +26,13 @@ class Config:
     CSRF_SESSION_KEY = config('CSRF_SESSION_KEY')
     WTF_CSRF_TIME_LIMIT = None
     WTF_CSRF_ENABLED = True
-    CORS_HEADERS = 'Content-Type'
 
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = config('DEVELOPMENT_DATABASE_URI')
     DEBUG = True
     SQLALCHEMY_ECHO = True
-    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = False
     PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
 
 

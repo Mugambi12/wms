@@ -7,10 +7,8 @@ $(document).ready(function () {
 
 // Call setup functions based on screen size
 if (window.innerWidth >= 768) {
-  // Desktop
   setupDesktopSidebar();
 } else {
-  // Mobile
   setupMobileSidebar();
 }
 
@@ -56,11 +54,10 @@ function setupMobileSidebar() {
       sidebarMobile.classList.contains("expand")
     );
 
-    // Update sidebar display based on expansion state
     if (sidebarMobile.classList.contains("expand")) {
-      sidebarMobile.style.display = "block"; // Show sidebar when expanding
+      sidebarMobile.style.display = "block";
     } else {
-      sidebarMobile.style.display = "none"; // Hide sidebar when collapsing
+      sidebarMobile.style.display = "none";
     }
   });
 
@@ -71,7 +68,7 @@ function setupMobileSidebar() {
       !toggleBtnMobile.contains(event.target)
     ) {
       sidebarMobile.classList.remove("expand");
-      sidebarMobile.style.display = "none"; // Hide sidebar when collapsing
+      sidebarMobile.style.display = "none";
     }
   });
 }

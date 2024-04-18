@@ -151,6 +151,10 @@ a.sidebar-link:hover {
     display: none;
   }
 
+  #sidebar.expand {
+    min-width: fit-content;
+  }
+
   .toggle-btn-desktop {
     display: none;
   }
@@ -159,12 +163,19 @@ a.sidebar-link:hover {
     display: block;
   }
 
+  #sidebar:not(.expand) .toggle-btn-mobile {
+    margin-left: -100px;
+  }
+
   .sidebar-content {
     padding-left: 0;
   }
 
   .sidebar-logo {
     margin: auto 30px;
+  }
+  .logo-tagline {
+    margin-left: 30px;
   }
 
   .sidebar-nav {
@@ -179,5 +190,9 @@ a.sidebar-link:hover {
 
   #sidebar.expand .sidebar-link {
     display: block;
+  }
+
+  a.sidebar-link {
+    padding: 0.625rem 1rem;
   }
 }

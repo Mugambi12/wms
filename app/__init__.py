@@ -8,7 +8,7 @@ from flask_wtf.csrf import generate_csrf
 from flask_apscheduler import APScheduler
 from flask_mail import Mail
 
-from config import Config, MailConfig, DevelopmentConfig
+from config import MailConfig, DevelopmentConfig
 from .utils import format_amount
 
 
