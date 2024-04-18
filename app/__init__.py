@@ -8,7 +8,7 @@ from flask_wtf.csrf import generate_csrf
 from flask_apscheduler import APScheduler
 from flask_mail import Mail
 
-from app.config import Config, MailConfig, DevelopmentConfig
+from config import Config, MailConfig, DevelopmentConfig
 from .utils import format_amount
 
 
@@ -49,7 +49,7 @@ def create_app():
 
         from .backend.database.models import MailSettings
         mail_settings = MailSettings.query.first()
-        if mail_settings:
+        if mail_settings.mail_server and mail_settings.company_email and mail_settings.password:
             app.config['MAIL_SERVER'] = f'smtp.{mail_settings.mail_server}.com'
             app.config['MAIL_PORT'] = 465
             app.config['MAIL_USERNAME'] = mail_settings.company_email
