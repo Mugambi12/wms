@@ -22,9 +22,8 @@
     </span>
     {% endif %}
 
-    <!-- Brand  -->
-    {% if company_logo %}
-
+    <!-- Brand -->
+    {% if company_logo and not current_user.is_authenticated %}
     <!-- Company Logo -->
     <img
       class="navbar-brand img-fluid"
@@ -32,8 +31,8 @@
       src="{{ company_logo }}"
       alt="Company Logo"
     />
-
     {% else %}
+    <!-- Company Name Link -->
     <a
       class="navbar-brand nav-link ms-3 {% if current_user.is_authenticated %}gradient-text{% else %}text-light fw-bold{% endif %}"
       href="{% if current_user.is_authenticated %}{{ url_for('accounts.dashboard.dashboard') }}{% else %}#{% endif %}"
