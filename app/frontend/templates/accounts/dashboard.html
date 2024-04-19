@@ -226,107 +226,108 @@
             <!-- Bar Chart -->
             <div class="col-md-8">
               <canvas id="barChart" class="responsive-canvas"></canvas>
-            </div>
-            <style>
-              .responsive-canvas {
-                width: 500px;
-                height: 200px;
-              }
 
-              @media (max-width: 768px) {
+              <style>
                 .responsive-canvas {
-                  width: 100%;
-                  height: 50vh;
-                }
-              }
-            </style>
-            <script>
-              document.addEventListener("DOMContentLoaded", function () {
-                const ctx = document.getElementById("barChart").getContext("2d");
-
-                function extractData(data, key) {
-                  return Object.values(data).map(month => month[key]);
+                  width: 500px;
+                  height: 200px;
                 }
 
-                const revenueExpenseData = {{ bar_chart_data | tojson }};
-                const usageData = extractData(revenueExpenseData, 'usage');
-                const revenueData = extractData(revenueExpenseData, 'revenue');
-                const isAdmin = {{ current_user.is_admin | tojson }};
-
-                let datasets = [
-                  {
-                    label: isAdmin ? "Water Usage (KES)" : "My Usage (KES)",
-                    data: usageData,
-                    backgroundColor: "rgba(54, 162, 235, 0.6)",
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    borderWidth: 0,
-                    barThickness: 8,
-                    borderRadius: 15,
-                  },
-                  {
-                    label: isAdmin ? "Revenue (KES)" : "My Expenditure (KES)",
-                    data: revenueData,
-                    backgroundColor: "rgba(255, 159, 64, 0.6)",
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    borderWidth: 0,
-                    barThickness: 8,
-                    borderRadius: 15,
-                  },
-                ];
-
-                // Add expenses dataset only for admin users
-                if (isAdmin) {
-                  const expensesData = extractData(revenueExpenseData, 'expenses');
-                  datasets.push({
-                    label: "Expenses (KES)",
-                    data: expensesData,
-                    backgroundColor: "rgba(255, 99, 132, 0.6)",
-                    borderColor: "rgba(255, 99, 132, 1)",
-                    borderWidth: 0,
-                    barThickness: 8,
-                    borderRadius: 15,
-                  });
+                @media (max-width: 768px) {
+                  .responsive-canvas {
+                    width: 100%;
+                    height: 50vh;
+                  }
                 }
+              </style>
+              <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                  const ctx = document.getElementById("barChart").getContext("2d");
 
-                const myBarChart = new Chart(ctx, {
-                  type: "bar",
-                  data: {
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    datasets: datasets,
-                  },
-                  options: {
-                    scales: {
-                      y: {
-                        beginAtZero: false,
-                        ticks: {
-                          callback: function (value, index, values) {
-                            return value.toLocaleString();
+                  function extractData(data, key) {
+                    return Object.values(data).map(month => month[key]);
+                  }
+
+                  const revenueExpenseData = {{ bar_chart_data | tojson }};
+                  const usageData = extractData(revenueExpenseData, 'usage');
+                  const revenueData = extractData(revenueExpenseData, 'revenue');
+                  const isAdmin = {{ current_user.is_admin | tojson }};
+
+                  let datasets = [
+                    {
+                      label: isAdmin ? "Water Usage (KES)" : "My Usage (KES)",
+                      data: usageData,
+                      backgroundColor: "rgba(54, 162, 235, 0.6)",
+                      borderColor: "rgba(75, 192, 192, 1)",
+                      borderWidth: 0,
+                      barThickness: 8,
+                      borderRadius: 15,
+                    },
+                    {
+                      label: isAdmin ? "Revenue (KES)" : "My Expenditure (KES)",
+                      data: revenueData,
+                      backgroundColor: "rgba(255, 159, 64, 0.6)",
+                      borderColor: "rgba(75, 192, 192, 1)",
+                      borderWidth: 0,
+                      barThickness: 8,
+                      borderRadius: 15,
+                    },
+                  ];
+
+                  // Add expenses dataset only for admin users
+                  if (isAdmin) {
+                    const expensesData = extractData(revenueExpenseData, 'expenses');
+                    datasets.push({
+                      label: "Expenses (KES)",
+                      data: expensesData,
+                      backgroundColor: "rgba(255, 99, 132, 0.6)",
+                      borderColor: "rgba(255, 99, 132, 1)",
+                      borderWidth: 0,
+                      barThickness: 8,
+                      borderRadius: 15,
+                    });
+                  }
+
+                  const myBarChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                      datasets: datasets,
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: false,
+                          ticks: {
+                            callback: function (value, index, values) {
+                              return value.toLocaleString();
+                            },
+                          },
+                          grid: {
+                            display: false,
                           },
                         },
-                        grid: {
-                          display: false,
+                        x: {
+                          grid: {
+                            display: false,
+                          },
                         },
                       },
-                      x: {
-                        grid: {
-                          display: false,
+                      plugins: {
+                        legend: {
+                          display: true,
+                          position: "top",
+                        },
+                        tooltip: {
+                          mode: "nearest",
+                          intersect: false,
                         },
                       },
                     },
-                    plugins: {
-                      legend: {
-                        display: true,
-                        position: "top",
-                      },
-                      tooltip: {
-                        mode: "nearest",
-                        intersect: false,
-                      },
-                    },
-                  },
+                  });
                 });
-              });
-            </script>
+              </script>
+            </div>
           </div>
         </div>
       </div>
