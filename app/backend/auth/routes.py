@@ -72,8 +72,10 @@ def reset_password_request():
     return _reset_password_request(form)
 
 
+
 @auth_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    form = ResetPasswordForm()
     """
     Reset the user's password using the provided reset token.
 
@@ -87,6 +89,4 @@ def reset_password(token):
         404: If the reset token is not found in the database.
 
     """
-    reset_token = PasswordResetToken.query.filter_by(token=token).first_or_404()
-    form = ResetPasswordForm()
-    return _reset_password(form, reset_token, token)
+    return _reset_password(form, token)

@@ -1,6 +1,3 @@
-# File: app/backend/database/models.py
-
-# Import necessary modules
 from datetime import datetime, timedelta, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -43,6 +40,27 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+class PasswordResetToken(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
+    token = db.Column(db.String(128), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=default_datetime)
+
+    def __init__(self, email, token):
+        self.email = email
+        self.token = token
+
+
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def __init__(self, user_id, content):
+        self.user_id = user_id
+        self.content = content
 
 
 class MeterReading(db.Model):
@@ -121,27 +139,6 @@ class Expense(db.Model):
 
     def __repr__(self):
         return f'<Expense {self.id}>'
-
-
-class PasswordResetToken(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), nullable=False)
-    token = db.Column(db.String(128), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=default_datetime)
-
-    def __init__(self, email, token):
-        self.email = email
-        self.token = token
-
-
-class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-
-    def __init__(self, user_id, content):
-        self.user_id = user_id
-        self.content = content
 
 
 class Message(db.Model):

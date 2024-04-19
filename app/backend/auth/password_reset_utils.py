@@ -112,22 +112,28 @@ def _reset_password_request(form):
         else:
             return jsonify({"message": "Email not found in our users.", "type": "warning"})
 
-    return render_template('auth/reset_password_request.html',
-                           form=form,
-                           title="Reset Password",
-                           hide_navbar=True,
-                           hide_sidebar=True,
-                           hide_footer=True)
+    return render_template(
+        'auth/reset_password_request.html',
+        form=form,
+        title="Reset Password",
+        hide_navbar=True,
+        hide_sidebar=True,
+        hide_footer=True
+    )
 
 
-def _reset_password(token, form, reset_token):
+def _reset_password(form, token):
+    reset_token = PasswordResetToken.query.filter_by(token=token).first_or_404()
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=reset_token.email).first()
 
         if user:
             user.password_hash = generate_password_hash(form.password.data)
+
             db.session.delete(reset_token)
             db.session.commit()
+
             flash('Your password has been reset successfully.', 'success')
             return redirect(url_for('auth.login'))
         else:
@@ -135,4 +141,11 @@ def _reset_password(token, form, reset_token):
             return redirect(url_for('auth.reset_password_request'))
 
     form.token.data = token
-    return render_template('auth/reset_password.html', form=form, token=token, hide_navbar=True, hide_sidebar=True, hide_footer=True)
+    return render_template(
+        'auth/reset_password.html',
+        form=form,
+        token=token,
+        hide_navbar=True,
+        hide_sidebar=True,
+        hide_footer=True
+    )
