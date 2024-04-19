@@ -22,6 +22,7 @@ def get_unread_message_count_for_navbar(user_id):
         print(f"Error retrieving unread message count for user {user_id}: {e}")
         return None
 
+
 def send_message(sender_id, receiver_id, content):
     """
     Send a message to a specific user.
@@ -44,6 +45,7 @@ def send_message(sender_id, receiver_id, content):
         db.session.rollback()
         return False
 
+
 def get_user_messages(user_id):
     """
     Retrieve messages exchanged between the current user and another user.
@@ -54,28 +56,25 @@ def get_user_messages(user_id):
     Returns:
         tuple: A tuple containing a list of messages and the first name of the other user.
     """
-    # Check if user_id is None or not
     if user_id is None:
         return [], None
 
-    # Retrieve chatting user if user_id is not None
     chatting_user = User.query.get(user_id)
     if not chatting_user:
         return [], None
 
-    # Retrieve messages between current user and the other user
     messages = Message.query.filter(
         ((Message.sender_id == current_user.id) & (Message.receiver_id == user_id)) |
         ((Message.sender_id == user_id) & (Message.receiver_id == current_user.id))
     ).order_by(Message.timestamp.asc()).all()
 
-    # Mark unread messages as read
     unread_messages = [msg for msg in messages if not msg.is_read and msg.receiver_id == current_user.id]
     for msg in unread_messages:
         msg.is_read = True
     db.session.commit()
 
     return messages, chatting_user.id
+
 
 def get_received_unread_message_count(user_id):
     """
@@ -95,6 +94,7 @@ def get_received_unread_message_count(user_id):
     except Exception as e:
         print(f"Error retrieving unread message count for user {user_id}: {e}")
         return None
+
 
 def send_broadcast_message(sender_id, content):
     """
@@ -119,6 +119,7 @@ def send_broadcast_message(sender_id, content):
         db.session.rollback()
         return False
 
+
 def get_broadcast_messages():
     """
     Retrieve broadcast messages sent to all users.
@@ -132,6 +133,7 @@ def get_broadcast_messages():
     except Exception as e:
         print(f"Error retrieving broadcast messages: {e}")
         return []
+
 
 def get_sender_name(sender_id):
     """

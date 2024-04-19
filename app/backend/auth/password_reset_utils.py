@@ -1,15 +1,11 @@
-# File: app/backend/auth/password_reset_utils.py
-
-# Import necessary modules
 from flask import flash, redirect, url_for, render_template, current_app, jsonify
 from werkzeug.security import generate_password_hash
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
+
 from app import mail, db
 from app.utils import generate_random_string
-from ..database.models import User, PasswordResetToken, MailSettings
-
-from app.backend.auth.forms import PasswordResetForm, ResetPasswordForm
+from ..database.models import User, PasswordResetToken
 
 
 def generate_token(email):
@@ -17,14 +13,6 @@ def generate_token(email):
         serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         salt = current_app.config.get('SECURITY_PASSWORD_SALT', generate_random_string())
         return serializer.dumps(email, salt=salt)
-
-#async def send_async_email(msg):
-#    try:
-#        mail.send(msg)
-#        return True
-#    except Exception as e:
-#        print(f"Failed to send email: {e}")
-#        return False
 
 
 def send_async_email(msg):
@@ -106,7 +94,6 @@ def send_password_reset_email(email, token):
     msg.html = email_body
 
     return send_async_email(msg)
-
 
 
 def _reset_password_request(form):

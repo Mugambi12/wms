@@ -1,5 +1,3 @@
-# File: app/backend/auth/routes.py
-
 from flask import Blueprint
 from flask_login import login_required
 from .forms import *
@@ -57,7 +55,6 @@ def register_apogen_admin():
     """
     form = RegistrationForm()
     return _register_user(form, is_admin=True)
-
 
 
 @auth_bp.route('/reset_password_request', methods=['GET', 'POST'])

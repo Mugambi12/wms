@@ -1,6 +1,3 @@
-# Purpose: Routes for the settings blueprint.
-# The settings blueprint contains routes for the settings page. The settings page is where the user can update the company information, service settings, house sections, payment methods, mail settings, and social accounts.
-
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app import db
@@ -58,6 +55,7 @@ def settings():
                            hide_footer=True,
                            title="Settings")
 
+
 @settings_bp.route('/service_settings', methods=['GET', 'POST'])
 @login_required
 def service_settings():
@@ -78,8 +76,6 @@ def service_settings():
         return redirect(url_for('accounts.settings.settings'))
 
     return redirect(url_for('accounts.settings.settings'))
-
-
 
 
 @settings_bp.route('/add_section', methods=['POST'])
@@ -163,8 +159,6 @@ def delete_section():
         flash(f'Failed to delete section: {str(e)}', 'danger')
 
     return redirect(url_for('accounts.settings.settings'))
-
-
 
 
 @settings_bp.route('/payment_methods', methods=['GET', 'POST'])

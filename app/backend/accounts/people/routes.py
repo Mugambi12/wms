@@ -1,6 +1,5 @@
 # app/backend/accounts/people/routes.py
 
-# Import necessary libraries
 from flask import Blueprint, flash, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 from app import db
@@ -26,7 +25,6 @@ def people_list():
         people_list = User.query.all()
         add_form = AddUserForm()
 
-        # Retrieve house sections and populate the choices
         house_sections = []
         settings = ServicesSetting.query.first()
         if settings and settings.house_sections:
@@ -43,6 +41,7 @@ def people_list():
             return redirect(url_for('accounts.people.edit_user', user_id=current_user.id))
     else:
         return redirect(url_for('auth.login'))
+
 
 @people_bp.route('/add_user', methods=['GET', 'POST'])
 @login_required
@@ -70,6 +69,7 @@ def add_user():
     else:
         return redirect(url_for('auth.login'))
 
+
 @people_bp.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def edit_user(user_id):
@@ -87,7 +87,6 @@ def edit_user(user_id):
         user = User.query.get_or_404(user_id)
         form = EditUserForm(request.form, obj=user)
 
-        # Populate house sections choices
         form.populate_house_sections()
 
         if request.method == 'POST' and form.validate():
@@ -96,22 +95,18 @@ def edit_user(user_id):
                     flash('New password must be at least 6 characters long.', 'danger')
                     return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
                 else:
-                    # Change password only if new password is provided
                     change_password(user, form)
 
-            # Check if the user is being assigned to a house where another user resides
             if user.house_section != form.house_section.data or user.house_number != form.house_number.data:
                 existing_user_in_house = User.query.filter_by(house_section=form.house_section.data, house_number=form.house_number.data, is_active=True).first()
                 if existing_user_in_house and existing_user_in_house.id != user.id:
                     flash('Another user is already registered in the selected house.', 'danger')
                     return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
 
-            # Check if the user is being activated and if the house has another active user
             if not user.is_active and User.query.filter_by(house_section=user.house_section, house_number=user.house_number, is_active=True).count() > 0:
                 flash('Another active user is already registered in this household.', 'danger')
                 return render_template('accounts/edit_people.html', user=user, form=form, hide_footer=True)
 
-            # Update user profile
             form.populate_obj(user)
             db.session.commit()
 
@@ -125,8 +120,6 @@ def edit_user(user_id):
                                title="Edit User")
     else:
         return redirect(url_for('auth.login'))
-
-
 
 
 @people_bp.route('/edit_profile_picture', methods=['GET', 'POST'])
@@ -153,6 +146,7 @@ def edit_profile_picture_route():
         return render_template('accounts/edit_people.html', form=form)
     else:
         return redirect(url_for('auth.login'))
+
 
 @people_bp.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required

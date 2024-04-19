@@ -38,9 +38,9 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = config('PRODUCTION_DATABASE_URI')
-    DEBUG = False
-    SQLALCHEMY_ECHO = False
-    SESSION_COOKIE_SECURE = True
+    DEBUG = config('DEBUG', cast=bool)
+    SQLALCHEMY_ECHO = config('SQLALCHEMY_ECHO', cast=bool)
+    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', cast=bool)
     PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
 
 

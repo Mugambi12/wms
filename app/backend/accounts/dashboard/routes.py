@@ -19,42 +19,31 @@ def dashboard():
         current_month = int(request.form['current_month'])
         current_year = int(request.form['current_year'])
     else:
-        # Get current month and year
         today = datetime.now()
         current_month = today.month
         current_year = today.year
 
-    # Get dashboard cards data
     cards_data = dashboard_cards_data(current_user)
 
-    # Fetch monthly performance data for the current month
     current_monthly_performance = fetch_monthly_performance_data(current_user, current_month, current_year)
 
-    # Define the previous month
     previous_month = current_month - 1 if current_month != 1 else 12
     previous_year = current_year - 1 if current_month == 1 else current_year
 
-    # Define the next month
     next_month = current_month + 1 if current_month != 12 else 1
     next_year = current_year + 1 if current_month == 12 else current_year
 
-    # Fetch actual revenue and expenses data from the database
     bar_chart_data = fetch_bar_chart_data(current_user)
 
-    # Fetch actual revenue and expenses data from the database
     doughnut_chart_data = fetch_doughnut_chart_data(current_user)
 
-    # Get recent transactions data
     recent_transactions = recent_transactions_data(current_user)
 
-    # Get data for the list of users
     now, users_to_display = get_user_list(current_user)
 
-    # Prepare sticky notes data
     content_form = StickyNoteForm()
     sticky_note_content = Note.query.all()
 
-    # Get delinquent bills data
     household_invoices = delinquent_household_invoices(current_user)
 
     return render_template('accounts/dashboard.html',

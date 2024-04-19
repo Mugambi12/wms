@@ -1,8 +1,10 @@
 # File: app/backend/accounts/records/routes.py
 
-# Import necessary libraries
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, flash, render_template, redirect, url_for, request, render_template_string, send_file, Response
 from flask_login import login_required, current_user
+from io import BytesIO
+from xhtml2pdf import pisa
+
 from app import db
 from .forms import *
 from ...database.models import *
@@ -44,6 +46,7 @@ def meter_readings():
                            hide_footer=True,
                            title="Readings")
 
+
 @records_bp.route('/edit_meter_reading/<int:meter_reading_id>', methods=['GET', 'POST'])
 @login_required
 def edit_meter_reading(meter_reading_id):
@@ -62,6 +65,7 @@ def edit_meter_reading(meter_reading_id):
                                hide_footer=True,
                            title="Edit Reading")
 
+
 @records_bp.route('/delete_meter_reading/<int:meter_reading_id>', methods=['POST'])
 @login_required
 def delete_meter_reading(meter_reading_id):
@@ -73,9 +77,6 @@ def delete_meter_reading(meter_reading_id):
         flash(result['message'], 'danger')
 
     return redirect(url_for('accounts.records.meter_readings'))
-
-
-
 
 
 @records_bp.route('/billing')
@@ -90,6 +91,7 @@ def billing():
                            payment_form=make_payment_form,
                            hide_footer=True,
                            title="Billing")
+
 
 @records_bp.route('/make_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
@@ -126,6 +128,7 @@ def make_payment(payment_id):
                            form=form,
                            meter_reading=meter_reading)
 
+
 @records_bp.route('/invoice/<int:invoice_id>')
 @login_required
 def invoice(invoice_id):
@@ -142,9 +145,6 @@ def invoice(invoice_id):
         return redirect(url_for('accounts.records.billing'))
 
 
-
-
-
 @records_bp.route('/payments')
 @login_required
 def payments():
@@ -157,6 +157,7 @@ def payments():
                            hide_footer=True,
                            title="Payments")
 
+
 @records_bp.route('/validate_payment/<int:payment_id>', methods=['POST'])
 @login_required
 def validate_payment(payment_id):
@@ -168,6 +169,7 @@ def validate_payment(payment_id):
         flash(result['message'], 'danger')
 
     return redirect(url_for('accounts.records.payments'))
+
 
 @records_bp.route('/edit_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
@@ -192,6 +194,7 @@ def edit_payment(payment_id):
                            payment=payment,
                            hide_footer=True)
 
+
 @records_bp.route('/delete_payment/<int:payment_id>', methods=['GET', 'POST'])
 @login_required
 def delete_payment(payment_id):
@@ -205,19 +208,11 @@ def delete_payment(payment_id):
     return redirect(url_for('accounts.records.payments'))
 
 
-
-
-
-
 @records_bp.route('/download_meter_readings', methods=['GET'])
 @login_required
 def download_meter_readings_route():
     return download_meter_readings()
 
-from flask import send_file, flash, redirect, url_for, render_template_string, Response
-from io import BytesIO
-from flask_login import current_user, login_required
-from xhtml2pdf import pisa
 
 @records_bp.route('/download_invoice/<int:invoice_id>', methods=['GET'])
 @login_required
@@ -233,6 +228,7 @@ def download_invoice_route(invoice_id):
     """
     return download_invoice(current_user, invoice_id)
 
+
 def download_invoice(current_user, invoice_id):
     """
     Helper function to download an invoice PDF by its ID.
@@ -246,19 +242,15 @@ def download_invoice(current_user, invoice_id):
     """
     invoice_data = fetch_invoice_data(current_user, invoice_id)
     if invoice_data:
-        # Extract customer name and get the first name
         customer_name = invoice_data.get('customer_name')
         owner_first_name = customer_name.split()[0]
 
-        # Extract other relevant information
         house_section = invoice_data.get('house_section')
         house_number = invoice_data.get('house_number')
         invoice_id = invoice_data.get('invoice_id')
 
-        # Format the date
         date_str = default_datetime().strftime("%d-%b-%Y")
 
-        # Construct the file name
         file_name = f"Invoice_{invoice_id}_{date_str}_{owner_first_name}_{house_section}_house_{house_number}.pdf"
 
         pdf_data = generate_invoice_pdf(invoice_data)
@@ -266,6 +258,7 @@ def download_invoice(current_user, invoice_id):
     else:
         flash("Invoice not found", "error")
         return redirect(url_for('accounts.records.billing'))
+
 
 def generate_invoice_pdf(invoice_data):
     """

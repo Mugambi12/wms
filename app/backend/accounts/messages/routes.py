@@ -18,11 +18,9 @@ def messages():
 
     if request.method == 'POST' and form.validate_on_submit():
         if form.receiver_id.data == 0:
-            # Broadcast message to all users
             if not send_broadcast_message(current_user.id, form.content.data):
                 flash('Failed to send broadcast message.', 'error')
         else:
-            # Send message to a specific user
             receiver_id = form.receiver_id.data
             content = form.content.data
 
@@ -31,7 +29,6 @@ def messages():
 
         return redirect(url_for('accounts.messages.messages', user_id=receiver_id))
 
-    # Fetch all users and their unread message counts
     all_users = User.query.all() if current_user.is_admin else User.query.filter(User.is_admin).all()
     unread_sent_message_counts = {user.id: get_received_unread_message_count(user.id) for user in all_users}
 
@@ -39,11 +36,9 @@ def messages():
     messages = []
     chatting_user_id = None
     if selected_user_id == '0':
-        # Retrieve broadcast messages
         chatting_user_id = '0'
         messages = get_broadcast_messages()
     else:
-        # Retrieve messages for a specific user
         messages, chatting_user_id = get_user_messages(selected_user_id)
 
     return render_template('accounts/messages.html',

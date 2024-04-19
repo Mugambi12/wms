@@ -8,7 +8,7 @@ from flask_wtf.csrf import generate_csrf
 from flask_apscheduler import APScheduler
 from flask_mail import Mail
 
-from config import MailConfig, DevelopmentConfig, ProductionConfig
+from config import MailConfig, ProductionConfig, DevelopmentConfig
 from .utils import format_amount
 
 
@@ -19,7 +19,7 @@ mail = Mail()
 def create_app():
     app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
-    app.config.from_object(DevelopmentConfig)
+    app.config.from_object(ProductionConfig)
 
     uploads_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'profile')
     os.makedirs(uploads_folder, exist_ok=True)

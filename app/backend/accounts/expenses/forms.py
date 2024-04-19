@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, SelectField, TextAreaField, DateField
 from wtforms.validators import DataRequired, Optional
 
+
 class AddExpenseForm(FlaskForm):
     expense_type = SelectField('Expense Type', choices=[
         ('Equipment Acquisition', 'Equipment Acquisition'),

@@ -23,6 +23,7 @@ def expenses():
                            hide_footer=True,
                            title="Expenses")
 
+
 @expenses_bp.route('/add_expense', methods=['POST'])
 @login_required
 def add_expense():
@@ -43,6 +44,7 @@ def add_expense():
         return redirect(url_for('accounts.expenses.expenses'))
     return render_template('accounts/expenses.html', add_expense_form=form, hide_footer=True)
 
+
 @expenses_bp.route('/edit_expense/<int:expense_id>', methods=['GET', 'POST'])
 @login_required
 def edit_expense(expense_id):
@@ -59,6 +61,7 @@ def edit_expense(expense_id):
                            edit_expense_form=edit_expense_form,
                            expense=edit_expense,
                            hide_footer=True)
+
 
 @expenses_bp.route('/delete_expense/<int:expense_id>', methods=['POST'])
 @login_required

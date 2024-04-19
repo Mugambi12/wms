@@ -1,8 +1,8 @@
-# app/backend/auth/forms.py
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Email
 from app.backend.database.models import User
+
 
 class LoginForm(FlaskForm):
     mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(min=9, max=20)])
@@ -33,5 +33,5 @@ class PasswordResetForm(FlaskForm):
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('New Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    token = HiddenField()  # Add a hidden field for the token
+    token = HiddenField()
     submit = SubmitField('Reset Password')

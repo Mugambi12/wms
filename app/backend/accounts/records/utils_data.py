@@ -29,7 +29,6 @@ def fetch_billing_data(current_user):
         .order_by(MeterReading.id.desc())
     )
 
-    # If the user is not an admin, filter by their house section and house number
     if not current_user.is_admin:
         query_billing_data = query_billing_data.filter(
             MeterReading.house_section == current_user.house_section,
@@ -43,7 +42,6 @@ def fetch_billing_data(current_user):
 
 def fetch_payment_data(current_user):
     try:
-        # Construct the query to fetch payment data
         query_payment_data = (
             db.session.query(
                 Payment.id,
@@ -57,25 +55,22 @@ def fetch_payment_data(current_user):
                 Payment.reference_number,
                 Payment.status
             )
-            .join(User)  # Join Payment table with User table
-            .order_by(Payment.timestamp.desc())  # Order by payment date in descending order
+            .join(User)
+            .order_by(Payment.timestamp.desc())
         )
 
-        # Filter the payment data based on user role
-        if not current_user.is_admin:  # If the current user is not an admin
-            query_payment_data = query_payment_data.filter(User.id == current_user.id)  # Filter by user ID
+        if not current_user.is_admin:
+            query_payment_data = query_payment_data.filter(User.id == current_user.id)
             query_payment_data = query_payment_data.filter(
                 User.house_section == current_user.house_section,
                 User.house_number == current_user.house_number
             )
 
-        # Execute the query and fetch payment data
-        payment_data = query_payment_data.all()  # Fetch all payment data
+        payment_data = query_payment_data.all()
 
         return payment_data
 
     except Exception as e:
-        # Handle any exceptions and return None
         print(f"An error occurred while fetching payment data: {e}")
         return None
 
@@ -83,11 +78,9 @@ def fetch_payment_data(current_user):
 def fetch_invoice_data(current_user, invoice_id):
     invoice = MeterReading.query.filter_by(id=invoice_id).first()
     if invoice:
-        # Check if the current user is an admin
         if current_user.is_admin:
             user = User.query.filter_by(id=invoice.user_id).first()
         else:
-            # If the current user is not an admin, filter invoices by the user's house section and house number
             user = User.query.filter_by(id=current_user.id).first()
 
         service_qty = (
@@ -98,7 +91,7 @@ def fetch_invoice_data(current_user, invoice_id):
                 MeterReading.payment_status == False
             )
             .group_by(
-                MeterReading.id,  # Include primary key in the GROUP BY clause
+                MeterReading.id,
                 MeterReading.timestamp,
                 MeterReading.customer_name,
                 MeterReading.house_section,

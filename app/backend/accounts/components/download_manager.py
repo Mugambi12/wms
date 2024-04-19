@@ -43,6 +43,7 @@ def download_users():
     else:
         return "Unsupported format", 400
 
+
 def generate_users_csv():
     """
     Generate CSV file for users.
@@ -52,10 +53,8 @@ def generate_users_csv():
     """
     data = []
     if current_user.is_authenticated and current_user.is_admin:
-        # Query all users if the user is an admin
         users = User.query.all()
     else:
-        # Query only the users belonging to the current user
         users = User.query.filter_by(id=current_user.id).all()
 
     for person in users:
@@ -79,6 +78,7 @@ def generate_users_csv():
 
     return csv_data
 
+
 def generate_users_excel():
     """
     Generate Excel file for users.
@@ -91,10 +91,8 @@ def generate_users_excel():
     ws.append(['ID', 'Name', 'Email', 'Mobile Number', 'House Section', 'House Number', 'Status'])
 
     if current_user.is_authenticated and current_user.is_admin:
-        # Query all users if the user is an admin
         users = User.query.all()
     else:
-        # Query only the users belonging to the current user
         users = User.query.filter_by(id=current_user.id).all()
 
     for person in users:
@@ -111,6 +109,7 @@ def generate_users_excel():
     output = BytesIO()
     wb.save(output)
     return output.getvalue()
+
 
 def generate_users_pdf(people_list):
     """
@@ -210,6 +209,7 @@ def download_meter_readings():
     else:
         return "Unsupported format", 400
 
+
 def generate_meter_readings_csv():
     """
     Generate CSV file for meter readings.
@@ -219,10 +219,8 @@ def generate_meter_readings_csv():
     """
     data = []
     if current_user.is_authenticated and current_user.is_admin:
-        # Query all meter readings if the user is an admin
         readings = MeterReading.query.all()
     else:
-        # Query only the meter readings belonging to the current user
         readings = MeterReading.query.filter_by(user_id=current_user.id).all()
 
     for reading in readings:
@@ -251,6 +249,7 @@ def generate_meter_readings_csv():
 
     return csv_data
 
+
 def generate_meter_readings_excel():
     """
     Generate Excel file for meter readings.
@@ -263,10 +262,8 @@ def generate_meter_readings_excel():
     ws.append(['ID', 'Timestamp', 'Customer Name', 'House Section', 'House Number', 'Reading Value', 'Consumed', 'Unit Price', 'Service Fee', 'Sub Total Price', 'Total Price', 'Status'])
 
     if current_user.is_authenticated and current_user.is_admin:
-        # Query all meter readings if the user is an admin
         readings = MeterReading.query.all()
     else:
-        # Query only the meter readings belonging to the current user
         readings = MeterReading.query.filter_by(user_id=current_user.id).all()
 
     for reading in readings:
@@ -288,6 +285,7 @@ def generate_meter_readings_excel():
     output = BytesIO()
     wb.save(output)
     return output.getvalue()
+
 
 def generate_meter_readings_pdf(readings_list):
     """
@@ -354,7 +352,6 @@ def generate_meter_readings_pdf(readings_list):
     """
 
     if current_user.is_authenticated and not current_user.is_admin:
-        # Filter readings list to include only the current user's readings
         readings_list = [reading for reading in readings_list if reading.user_id == current_user.id]
 
     html_data = render_template_string(html_template, readings_list=readings_list)
@@ -377,19 +374,14 @@ def download_invoice(invoice_id):
     """
     invoice_data = fetch_invoice_data(invoice_id)
     if invoice_data:
-        # Extract customer name and get the first name
         customer_name = invoice_data.get('customer_name')
         owner_first_name = customer_name.split()[0]
-
-        # Extract other relevant information
         house_section = invoice_data.get('house_section')
         house_number = invoice_data.get('house_number')
         invoice_id = invoice_data.get('invoice_id')
 
-        # Format the date
         date_str = default_datetime().strftime("%d-%b-%Y")
 
-        # Construct the file name
         file_name = f"Invoice_{invoice_id}_{date_str}_{owner_first_name}_{house_section}_house_{house_number}.pdf"
 
         pdf_data = generate_invoice_pdf(invoice_data)
@@ -397,6 +389,7 @@ def download_invoice(invoice_id):
     else:
         flash("Invoice not found", "error")
         return redirect(url_for('accounts.records.billing'))
+
 
 def generate_invoice_pdf(invoice_data):
     """

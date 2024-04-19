@@ -1,6 +1,3 @@
-# app/backend/accounts/settings/routes.py
-
-# Importing Required Libraries
 import os
 from werkzeug.utils import secure_filename
 from flask import redirect, url_for, flash, current_app
@@ -25,6 +22,7 @@ def save_uploaded_logo(company_logo):
         print(f'Error saving company logo: {str(e)}')
         return None
 
+
 def update_or_create_company_information(company_information, form_data):
     try:
         if company_information:
@@ -42,9 +40,9 @@ def update_or_create_company_information(company_information, form_data):
         flash(f'Failed to update company information: {str(e)}', 'danger')
 
 
-
 def get_service_settings():
     return ServicesSetting.query.first()
+
 
 def update_or_create_service_settings(service_settings, form_data):
     try:
@@ -63,9 +61,9 @@ def update_or_create_service_settings(service_settings, form_data):
         flash(f'Failed to update service settings: {str(e)}', 'danger')
 
 
-
 def get_section_settings():
     return ServicesSetting.query.first()
+
 
 def add_house_section(all_house_sections, house_section):
     if not house_section:
@@ -84,9 +82,9 @@ def add_house_section(all_house_sections, house_section):
     return redirect(url_for('accounts.settings.settings'))
 
 
-
 def get_payment_methods():
     return PaymentMethods.query.first()
+
 
 def update_or_create_payment_methods(payment_methods, form_data):
     try:
@@ -105,9 +103,9 @@ def update_or_create_payment_methods(payment_methods, form_data):
         flash(f'Failed to update payment methods: {str(e)}', 'danger')
 
 
-
 def get_mail_settings():
     return MailSettings.query.first()
+
 
 def update_or_create_mail_settings(mail_settings, form_data):
     try:
@@ -128,6 +126,7 @@ def update_or_create_mail_settings(mail_settings, form_data):
 
 def get_social_accounts():
     return SocialAccounts.query.first()
+
 
 def update_or_create_social_accounts(social_accounts, form_data):
     try:

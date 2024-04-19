@@ -640,46 +640,30 @@
 
 <!-- A Calendar -->
 <script>
-  // Function to generate and update the calendar
   function generateCalendar() {
-    // Get current date
     const currentDate = new Date();
-
-    // Get month and year
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
 
-    // Update month header
     document.getElementById("currentMonth").textContent = `${getMonthName(
       currentMonth
     )} ${currentYear}`;
 
-    // Get the first day of the month
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-
-    // Get the day of the week for the first day of the month (0 = Sunday, 1 = Monday, ...)
     const firstDayOfWeek = firstDayOfMonth.getDay();
-
-    // Clear the previous calendar days
     const calendarDays = document.getElementById("calendarDays");
     calendarDays.innerHTML = "";
-
-    // Get the number of days in the previous month
     const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-    // Create calendar days
-    let day = 1 - firstDayOfWeek; // Start from the first day of the week in the current month
+    let day = 1 - firstDayOfWeek;
     for (let i = 0; i < 6; i++) {
-      // Create row
       const row = document.createElement("div");
       row.classList.add("row", "text-center");
 
-      // Create columns for each day of the week
       for (let j = 0; j < 7; j++) {
         const col = document.createElement("div");
         col.classList.add("col");
 
-        // If the current day is in the previous month or the next month, display the corresponding day
         if (day <= 0 || day > getDaysInMonth(currentMonth, currentYear)) {
           col.textContent =
             day <= 0
@@ -701,12 +685,10 @@
     }
   }
 
-  // Function to get the number of days in a month
   function getDaysInMonth(month, year) {
     return new Date(year, month + 1, 0).getDate();
   }
 
-  // Function to get the name of the month
   function getMonthName(month) {
     const months = [
       "January",
@@ -725,7 +707,6 @@
     return months[month];
   }
 
-  // Call the generateCalendar function to initially generate the calendar
   generateCalendar();
 </script>
 

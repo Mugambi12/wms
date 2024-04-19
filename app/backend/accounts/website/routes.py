@@ -4,7 +4,9 @@ from flask_login import login_required, current_user
 from app import db
 from ...database.models import Contact
 
+
 website_bp = Blueprint('website', __name__, url_prefix='/website')
+
 
 @website_bp.route('/website')
 @login_required

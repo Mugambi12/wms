@@ -10,22 +10,18 @@ from ..components.payment_processor import process_payments_with_context
 
 def handle_add_meter_reading(form, current_user):
     try:
-        # Get form data
         house_section = form.house_section.data
         house_number = form.house_number.data
         reading_value = form.reading_value.data
 
-        # If the user is not an admin, ensure they can only add readings for their own house
         if not current_user.is_admin:
             if current_user.house_section != house_section or current_user.house_number != house_number:
                 return {'success': False, 'message': 'You are not authorized to add readings for this house.'}
 
-        # Check if the user associated with the house exists
         user = User.query.filter_by(house_section=house_section, house_number=house_number).first()
         if not user:
             return {'success': False, 'message': 'Invalid house section or house number.'}
 
-        # Calculate consumed units and total amount
         latest_reading = MeterReading.query.filter_by(
             house_section=house_section, house_number=house_number
         ).order_by(MeterReading.reading_value.desc()).first()
@@ -43,7 +39,6 @@ def handle_add_meter_reading(form, current_user):
         sub_total_amount = consumed * unit_price
         total_amount = sub_total_amount + service_fee
 
-        # Prepare data for the new meter reading
         customer = f"{user.first_name} {user.last_name}" if user else None
 
         new_meter_reading = MeterReading(
@@ -59,11 +54,9 @@ def handle_add_meter_reading(form, current_user):
             total_amount=total_amount
         )
 
-        # Save the new meter reading
         db.session.add(new_meter_reading)
         db.session.commit()
 
-        # Process payments
         process_payments_with_context()
 
         return {'success': True, 'message': 'Meter reading added successfully!'}
@@ -80,7 +73,6 @@ def handle_add_meter_reading(form, current_user):
 def get_meter_readings(current_user):
     query_meter_reading_data = MeterReading.query
 
-    # If the user is not an admin, filter by their house section and house number
     if not current_user.is_admin:
         query_meter_reading_data = query_meter_reading_data.filter(
             MeterReading.house_section == current_user.house_section,
@@ -105,7 +97,6 @@ def edit_meter_reading_logic(edited_reading):
 
     if request.method == 'POST':
         try:
-            # Update the form with the submitted data
             if edit_meter_reading_form.validate_on_submit():
                 edited_reading.customer_name = edit_meter_reading_form.customer_name.data
                 edited_reading.house_section = edit_meter_reading_form.house_section.data

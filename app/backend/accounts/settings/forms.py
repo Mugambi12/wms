@@ -1,9 +1,7 @@
-# app/backend/accounts/settings/forms.py
-
-# Importing Required Libraries
 from flask_wtf import FlaskForm
 from wtforms import FloatField, StringField, SubmitField, TextAreaField, PasswordField
 from wtforms.validators import Email, URL, DataRequired, Optional
+
 
 class CompanyInformationForm(FlaskForm):
     company_logo = StringField('Company Logo')
@@ -15,19 +13,23 @@ class CompanyInformationForm(FlaskForm):
     company_description = TextAreaField('Company Description')
     submit = SubmitField('Submit')
 
+
 class ServicesSettingForm(FlaskForm):
     unit_price = FloatField('Unit Price')
     service_fee = FloatField('Service Fee')
     submit = SubmitField('Update')
 
+
 class AddHouseSectionForm(FlaskForm):
     house_sections = StringField('New House Section')
     submit = SubmitField()
+
 
 class EditSectionForm(FlaskForm):
     edit_house_section = StringField('Edit House Section', validators=[DataRequired()])
     new_section_name = StringField('New Section Name', validators=[DataRequired()])
     submit = SubmitField('Edit')
+
 
 class PaymentMethodsForm(FlaskForm):
     bank_name = StringField('Bank Name')
@@ -35,11 +37,13 @@ class PaymentMethodsForm(FlaskForm):
     account_number = StringField('Account Number')
     submit = SubmitField('Update')
 
+
 class MailSettingsForm(FlaskForm):
     mail_server = StringField('Mail Sever')
     company_email = StringField('Email Address', validators=[Email(), Optional()])
     password = PasswordField('Email Password')
     submit = SubmitField('Update')
+
 
 class SocialAccountsForm(FlaskForm):
     whatsapp = StringField('WhatsApp')

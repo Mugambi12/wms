@@ -1,10 +1,5 @@
-# File: app/backend/accounts/__init__.py
-
 from flask import Blueprint
 
-accounts_bp = Blueprint('accounts', __name__, url_prefix='/accounts')
-
-# Import and register sub-blueprints
 from .messages.routes import messages_bp
 from .dashboard.routes import dashboard_bp
 from .people.routes import people_bp
@@ -13,6 +8,8 @@ from .expenses.routes import expenses_bp
 from .website.routes import website_bp
 from .settings.routes import settings_bp
 from .components.accounts_context import accounts_context
+
+accounts_bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 
 accounts_bp.register_blueprint(messages_bp)
 accounts_bp.register_blueprint(dashboard_bp)

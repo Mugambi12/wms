@@ -10,19 +10,16 @@ from app import db
 
 def dashboard_cards_data(current_user):
     if current_user.is_admin:
-        # If the current user is an admin, count all distinct houses, and sum up revenue, consumption, and expenses.
         total_houses = User.query.filter(User.house_section != None, User.house_number != None).with_entities(User.house_section, User.house_number).distinct().count()
         total_revenue = sum(payment.amount for payment in Payment.query.all())
         total_consumption = sum(reading.consumed for reading in MeterReading.query.all())
         total_expenses = sum(expense.amount for expense in Expense.query.all())
     else:
-        # If the current user is not an admin, count distinct houses, revenue generated, and consumption only for their house section and number.
         total_houses = User.query.filter(User.house_section == current_user.house_section, User.house_number == current_user.house_number).with_entities(User.house_section, User.house_number).distinct().count()
         total_revenue = sum(payment.amount for payment in Payment.query.filter_by(user_id=current_user.id).all())
         total_consumption = sum(reading.consumed for reading in MeterReading.query.filter(MeterReading.user_id == current_user.id).all())
         total_expenses = sum(reading.total_amount for reading in MeterReading.query.filter(MeterReading.user_id == current_user.id, MeterReading.payment_status == False).all())
 
-    # Assemble the data into a dictionary
     cards_data = {
         'total_houses': total_houses,
         'total_revenue': total_revenue,
@@ -31,6 +28,7 @@ def dashboard_cards_data(current_user):
     }
 
     return cards_data
+
 
 def fetch_monthly_performance_data(current_user, month, year):
     if current_user.is_admin:
@@ -60,51 +58,45 @@ def fetch_monthly_performance_data(current_user, month, year):
 
     return revenue_generated, water_consumed
 
+
 def fetch_bar_chart_data(current_user):
     if current_user.is_admin:
-        # Fetch usage data from meter reading table and sum them by month
         usage_data = db.session.query(func.sum(MeterReading.consumed).label('consumed'), extract('month', MeterReading.timestamp).label('month')) \
                                  .group_by(extract('month', MeterReading.timestamp)) \
                                  .all()
 
-        # Fetch revenue data from payments table and sum them by month
         revenue_data = db.session.query(func.sum(Payment.amount).label('total_amount'), extract('month', Payment.timestamp).label('month')) \
                                  .group_by(extract('month', Payment.timestamp)) \
                                  .all()
 
-        # No filtering for expense data for admin users
         expense_data = db.session.query(func.sum(Expense.amount).label('total_amount'), extract('month', Expense.timestamp).label('month')) \
                                  .group_by(extract('month', Expense.timestamp)) \
                                  .all()
     else:
-        # If the current user is not an admin, filter usage data based on house section and number
         usage_data = db.session.query(func.sum(MeterReading.consumed).label('consumed'), extract('month', MeterReading.timestamp).label('month')) \
                                  .join(User) \
                                  .filter(User.id == current_user.id) \
                                  .group_by(extract('month', MeterReading.timestamp)) \
                                  .all()
 
-        # Filter revenue data based on user ID
         revenue_data = db.session.query(func.sum(Payment.amount).label('total_amount'), extract('month', Payment.timestamp).label('month')) \
                                  .join(User) \
                                  .filter(User.id == current_user.id) \
                                  .group_by(extract('month', Payment.timestamp)) \
                                  .all()
 
-        # Set expense data to an empty list for non-admin users
         expense_data = []
 
-    # Format the data into dictionaries with month as key
     usage_dict = {result.month: result.consumed for result in usage_data}
     revenue_dict = {result.month: result.total_amount for result in revenue_data}
     expense_dict = {result.month: result.total_amount for result in expense_data}
 
-    # Combine revenue and expenses data into a single dictionary
     combined_data = {}
     for month in range(1, 13):
         combined_data[month] = {'usage': usage_dict.get(month, 0), 'revenue': revenue_dict.get(month, 0), 'expenses': expense_dict.get(month, 0)}
 
     return combined_data
+
 
 def fetch_doughnut_chart_data(current_user):
     if current_user.is_admin:
@@ -121,6 +113,7 @@ def fetch_doughnut_chart_data(current_user):
 
     return combined_data
 
+
 def get_user_list(current_user):
     now = datetime.utcnow() + timedelta(hours=3)
 
@@ -130,6 +123,7 @@ def get_user_list(current_user):
         users_to_display = User.query.filter_by(house_section=current_user.house_section, house_number=current_user.house_number).all()
 
     return now, users_to_display
+
 
 def delinquent_household_invoices(current_user):
     if current_user.is_admin:
@@ -174,37 +168,31 @@ def delinquent_household_invoices(current_user):
 
     return household_invoices
 
+
 def recent_transactions_data(current_user):
     if current_user.is_admin:
-        # If the current user is an admin, retrieve all transactions
         meter_readings = MeterReading.query.all()
         payments = Payment.query.all()
         expenses = Expense.query.all()
     else:
-        # If the current user is not an admin, filter transactions by house section and number
         meter_readings = MeterReading.query.filter_by(user_id=current_user.id).all()
         payments = Payment.query.filter_by(user_id=current_user.id).all()
         expenses = Expense.query.filter_by(user_id=current_user.id).all()
 
-    # Add a type indicator to each transaction
     meter_readings_with_type = [(meter_reading, 'MeterReading') for meter_reading in meter_readings]
     payments_with_type = [(payment, 'Payment') for payment in payments]
     expenses_with_type = [(expense, 'Expense') for expense in expenses]
 
-    # Combine all transactions with their types
     all_transactions = meter_readings_with_type + payments_with_type + expenses_with_type
 
-    # Sort transactions by timestamp in descending order
     sorted_transactions = sorted(all_transactions, key=lambda x: x[0].timestamp, reverse=True)
 
     return sorted_transactions
 
 
-
-
-
 def get_sticky_note_content():
     return Note.query.filter_by(user_id=current_user.id).first()
+
 
 def update_sticky_note_content(new_content):
     new_content = ' '.join(new_content.split())

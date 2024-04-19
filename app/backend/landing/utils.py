@@ -1,5 +1,3 @@
-# app/backend/landing/routes.py
-
 from flask import render_template, jsonify
 from .form import ContactForm
 from app import db

@@ -1,5 +1,3 @@
-# app/backend/landing/routes.py
-
 from flask import Blueprint
 from .utils import _landing, _submit_message
 
