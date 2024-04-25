@@ -1,70 +1,81 @@
 # Water Management System
 
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/mugambi12/water_management_system?color=blueviolet)
-![Number of lines of code](https://img.shields.io/tokei/lines/github/mugambi12/water_management_system?color=blueviolet)
-![Code language count](https://img.shields.io/github/languages/count/mugambi12/water_management_system?color=blue)
-![GitHub top language](https://img.shields.io/github/languages/top/mugambi12/water_management_system?color=blue)
-![GitHub last commit](https://img.shields.io/github/last-commit/mugambi12/water_management_system?color=brightgreen)
-
-![Water Management System Demo](./app/frontend/static/images/readme/dashboard.png)
+![GitHub Code Size](https://img.shields.io/github/languages/code-size/mugambi12/water_management_system?color=blueviolet)
+![Lines of Code](https://img.shields.io/tokei/lines/github/mugambi12/water_management_system?color=blueviolet)
+![Languages Count](https://img.shields.io/github/languages/count/mugambi12/water_management_system?color=blue)
+![Top Language](https://img.shields.io/github/languages/top/mugambi12/water_management_system?color=blue)
+![Last Commit](https://img.shields.io/github/last-commit/mugambi12/water_management_system?color=brightgreen)
 
 ## Overview
 
-The Water Management System is a Flask-based web application designed to streamline and optimize water management processes. It empowers users with various functionalities, including:
+The Water Management System is a Flask-based web application designed to optimize and streamline water management processes. By leveraging modern technology, it empowers users to monitor, manage, and communicate about water usage effectively.
 
-- **Secure user management:** Facilitates secure user registration, login, and logout. Additionally, provides a password reset feature to allow users to securely reset their passwords in case they forget them.
-- **Role-based access control:** Enhances security by assigning different access levels (e.g., standard user, administrator).
-- **Dynamic dashboards:** Provides users with personalized insights into their water usage patterns through interactive charts and graphs.
-- **Water consumption and expense tracking:** Enables users to monitor their water consumption and associated expenses, promoting accountability and responsible water use.
-- **Real-time chat:** Fosters communication and collaboration among users.
-- **Admin broadcast messages:** Allows administrators to keep users informed through announcements and updates.
-- **Feedback tracking system:** Gathers valuable user input to facilitate continuous improvement of the application.
+## Features
 
-This technology-driven approach aims to address water sustainability challenges by empowering users and encouraging responsible water management practices.
+- **Secure User Management:** The system allows users to securely register, log in, and log out, with password reset functionality for account recovery.
+- **Role-Based Access Control:** Assigns different access levels (e.g., standard user, administrator) for enhanced security and control.
+- **Dynamic Dashboards:** Offers personalized insights into water usage through interactive charts and graphs.
+- **Water Consumption and Expense Tracking:** Enables monitoring of water usage and associated costs for responsible water management.
+- **Real-Time Chat:** Facilitates user communication and collaboration.
+- **Admin Broadcast Messages:** Administrators can share announcements and updates with users.
+- **Feedback Tracking System:** Collects user input to improve the application continuously.
+
+## Demonstrations
+
+Here are some visual examples of the system's key features:
+
+### Dashboard
+
+![Dashboard](./wms/core/frontend/static/images/readme/dashboard.png)
+_The system dashboard provides an overview of water usage and management activities._
+
+### Mobile Application
+
+![Mobile Home](./wms/core/frontend/static/images/readme/mobile-1.png)
+
+_The mobile application's home screen offers quick access to essential controls and information._
+
+![Mobile Detail](./wms/core/frontend/static/images/readme/mobile-2.png)
+
+_Users can access detailed information and manage specific settings through the mobile app._
 
 ## Tech Stack
 
-The Water Management System utilizes the following technologies:
+The Water Management System is built with the following technologies:
 
-- Python for backend development
-- Flask for web framework
-- Blueprints for modular structure
-- WebSockets(Flask-SocketIO) for real-time communication
-- Bootstrap, CSS, and HTML for frontend design
-- JavaScript for interactive elements
+- **Python:** Backend development.
+- **Flask:** Web framework.
+- **Blueprints:** Modular structure.
+- **WebSockets (Flask-SocketIO):** Real-time communication.
+- **Bootstrap, CSS, and HTML:** Frontend design.
+- **JavaScript:** Interactive elements.
 
 ## Getting Started
 
 ### Prerequisites
 
-Before you start using the Water Management System, ensure you have the following prerequisites installed and configured on your system:
+Ensure you have the following prerequisites installed on your system:
 
-- **Python:** The system is built using Python, so ensure you have Python installed. You can download and install Python from the [official Python website](https://www.python.org/).
+- **Python:** Download and install Python from the [official Python website](https://www.python.org/).
+- **Virtual Environment:** Recommended for managing dependencies and isolating the project environment.
 
-- **Virtual Environment (optional but recommended):** It's recommended to use a virtual environment to manage dependencies and isolate the project environment. You can create a virtual environment using `virtualenv` or `venv` module, which comes built-in with Python.
+  #### Creating a Virtual Environment:
 
-  #### Alternative: 1.
+  - **Using `venv` (Python 3):**
 
-  ##### Using venv (Python 3)
+    ```cmd
+    > python -m venv venv
+    > venv\Scripts\activate
+    ```
 
-  ```cmd
-  > python -m venv venv
-  > venv\Scripts\activate
-  ```
-
-  #### Alternative: 2.
-
-  ##### Using virtualenv
-
-  ```cmd
-  > pip install virtualenv
-  > virtualenv venv
-  > venv\Scripts\activate
-  ```
+  - **Using `virtualenv`:**
+    ```cmd
+    > pip install virtualenv
+    > virtualenv venv
+    > venv\Scripts\activate
+    ```
 
 ### Installation
-
-Follow these steps to set up the Water Management System on your local machine:
 
 1. **Clone the repository:**
 
@@ -73,52 +84,38 @@ Follow these steps to set up the Water Management System on your local machine:
    > cd water_management_system
    ```
 
-2. **Install dependencies:**
-
-   Navigate to the project directory and install the required dependencies using pip:
-
+2. **Install dependencies:** Navigate to the project directory and install the required dependencies:
    ```cmd
    > pip install -r requirements.txt
    ```
 
 ### Usage
 
-Once you have completed the installation, follow these steps to run the Water Management System:
-
-1. **Navigate to `WMS` folder**
+1. **Navigate to `WMS` folder:**
 
    ```cmd
    > cd wms
    ```
 
-1. **Run the application:**
+2. **Run the application:** Start the Flask server:
 
-   Start the Flask server by executing the following command from the project directory:
+   - **Using `run.py`:**
 
-   #### Alternative: 1.
+     ```cmd
+     > python run.py
+     ```
 
-   ```cmd
-   > python run.py
-   ```
+   - **Using Flask CLI:**
+     ```cmd
+     > flask run
+     ```
 
-   #### Alternative: 2.
+   The application will be accessible at `http://localhost:5000`.
 
-   ```cmd
-   > flask run
-   ```
+3. **Access the application:** Open your web browser and navigate to `http://localhost:5000` to explore the system.
 
-   By default, the application will be accessible at `http://localhost:5000`.
+4. **Explore the features:** Try out user management, dashboards, water consumption tracking, and more.
 
-1. **Access the application:**
-
-   Open your web browser and navigate to `http://localhost:5000` to access the Water Management System.
-
-1. **Explore the features:**
-
-   Once the application is running, you can explore its various features, including user management, dashboards, water consumption tracking, real-time chat, and more.
-
-1. **Contribute (optional):**
-
-   If you would like to contribute to the project, feel free to fork the repository, make your changes, and submit a pull request. Your contributions are highly appreciated!
+5. **Contribute (optional):** Contributions are welcome! Fork the repository, make changes, and submit a pull request.
 
 ---
