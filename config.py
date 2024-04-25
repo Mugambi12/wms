@@ -24,27 +24,27 @@ class Config:
 
     CSRF_ENABLED = config('CSRF_ENABLED', cast=bool)
     CSRF_SESSION_KEY = config('CSRF_SESSION_KEY')
+    WTF_CSRF_ENABLED = config('WTF_CSRF_ENABLED', cast=bool)
     WTF_CSRF_TIME_LIMIT = None
-    WTF_CSRF_ENABLED = True
 
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = config('DEVELOPMENT_DATABASE_URI')
-    DEBUG = True
-    SQLALCHEMY_ECHO = True
-    SESSION_COOKIE_SECURE = False
+    DEBUG = config('DEVELOPMENT_DEBUG', cast=bool)
+    SQLALCHEMY_ECHO = config('DEVELOPMENT_SQLALCHEMY_ECHO', cast=bool)
+    SESSION_COOKIE_SECURE = config('DEVELOPMENT_SESSION_COOKIE_SECURE', cast=bool)
     PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
 
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = config('PRODUCTION_DATABASE_URI')
-    DEBUG = config('DEBUG', cast=bool)
-    SQLALCHEMY_ECHO = config('SQLALCHEMY_ECHO', cast=bool)
-    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', cast=bool)
+    DEBUG = config('PRODUCTION_DEBUG', cast=bool)
+    SQLALCHEMY_ECHO = config('PRODUCTION_SQLALCHEMY_ECHO', cast=bool)
+    SESSION_COOKIE_SECURE = config('PRODUCTION_SESSION_COOKIE_SECURE', cast=bool)
     PERMANENT_SESSION_LIFETIME = timedelta(hours=1.5)
 
 
 class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = config('TEST_DATABASE_URI')
-    SQLALCHEMY_ECHO = False
-    TESTING = True
+    SQLALCHEMY_ECHO = config('TEST_SQLALCHEMY_ECHO', cast=bool)
+    TESTING = config('TESTING', cast=bool)

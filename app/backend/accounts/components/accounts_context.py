@@ -14,8 +14,11 @@ def accounts_context():
     all_users = User.query.all()
     unread_message_counts = {user.id: get_unread_message_count_for_navbar(user.id) for user in all_users}
 
+
     company_information = CompanyInformation.query.first()
-    company_logo = company_information.company_logo if company_information and company_information.company_logo is not None else 'ApoGen io'
+    company_logo = 'ApoGen io'
+    if company_information and company_information.company_logo is not None:
+        company_logo = company_information.company_logo
 
     company_name = company_information.company_name if company_information and company_information.company_name is not None else 'ApoGen io'
     company_address = company_information.company_address if company_information and company_information.company_address is not None else 'Nairobi'

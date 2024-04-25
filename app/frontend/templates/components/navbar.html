@@ -23,7 +23,7 @@
     {% endif %}
 
     <!-- Brand -->
-    {% if company_logo and not current_user.is_authenticated %}
+    {% if company_logo and company_logo != 'ApoGen io' %}
     <!-- Company Logo -->
     <img
       class="navbar-brand img-fluid"
@@ -34,7 +34,7 @@
     {% else %}
     <!-- Company Name Link -->
     <a
-      class="navbar-brand nav-link ms-3 {% if current_user.is_authenticated %}gradient-text{% else %}text-light fw-bold{% endif %}"
+      class="navbar-brand nav-link ms-3 {% if current_user.is_authenticated %}gradient-text{% else %}text-dark fw-bold{% endif %}"
       href="{% if current_user.is_authenticated %}{{ url_for('accounts.dashboard.dashboard') }}{% else %}#{% endif %}"
     >
       {{ company_name.title() }}
@@ -234,6 +234,7 @@
             />
             {% endif %}
           </button>
+
           <ul
             class="dropdown-menu dropdown-menu-end border-0 shadow bg-light"
             aria-labelledby="dropdownMenuButton"
@@ -308,22 +309,22 @@
         <!-- Guest Navbar Links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link text-light" href="#HOME">Home</a>
+            <a class="nav-link" href="#HOME">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="#about">About Us</a>
+            <a class="nav-link" href="#about">About Us</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="#services">Services</a>
+            <a class="nav-link" href="#services">Services</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="#how-it-works">How It Works</a>
+            <a class="nav-link" href="#how-it-works">How It Works</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="#contact">Contact</a>
+            <a class="nav-link" href="#contact">Contact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="#testimonials">Testimonials</a>
+            <a class="nav-link" href="#testimonials">Testimonials</a>
           </li>
           <li class="nav-item">
             <a

@@ -9,6 +9,8 @@ def default_datetime():
 
 
 class User(db.Model, UserMixin):
+    __tablename__ = 'user'
+
     id = db.Column(db.Integer, primary_key=True)
     mobile_number = db.Column(db.String(20), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
@@ -43,6 +45,8 @@ class User(db.Model, UserMixin):
 
 
 class PasswordResetToken(db.Model):
+    __tablename__ = 'password_reset_token'
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
     token = db.Column(db.String(128), unique=True, nullable=False)
@@ -54,6 +58,8 @@ class PasswordResetToken(db.Model):
 
 
 class Note(db.Model):
+    __tablename__ = 'note'
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
@@ -64,6 +70,8 @@ class Note(db.Model):
 
 
 class MeterReading(db.Model):
+    __tablename__ = 'meter_reading'
+
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
     customer_name = db.Column(db.String(50))
@@ -94,6 +102,8 @@ class MeterReading(db.Model):
 
 
 class Payment(db.Model):
+    __tablename__ = 'payment'
+
     id = db.Column(db.Integer, primary_key=True)
     invoice_amount = db.Column(db.Integer)
     customer_name = db.Column(db.String(50))
@@ -119,6 +129,8 @@ class Payment(db.Model):
 
 
 class Expense(db.Model):
+    __tablename__ = 'expense'
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
@@ -142,6 +154,8 @@ class Expense(db.Model):
 
 
 class Message(db.Model):
+    __tablename__ = 'message'
+
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     receiver_id = db.Column(db.Integer, nullable=False)
@@ -156,6 +170,8 @@ class Message(db.Model):
 
 
 class Contact(db.Model):
+    __tablename__ = 'contact'
+
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=default_datetime, nullable=False)
     name = db.Column(db.String(50))
@@ -169,6 +185,8 @@ class Contact(db.Model):
 
 
 class CompanyInformation(db.Model):
+    __tablename__ = 'company_information'
+
     id = db.Column(db.Integer, primary_key=True)
     company_logo = db.Column(db.String(255))
     company_name = db.Column(db.String(255))
@@ -189,6 +207,8 @@ class CompanyInformation(db.Model):
 
 
 class ServicesSetting(db.Model):
+    __tablename__ = 'services_setting'
+
     id = db.Column(db.Integer, primary_key=True)
     unit_price = db.Column(db.Float)
     service_fee = db.Column(db.Float)
@@ -201,6 +221,8 @@ class ServicesSetting(db.Model):
 
 
 class PaymentMethods(db.Model):
+    __tablename__ = 'payment_methods'
+
     id = db.Column(db.Integer, primary_key=True)
     bank_name = db.Column(db.String(255))
     paybill = db.Column(db.Integer)
@@ -213,6 +235,8 @@ class PaymentMethods(db.Model):
 
 
 class MailSettings(db.Model):
+    __tablename__ = 'mail_settings'
+
     id = db.Column(db.Integer, primary_key=True)
     mail_server = db.Column(db.String(120))
     company_email = db.Column(db.String(120))
@@ -225,6 +249,8 @@ class MailSettings(db.Model):
 
 
 class SocialAccounts(db.Model):
+    __tablename__ = 'social_accounts'
+
     id = db.Column(db.Integer, primary_key=True)
     whatsapp = db.Column(db.String(255))
     twitter = db.Column(db.String(255))

@@ -45,17 +45,32 @@ def create_app():
         app.register_blueprint(auth_bp)
         app.register_blueprint(accounts_bp)
 
+#        from .backend.database.models import MailSettings
+#        mail_settings = MailSettings.query.first()
+#        if mail_settings.mail_server and mail_settings.company_email and mail_settings.password:
+#            app.config['MAIL_SERVER'] = f'smtp.{mail_settings.mail_server}.com'
+#            app.config['MAIL_PORT'] = 465
+#            app.config['MAIL_USERNAME'] = mail_settings.company_email
+#            app.config['MAIL_PASSWORD'] = mail_settings.password
+#            app.config['MAIL_USE_TLS'] = False
+#            app.config['MAIL_USE_SSL'] = True
+#        else:
+#            app.config.from_object(MailConfig)
+#        mail.init_app(app)
+
         from .backend.database.models import MailSettings
-        mail_settings = MailSettings.query.first()
-        if mail_settings.mail_server and mail_settings.company_email and mail_settings.password:
-            app.config['MAIL_SERVER'] = f'smtp.{mail_settings.mail_server}.com'
-            app.config['MAIL_PORT'] = 465
-            app.config['MAIL_USERNAME'] = mail_settings.company_email
-            app.config['MAIL_PASSWORD'] = mail_settings.password
-            app.config['MAIL_USE_TLS'] = False
-            app.config['MAIL_USE_SSL'] = True
-        else:
-            app.config.from_object(MailConfig)
+        app.config.from_object(MailConfig)
+        try:
+            mail_settings = MailSettings.query.first()
+            if mail_settings and mail_settings.mail_server and mail_settings.company_email and mail_settings.password:
+                app.config['MAIL_SERVER'] = f'smtp.{mail_settings.mail_server}.com'
+                app.config['MAIL_PORT'] = 465
+                app.config['MAIL_USERNAME'] = mail_settings.company_email
+                app.config['MAIL_PASSWORD'] = mail_settings.password
+                app.config['MAIL_USE_TLS'] = False
+                app.config['MAIL_USE_SSL'] = True
+        except Exception as e:
+            print(f"Error fetching mail settings from the database: {e}")
         mail.init_app(app)
 
         app.context_processor(accounts_context)
