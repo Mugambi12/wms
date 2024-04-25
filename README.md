@@ -43,18 +43,22 @@ Before you start using the Water Management System, ensure you have the followin
 
 - **Virtual Environment (optional but recommended):** It's recommended to use a virtual environment to manage dependencies and isolate the project environment. You can create a virtual environment using `virtualenv` or `venv` module, which comes built-in with Python.
 
-  ### Using virtualenv
+  #### Alternative: 1.
+
+  ##### Using venv (Python 3)
+
+  ```cmd
+  > python -m venv venv
+  > venv\Scripts\activate
+  ```
+
+  #### Alternative: 2.
+
+  ##### Using virtualenv
 
   ```cmd
   > pip install virtualenv
   > virtualenv venv
-  > venv\Scripts\activate
-  ```
-
-  ### Using venv (Python 3)
-
-  ```cmd
-  > python -m venv venv
   > venv\Scripts\activate
   ```
 
@@ -81,9 +85,23 @@ Follow these steps to set up the Water Management System on your local machine:
 
 Once you have completed the installation, follow these steps to run the Water Management System:
 
+1. **Navigate to `WMS` folder**
+
+   ```cmd
+   > cd wms
+   ```
+
 1. **Run the application:**
 
    Start the Flask server by executing the following command from the project directory:
+
+   #### Alternative: 1.
+
+   ```cmd
+   > python run.py
+   ```
+
+   #### Alternative: 2.
 
    ```cmd
    > flask run
@@ -91,15 +109,15 @@ Once you have completed the installation, follow these steps to run the Water Ma
 
    By default, the application will be accessible at `http://localhost:5000`.
 
-2. **Access the application:**
+1. **Access the application:**
 
    Open your web browser and navigate to `http://localhost:5000` to access the Water Management System.
 
-3. **Explore the features:**
+1. **Explore the features:**
 
    Once the application is running, you can explore its various features, including user management, dashboards, water consumption tracking, real-time chat, and more.
 
-4. **Contribute (optional):**
+1. **Contribute (optional):**
 
    If you would like to contribute to the project, feel free to fork the repository, make your changes, and submit a pull request. Your contributions are highly appreciated!
 
