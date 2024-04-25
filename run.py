@@ -1,6 +1,6 @@
 # File: run.py
 
-from app import create_app, db
+from core import create_app, db
 from waitress import serve
 
 app = create_app()
