@@ -1,10 +1,10 @@
 # Water Management System
 
-![GitHub Code Size](https://img.shields.io/github/languages/code-size/mugambi12/water_management_system?color=blueviolet)
-![Lines of Code](https://img.shields.io/tokei/lines/github/mugambi12/water_management_system?color=blueviolet)
-![Languages Count](https://img.shields.io/github/languages/count/mugambi12/water_management_system?color=blue)
-![Top Language](https://img.shields.io/github/languages/top/mugambi12/water_management_system?color=blue)
-![Last Commit](https://img.shields.io/github/last-commit/mugambi12/water_management_system?color=brightgreen)
+![GitHub Code Size](https://img.shields.io/github/languages/code-size/mugambi12/wms?color=blueviolet)
+![Lines of Code](https://img.shields.io/tokei/lines/github/mugambi12/wms?color=blueviolet)
+![Languages Count](https://img.shields.io/github/languages/count/mugambi12/wms?color=blue)
+![Top Language](https://img.shields.io/github/languages/top/mugambi12/wms?color=blue)
+![Last Commit](https://img.shields.io/github/last-commit/mugambi12/wms?color=brightgreen)
 
 ## Overview
 
@@ -80,8 +80,8 @@ Ensure you have the following prerequisites installed on your system:
 1. **Clone the repository:**
 
    ```cmd
-   > git clone https://github.com/mugambi12/water_management_system.git
-   > cd water_management_system
+   > git clone https://github.com/mugambi12/wms.git
+   > cd wms
    ```
 
 2. **Install dependencies:** Navigate to the project directory and install the required dependencies:
