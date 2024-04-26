@@ -80,7 +80,8 @@
               </thead>
               <!-- Table Body -->
               <tbody>
-                {% for person in people_list %} {% if not person.is_active %}
+                {% for person in people_list %} {% if not person.is_active and
+                person.house_number != '0' and person.house_number != '' %}
                 <tr>
                   <th scope="row">{{ loop.index }}</th>
                   <td>{{ person.id }}</td>
@@ -98,17 +99,18 @@
                     {{ person.balance | format_amount }}
                   </td>
                   <td>
-                    {% if person.is_active %}<span class="text-success"
-                      >Active</span
-                    >
-                    {% else %}<span class="text-danger">Inactive</span>{% endif
-                    %}
+                    {% if person.is_active %}
+                    <span class="text-success">Active</span>
+                    {% else %}
+                    <span class="text-danger">Inactive</span>
+                    {% endif %}
                   </td>
                   <td>
-                    {% if person.is_admin %}<span class="text-success"
-                      >Admin</span
-                    >
-                    {% else %}<span class="text-info">Regular</span>{% endif %}
+                    {% if person.is_admin %}
+                    <span class="text-success">Admin</span>
+                    {% else %}
+                    <span class="text-info">Regular</span>
+                    {% endif %}
                   </td>
                   <td class="text-center">
                     {% if current_user.is_admin or current_user.id == person.id
