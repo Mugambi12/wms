@@ -80,8 +80,7 @@
               </thead>
               <!-- Table Body -->
               <tbody>
-                {% for person in people_list %} {% if not person.is_active and
-                person.house_number != '0' and person.house_number != '' %}
+                {% for person in people_list %}
                 <tr>
                   <th scope="row">{{ loop.index }}</th>
                   <td>{{ person.id }}</td>
@@ -130,7 +129,7 @@
                     {% endif %}
                   </td>
                 </tr>
-                {% endif %} {% endfor %}
+                {% endfor %}
               </tbody>
             </table>
           </div>
