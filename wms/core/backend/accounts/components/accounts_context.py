@@ -16,7 +16,7 @@ def accounts_context():
 
 
     company_information = CompanyInformation.query.first()
-    company_logo = 'ApoGen io'
+    company_logo = ''
     if company_information and company_information.company_logo is not None:
         company_logo = company_information.company_logo
 
