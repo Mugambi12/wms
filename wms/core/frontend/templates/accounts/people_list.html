@@ -80,57 +80,58 @@
               </thead>
               <!-- Table Body -->
               <tbody>
-                {% for person in people_list %}
-                <tr>
-                  <th scope="row">{{ loop.index }}</th>
-                  <td>{{ person.id }}</td>
-                  <td class="text-start">
-                    {{ person.first_name.title() ~ " " ~
-                    person.last_name.title() }}
-                  </td>
-                  <td>{{ person.mobile_number }}</td>
-                  <td>{{ person.email }}</td>
-                  <td>{{ person.house_section }}</td>
-                  <td>{{ person.house_number }}</td>
-                  <td
-                    class="fw-bold text-center {% if person.balance > 0 %}text-success{% elif person.balance == 0 %}text-dark{% else %}text-danger{% endif %}"
-                  >
-                    {{ person.balance | format_amount }}
-                  </td>
-                  <td>
-                    {% if person.is_active %}
+    {% for person in people_list %}
+        {% if not person.is_active %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ person.id }}</td>
+            <td class="text-start">
+                {{ person.first_name | title }} {{ person.last_name | title }}
+            </td>
+            <td>{{ person.mobile_number }}</td>
+            <td>{{ person.email }}</td>
+            <td>{{ person.house_section }}</td>
+            <td>{{ person.house_number }}</td>
+            <td class="fw-bold text-center
+                {% if person.balance > 0 %}
+                    text-success
+                {% elif person.balance == 0 %}
+                    text-dark
+                {% else %}
+                    text-danger
+                {% endif %}
+            ">
+                {{ person.balance | format_amount }}
+            </td>
+            <td>
+                {% if person.is_active %}
                     <span class="text-success">Active</span>
-                    {% else %}
+                {% else %}
                     <span class="text-danger">Inactive</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if person.is_admin %}
+                {% endif %}
+            </td>
+            <td>
+                {% if person.is_admin %}
                     <span class="text-success">Admin</span>
-                    {% else %}
+                {% else %}
                     <span class="text-info">Regular</span>
-                    {% endif %}
-                  </td>
-                  <td class="text-center">
-                    {% if current_user.is_admin or current_user.id == person.id
-                    %}
-                    <a
-                      href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
-                    >
-                      <ion-icon name="create-outline" class="me-1"></ion-icon>
-                      <span class="text-muted">Edit</span>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if current_user.is_admin or current_user.id == person.id %}
+                    <a href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}">
+                        <ion-icon name="create-outline" class="me-1"></ion-icon>
+                        <span class="text-muted">Edit</span>
                     </a>
-                    {% else %}
-                    <ion-icon
-                      name="ban-outline"
-                      class="me-1 text-muted"
-                    ></ion-icon>
+                {% else %}
+                    <ion-icon name="ban-outline" class="me-1 text-muted"></ion-icon>
                     <span class="text-muted">Restricted</span>
-                    {% endif %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+</tbody>
             </table>
           </div>
         </div>
