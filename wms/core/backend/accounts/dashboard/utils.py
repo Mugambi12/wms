@@ -10,7 +10,12 @@ from core import db
 
 def dashboard_cards_data(current_user):
     if current_user.is_admin:
-        total_houses = User.query.filter(User.house_section != None, User.house_number != None).with_entities(User.house_section, User.house_number).distinct().count()
+        total_houses = User.query.filter(
+                            (User.house_section != 'admin') &
+                            (User.house_section != 'Admin') &
+                            (User.house_section.isnot(None)) &
+                            User.house_number.isnot(None)
+                        ).with_entities(User.house_section, User.house_number).distinct().count()
         total_revenue = sum(payment.amount for payment in Payment.query.all())
         total_consumption = sum(reading.consumed for reading in MeterReading.query.all())
         total_expenses = sum(expense.amount for expense in Expense.query.all())
