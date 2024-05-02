@@ -118,4 +118,9 @@ Ensure you have the following prerequisites installed on your system:
 
 5. **Contribute (optional):** Contributions are welcome! Fork the repository, make changes, and submit a pull request.
 
+
+### licence 
+
+- Licenced under MIT
+
 ---
