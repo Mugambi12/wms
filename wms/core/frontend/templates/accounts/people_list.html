@@ -391,7 +391,8 @@
               </tr>
             </thead>
             <tbody>
-              {% for person in people_list %} {% if person.is_active %}
+              {% for person in people_list | reverse %} {% if person.is_active
+              %}
               <tr>
                 <th scope="row">{{ loop.index }}</th>
                 <td>{{ person.id }}</td>
