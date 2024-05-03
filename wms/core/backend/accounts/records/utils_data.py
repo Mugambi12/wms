@@ -111,9 +111,10 @@ def fetch_invoice_data(current_user, invoice_id):
         if user:
             invoice_data = {
                 'mobile': user.mobile_number,
+                'balance': user.balance,
                 'first_service': 'Water Usage',
                 'first_description': 'Monthly water consumption',
-                'second_service': 'Service Fee',
+                'second_service': 'Standing Charge',
                 'second_description': 'Maintenance & service charge',
                 'invoice_id': invoice.id,
                 'timestamp': invoice.timestamp,
