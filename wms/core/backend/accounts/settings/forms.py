@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import FloatField, StringField, SubmitField, TextAreaField, PasswordField
+from wtforms import FloatField, StringField, SubmitField, TextAreaField, PasswordField, FileField
 from wtforms.validators import Email, URL, DataRequired, Optional
 
 
 class CompanyInformationForm(FlaskForm):
-    company_logo = StringField('Company Logo')
-    company_name = StringField('Company Name')
+    company_logo = FileField('Company Logo')
+    company_name = StringField('Company Name', validators=[DataRequired()])
     company_address = StringField('Company Address')
     company_email = StringField('Company Email', validators=[Email()])
     contact_number = StringField('Contact Number')
