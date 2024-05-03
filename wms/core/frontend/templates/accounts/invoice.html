@@ -10,15 +10,14 @@
 <div class="invoice-wrapper" id="print-area">
   <div class="invoice">
     <div class="invoice-container">
-      <!-- Invoice Header Section -->
       <div class="invoice-head">
-        <div class="invoice-head-top">
+        <div class="invoice-head-top p-3">
           <div class="invoice-head-top-left text-start">
             {% if company_name %} {% set company_words = company_name.split() %}
             <h3 class="text-dark">
               {% for word in company_words %}
               <span
-                class="text-{{ loop.cycle('info', 'danger', 'primary', 'warning', 'success', 'dark') }}"
+                class="text-{{ loop.cycle('info', 'warning', 'danger', 'primary', 'success', 'dark') }}"
                 >{{ word.title() }}</span
               >
               {% endfor %}
@@ -28,11 +27,12 @@
             {% endif %}
           </div>
           <div class="invoice-head-top-right text-end">
-            <h3>Invoice</h3>
+            <h3 class="text-primary">WATER UTILITY BILL</h3>
           </div>
         </div>
 
         <div class="hr"></div>
+
         <div class="invoice-head-middle">
           <div class="invoice-head-middle-left text-start">
             <p>
@@ -48,18 +48,38 @@
           </div>
         </div>
 
+        <div
+          class="text-center py-3 m-3 shadow-sm bg-primary bg-opacity-10 text-bold"
+        >
+          <h6>
+            Outstanding balance of
+            <span class="text-bold text-danger">
+              KES {{ invoice_data.balance | abs | format_amount }}
+            </span>
+            due on
+            <span id="due-date2"></span>
+          </h6>
+        </div>
+
         <div class="hr"></div>
+
         <div class="invoice-head-bottom">
           <div class="invoice-head-bottom-left">
             <ul class="text-start">
               <li class="text-bold">Invoiced To:</li>
               <li><b>Name:</b> {{ invoice_data.customer_name.title() }}</li>
-              <li><b>Phase:</b> {{ invoice_data.house_section.title() }}</li>
-              <li><b>House No.:</b> {{ invoice_data.house_number }}</li>
               <li>
-                <b>Meter Reading:</b> {{ invoice_data.reading_value }} Units
+                <b>House Section:</b> {{ invoice_data.house_section.title() }}
               </li>
-              <li><b>Contact No.:</b> (+254){{ invoice_data.mobile[-9:] }}</li>
+              <li><b>House No:</b> {{ invoice_data.house_number }}</li>
+              <li>
+                <b>Previous Reading:</b> {{ invoice_data.reading_value -
+                invoice_data.consumed }} Units
+              </li>
+              <li>
+                <b>Current Reading:</b> {{ invoice_data.reading_value }} Units
+              </li>
+              <li><b>Mobile:</b> (+254) {{ invoice_data.mobile[-9:] }}</li>
             </ul>
           </div>
 
@@ -69,8 +89,9 @@
               <li><b>Name: </b> {{ company_name.title() }}</li>
               <li><b>Gateway: </b> {{ bank_name.title() }}</li>
               <li><b>Pay Bill No: </b> {{ paybill }},</li>
-              <li><b>Account No.: </b> {{ account_number }}</li>
-              <li><b>Contant: </b>(254) {{ contact_number }}</li>
+              <li><b>Account No: </b> {{ account_number }}</li>
+              <li><b>Bank Name: </b> {{ account_name }}</li>
+              <li><b>Mobile: </b> (+254) {{ contact_number [-9:] }}</li>
             </ul>
           </div>
         </div>
@@ -120,6 +141,7 @@
               </tr>
             </tbody>
           </table>
+
           <div class="invoice-body-bottom">
             <div class="invoice-body-info-item border-bottom">
               <div class="info-item-td text-end text-bold">Sub Total:</div>
@@ -129,9 +151,9 @@
               </div>
             </div>
             <div class="invoice-body-info-item border-bottom">
-              <div class="info-item-td text-end text-bold">VAT (5%):</div>
+              <div class="info-item-td text-end text-bold">VAT (0%):</div>
               <div class="info-item-td text-end">
-                KES {{ (0.05 * (invoice_data.sub_total_amount +
+                KES {{ (0.00 * (invoice_data.sub_total_amount +
                 invoice_data.service_fee * invoice_data.service_qty)) |
                 format_amount }}
               </div>
@@ -140,7 +162,7 @@
               <div class="info-item-td text-end text-bold">Total:</div>
               <div class="info-item-td text-end">
                 KES {{ ((invoice_data.sub_total_amount +
-                invoice_data.service_fee * invoice_data.service_qty) + (0.05 *
+                invoice_data.service_fee * invoice_data.service_qty) + (0.00 *
                 (invoice_data.sub_total_amount + invoice_data.service_fee *
                 invoice_data.service_qty))) | format_amount }}
               </div>
@@ -150,43 +172,84 @@
       </div>
 
       <!-- Invoice Footer Section -->
-      <div class="invoice-foot text-center">
-        <p class="text-bold">
-          NOTE: This is a computer-generated receipt and does not require a
-          physical signature.
-        </p>
+      <div class="invoice-foot text-left">
+        <div class="text-left">
+          <h6>Reminders</h6>
+          <p class="ms-2">
+            <span class="text-bold text-info">- IMPORTANT!!!</span>
+            You have {{ invoice_data.service_qty | format_amount }} unpaid
+            bill{% if invoice_data.service_qty > 1 %}s{% endif %} for the month
+            of {{ invoice_data.timestamp.strftime('%B %Y') }}{% if
+            invoice_data.service_qty > 1 %} and the preceding {{
+            invoice_data.service_qty - 1 }} months{% endif %}.
+          </p>
 
-        <div class="invoice-btns mt-3">
-          <button type="button" class="invoice-btn" onclick="printInvoice()">
-            <ion-icon name="print-outline"></ion-icon> Print/Download
-          </button>
-          <script>
-            function printInvoice() {
-              window.print();
-            }
-          </script>
+          <p class="text-bold text-danger ms-2">
+            - Payments to be made by the
+            <span id="due-date1"></span>
+          </p>
+          <p class="ms-2">- Please contact the number above for any queries.</p>
+        </div>
 
-          <!-- Download PDF -->
-          <form
-            action="{{ url_for('accounts.records.download_invoice_route', invoice_id=invoice_data.invoice_id) }}"
-            method="get"
-            class="d-inline"
-          >
-            <button
-              type="submit"
-              class="invoice-btn ms-2"
-              name="format"
-              value="pdf"
-            >
-              <ion-icon name="cloud-download-outline"></ion-icon> Download PDF
+        <div class="text-center">
+          <div class="invoice-btns mt-3">
+            <button type="button" class="invoice-btn" onclick="printInvoice()">
+              <ion-icon name="print-outline"></ion-icon> Print/Download
             </button>
-          </form>
+            <script>
+              function printInvoice() {
+                window.print();
+              }
+            </script>
+
+            <!-- Download PDF -->
+            <form
+              action="{{ url_for('accounts.records.download_invoice_route', invoice_id=invoice_data.invoice_id) }}"
+              method="get"
+              class="d-inline"
+            >
+              <button
+                type="submit"
+                class="invoice-btn ms-2"
+                name="format"
+                value="pdf"
+              >
+                <ion-icon name="cloud-download-outline"></ion-icon> Download PDF
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    function getDueDate() {
+      const currentDate = new Date();
+      const currentDay = currentDate.getDate();
+      let calculatedDate;
+
+      if (currentDay >= 15 && currentDay <= 31) {
+        calculatedDate = new Date(currentDate);
+        calculatedDate.setMonth(currentDate.getMonth() + 1);
+      } else if (currentDay >= 1 && currentDay <= 15) {
+        calculatedDate = new Date(currentDate);
+        calculatedDate.setMonth(currentDate.getMonth());
+      }
+
+      const calculatedMonth = calculatedDate.toLocaleString("default", {
+        month: "long",
+      });
+      const calculatedYear = calculatedDate.getFullYear();
+
+      return `5th of ${calculatedMonth} ${calculatedYear}`;
+    }
+
+    document.getElementById("due-date1").innerText = getDueDate();
+    document.getElementById("due-date2").innerText = getDueDate();
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+  {% endblock %}
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
-{% endblock %}
