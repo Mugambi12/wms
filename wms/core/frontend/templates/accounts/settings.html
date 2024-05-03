@@ -21,11 +21,7 @@
             class="rounded-circle img-fluid profile-image mb-3"
             style="width: 120px; height: 120px; object-fit: cover"
           />
-          <h4 class="company-name mb-4">
-            {% if company_information.company_name %} {{
-            company_information.company_name | title }} {% else %} ApoGen SS {%
-            endif %}
-          </h4>
+          <h4 class="company-name mb-4">{{ company_name | title }}</h4>
         </div>
 
         <!-- Navigation Links -->
@@ -88,6 +84,7 @@
                 name="csrf_token"
                 value="{{ csrf_token() }}"
               />
+
               <div class="row">
                 <!-- Company Logo -->
                 <div class="col-md-6 mb-3">
@@ -104,6 +101,7 @@
                   </div>
                 </div>
 
+                <!-- Company Name -->
                 <div class="col-md-6 mb-3">
                   {{
                   company_information_form.company_name.label(class="form-label")
@@ -112,6 +110,7 @@
                   form-control-sm") }}
                 </div>
 
+                <!-- Company Address -->
                 <div class="col-md-6 mb-3">
                   {{
                   company_information_form.company_address.label(class="form-label")
@@ -120,6 +119,7 @@
                   form-control-sm") }}
                 </div>
 
+                <!-- Company Email -->
                 <div class="col-md-6 mb-3">
                   {{
                   company_information_form.company_email.label(class="form-label")
@@ -128,6 +128,7 @@
                   form-control-sm") }}
                 </div>
 
+                <!-- Contact Number -->
                 <div class="col-md-6 mb-3">
                   {{
                   company_information_form.contact_number.label(class="form-label")
@@ -136,6 +137,7 @@
                   form-control-sm") }}
                 </div>
 
+                <!-- Company Website URL -->
                 <div class="col-md-6 mb-3">
                   {{
                   company_information_form.company_website_url.label(class="form-label")
@@ -144,6 +146,8 @@
                   form-control-sm") }}
                 </div>
               </div>
+
+              <!-- Company Description -->
               <div class="mb-4">
                 {{
                 company_information_form.company_description.label(class="form-label")
@@ -152,6 +156,7 @@
                 form-control-sm", rows=3) }}
               </div>
 
+              <!-- Submit Button -->
               <div class="text-center">
                 <button
                   type="submit"
