@@ -17,7 +17,7 @@ mail = Mail()
 def create_app():
     app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
-    app.config.from_object(ProductionConfig)
+    app.config.from_object(DevelopmentConfig)
 
     uploads_folder = os.path.join(app.root_path, 'frontend', 'static', 'uploads', 'profile')
     os.makedirs(uploads_folder, exist_ok=True)
