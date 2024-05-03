@@ -11,39 +11,42 @@ def inject_now():
 
 
 def accounts_context():
+    # Retrieve all users and unread message counts
     all_users = User.query.all()
     unread_message_counts = {user.id: get_unread_message_count_for_navbar(user.id) for user in all_users}
 
-
+    # Retrieve company information
     company_information = CompanyInformation.query.first()
-    company_logo = ''
-    if company_information and company_information.company_logo is not None:
-        company_logo = company_information.company_logo
+    company_logo = getattr(company_information, 'company_logo', '')
+    company_name = getattr(company_information, 'company_name', "Dakoke Springs")
+    company_address = getattr(company_information, 'company_address', 'Nairobi')
+    contact_number = getattr(company_information, 'contact_number', '254720352846')
+    company_email = getattr(company_information, 'company_email', 'info@dakokesprings.co.ke')
+    company_website_url = getattr(company_information, 'company_website_url', 'http://www.dakokesprings.co.ke')
+    company_description = getattr(company_information, 'company_description', 'Welcome to dakoke springs. The best water service solutions company.')
 
-    company_name = company_information.company_name if company_information and company_information.company_name is not None else 'ApoGen io'
-    company_address = company_information.company_address if company_information and company_information.company_address is not None else 'Nairobi'
-    contact_number = company_information.contact_number if company_information and company_information.contact_number is not None else '254723396403'
-    company_email = company_information.company_email if company_information and company_information.company_email is not None else 'info@apogen.io'
-    company_website_url = company_information.company_website_url if company_information and company_information.company_website_url is not None else 'http://www.apogen.io'
-    company_description = company_information.company_description if company_information and company_information.company_description is not None else 'Welcome to apogen. The best software solutions company in Africa.'
-
+    # Retrieve payment methods
     payment_methods = PaymentMethods.query.first()
-    bank_name = payment_methods.bank_name if payment_methods and payment_methods.bank_name is not None else 'ApoGen QuickPay'
-    paybill = payment_methods.paybill if payment_methods and payment_methods.paybill is not None else 'N/A'
-    account_number = payment_methods.account_number if payment_methods and payment_methods.account_number is not None else '254723396403'
+    bank_name = getattr(payment_methods, 'bank_name', 'Cooperative Bank of Kenya')
+    paybill = getattr(payment_methods, 'paybill', '400200')
+    account_number = getattr(payment_methods, 'account_number', '40003937')
+    account_name = getattr(payment_methods, 'account_name', 'Venter Nkatha')
 
+    # Retrieve social links
     social_links = SocialAccounts.query.first()
-    whatsapp = social_links.whatsapp if social_links and social_links.whatsapp is not None else 'https://www.whatsapp.com/'
-    facebook = social_links.facebook if social_links and social_links.facebook is not None else 'https://www.facebook.com/'
-    youtube = social_links.youtube if social_links and social_links.youtube is not None else 'https://www.youtube.com/'
-    twitter = social_links.twitter if social_links and social_links.twitter is not None else 'https://twitter.com/'
-    instagram = social_links.instagram if social_links and social_links.instagram is not None else 'https://www.instagram.com/'
-    linkedin = social_links.linkedin if social_links and social_links.linkedin is not None else 'https://www.linkedin.com/'
-    tiktok = social_links.tiktok if social_links and social_links.tiktok is not None else 'https://www.tiktok.com/'
+    whatsapp = getattr(social_links, 'whatsapp', 'https://www.whatsapp.com/')
+    facebook = getattr(social_links, 'facebook', 'https://www.facebook.com/')
+    youtube = getattr(social_links, 'youtube', 'https://www.youtube.com/')
+    twitter = getattr(social_links, 'twitter', 'https://twitter.com/')
+    instagram = getattr(social_links, 'instagram', 'https://www.instagram.com/')
+    linkedin = getattr(social_links, 'linkedin', 'https://www.linkedin.com/')
+    tiktok = getattr(social_links, 'tiktok', 'https://www.tiktok.com/')
 
-
+    # Return a dictionary with all relevant data
     return {
+        'all_users': all_users,
         'unread_message_counts': unread_message_counts,
+
         'company_logo': company_logo,
         'company_name': company_name,
         'company_address': company_address,
@@ -55,6 +58,7 @@ def accounts_context():
         'bank_name': bank_name,
         'paybill': paybill,
         'account_number': account_number,
+        'account_name': account_name,
 
         'whatsapp': whatsapp,
         'facebook': facebook,
@@ -64,3 +68,4 @@ def accounts_context():
         'linkedin': linkedin,
         'tiktok': tiktok
     }
+
