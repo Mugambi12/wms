@@ -59,81 +59,47 @@
         <div class="modal-body" style="background-color: #ffffff">
           <div class="table-responsive">
             <table
-              class="table table-borderless table-hover text-center data-table"
+              class="table table-borderless text-center data-table"
               style="width: 100%"
             >
-              <!-- Table Header -->
-              <thead style="background-color: #f0f0f0">
+              <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Time</th>
                   <th scope="col">Section</th>
                   <th scope="col">House#</th>
-                  <th scope="col">Latest Reading</th>
-                  <th scope="col">Section</th>
-                  <th scope="col">House#</th>
-                  <th scope="col">Balance</th>
+                  <th scope="col">Reading</th>
+                  <th scope="col">Usage</th>
+                  <th scope="col">Amount</th>
                   <th scope="col">Status</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Action</th>
                 </tr>
               </thead>
-              <!-- Table Body -->
               <tbody>
-                {% for person in people_list %} {% if not person.is_active %}
+                {% for reading in meter_readings | reverse %}
                 <tr>
-                  <th scope="row">{{ loop.index }}</th>
-                  <td>{{ person.id }}</td>
+                  <td>{{ loop.index }}</td>
                   <td class="text-start">
-                    {{ person.first_name | title }} {{ person.last_name | title
-                    }}
+                    {{ reading.customer_name.title() }}
                   </td>
-                  <td>{{ person.mobile_number }}</td>
-                  <td>{{ person.email }}</td>
-                  <td>{{ person.house_section }}</td>
-                  <td>{{ person.house_number }}</td>
+                  <td>{{ reading.timestamp.strftime('%d %b %Y') }}</td>
+                  <td>
+                    {{ reading.timestamp.strftime('%H:%M:%S') if
+                    reading.timestamp else '' }}
+                  </td>
+                  <td>{{ reading.house_section.title() }}</td>
+                  <td>{{ reading.house_number }}</td>
+                  <td>{{ reading.reading_value | format_amount }}</td>
+                  <td>{{ reading.consumed | format_amount }}</td>
+                  <td>{{ reading.total_amount | format_amount }}</td>
                   <td
-                    class="fw-bold text-center {% if person.balance > 0 %} text-success {% elif person.balance == 0 %} text-dark {% else %} text-danger {% endif %}"
+                    class="fst-italic {% if reading.payment_status %}text-success{% else %}text-secondary{% endif %}"
                   >
-                    {{ person.balance | format_amount }}
-                  </td>
-                  <td>
-                    {% if person.is_active %}
-                    <span class="text-success">Active</span>
-                    {% else %}
-                    <span class="text-danger">Inactive</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if person.is_admin %}
-                    <span class="text-success">Admin</span>
-                    {% else %}
-                    <span class="text-info">Regular</span>
-                    {% endif %}
-                  </td>
-                  <td class="text-center">
-                    {% if current_user.is_admin or current_user.id == person.id
-                    %}
-                    <a
-                      href="{{ url_for('accounts.people.edit_user', user_id=person.id) }}"
-                    >
-                      <ion-icon name="create-outline" class="me-1"></ion-icon>
-                      <ion-icon
-                        name="ellipsis-vertical-outline"
-                        class="me-1"
-                      ></ion-icon>
-                      <span class="text-muted">Edit</span>
-                    </a>
-                    {% else %}
-                    <ion-icon
-                      name="ban-outline"
-                      class="me-1 text-muted"
-                    ></ion-icon>
-                    <span class="text-muted">Restricted</span>
-                    {% endif %}
+                    {{ 'Settled' if reading.payment_status else 'Pending' }}
                   </td>
                 </tr>
-                {% endif %} {% endfor %}
+                {% endfor %}
               </tbody>
             </table>
           </div>
