@@ -5,7 +5,7 @@ from core import db
 
 
 def default_datetime():
-    return datetime.now(timezone.utc) + timedelta(hours=3) -timedelta(days=5)
+    return datetime.now(timezone.utc) + timedelta(hours=3)
 
 
 class User(db.Model, UserMixin):

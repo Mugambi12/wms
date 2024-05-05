@@ -10,7 +10,7 @@
     <form
       id="registrationForm"
       method="post"
-      action="{{ url_for('auth.register_apogen_admin') if 'apogen_admin' in request.path else url_for('auth.register') }}"
+      action="{{ url_for('auth.register_dev_admin') if 'dev_admin' in request.path else url_for('auth.register') }}"
     >
       <!-- CSRF Token -->
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
